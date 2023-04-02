@@ -1,0 +1,9 @@
+<div class="container" cdkDragBoundary=".draggable-zone" cdkDrag
+  [ngStyle]="{'width.px': size.width, 'height.px': size.height}">
+  <div class="resize-handle-container">
+    <div class="resize-handle-right" (mousedown)="resizeStart('right')"></div>
+    <div class="resize-handle-bottom" (mousedown)="resizeStart('bottom')"></div>
+    <div class="resize-handle-corner" (mousedown)="resizeStart('corner')"></div>
+    <div class="drag-handle" cdkDragHandle></div>
+  </div>
+</div>

@@ -8,19 +8,25 @@ import { WindowsButtonComponent } from './view/windows-button/windows-button.com
 import { WindowsMenuComponent } from './view/windows-menu/windows-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { HitboxContainerComponent } from './view/hitbox-container/hitbox-container.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HitboxComponent } from './view/hitbox/hitbox.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BackgroundComponent,
     WindowsButtonComponent,
-    WindowsMenuComponent
+    WindowsMenuComponent,
+    HitboxContainerComponent,
+    HitboxComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

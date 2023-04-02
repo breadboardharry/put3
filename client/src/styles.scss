@@ -22,16 +22,21 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-body {
-  margin: 0;
   padding: 0;
+
   overflow: hidden;
+  @extend %prevent-select;
+
   background-color: black;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .hidden {
   display: none;
+}
+
+%prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }

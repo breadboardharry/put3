@@ -1,0 +1,64 @@
+$handle-size: 4px;
+
+.container {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  z-index: 1;
+
+  // width: 8vw;
+  // height: 6vh;
+
+  background-color: aqua;
+}
+
+.resize-handle-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: blue;
+}
+
+.drag-handle {
+  width: 100%;
+  height: 100%;
+
+  cursor: move;
+}
+
+.resize-handle-bottom {
+  position: absolute;
+  height: $handle-size;
+  width: 100%;
+
+  cursor: row-resize;
+  z-index: 1;
+
+  bottom: 0;
+  background-color: red;
+}
+
+.resize-handle-right {
+  position: absolute;
+  width: $handle-size;
+  height: 100%;
+
+  cursor: col-resize;
+  z-index: 2;
+
+  right: 0;
+  background-color: orangered;
+}
+
+.resize-handle-corner {
+  position: absolute;
+  width: $handle-size;
+  height: $handle-size;
+
+  cursor: nwse-resize;
+  z-index: 3;
+
+  bottom: 0;
+  right: 0;
+  background-color: yellow;
+}
