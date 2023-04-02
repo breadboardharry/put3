@@ -9,13 +9,18 @@ import { HitboxService } from './services/hitbox-service/hitbox.service';
 export class AppComponent {
   title = 'put3';
 
-  constructor(private hitbox: HitboxService) { }
+  constructor(private hitboxService: HitboxService) { }
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    // CTRL +
+    // Add new hitbox
     if (event.ctrlKey && (event.code === '+' || event.code === 'Backquote')) {
-      this.hitbox.addNew();
+      this.hitboxService.addNew();
+    }
+
+    // Run
+    if (event.ctrlKey && event.code === 'Space') {
+      this.hitboxService.run();
     }
   }
 }

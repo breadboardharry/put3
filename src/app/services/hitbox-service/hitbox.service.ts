@@ -1,26 +1,37 @@
 import { Injectable } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
-export interface Button {
-  label: string;
-}
+import { Hitbox } from 'src/app/interfaces/hitbox';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HitboxService {
 
-  private buttons: Button[] = [
-    { label: 'Button 1' },
-  ];
+  private running: boolean = false;
+  public hitboxes: Hitbox[] = [];
 
   constructor() { }
 
   public addNew() {
-    this.buttons.push({ label: 'Button ' + (this.buttons.length + 1) });
+    // Add new hitbox only if not running
+    if(this.running) return;
+    this.hitboxes.push({
+      size: {
+        width: 250,
+        height: 100
+      },
+      behavior: {
+        trigger: undefined,
+        action: undefined
+      },
+      active: this.running
+    });
   }
 
-  public get list() {
-    return this.buttons;
+  public run() {
+    this.running = true;
+    this.hitboxes.forEach(hitbox => {
+      hitbox.active = true;
+    });
+    console.log('Running...');
   }
 }

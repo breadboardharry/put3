@@ -1,9 +1,35 @@
-<div class="container" cdkDragBoundary=".draggable-zone" cdkDrag
-  [ngStyle]="{'width.px': size.width, 'height.px': size.height}">
-  <div class="resize-handle-container">
-    <div class="resize-handle-right" (mousedown)="resizeStart('right')"></div>
-    <div class="resize-handle-bottom" (mousedown)="resizeStart('bottom')"></div>
-    <div class="resize-handle-corner" (mousedown)="resizeStart('corner')"></div>
-    <div class="drag-handle" cdkDragHandle></div>
+<div class="container" cdkDragBoundary=".draggable-zone" cdkDrag [ngStyle]="{'width.px': hitbox.size.width}"
+  (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()">
+  <div [ngStyle]="{'width.px': hitbox.size.width, 'height.px': hitbox.size.height}">
+    <div class="resize-handle-container" [ngClass]="{'hover': hover}">
+      <div class="resize-handle-right" (mousedown)="resizeStart('right')"></div>
+      <div class="resize-handle-bottom" (mousedown)="resizeStart('bottom')"></div>
+      <div class="resize-handle-corner" (mousedown)="resizeStart('corner')"></div>
+      <div class="drag-handle" cdkDragHandle><p *ngIf="hitbox.active">izjdo</p></div>
+    </div>
+  </div>
+  <!-- -------------------------- SETTINGS SECTION --------------------------- -->
+  <div class="settings-panel" [ngClass]="{'hover': hover}">
+    <button class="action-menu-button" [matMenuTriggerFor]="actionMenu" (click)="mouseEnter()">
+      {{hitbox.behavior.action ? hitbox.behavior.action.name : 'Action ▾'}}
+    </button>
+
+    <mat-menu #actionMenu="matMenu">
+      <button *ngFor="let action of actions" mat-menu-item
+      (mouseenter)="mouseEnter()" (click)="selectAction(action)">
+        {{action.name}}
+      </button>
+    </mat-menu>
+
+    <button class="action-menu-button" [matMenuTriggerFor]="triggerMenu" (click)="mouseEnter()">
+      {{hitbox.behavior.trigger ? hitbox.behavior.trigger.name : 'Trigger ▾'}}
+    </button>
+
+    <mat-menu #triggerMenu="matMenu">
+      <button *ngFor="let trigger of triggers" mat-menu-item
+      (mouseenter)="mouseEnter()" (click)="selectTrigger(trigger)">
+        {{trigger.name}}
+      </button>
+    </mat-menu>
   </div>
 </div>

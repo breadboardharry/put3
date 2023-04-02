@@ -8,7 +8,7 @@ import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 })
 export class HitboxContainerComponent implements OnInit {
 
-  constructor(public hitbox: HitboxService) { }
+  constructor(public hitboxService: HitboxService) { }
 
   ngOnInit(): void {
   }

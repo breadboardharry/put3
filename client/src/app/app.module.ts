@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HitboxContainerComponent } from './view/hitbox-container/hitbox-container.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HitboxComponent } from './view/hitbox/hitbox.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HitboxComponent } from './view/hitbox/hitbox.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatProgressSpinnerModule,
-    DragDropModule
+    DragDropModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]
