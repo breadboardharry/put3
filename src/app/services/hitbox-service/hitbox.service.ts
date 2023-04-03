@@ -16,8 +16,8 @@ export class HitboxService {
     if(this.running) return;
     this.hitboxes.push({
       size: {
-        width: 250,
-        height: 100
+        width: 120,
+        height: 120
       },
       behavior: {
         trigger: undefined,

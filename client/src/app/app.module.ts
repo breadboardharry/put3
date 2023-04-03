@@ -12,6 +12,7 @@ import { HitboxContainerComponent } from './view/hitbox-container/hitbox-contain
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { HitboxCoreComponent } from './view/hitbox-core/hitbox-core.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MatMenuModule } from '@angular/material/menu';
     WindowsButtonComponent,
     WindowsMenuComponent,
     HitboxContainerComponent,
-    HitboxComponent
+    HitboxComponent,
+    HitboxCoreComponent
   ],
   imports: [
     BrowserModule,
