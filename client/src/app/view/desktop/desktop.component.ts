@@ -8,7 +8,8 @@ import { DesktopService } from 'src/app/services/desktop-service/desktop.service
 })
 export class DesktopComponent implements OnInit {
 
-  backgroundImage: string = '';
+  // Background image set default
+  backgroundImage: string = 'assets/images/default-desktop-background.jpg';
 
   constructor(private desktopService: DesktopService) { }
 
@@ -16,7 +17,7 @@ export class DesktopComponent implements OnInit {
     // Get desktop background image
     this.desktopService.getBackground().then(image => {
       this.backgroundImage = image;
-    })
+    });
   }
 
 }
