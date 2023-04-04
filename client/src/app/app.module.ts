@@ -11,8 +11,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { HitboxCoreComponent } from './view/hitbox-core/hitbox-core.component';
-import { HitboxSettingsComponent } from './view/hitbox-settings/hitbox-settings.component';
+import { HitboxCoreComponent } from './view/hitbox/core/hitbox-core.component';
+import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
@@ -23,7 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     WindowsMenuComponent,
     HitboxComponent,
     HitboxCoreComponent,
-    HitboxSettingsComponent
+    HitboxSettingsComponent,
   ],
   imports: [
     BrowserModule,
