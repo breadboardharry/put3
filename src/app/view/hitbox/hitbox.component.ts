@@ -4,6 +4,7 @@ import { Action } from 'src/app/interfaces/action';
 import { Size } from 'src/app/interfaces/size';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Position } from 'src/app/interfaces/position';
+import { CdkDragEnd } from "@angular/cdk/drag-drop";
 
 type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 
@@ -29,15 +30,33 @@ export class HitboxComponent implements OnInit {
   }
 
   actions: Action[] = [
-    { name: 'Action 1', value: 'action-1' },
-    { name: 'Action 2', value: 'action-2' },
-    { name: 'Action 3', value: 'action-3'}
+    {
+      name: 'Action 1',
+      value: 'action-1'
+    },
+    {
+      name: 'Action 2',
+      value: 'action-2'
+    },
+    {
+      name: 'Action 3',
+      value: 'action-3'
+    }
   ];
 
   triggers: Trigger[] = [
-    { name: 'Hover', value: 'hover' },
-    { name: 'Clique', value: 'click' },
-    { name: 'Double clique', value: 'double-click' }
+    {
+      name: 'Hover',
+      value: 'hover',
+    },
+    {
+      name: 'Clique',
+      value: 'click',
+    },
+    {
+      name: 'Double clique',
+      value: 'double-click'
+    }
   ];
 
   resizing: ResizeHandle = 'none';
@@ -49,6 +68,12 @@ export class HitboxComponent implements OnInit {
   dy: number = 0;
 
   hover: boolean = false;
+  settingsPos: 'top' | 'bottom' = 'bottom';
+
+  dragEnd(event: CdkDragEnd) {
+    let yPos = event.source.getRootElement().getBoundingClientRect().y;
+    this.updateSettingsPanelPos(yPos);
+  }
 
   resizeStart(handle: ResizeHandle): void {
     this.resizing = handle;
@@ -72,6 +97,7 @@ export class HitboxComponent implements OnInit {
     if (this.resizing === 'bottom' || this.resizing === 'corner') {
       this.dy = this.mouse.y - this.lastMouse.y;
       this.hitbox.size.height = this.prevSize.height + this.dy;
+      this.updateSettingsPanelPos(this.mouse.y - this.hitbox.size.height);
     }
   }
 
@@ -81,27 +107,25 @@ export class HitboxComponent implements OnInit {
     if (this.resizing === 'right' || this.resizing === 'corner')
       this.hitbox.size.width = this.prevSize.width + this.dx;
 
-    if (this.resizing === 'bottom' || this.resizing === 'corner')
+    if (this.resizing === 'bottom' || this.resizing === 'corner') {
       this.hitbox.size.height = this.prevSize.height + this.dy;
+      this.updateSettingsPanelPos(this.mouse.y - this.hitbox.size.height);
+    }
 
     this.resizing = 'none';
   }
 
-  selectAction(action: Action): void {
-    this.hitbox.behavior.action = action;
-    this.hover = false;
-  }
-
-  selectTrigger(trigger: Trigger): void {
-    this.hitbox.behavior.trigger = trigger;
-    this.hover = false;
-  }
-
-  mouseEnter() {
-    this.hover = true;
+  mouseEnter(hover: boolean = true) {
+    this.hover = hover;
   }
 
   mouseLeave() {
     this.hover = false;
+  }
+
+  updateSettingsPanelPos(yPos: number) {
+    let windowHeight = window.innerHeight;
+
+    this.settingsPos = windowHeight-(yPos + this.hitbox.size.height) <= 160 ? 'top' : 'bottom';
   }
 }

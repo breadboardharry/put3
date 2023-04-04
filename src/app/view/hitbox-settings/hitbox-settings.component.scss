@@ -1,0 +1,54 @@
+.settings-panel {
+  align-self: center;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+
+  opacity: 0;
+  transition: opacity 0.55s .65s ease-out;
+}
+
+.settings-panel.hover {
+  opacity: 1;
+  transition: opacity .1s;
+}
+
+.action-menu-button {
+  border: none;
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 500;
+  font-family: Roboto;
+
+  white-space: nowrap;
+
+  margin: 0;
+  padding: .5vh .75vw;
+
+  display: flex;
+
+  border-radius: 3px;
+
+  background-color: white;
+
+  &:hover {
+    background-color: rgb(203, 203, 203);
+  }
+
+  &:disabled {
+    background-color: rgb(174, 174, 174);
+    cursor: default;
+  }
+}
+
+.menu-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.bold {
+  font-weight: bold;
+}

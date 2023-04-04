@@ -1,5 +1,5 @@
 <div class="container" cdkDragBoundary=".draggable-zone" cdkDrag [cdkDragDisabled]="hitbox.active" [ngStyle]="{'width.px': hitbox.size.width}"
-  (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()">
+  (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()" (cdkDragEnded)="dragEnd($event)">
   <div [ngStyle]="{'width.px': hitbox.size.width, 'height.px': hitbox.size.height}">
     <!-- ---------------------------- RESIZE & MOVE ---------------------------- -->
     <div *ngIf="!hitbox.active" class="resize-handle-container" [ngClass]="{'hover': hover}">
@@ -11,28 +11,7 @@
     <!-- ------------------------- BUTTON WHEN ACTIVE -------------------------- -->
     <app-hitbox-core *ngIf="hitbox.active" [hitbox]="hitbox"></app-hitbox-core>
   </div>
+
   <!-- -------------------------- SETTINGS SECTION --------------------------- -->
-  <div *ngIf="!hitbox.active" class="settings-panel" [ngClass]="{'hover': hover}">
-    <button class="action-menu-button" [matMenuTriggerFor]="actionMenu" (click)="mouseEnter()">
-      {{hitbox.behavior.action ? hitbox.behavior.action.name : 'Action ▾'}}
-    </button>
-
-    <mat-menu #actionMenu="matMenu">
-      <button *ngFor="let action of actions" mat-menu-item
-      (mouseenter)="mouseEnter()" (click)="selectAction(action)">
-        {{action.name}}
-      </button>
-    </mat-menu>
-
-    <button class="action-menu-button" [matMenuTriggerFor]="triggerMenu" (click)="mouseEnter()">
-      {{hitbox.behavior.trigger ? hitbox.behavior.trigger.name : 'Trigger ▾'}}
-    </button>
-
-    <mat-menu #triggerMenu="matMenu">
-      <button *ngFor="let trigger of triggers" mat-menu-item
-      (mouseenter)="mouseEnter()" (click)="selectTrigger(trigger)">
-        {{trigger.name}}
-      </button>
-    </mat-menu>
-  </div>
+  <app-hitbox-settings [class]="'pos-' + settingsPos" *ngIf="!hitbox.active" [hitbox]="hitbox" [triggers]="triggers" [actions]="actions" [(hover)]="hover"></app-hitbox-settings>
 </div>

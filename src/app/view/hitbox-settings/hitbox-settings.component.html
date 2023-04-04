@@ -1,0 +1,34 @@
+<div class="settings-panel" (mouseenter)="mouseEnter()" [ngClass]="{'hover': hover}">
+
+  <!-- ------------------------ TRIGGERS AND ACTIONS ------------------------- -->
+  <button class="action-menu-button" [matMenuTriggerFor]="behaviorMenu" (mouseenter)="mouseEnter()">
+    <img class="menu-icon" src="assets/icons/rocket.png">
+  </button>
+
+  <mat-menu #behaviorMenu="matMenu">
+    <div *ngFor="let trigger of triggers">
+      <button [matMenuTriggerFor]="actionsMenu" mat-menu-item
+      [ngClass]="{'bold': hitbox.events[trigger.value]}" (mouseenter)="mouseEnter()">
+        {{trigger.name}}
+      </button>
+
+      <mat-menu #actionsMenu="matMenu">
+        <button *ngFor="let action of actions" mat-menu-item
+        (click)="assignAction(action, trigger)" (mouseenter)="mouseEnter()"
+        [ngClass]="{'bold': hitbox.events[trigger.value] == action}">
+          {{action.name}}
+        </button>
+      </mat-menu>
+    </div>
+  </mat-menu>
+
+  <!-- --------------------------- OTHER SETTINGS ---------------------------- -->
+  <button class="action-menu-button" [matMenuTriggerFor]="othersMenu" disabled>
+    <img class="menu-icon" src="assets/icons/more.png">
+  </button>
+
+  <mat-menu #othersMenu="matMenu">
+    <!-- Empty for the moment -->
+  </mat-menu>
+
+</div>

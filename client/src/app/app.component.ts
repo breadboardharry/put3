@@ -9,7 +9,7 @@ import { HitboxService } from './services/hitbox-service/hitbox.service';
 export class AppComponent {
   title = 'put3';
 
-  constructor(private hitboxService: HitboxService) { }
+  constructor(public hitboxService: HitboxService) { }
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {

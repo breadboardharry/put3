@@ -19,16 +19,14 @@ export class HitboxService {
         width: 120,
         height: 120
       },
-      behavior: {
-        trigger: undefined,
-        action: undefined
-      },
+      events: [],
       active: this.running
     });
   }
 
   public run() {
     this.running = true;
+    console.log(this.hitboxes);
     this.hitboxes.forEach(hitbox => {
       hitbox.active = true;
     });

@@ -77,41 +77,17 @@ $handle-size: 5px;
   right: 0;
 }
 
-.settings-panel {
-  align-self: center;
-
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 8px;
-
-  opacity: 0;
-  transition: opacity 0.55s .65s ease-out;
+app-hitbox-settings {
+  position: absolute;
+  left: 0;
 }
 
-.settings-panel.hover {
-  opacity: 1;
-  transition: opacity .1s;
+.pos-top {
+  top: -8px;
+  transform: translate(0, -100%);
 }
 
-.action-menu-button {
-  border: none;
-  cursor: pointer;
-
-  font-size: 14px;
-  font-weight: 500;
-  font-family: Roboto;
-
-  white-space: nowrap;
-
-  margin: 0;
-  padding: .5vh 1vw;
-
-  border-radius: 3px;
-
-  background-color: white;
-
-  &:hover {
-    background-color: rgb(203, 203, 203);
-  }
+.pos-bottom {
+  bottom: -8px;
+  transform: translate(0, 100%);
 }
