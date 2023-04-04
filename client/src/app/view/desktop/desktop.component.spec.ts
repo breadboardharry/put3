@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BackgroundComponent } from './background.component';
+import { DesktopComponent } from './desktop.component';
 
 describe('BackgroundComponent', () => {
-  let component: BackgroundComponent;
-  let fixture: ComponentFixture<BackgroundComponent>;
+  let component: DesktopComponent;
+  let fixture: ComponentFixture<DesktopComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BackgroundComponent ]
+      declarations: [ DesktopComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BackgroundComponent);
+    fixture = TestBed.createComponent(DesktopComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
