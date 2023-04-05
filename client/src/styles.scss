@@ -15,6 +15,10 @@ $windows-theme: mat.define-light-theme((
 @include mat.all-component-themes($windows-theme);
 @include mat.strong-focus-indicators-theme($windows-theme);
 
+:root {
+  --cursor-style: default;
+}
+
 html,
 body {
   height: 100%;
@@ -39,4 +43,8 @@ body {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+
+.overwrite-cursor {
+  cursor: var(--cursor-style) !important;
 }

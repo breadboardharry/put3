@@ -1,0 +1,24 @@
+.selection-area {
+  width: 100%;
+  height: 100%;
+
+  box-sizing: border-box;
+
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.hover:not(.focus) {
+  background-color: rgba(150, 161, 167, 0.2);
+  border: 1px solid rgba(150, 150, 157, 0.3);
+}
+
+.focus {
+  background-color: rgba(157, 196, 217, 0.355);
+  border: 1px solid rgba(138, 164, 208, 0.599);
+}
+
+.loading {
+  cursor: wait;
+}

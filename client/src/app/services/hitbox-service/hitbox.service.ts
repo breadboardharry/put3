@@ -16,8 +16,8 @@ export class HitboxService {
     if(this.running) return;
     this.hitboxes.push({
       size: {
-        width: 120,
-        height: 120
+        width: 88,
+        height: 88
       },
       events: [],
       active: this.running
