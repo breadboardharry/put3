@@ -1,19 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CursorStyle } from 'src/app/enums/cursor-style';
 import { CursorService } from 'src/app/services/cursor-service/cursor.service';
+import { InteractionTemplateComponent } from '../template/interaction-template.component';
 
 @Component({
   selector: 'app-desktop-icon',
   templateUrl: './desktop-icon.component.html',
   styleUrls: ['./desktop-icon.component.scss']
 })
-export class DesktopIconComponent implements OnInit {
-
-  @Input() hoverEvent: any;
-  @Input() clickEvent: any;
-  @Input() singleClickEvent: any;
-  @Input() doubleClickEvent: any;
-  @Input() outsideClickEvent: any;
+export class DesktopIconComponent extends InteractionTemplateComponent {
 
   hover: boolean = false;
   focus: boolean = false;
@@ -22,14 +17,8 @@ export class DesktopIconComponent implements OnInit {
   clicking: boolean = false;
   loading: boolean = false;
 
-  constructor(private cursorService: CursorService) { }
-
-  ngOnInit(): void {
-    this.hoverEvent.subscribe((hover: boolean) => this.onHover(hover));
-    this.clickEvent.subscribe(() => this.onClick());
-    this.singleClickEvent.subscribe(() => this.onSingleClick());
-    this.doubleClickEvent.subscribe(() => this.onDoubleClick());
-    this.outsideClickEvent.subscribe(() => this.onOutsideClick());
+  constructor(private cursorService: CursorService) {
+    super();
   }
 
   onHover(hover: boolean) {
@@ -51,6 +40,7 @@ export class DesktopIconComponent implements OnInit {
 
   onDoubleClick() {
     this.loading = true;
+    this.focus = false;
     this.cursorService.setStyle(CursorStyle.Progress, 2000).then(() => {
       this.loading = false;
     });

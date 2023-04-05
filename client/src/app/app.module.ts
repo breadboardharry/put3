@@ -27,7 +27,7 @@ import { ChildElementsDirective } from './directives/child-elements.directive';
     HitboxCoreComponent,
     HitboxSettingsComponent,
     DesktopIconComponent,
-    ChildElementsDirective,
+    ChildElementsDirective
   ],
   imports: [
     BrowserModule,
