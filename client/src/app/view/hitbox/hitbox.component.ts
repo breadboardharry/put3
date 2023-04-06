@@ -5,6 +5,8 @@ import { Size } from 'src/app/interfaces/size';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Position } from 'src/app/interfaces/position';
 import { CdkDragEnd } from "@angular/cdk/drag-drop";
+import { DesktopIconComponent } from '../interaction/desktop-icon/desktop-icon.component';
+import { ComponentLocation } from 'src/app/enums/component-location';
 
 type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 
@@ -32,15 +34,9 @@ export class HitboxComponent implements OnInit {
   actions: Action[] = [
     {
       name: 'Action 1',
-      value: 'action-1'
-    },
-    {
-      name: 'Action 2',
-      value: 'action-2'
-    },
-    {
-      name: 'Action 3',
-      value: 'action-3'
+      value: 'action-1',
+      component: DesktopIconComponent,
+      location: ComponentLocation.Core
     }
   ];
 

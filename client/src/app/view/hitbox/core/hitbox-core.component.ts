@@ -1,7 +1,10 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { ChildElementsDirective } from 'src/app/directives/child-elements.directive';
 import { DesktopIconComponent } from '../../interaction/desktop-icon/desktop-icon.component';
+import { Action } from 'src/app/interfaces/action';
+import { ComponentLocation } from 'src/app/enums/component-location';
+import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 
 @Component({
   selector: 'app-hitbox-core',
@@ -11,6 +14,7 @@ import { DesktopIconComponent } from '../../interaction/desktop-icon/desktop-ico
 export class HitboxCoreComponent implements OnInit {
 
   @ViewChild(ChildElementsDirective, {static: true}) childElements!: ChildElementsDirective;
+  childElementsContainerRef!: ViewContainerRef;
 
   @Input() hitbox!: Hitbox;
 
@@ -24,17 +28,41 @@ export class HitboxCoreComponent implements OnInit {
   doubleClickEvent = new EventEmitter();
   outsideClickEvent = new EventEmitter();
 
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef, private desktopService: DesktopService) { }
 
   ngOnInit(): void {
-    this.addComponent();
+    // Get reference to the component container
+    this.childElementsContainerRef = this.childElements.viewContainerRef;
+    this.childElementsContainerRef.clear();
+
+    const events = this.hitbox.events;
+
+    // Generate interaction component for each trigger
+    if('hover' in events && events.hover)
+      this.addComponent(events.hover);
+
+    if('click' in events && events.click)
+      this.addComponent(events.click);
+
+    if('doubleClick' in events && events.doubleClick)
+      this.addComponent(events.doubleClick);
+
   }
 
-  addComponent() {
-    const viewContainerRef = this.childElements.viewContainerRef;
-    viewContainerRef.clear();
+  addComponent(action: Action) {
+    let componentRef;
 
-    const componentRef = viewContainerRef.createComponent(DesktopIconComponent);
+    // Add the component to the correct location
+    switch (action.location) {
+      case ComponentLocation.Core:
+        componentRef = this.childElementsContainerRef.createComponent<any>(action.component);
+        break;
+
+      case ComponentLocation.Desktop:
+        componentRef = this.desktopService.containerRef.createComponent<any>(action.component);
+        break;
+    }
+
     componentRef.instance.hoverEvent = this.hoverEvent;
     componentRef.instance.clickEvent = this.clickEvent;
     componentRef.instance.singleClickEvent = this.singleClickEvent;
