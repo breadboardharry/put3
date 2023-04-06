@@ -6,5 +6,6 @@ export interface Action {
   value: string;
   component: any;
   location: ComponentLocation,
-  triggers: ETrigger[]
+  triggers: ETrigger[],
+  lockedTriggers?: ETrigger[]
 }

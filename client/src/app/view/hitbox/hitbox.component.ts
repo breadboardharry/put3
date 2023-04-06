@@ -39,7 +39,8 @@ export class HitboxComponent implements OnInit {
       value: 'desktop-icon',
       component: DesktopIconComponent,
       location: ComponentLocation.Core,
-      triggers: [ETrigger.Default]
+      triggers: [ETrigger.Default],
+      lockedTriggers: [ETrigger.Hover, ETrigger.Click]
     },
     {
       name: 'Rick Roll',

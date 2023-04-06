@@ -22,7 +22,14 @@ export class HitboxSettingsComponent implements OnInit {
   }
 
   assignAction(action: Action, trigger: Trigger) {
-    this.hitbox.events[trigger.value] = action;
+    // Check if this action is already assigned
+    if(this.hitbox.events[trigger.value]) {
+      delete this.hitbox.events[trigger.value];
+    }
+    else {
+      this.hitbox.events[trigger.value] = action;
+    }
+
     this.mouseLeave();
   }
 
@@ -32,5 +39,33 @@ export class HitboxSettingsComponent implements OnInit {
 
   mouseLeave() {
     this.hoverChange.emit(false);
+  }
+
+  isDisabled(trigger: Trigger): boolean {
+    let isTriggerUsed: boolean = false;
+
+    // Check if at least one action can be associated with this trigger
+    for(let action of this.actions) {
+
+      if(action.triggers.includes(trigger.value)) {
+        isTriggerUsed = true;
+        break;
+      }
+    }
+
+    // Disable if no trigger can be assigned to this trigger
+    if(!isTriggerUsed) return true;
+
+    // For each assigned action
+    for(let action of Object.values(this.hitbox.events) as Action[]) {
+      // Check if this action blocks this trigger
+      if('lockedTriggers' in action && action.lockedTriggers &&
+      action.lockedTriggers.includes(trigger.value)) {
+        return true;
+      }
+    }
+
+    // Everythings OK
+    return false;
   }
 }
