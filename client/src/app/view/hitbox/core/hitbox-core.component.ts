@@ -5,6 +5,7 @@ import { DesktopIconComponent } from '../../interaction/desktop-icon/desktop-ico
 import { Action } from 'src/app/interfaces/action';
 import { ComponentLocation } from 'src/app/enums/component-location';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
+import { ETrigger } from 'src/app/enums/trigger';
 
 @Component({
   selector: 'app-hitbox-core',
@@ -36,17 +37,12 @@ export class HitboxCoreComponent implements OnInit {
     this.childElementsContainerRef.clear();
 
     const events = this.hitbox.events;
+    console.log({...events});
+    console.log(events.default);
 
     // Generate interaction component for each trigger
-    if('hover' in events && events.hover)
-      this.addComponent(events.hover);
-
-    if('click' in events && events.click)
-      this.addComponent(events.click);
-
-    if('doubleClick' in events && events.doubleClick)
-      this.addComponent(events.doubleClick);
-
+    if(ETrigger.Default in events && events.default)
+      this.addComponent(events.default);
   }
 
   addComponent(action: Action) {
@@ -71,6 +67,10 @@ export class HitboxCoreComponent implements OnInit {
   }
 
   mouseEnter() {
+    const events = this.hitbox.events;
+    if(ETrigger.Hover in events && events.hover)
+      this.addComponent(events.hover);
+
     this.hoverEvent.emit(true);
   }
 
@@ -100,10 +100,18 @@ export class HitboxCoreComponent implements OnInit {
   }
 
   private singleClick() {
+    const events = this.hitbox.events;
+    if(ETrigger.Click in events && events.click)
+      this.addComponent(events.click);
+
     this.singleClickEvent.emit();
   }
 
   private doubleClick() {
+    const events = this.hitbox.events;
+    if(ETrigger.DoubleClick in events && events.doubleClick)
+      this.addComponent(events.doubleClick);
+
     this.doubleClickEvent.emit();
   }
 

@@ -1,4 +1,6 @@
+import { ETrigger } from "../enums/trigger";
+
 export interface Trigger {
   name: string;
-  value: string;
+  value: ETrigger;
 }

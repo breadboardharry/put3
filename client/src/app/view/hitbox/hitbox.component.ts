@@ -7,6 +7,8 @@ import { Position } from 'src/app/interfaces/position';
 import { CdkDragEnd } from "@angular/cdk/drag-drop";
 import { DesktopIconComponent } from '../interaction/desktop-icon/desktop-icon.component';
 import { ComponentLocation } from 'src/app/enums/component-location';
+import { RickRollComponent } from '../interaction/rick-roll/rick-roll.component';
+import { ETrigger } from 'src/app/enums/trigger';
 
 type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 
@@ -33,25 +35,37 @@ export class HitboxComponent implements OnInit {
 
   actions: Action[] = [
     {
-      name: 'Action 1',
-      value: 'action-1',
+      name: 'Desktop Icon',
+      value: 'desktop-icon',
       component: DesktopIconComponent,
-      location: ComponentLocation.Core
-    }
+      location: ComponentLocation.Core,
+      triggers: [ETrigger.Default]
+    },
+    {
+      name: 'Rick Roll',
+      value: 'rick-roll',
+      component: RickRollComponent,
+      location: ComponentLocation.Desktop,
+      triggers: [ETrigger.Click, ETrigger.DoubleClick]
+    },
   ];
 
   triggers: Trigger[] = [
     {
+      name: 'Défaut',
+      value: ETrigger.Default,
+    },
+    {
       name: 'Hover',
-      value: 'hover',
+      value: ETrigger.Hover,
     },
     {
       name: 'Clique',
-      value: 'click',
+      value: ETrigger.Click,
     },
     {
       name: 'Double clique',
-      value: 'double-click'
+      value: ETrigger.DoubleClick
     }
   ];
 

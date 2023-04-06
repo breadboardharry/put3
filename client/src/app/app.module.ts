@@ -16,6 +16,7 @@ import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.
 import { HttpClientModule } from '@angular/common/http';
 import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
 import { ChildElementsDirective } from './directives/child-elements.directive';
+import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ChildElementsDirective } from './directives/child-elements.directive';
     HitboxCoreComponent,
     HitboxSettingsComponent,
     DesktopIconComponent,
-    ChildElementsDirective
+    ChildElementsDirective,
+    RickRollComponent
   ],
   imports: [
     BrowserModule,

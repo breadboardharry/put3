@@ -13,11 +13,13 @@
       </button>
 
       <mat-menu #actionsMenu="matMenu">
-        <button *ngFor="let action of actions" mat-menu-item
-        (click)="assignAction(action, trigger)" (mouseenter)="mouseEnter()"
-        [ngClass]="{'bold': hitbox.events[trigger.value] == action}">
-          {{action.name}}
-        </button>
+        <div *ngFor="let action of actions">
+          <button *ngIf="action.triggers.includes(trigger.value)" mat-menu-item
+          (click)="assignAction(action, trigger)" (mouseenter)="mouseEnter()"
+          [ngClass]="{'bold': hitbox.events[trigger.value] == action}">
+            {{action.name}}
+          </button>
+        </div>
       </mat-menu>
     </div>
   </mat-menu>
