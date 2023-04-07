@@ -14,6 +14,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { HitboxCoreComponent } from './view/hitbox/core/hitbox-core.component';
 import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
+import { ChildElementsDirective } from './directives/child-elements.directive';
+import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +27,9 @@ import { HttpClientModule } from '@angular/common/http';
     HitboxComponent,
     HitboxCoreComponent,
     HitboxSettingsComponent,
+    DesktopIconComponent,
+    ChildElementsDirective,
+    RickRollComponent
   ],
   imports: [
     BrowserModule,

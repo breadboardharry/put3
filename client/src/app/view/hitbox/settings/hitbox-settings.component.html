@@ -1,23 +1,26 @@
 <div class="settings-panel" (mouseenter)="mouseEnter()" [ngClass]="{'hover': hover}">
 
   <!-- ------------------------ TRIGGERS AND ACTIONS ------------------------- -->
-  <button class="action-menu-button" [matMenuTriggerFor]="behaviorMenu" (mouseenter)="mouseEnter()">
+  <button class="action-menu-button" [matMenuTriggerFor]="behaviorMenu" (mouseenter)="mouseEnter()"
+  [disabled]="!actions.length">
     <img class="menu-icon" src="assets/icons/rocket.png">
   </button>
 
   <mat-menu #behaviorMenu="matMenu">
     <div *ngFor="let trigger of triggers">
-      <button [matMenuTriggerFor]="actionsMenu" mat-menu-item
+      <button *ngIf="!isDisabled(trigger)" [matMenuTriggerFor]="actionsMenu" mat-menu-item
       [ngClass]="{'bold': hitbox.events[trigger.value]}" (mouseenter)="mouseEnter()">
         {{trigger.name}}
       </button>
 
       <mat-menu #actionsMenu="matMenu">
-        <button *ngFor="let action of actions" mat-menu-item
-        (click)="assignAction(action, trigger)" (mouseenter)="mouseEnter()"
-        [ngClass]="{'bold': hitbox.events[trigger.value] == action}">
-          {{action.name}}
-        </button>
+        <div *ngFor="let action of actions">
+          <button *ngIf="action.triggers.includes(trigger.value)" mat-menu-item
+          (click)="assignAction(action, trigger)" (mouseenter)="mouseEnter()"
+          [ngClass]="{'bold': hitbox.events[trigger.value] == action}">
+            {{action.name}}
+          </button>
+        </div>
       </mat-menu>
     </div>
   </mat-menu>

@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { HitboxService } from './services/hitbox-service/hitbox.service';
+import { CursorService } from './services/cursor-service/cursor.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { HitboxService } from './services/hitbox-service/hitbox.service';
 export class AppComponent {
   title = 'put3';
 
-  constructor(public hitboxService: HitboxService) { }
+  constructor(public hitboxService: HitboxService, public cursorService: CursorService ) { }
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
