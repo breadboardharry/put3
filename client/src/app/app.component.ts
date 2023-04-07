@@ -24,4 +24,9 @@ export class AppComponent {
       this.hitboxService.run();
     }
   }
+
+  @HostListener('contextmenu', ['$event'])
+  onRightClick(event: any) {
+    event.preventDefault();
+  }
 }
