@@ -32,3 +32,6 @@ Add-Type -AssemblyName System.Windows.Forms
 Start-Sleep -Seconds 2  # Attendre que la page soit chargée
 # $webBrowser.Focus()
 [System.Windows.Forms.SendKeys]::SendWait("{F11}")
+
+Set-AudioDevice -PlaybackMute 0
+Set-AudioDevice -PlaybackVolume 100
