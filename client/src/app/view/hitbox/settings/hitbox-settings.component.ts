@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ETrigger } from 'src/app/enums/trigger';
 import { Action } from 'src/app/interfaces/action';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
@@ -67,5 +68,9 @@ export class HitboxSettingsComponent implements OnInit {
 
     // Everythings OK
     return false;
+  }
+
+  isActionEnabled(action: Action, trigger: Trigger): boolean {
+    return action.triggers.includes(ETrigger.All) || action.triggers.includes(trigger.value);
   }
 }

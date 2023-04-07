@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
 import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
+import { AudioPlayerComponent } from './view/interaction/audio-player/audio-player.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.compon
     HitboxSettingsComponent,
     DesktopIconComponent,
     ChildElementsDirective,
-    RickRollComponent
+    RickRollComponent,
+    AudioPlayerComponent
   ],
   imports: [
     BrowserModule,

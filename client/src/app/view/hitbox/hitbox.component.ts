@@ -9,6 +9,7 @@ import { DesktopIconComponent } from '../interaction/desktop-icon/desktop-icon.c
 import { ComponentLocation } from 'src/app/enums/component-location';
 import { RickRollComponent } from '../interaction/rick-roll/rick-roll.component';
 import { ETrigger } from 'src/app/enums/trigger';
+import { AudioPlayerComponent } from '../interaction/audio-player/audio-player.component';
 
 type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 
@@ -48,6 +49,13 @@ export class HitboxComponent implements OnInit {
       component: RickRollComponent,
       location: ComponentLocation.Desktop,
       triggers: [ETrigger.Click, ETrigger.DoubleClick]
+    },
+    {
+      name: 'Pet',
+      value: 'pet',
+      component: AudioPlayerComponent,
+      location: ComponentLocation.Desktop,
+      triggers: [ETrigger.All]
     },
   ];
 

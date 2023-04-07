@@ -15,7 +15,7 @@
 
       <mat-menu #actionsMenu="matMenu">
         <div *ngFor="let action of actions">
-          <button *ngIf="action.triggers.includes(trigger.value)" mat-menu-item
+          <button *ngIf="isActionEnabled(action, trigger)" mat-menu-item
           (click)="assignAction(action, trigger)" (mouseenter)="mouseEnter()"
           [ngClass]="{'bold': hitbox.events[trigger.value] == action}">
             {{action.name}}
