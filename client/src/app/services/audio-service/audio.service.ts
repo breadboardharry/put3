@@ -6,9 +6,11 @@ import { SoundLoop } from 'src/app/interfaces/sound-loop';
 })
 export class AudioService {
 
+  private audios: HTMLAudioElement[] = [];
+
   constructor() { }
 
-  async play(src: string, loop: SoundLoop | null = null): Promise<void> {
+  public async play(src: string, loop: SoundLoop | null = null): Promise<void> {
     let rep = 0;
 
     do {
@@ -23,9 +25,16 @@ export class AudioService {
     return new Promise<void>((resolve) => {
       audio.load();
       audio.play();
+      this.audios.push(audio);
       audio.addEventListener('ended', () => {
         resolve();
       });
     })
+  }
+
+  public stopAll(): void {
+    for(let audio of this.audios) {
+      audio.pause();
+    }
   }
 }

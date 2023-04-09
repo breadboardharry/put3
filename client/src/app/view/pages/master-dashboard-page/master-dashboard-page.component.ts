@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AssetsService } from 'src/app/services/assets-service/assets.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class MasterDashboardPageComponent implements OnInit {
   fools: any[] = [];
   target: any = null;
 
-  constructor(private websocket: WebSocketService) { }
+  constructor(private websocket: WebSocketService, public assetsService: AssetsService) { }
 
   ngOnInit(): void {
     // Update role if needed
@@ -22,14 +23,41 @@ export class MasterDashboardPageComponent implements OnInit {
 
     this.websocket.socket.on('foolList', (foolList: any) => {
       this.fools = foolList;
+      if (foolList.length <= 0) this.target = null;
     });
   }
 
   selectTarget(fool: any) {
-    this.target = fool;
+    this.target = this.target === fool ? null : fool;
   }
 
-  action() {
-    this.websocket.socket.emit('action', { target: this.target });
+  soundboard(track: string) {
+    this.websocket.socket.emit('action', {
+      target: this.target,
+      action: {
+        type: 'audio',
+        track: track
+      }
+    });
+  }
+
+  normalize(str: string): string {
+    const trim = 18;
+    // Remove the first part of the path and the file extension
+    str = str.split('/')[1].split('.')[0];
+    const len = str.length;
+    // Trim the string if it's too long
+    if (len >= trim) str = str.substring(0, trim) + '...';
+    return str;
+  }
+
+  stopAll() {
+    this.websocket.socket.emit('action', {
+      target: this.target,
+      action: {
+        type: 'audio',
+        stop: true
+      }
+    });
   }
 }

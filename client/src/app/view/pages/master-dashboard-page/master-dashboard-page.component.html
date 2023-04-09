@@ -1,4 +1,23 @@
-<button *ngFor="let fool of fools" (click)="selectTarget(fool)">
-  {{fool.name}}
-</button>
-<button (click)="action()" [disabled]="!fools.length">Action</button>
+<div class="page">
+  <div class="content">
+    <div class="fools-container">
+      <div class="fool-card" [ngClass]="{'selected': fool == target}" *ngFor="let fool of fools"
+        (click)="selectTarget(fool)">
+        {{fool.name}}
+      </div>
+    </div>
+
+    <div class="soundboard">
+      <div class="sidebar">
+        Soundboard
+        <button class="stop" (click)="stopAll()" [disabled]="!fools.length || target == null">STOP</button>
+      </div>
+      <div class="buttons">
+        <button class="sound-button" *ngFor="let track of assetsService.getFlattenSounds()" (click)="soundboard(track)"
+          [disabled]="!fools.length || target == null">
+          {{normalize(track)}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

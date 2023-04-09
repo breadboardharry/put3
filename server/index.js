@@ -65,7 +65,7 @@ sockets.on('connection', socket => {
     users[socket.id].status = 'active';
     users[socket.id].role = role;
 
-    if (role == 'fool') users[socket.id].name = 'JZiosdzd';
+    if (role == 'fool') users[socket.id].name = 'Je suis un pc';
 
     // Send updated fool list
     const foolList = Object.values(toArray(users)).filter(user => user.role == 'fool');
