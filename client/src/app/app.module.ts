@@ -18,6 +18,7 @@ import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-ic
 import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
 import { AudioPlayerComponent } from './view/interaction/audio-player/audio-player.component';
+import { HomePageComponent } from './view/pages/home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AudioPlayerComponent } from './view/interaction/audio-player/audio-play
     DesktopIconComponent,
     ChildElementsDirective,
     RickRollComponent,
-    AudioPlayerComponent
+    AudioPlayerComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
