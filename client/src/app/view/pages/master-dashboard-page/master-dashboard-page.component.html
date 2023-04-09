@@ -1,0 +1,4 @@
+<button *ngFor="let fool of fools" (click)="selectTarget(fool)">
+  {{fool.name}}
+</button>
+<button (click)="action()" [disabled]="!fools.length">Action</button>

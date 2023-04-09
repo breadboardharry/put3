@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Routes = require('./routes/routes');
+const { toArray } = require('./utils/utils');
 
 // Constants and options
 const PORT = process.env.PORT || 3000;
@@ -17,7 +18,7 @@ const corsOptions = {
 
 // Setup servers
 const server = http.createServer(app);
-const socket = require('socket.io')(server, {
+const sockets = require('socket.io')(server, {
   cors: corsOptions
 });
 
@@ -31,12 +32,51 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 // Routes
 app.use('/', Routes);
 
+let users = {};
+
 // Server starting
 server.listen(PORT, () => {
   console.log(`[*] Server started on: http://localhost:${PORT}`);
+
+  // setInterval(() => {
+  //   console.log('Users: ' + JSON.stringify(users));
+  // }, 2000);
 });
 
 // On every client connection
-socket.on('connection', socket => {
-  console.log('Socket: client connected');
+sockets.on('connection', socket => {
+  console.log('[-] New user connected: ' + socket.id);
+  users[socket.id] =  {
+    status: 'pending',
+  };
+  socket.emit('id', socket.id);
+
+  socket.on('disconnect', (data) => {
+    console.log('[-] User disconnected: ' + socket.id);
+    delete users[socket.id];
+
+    // Send updated fool list
+    const foolList = Object.values(toArray(users)).filter(user => user.role == 'fool');
+    sockets.emit('foolList', foolList);
+  });
+
+  socket.on('role', (role) => {
+    console.log('[-] User ' + socket.id + ' selected role ' + role);
+    users[socket.id].status = 'active';
+    users[socket.id].role = role;
+
+    if (role == 'fool') users[socket.id].name = 'JZiosdzd';
+
+    // Send updated fool list
+    const foolList = Object.values(toArray(users)).filter(user => user.role == 'fool');
+    sockets.emit('foolList', foolList);
+  });
+
+  socket.on('action', (data) => {
+    console.log('[-] Action from ' + socket.id + ' to ' + data.target.id);
+    sockets.emit('action', data);
+  });
 });
+
+
+

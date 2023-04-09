@@ -1,22 +1,40 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebsocketService {
+export class WebSocketService {
 
-  private socket: any;
-  public data: any;
+  private _socket: any;
+  private _id: string = '';
+  private _role: string = '';
 
   constructor() {
     // Connect Socket with server URL
-    this.socket = io(environment.apiUrl);
-
-    this.socket.on('notification', (data: any) => {
-      this.data = data;
-      console.log(data);
+    this._socket = io(environment.apiUrl);
+    // Get ID from server
+    this._socket.on('id', (id :string) => {
+      this._id = id;
+      console.log('ID: ' + this._id);
+      this.socket.off('id');
     });
+  }
+
+  get socket() {
+    return this._socket;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get role() {
+    return this._role;
+  }
+
+  set role(role: string) {
+    this._role = role;
   }
 }

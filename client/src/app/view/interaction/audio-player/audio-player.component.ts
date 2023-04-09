@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { InteractionTemplateComponent } from '../template/interaction-template.component';
-import { AudioService } from 'src/app/services/sound-service/audio.service';
+import { AudioService } from 'src/app/services/audio-service/audio.service';
 
 @Component({
   selector: 'app-audio-player',

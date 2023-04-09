@@ -19,6 +19,8 @@ import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
 import { AudioPlayerComponent } from './view/interaction/audio-player/audio-player.component';
 import { HomePageComponent } from './view/pages/home-page/home-page.component';
+import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page/master-dashboard-page.component';
+import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-page.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { HomePageComponent } from './view/pages/home-page/home-page.component';
     ChildElementsDirective,
     RickRollComponent,
     AudioPlayerComponent,
-    HomePageComponent
+    HomePageComponent,
+    MasterDashboardPageComponent,
+    FoolHomePageComponent
   ],
   imports: [
     BrowserModule,

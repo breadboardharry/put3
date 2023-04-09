@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { WebsocketService } from 'src/app/services/websocket-service/websocket.service';
+import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
   selector: 'app-home-page',
@@ -9,18 +9,20 @@ import { WebsocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class HomePageComponent implements OnInit {
 
-  constructor(private router: Router, private websocket: WebsocketService) { }
+  constructor(private router: Router, private websocket: WebSocketService) { }
 
   ngOnInit(): void {
   }
 
   chooseMaster() {
-    console.log('Master chosen');
+    this.websocket.role = 'master';
+    this.websocket.socket.emit('role', 'master');
     this.router.navigate(['/master']);
   }
 
   chooseFool() {
-    console.log('Fool chosen');
+    this.websocket.role = 'fool';
+    this.websocket.socket.emit('role', 'fool');
     this.router.navigate(['/fool']);
   }
 }
