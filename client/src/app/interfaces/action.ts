@@ -4,8 +4,9 @@ import { ETrigger } from "../enums/trigger";
 export interface Action {
   name: string;
   value: string;
-  component: any;
+  view: any;
   location: ComponentLocation,
   triggers: ETrigger[],
-  lockedTriggers?: ETrigger[]
+  lockedTriggers?: ETrigger[],
+  data?: any;
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { InteractionTemplateComponent } from '../template/interaction-template.component';
 import { AudioService } from 'src/app/services/sound-service/audio.service';
 
@@ -9,12 +9,13 @@ import { AudioService } from 'src/app/services/sound-service/audio.service';
 })
 export class AudioPlayerComponent extends InteractionTemplateComponent {
 
-  @Input() data: any;
-
   constructor(private audioService: AudioService) {
     super();
+  }
 
-    this.audioService.play('assets/sounds/farts/pet_cri.mp3');
+  init() {
+    // Play sound when component is created
+    this.audioService.play('assets/sounds/' + this.data.track);
   }
 
   onHover(hover: boolean): void { }

@@ -24,7 +24,6 @@ export class AudioService {
       audio.load();
       audio.play();
       audio.addEventListener('ended', () => {
-        console.log('done');
         resolve();
       });
     })

@@ -12,6 +12,9 @@ export class RickRollComponent extends InteractionTemplateComponent {
     super();
   }
 
+  init() {
+  }
+
   onHover(hover: boolean): void {
   }
 

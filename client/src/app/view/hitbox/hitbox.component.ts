@@ -1,15 +1,10 @@
 import { Component, HostListener, Input, OnInit  } from '@angular/core';
-import { Trigger } from 'src/app/interfaces/trigger';
-import { Action } from 'src/app/interfaces/action';
 import { Size } from 'src/app/interfaces/size';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Position } from 'src/app/interfaces/position';
 import { CdkDragEnd } from "@angular/cdk/drag-drop";
-import { DesktopIconComponent } from '../interaction/desktop-icon/desktop-icon.component';
-import { ComponentLocation } from 'src/app/enums/component-location';
-import { RickRollComponent } from '../interaction/rick-roll/rick-roll.component';
-import { ETrigger } from 'src/app/enums/trigger';
-import { AudioPlayerComponent } from '../interaction/audio-player/audio-player.component';
+import { triggers } from 'src/app/data/triggers'
+import { actions } from 'src/app/data/actions'
 
 type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 
@@ -21,6 +16,9 @@ type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 export class HitboxComponent implements OnInit {
 
   @Input() hitbox!: Hitbox;
+  
+  triggers = triggers;
+  actions = actions;
 
   prevSize!: Size;
 
@@ -33,50 +31,6 @@ export class HitboxComponent implements OnInit {
       height: this.hitbox.size.height
     }
   }
-
-  actions: Action[] = [
-    {
-      name: 'Desktop Icon',
-      value: 'desktop-icon',
-      component: DesktopIconComponent,
-      location: ComponentLocation.Core,
-      triggers: [ETrigger.Default],
-      lockedTriggers: [ETrigger.Hover, ETrigger.Click]
-    },
-    {
-      name: 'Rick Roll',
-      value: 'rick-roll',
-      component: RickRollComponent,
-      location: ComponentLocation.Desktop,
-      triggers: [ETrigger.Click, ETrigger.DoubleClick]
-    },
-    {
-      name: 'Pet',
-      value: 'pet',
-      component: AudioPlayerComponent,
-      location: ComponentLocation.Desktop,
-      triggers: [ETrigger.All]
-    },
-  ];
-
-  triggers: Trigger[] = [
-    {
-      name: 'Défaut',
-      value: ETrigger.Default,
-    },
-    {
-      name: 'Hover',
-      value: ETrigger.Hover,
-    },
-    {
-      name: 'Clique',
-      value: ETrigger.Click,
-    },
-    {
-      name: 'Double clique',
-      value: ETrigger.DoubleClick
-    }
-  ];
 
   resizing: ResizeHandle = 'none';
 

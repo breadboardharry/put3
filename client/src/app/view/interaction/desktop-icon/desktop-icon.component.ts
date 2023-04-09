@@ -21,6 +21,9 @@ export class DesktopIconComponent extends InteractionTemplateComponent {
     super();
   }
 
+  init() {
+  }
+
   onHover(hover: boolean) {
     this.hover = hover;
   }

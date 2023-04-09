@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { assets } from 'src/app/data/assets';
 import { ETrigger } from 'src/app/enums/trigger';
 import { Action } from 'src/app/interfaces/action';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
+import { AssetsService } from 'src/app/services/assets-service/assets.service';
 
 @Component({
   selector: 'app-hitbox-settings',
@@ -17,21 +19,26 @@ export class HitboxSettingsComponent implements OnInit {
   @Input() hover!: boolean;
   @Output() hoverChange = new EventEmitter<boolean>();
 
-  constructor() { }
+  constructor(public assetsService: AssetsService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
-  assignAction(action: Action, trigger: Trigger) {
-    // Check if this action is already assigned
-    if(this.hitbox.events[trigger.value]) {
+  assignAction(event: any, action: Action, trigger: Trigger, data: any = {}) {
+    // Set data to action
+    action.data = {...data};
+
+    const currentAction = this.hitbox.events[trigger.value];
+    // Remove assigned action if click on the same
+    if(currentAction === action) {
       delete this.hitbox.events[trigger.value];
     }
+    // Else, assign the new action
     else {
-      this.hitbox.events[trigger.value] = action;
+      this.hitbox.events[trigger.value] = {...action};
     }
 
     this.mouseLeave();
+    event.stopPropagation();
   }
 
   mouseEnter(hover: boolean = true) {

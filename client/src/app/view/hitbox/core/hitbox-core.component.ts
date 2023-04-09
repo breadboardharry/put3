@@ -37,9 +37,6 @@ export class HitboxCoreComponent implements OnInit {
     this.childElementsContainerRef.clear();
 
     const events = this.hitbox.events;
-    console.log({...events});
-    console.log(events.default);
-
     // Generate interaction component for each trigger
     if(ETrigger.Default in events && events.default)
       this.addComponent(events.default);
@@ -51,14 +48,15 @@ export class HitboxCoreComponent implements OnInit {
     // Add the component to the correct location
     switch (action.location) {
       case ComponentLocation.Core:
-        componentRef = this.childElementsContainerRef.createComponent<any>(action.component);
+        componentRef = this.childElementsContainerRef.createComponent<any>(action.view);
         break;
 
       case ComponentLocation.Desktop:
-        componentRef = this.desktopService.containerRef.createComponent<any>(action.component);
+        componentRef = this.desktopService.containerRef.createComponent<any>(action.view);
         break;
     }
 
+    componentRef.instance.data = action.data;
     componentRef.instance.hoverEvent = this.hoverEvent;
     componentRef.instance.clickEvent = this.clickEvent;
     componentRef.instance.singleClickEvent = this.singleClickEvent;

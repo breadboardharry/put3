@@ -8,6 +8,7 @@ client/dist
 client/tmp
 client/out-tsc
 client/bazel-out
+client/src/app/data/assets.ts
 
 # Express Server
 /uploads/*

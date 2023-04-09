@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export abstract class InteractionTemplateComponent implements OnInit {
 
+  @Input() data: any;
   @Input() hoverEvent: any;
   @Input() clickEvent: any;
   @Input() singleClickEvent: any;
@@ -21,8 +22,11 @@ export abstract class InteractionTemplateComponent implements OnInit {
     this.singleClickEvent.subscribe(() => this.onSingleClick());
     this.doubleClickEvent.subscribe(() => this.onDoubleClick());
     this.outsideClickEvent.subscribe(() => this.onOutsideClick());
+
+    this.init();
   }
 
+  abstract init(): void;
   abstract onHover(hover: boolean): void;
   abstract onClick(): void;
   abstract onSingleClick(): void;
