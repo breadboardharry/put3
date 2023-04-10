@@ -62,10 +62,19 @@ sockets.on('connection', socket => {
 
   socket.on('role', (role) => {
     console.log('[-] User ' + socket.id + ' selected role ' + role);
-    users[socket.id].status = 'active';
+    users[socket.id].status = role == 'fool' ? 'editing' : 'active';
     users[socket.id].role = role;
 
     if (role == 'fool') users[socket.id].name = utils.newName(users);
+
+    // Send updated fool list
+    const foolList = Object.values(utils.toArray(users)).filter(user => user.role == 'fool');
+    sockets.emit('foolList', foolList);
+  });
+
+  socket.on('status', (status) => {
+    console.log('[-] User ' + socket.id + ' new status ' + status);
+    users[socket.id].status = status;
 
     // Send updated fool list
     const foolList = Object.values(utils.toArray(users)).filter(user => user.role == 'fool');

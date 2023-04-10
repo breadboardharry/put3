@@ -1,10 +1,12 @@
 <div class="page">
   <div class="content">
     <div class="fools-container">
-      <div class="fool-card" [ngClass]="{'selected': fool == target}" *ngFor="let fool of fools"
+      <div class="fool-card" [ngClass]="{'selected': target && fool.id == target.id}" *ngFor="let fool of fools"
         (click)="selectTarget(fool)">
-        {{fool.name}}
+        <div class="fool-name">{{fool.name}}</div>
+        <div class="fool-status">{{fool.status}}</div>
       </div>
+      <p *ngIf="!fools.length" class="no-fool">No fool connected</p>
     </div>
 
     <div class="soundboard">
