@@ -12,7 +12,15 @@
     <div class="soundboard">
       <div class="sidebar">
         Soundboard
-        <button class="stop" (click)="stopAll()" [disabled]="!fools.length || target == null">STOP</button>
+
+        <div class="options">
+          <div class="volume">
+            <img class="speaker-icon" [ngClass]="{'disabled': !fools.length || target == null}" src="assets/icons/speaker.png">
+            <mat-slider min="0" max="100" thumbLabel [(ngModel)]="volume" [disabled]="!fools.length || target == null"></mat-slider>
+          </div>
+
+          <button class="stop" (click)="stopAll()" [disabled]="!fools.length || target == null">STOP</button>
+        </div>
       </div>
       <div class="buttons">
         <button class="sound-button" *ngFor="let track of assetsService.getFlattenSounds()" (click)="soundboard(track)"

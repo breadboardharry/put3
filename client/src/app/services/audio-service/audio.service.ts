@@ -6,26 +6,28 @@ import { SoundLoop } from 'src/app/interfaces/sound-loop';
 })
 export class AudioService {
 
-  private audios: HTMLAudioElement[] = [];
+  private _audios: HTMLAudioElement[] = [];
 
   constructor() { }
 
-  public async play(src: string, loop: SoundLoop | null = null): Promise<void> {
+  public async play(src: string, volume: number = 1.0, loop: SoundLoop | null = null): Promise<void> {
     let rep = 0;
 
     do {
-      await this.playAudio(src);
+      await this.playAudio(src, volume);
     }
     while (loop !== null && loop.enable && (!('reps' in loop) || ++rep < loop.reps!));
   }
 
-  private playAudio(src: string): Promise<void> {
+  private playAudio(src: string, volume: number = 1.0): Promise<void> {
     let audio = new Audio(src);
 
     return new Promise<void>((resolve) => {
       audio.load();
+      audio.volume = volume;
       audio.play();
-      this.audios.push(audio);
+      this._audios.push(audio);
+
       audio.addEventListener('ended', () => {
         resolve();
       });
@@ -33,7 +35,7 @@ export class AudioService {
   }
 
   public stopAll(): void {
-    for(let audio of this.audios) {
+    for(let audio of this._audios) {
       audio.pause();
     }
   }

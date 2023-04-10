@@ -21,6 +21,8 @@ import { AudioPlayerComponent } from './view/interaction/audio-player/audio-play
 import { HomePageComponent } from './view/pages/home-page/home-page.component';
 import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page/master-dashboard-page.component';
 import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-page.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-pag
     MatProgressSpinnerModule,
     DragDropModule,
     MatMenuModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSliderModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

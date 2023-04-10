@@ -11,6 +11,7 @@ export class MasterDashboardPageComponent implements OnInit {
 
   fools: any[] = [];
   target: any = null;
+  volume: number = 100;
 
   constructor(private websocket: WebSocketService, public assetsService: AssetsService) { }
 
@@ -36,7 +37,8 @@ export class MasterDashboardPageComponent implements OnInit {
       target: this.target,
       action: {
         type: 'audio',
-        track: track
+        track: track,
+        volume: this.volume / 100
       }
     });
   }

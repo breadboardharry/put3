@@ -52,8 +52,9 @@ export class FoolHomePageComponent implements OnInit {
 
     switch (data.action.type) {
       case 'audio':
+        const volume = 'volume' in data.action ? data.action.volume : 1.0;
         if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-        else this.audio.play('assets/sounds/' + data.action.track);
+        else if ('track' in data.action) this.audio.play('assets/sounds/' + data.action.track, volume);
         break;
 
       default:
