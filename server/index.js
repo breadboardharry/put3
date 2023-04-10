@@ -6,7 +6,7 @@ const WebSocket = require('ws');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Routes = require('./routes/routes');
-const { toArray } = require('./utils/utils');
+const utils = require('./utils/utils');
 
 // Constants and options
 const PORT = process.env.PORT || 3000;
@@ -56,7 +56,7 @@ sockets.on('connection', socket => {
     delete users[socket.id];
 
     // Send updated fool list
-    const foolList = Object.values(toArray(users)).filter(user => user.role == 'fool');
+    const foolList = Object.values(utils.toArray(users)).filter(user => user.role == 'fool');
     sockets.emit('foolList', foolList);
   });
 
@@ -65,10 +65,10 @@ sockets.on('connection', socket => {
     users[socket.id].status = 'active';
     users[socket.id].role = role;
 
-    if (role == 'fool') users[socket.id].name = 'Je suis un pc';
+    if (role == 'fool') users[socket.id].name = utils.newName(users);
 
     // Send updated fool list
-    const foolList = Object.values(toArray(users)).filter(user => user.role == 'fool');
+    const foolList = Object.values(utils.toArray(users)).filter(user => user.role == 'fool');
     sockets.emit('foolList', foolList);
   });
 
