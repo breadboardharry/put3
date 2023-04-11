@@ -1,8 +1,15 @@
 <div class="page">
+  <app-master-dashboard-navbar></app-master-dashboard-navbar>
   <div class="content">
     <div class="fools-container">
+
+      <app-master-dashboard-fool-card *ngFor="let fool of fools" [fool]="fool"></app-master-dashboard-fool-card>
+
       <div class="fool-card" [ngClass]="{'selected': target && fool.id == target.id}" *ngFor="let fool of fools"
         (click)="selectTarget(fool)">
+
+
+
         <div class="fool-name">{{fool.name}}</div>
         <div class="fool-status">{{fool.status}}</div>
       </div>

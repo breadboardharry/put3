@@ -9,6 +9,8 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class HomePageComponent implements OnInit {
 
+  hover: 'master' | 'fool' | null = null;
+
   constructor(private router: Router, private websocket: WebSocketService) { }
 
   ngOnInit(): void {
@@ -24,5 +26,13 @@ export class HomePageComponent implements OnInit {
     this.websocket.role = 'fool';
     this.websocket.socket.emit('role', 'fool');
     this.router.navigate(['/fool']);
+  }
+
+  mouseEnter(elem: 'master' | 'fool') {
+    this.hover = elem;
+  }
+
+  mouseLeave() {
+    this.hover = null;
   }
 }

@@ -1,2 +1,13 @@
-<button (click)="chooseMaster()">Maitre</button>
-<button (click)="chooseFool()">Piégé</button>
+<div class="page">
+  <div class="roles">
+    <button class="master" [ngClass]="{'hide': hover == 'fool'}" (click)="chooseMaster()"
+      (mouseenter)="mouseEnter('master')" (mouseleave)="mouseLeave()">
+      <span class="text">Maitre</span>
+    </button>
+
+    <button class="fool" [ngClass]="{'hide': hover == 'master'}" (click)="chooseFool()"
+      (mouseenter)="mouseEnter('fool')" (mouseleave)="mouseLeave()">
+      <span class="text">Piégé</span>
+    </button>
+  </div>
+</div>

@@ -12,6 +12,9 @@ $windows-theme: mat.define-light-theme((
   )
 ));
 
+$dark-linear-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
+$light-linear-gradient: linear-gradient(145deg, rgb(49, 49, 89), rgb(30, 33, 83));
+
 @include mat.all-component-themes($windows-theme);
 @include mat.strong-focus-indicators-theme($windows-theme);
 
