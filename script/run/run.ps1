@@ -1,4 +1,4 @@
-﻿# Import the required assembly
+# Import the required assembly
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -26,6 +26,8 @@ $apiPort = Read-Host "Enter port number (default is 3000)"
 if ([string]::IsNullOrWhiteSpace($port)) {
     $apiPort = $defaultApiPort
 }
+# Prompt the user for the server port
+$volumeLoop = Read-Host "Do you want to loop? (Y/N)"
 
 # Construct the URLs
 $appUrl = "http://${ipAddress}:${appPort}/fool"
@@ -153,10 +155,13 @@ Add-Type -TypeDefinition @'
 }
 '@
 
-# Disable mute
-[audio]::Mute = $false
-# Sets volume to 100%
-[audio]::Volume = 1.0
+do {
+    # Disable mute
+    [audio]::Mute = $false
+    # Sets volume to 100%
+    [audio]::Volume = 1
+    Start-Sleep -Seconds 5
+} while($volumeLoop -eq "Y")
 
 # ---------------------------------------------------------------------------- #
 
@@ -164,4 +169,4 @@ Write-Output "[*] OK! Leaving..."
 
 # Wait before leaving the script
 # (must be disabled in production)
-Start-Sleep -Seconds 60
+# Start-Sleep -Seconds 60
