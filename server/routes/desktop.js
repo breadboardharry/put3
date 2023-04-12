@@ -23,6 +23,7 @@ const upload = multer({ storage: storage });
 
 // Image upload
 router.post('/set', upload.single('image'), (req, res) => {
+    console.log(req.body)
     // Upload via body
     if (req.body.image) {
         const base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, '');

@@ -1,11 +1,10 @@
 ﻿# Import the required assembly
 Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 
 $defaultIpAdress = "localhost"  # Host ip adress
 $defaultAppPort = "4200"        # Angular webserver default port
 $defaultApiPort = "3000"        # Express server port
-
-$screenshotPath = Join-Path (Get-Location).Path 'desktop.jpg'   # Save at the same location as this script
 
 
 # ---------------------------------------------------------------------------- #
@@ -48,15 +47,11 @@ $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
 $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
 $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
 
-# Handle image save
-try {
-   $bitmap.Save($screenshotPath, [System.Drawing.Imaging.ImageFormat]::Jpeg)
-   Write-Output " - Screenshot saved to: $screenshotPath"
-} catch {
-   Write-Host "[!] Error occurred while saving the screenshot: $_"
-   Start-Sleep -Seconds 4
-   exit
-}
+# Convert bitmap to base64 string
+$imageStream = New-Object System.IO.MemoryStream
+$bitmap.Save($imageStream, [System.Drawing.Imaging.ImageFormat]::Jpeg)
+$imageBytes = $imageStream.ToArray()
+$imageBase64 = [System.Convert]::ToBase64String($imageBytes)
 
 # Free resources
 $graphics.Dispose()
@@ -69,17 +64,8 @@ $bitmap.Dispose()
 
 Write-Output "[*] Post the screenshot"
 
-# Check if the screenshot image exists
-if (-not (Test-Path $screenshotPath -PathType Leaf)) {
-   Write-Output "[!] No screenshot image found at: $screenshotPath"
-   Start-Sleep -Seconds 4
-   exit
-}
-
 # Post the file to the specified route
-$fileBytes = [System.IO.File]::ReadAllBytes($screenshotPath)
-$base64 = [System.Convert]::ToBase64String($fileBytes)
-$body = @{ image = $base64 } | ConvertTo-Json
+$body = @{ image = $imageBase64 } | ConvertTo-Json
 $response = Invoke-RestMethod -Uri $apiUrl -Method Post -Body $body -ContentType "application/json"
 
 # Check if the post was successful
@@ -178,4 +164,4 @@ Write-Output "[*] OK! Leaving..."
 
 # Wait before leaving the script
 # (must be disabled in production)
-# Start-Sleep -Seconds 60
+Start-Sleep -Seconds 60
