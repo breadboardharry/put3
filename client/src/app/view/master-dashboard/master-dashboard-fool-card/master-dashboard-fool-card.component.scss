@@ -1,0 +1,74 @@
+$width: 210px;
+$border-radius: 14px;
+$border-width: 6px;
+$border-gradient: linear-gradient(145deg, rgb(99, 99, 124), rgb(77, 77, 103));
+$background-gradient: rgb(16, 16, 65);
+
+.card {
+  width: $width;
+  padding: $border-width;
+
+  border: 0;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: $background-gradient;
+
+  &.selected {
+    background: $border-gradient;
+  }
+
+  color: white;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition: all .15s,
+  color 50ms;
+}
+
+.card .labels {
+  background: $background-gradient;
+  padding: 24px 24px;
+  border-radius: $border-radius - $border-width;
+  width: 100%;
+  height: 100%;
+  transition: .2s;
+}
+
+.card:hover .labels {
+  background: rgb(10, 10, 60);
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.fool-name {
+  @extend %fool-label;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.15rem;
+}
+
+.fool-status {
+  @extend %fool-label;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+%fool-label {
+  color: inherit;
+  font-family: Roboto, "Helvetica Neue";
+  line-height: 1em;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.08rem;
+}

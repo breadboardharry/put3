@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="header">
+
+  </div>
+  <div class="items">
+    <div class="menu-items">
+      <button class="menu-item" *ngFor="let item of items.menu">
+        <img class="menu-icon" [src]="'assets/icons/' + item.icon">
+        <span class="menu-title">{{item.title}}</span>
+      </button>
+    </div>
+
+    <div class="menu-items">
+      <button class="menu-item" *ngFor="let item of items.bottom">
+        <img class="menu-icon" [src]="'assets/icons/' + item.icon">
+        <span class="menu-title">{{item.title}}</span>
+      </button>
+    </div>
+  </div>
+</div>

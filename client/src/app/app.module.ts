@@ -23,6 +23,10 @@ import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page
 import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-page.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+import { MasterDashboardNavbarComponent } from './view/master-dashboard/master-dashboard-navbar/master-dashboard-navbar.component';
+import { MasterDashboardFoolCardComponent } from './view/master-dashboard/master-dashboard-fool-card/master-dashboard-fool-card.component';
+import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboard.component';
+import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { FormsModule } from '@angular/forms';
     AudioPlayerComponent,
     HomePageComponent,
     MasterDashboardPageComponent,
-    FoolHomePageComponent
+    FoolHomePageComponent,
+    MasterDashboardNavbarComponent,
+    MasterDashboardFoolCardComponent,
+    SoundboardComponent,
+    SoundboardButtonComponent
   ],
   imports: [
     BrowserModule,
