@@ -8,7 +8,7 @@ export class AssetsService {
 
   constructor() { }
 
-  getFlattenSounds() {
+  getFlattenSounds(): string[] {
     const dir = assets['sounds'];
     return this.flattenObject(dir);
   }

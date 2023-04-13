@@ -18,6 +18,15 @@ import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-ic
 import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
 import { AudioPlayerComponent } from './view/interaction/audio-player/audio-player.component';
+import { HomePageComponent } from './view/pages/home-page/home-page.component';
+import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page/master-dashboard-page.component';
+import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-page.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
+import { MasterDashboardNavbarComponent } from './view/master-dashboard/master-dashboard-navbar/master-dashboard-navbar.component';
+import { MasterDashboardFoolCardComponent } from './view/master-dashboard/master-dashboard-fool-card/master-dashboard-fool-card.component';
+import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboard.component';
+import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +40,14 @@ import { AudioPlayerComponent } from './view/interaction/audio-player/audio-play
     DesktopIconComponent,
     ChildElementsDirective,
     RickRollComponent,
-    AudioPlayerComponent
+    AudioPlayerComponent,
+    HomePageComponent,
+    MasterDashboardPageComponent,
+    FoolHomePageComponent,
+    MasterDashboardNavbarComponent,
+    MasterDashboardFoolCardComponent,
+    SoundboardComponent,
+    SoundboardButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +56,9 @@ import { AudioPlayerComponent } from './view/interaction/audio-player/audio-play
     MatProgressSpinnerModule,
     DragDropModule,
     MatMenuModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSliderModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

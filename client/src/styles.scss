@@ -1,19 +1,7 @@
-@use '@angular/material' as mat;
-@include mat.core();
-@include mat.strong-focus-indicators();
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-$primary: mat.define-palette(mat.$gray-palette, 200);
-$accent: mat.define-palette(mat.$indigo-palette, A200, A100, A400);
-
-$windows-theme: mat.define-light-theme((
-  color: (
-    primary: $primary,
-    accent: $accent,
-  )
-));
-
-@include mat.all-component-themes($windows-theme);
-@include mat.strong-focus-indicators-theme($windows-theme);
+$dark-linear-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
+$light-linear-gradient: linear-gradient(145deg, rgb(49, 49, 89), rgb(30, 33, 83));
 
 :root {
   --cursor-style: default;
@@ -47,4 +35,23 @@ body {
 
 .overwrite-cursor {
   cursor: var(--cursor-style) !important;
+}
+
+%font-base {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: white;
+  font-size: 16px;
+  letter-spacing: 0.05rem;
+  line-height: 1rem;
+}
+
+// OVERWRITE SLIDER STYLE
+.mat-slider-track-background {
+  background-color: transparentize(#2e2e53, 0.4);
+}
+.mat-slider:hover .mat-slider-track-background, .mat-slider.cdk-focused .mat-slider-track-background {
+  background-color: transparentize(#2e2e53, 0.4);
+}
+.mat-slider.mat-slider-disabled .mat-slider-track-background, .mat-slider.mat-slider-disabled .mat-slider-track-fill, .mat-slider.mat-slider-disabled .mat-slider-thumb {
+  background-color: transparentize(#2e2e53, 0.4);
 }

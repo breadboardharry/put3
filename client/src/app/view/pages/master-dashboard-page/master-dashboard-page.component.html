@@ -1,0 +1,20 @@
+<div class="page">
+  <app-master-dashboard-navbar></app-master-dashboard-navbar>
+  <div class="content">
+    <div class="fools-container">
+      <app-master-dashboard-fool-card *ngFor="let fool of fools"
+                                      [selected]="target && fool.id == target.id"
+                                      [fool]="fool"
+                                      (click)="selectTarget(fool)">
+      </app-master-dashboard-fool-card>
+      <p class="no-fool" *ngIf="!fools.length">No fool connected</p>
+    </div>
+
+    <hr class="separator"/>
+
+    <app-soundboard [fools]="fools"
+                    [target]="target"
+                    [disabled]="!fools.length || target == null">
+    </app-soundboard>
+  </div>
+</div>
