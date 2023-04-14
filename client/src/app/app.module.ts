@@ -27,6 +27,8 @@ import { MasterDashboardNavbarComponent } from './view/master-dashboard/master-d
 import { MasterDashboardFoolCardComponent } from './view/master-dashboard/master-dashboard-fool-card/master-dashboard-fool-card.component';
 import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboard.component';
 import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
+import { CodelockComponent } from './view/codelock/codelock.component';
+import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/so
     MasterDashboardNavbarComponent,
     MasterDashboardFoolCardComponent,
     SoundboardComponent,
-    SoundboardButtonComponent
+    SoundboardButtonComponent,
+    CodelockComponent,
+    CodelockPageComponent
   ],
   imports: [
     BrowserModule,
