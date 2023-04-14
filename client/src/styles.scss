@@ -21,7 +21,7 @@ body {
   overflow: hidden;
   @extend %prevent-select;
 
-  background-color: black;
+  background: $dark-linear-gradient;
   color: white;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
