@@ -8,8 +8,7 @@ export const environment = {
   production: false,
   serverUrl: backendUrl,
   apiPath: '',
-  socketPath: '/socket',
-  masterCode: [7, 5, 2, 1]
+  socketPath: '/socket'
 };
 
 /*

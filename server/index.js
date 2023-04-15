@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const Routes = require('./routes/routes');
 
+require('dotenv').config()
+
 // Constants and options
 const PORT = process.env.PORT || 3000;
 // Cors options - allow requests from any origin
