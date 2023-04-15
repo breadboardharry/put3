@@ -13,8 +13,8 @@ export class WebSocketService {
 
   constructor() {
     // Connect Socket with server URL
-    this._socket = io("http://localhost", {
-        path: "/socket/"
+    this._socket = io(environment.serverUrl, {
+        path: environment.socketPath
     });
 
     // Get ID from server
