@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 
 const http = require('http');
-const WebSocket = require('ws');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Routes = require('./routes/routes');
@@ -19,7 +18,8 @@ const corsOptions = {
 // Setup servers
 const server = http.createServer(app);
 const sockets = require('socket.io')(server, {
-  cors: corsOptions
+  cors: corsOptions,
+  path: '/socket/',
 });
 
 // Allow requests from any origin
@@ -36,14 +36,14 @@ let users = {};
 
 // Server starting
 server.listen(PORT, () => {
-  console.log(`[*] Server started on: http://localhost:${PORT}`);
+  console.log(`[*] Server started on port ${PORT}`);
 
   // setInterval(() => {
   //   console.log('Users: ' + JSON.stringify(users));
   // }, 2000);
 });
 
-// On every client connection
+// On each client connection
 sockets.on('connection', socket => {
   console.log('[-] New user connected: ' + socket.id);
   users[socket.id] =  {

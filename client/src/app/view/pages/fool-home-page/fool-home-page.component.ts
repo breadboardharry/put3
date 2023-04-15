@@ -48,8 +48,6 @@ export class FoolHomePageComponent implements OnInit {
     // Check if this user is the target
     if (data.target.id !== this.websocket.id) return;
 
-    console.log('You are the target');
-
     switch (data.action.type) {
       case 'audio':
         const volume = 'volume' in data.action ? data.action.volume : 1.0;

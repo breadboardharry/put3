@@ -3,8 +3,6 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 $defaultIpAdress = "localhost"  # Host ip adress
-$defaultAppPort = "4200"        # Angular webserver default port
-$defaultApiPort = "3000"        # Express server port
 
 
 # ---------------------------------------------------------------------------- #
@@ -16,22 +14,12 @@ $ipAddress = Read-Host "Enter IP address (default is localhost)"
 if ([string]::IsNullOrWhiteSpace($ipAddress)) {
     $ipAddress = $defaultIpAdress
 }
-# Prompt the user for the app port
-$appPort = Read-Host "Enter port number (default is 4200)"
-if ([string]::IsNullOrWhiteSpace($port)) {
-    $appPort = $defaultAppPort
-}
-# Prompt the user for the server port
-$apiPort = Read-Host "Enter port number (default is 3000)"
-if ([string]::IsNullOrWhiteSpace($port)) {
-    $apiPort = $defaultApiPort
-}
 # Prompt the user for the server port
 $volumeLoop = Read-Host "Do you want to loop? (Y/N)"
 
 # Construct the URLs
-$appUrl = "http://${ipAddress}:${appPort}/fool"
-$apiUrl = "http://${ipAddress}:${apiPort}/desktop/set"
+$appUrl = "http://${ipAddress}/fool"
+$apiUrl = "http://${ipAddress}/api/desktop/set"
 
 # ---------------------------------------------------------------------------- #
 #                              DESKTOP SCREENSHOT                              #

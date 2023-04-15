@@ -1,0 +1,17 @@
+version: '3'
+services:
+  frontend:
+    image: put3/frontend:latest
+    ports:
+      - "80:80"
+    networks:
+      - put3
+
+  backend:
+    image: put3/backend:latest
+    networks:
+      - put3
+
+networks:
+  put3:
+    driver: bridge

@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DesktopService {
 
-  private apiUrl = environment.apiUrl;
+  private apiUrl = environment.serverUrl + environment.apiPath;
   public containerRef!: ViewContainerRef;
 
   constructor(private http: HttpClient) { }

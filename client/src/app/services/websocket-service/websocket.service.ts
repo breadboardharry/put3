@@ -13,7 +13,10 @@ export class WebSocketService {
 
   constructor() {
     // Connect Socket with server URL
-    this._socket = io(environment.apiUrl);
+    this._socket = io(environment.serverUrl, {
+        path: environment.socketPath
+    });
+
     // Get ID from server
     this._socket.on('id', (id :string) => {
       this._id = id;

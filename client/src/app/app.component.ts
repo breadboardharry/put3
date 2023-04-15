@@ -9,5 +9,6 @@ import { slideInAnimation } from './animations/route-transition.animations';
 })
 export class AppComponent {
 
-  constructor() { }
+  constructor() {}
+
 }
