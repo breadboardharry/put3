@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CodeName } from 'src/app/enums/code';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class AccessControlService {
    * @param {string} code Code to check
    * @returns {Promise<boolean>} Is valid
    */
-  public checkCode(codeName: string, code: string): Promise<boolean> {
+  public checkCode(codeName: CodeName, code: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.http.post<boolean>(
         this.apiUrl + '/access-control/check/code/' + codeName,
@@ -34,7 +35,7 @@ export class AccessControlService {
    * @param {string} codeName Name of the code
    * @returns {Promise<number>} Code length
    */
-  public getCodeLength(codeName: string): Promise<number> {
+  public getCodeLength(codeName: CodeName): Promise<number> {
     return new Promise((resolve, reject) => {
       this.http.get<number>(
         this.apiUrl + '/access-control/get/code/length/' + codeName,

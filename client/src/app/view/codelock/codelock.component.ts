@@ -1,4 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { CodeName } from 'src/app/enums/code';
 import { AccessControlService } from 'src/app/services/access-control-service/access-control.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { AccessControlService } from 'src/app/services/access-control-service/ac
 })
 export class CodelockComponent implements OnInit {
 
-  @Input() accessCode!: string;
+  @Input() codeName!: CodeName;
   @Output() passed: EventEmitter<void> = new EventEmitter<void>();
 
   code: number[] = [];
@@ -17,7 +18,7 @@ export class CodelockComponent implements OnInit {
   constructor(private accessControl: AccessControlService) { }
 
   ngOnInit(): void {
-    this.accessControl.getCodeLength(this.accessCode).then((length: number) => {
+    this.accessControl.getCodeLength(this.codeName).then((length: number) => {
       this.accessCodeLength = length;
     });
   }
@@ -28,7 +29,7 @@ export class CodelockComponent implements OnInit {
     // Check if the code is filled
     if (this.code.length >= this.accessCodeLength) {
       // Check if code is correct
-      if (await this.accessControl.checkCode(this.accessCode, this.code.join(''))) {
+      if (await this.accessControl.checkCode(this.codeName, this.code.join(''))) {
         this.passed.emit();
         return;
       };

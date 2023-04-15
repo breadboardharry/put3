@@ -13,8 +13,6 @@ router.post('/check/code/:codeName', (req, res) => {
     const codeName = req.params.codeName;
     const { code } = req.body;
 
-    console.log(codeName, code);
-
     switch (codeName) {
         case 'master':
             res.status(200).json(code === process.env.MASTER_CODE);
