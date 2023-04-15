@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { slideInAnimation } from './animations/route-transition.animations';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,9 @@ import { slideInAnimation } from './animations/route-transition.animations';
 })
 export class AppComponent {
 
-  constructor() { }
+  constructor() {
+    console.log('environment.apiUrl: ' + environment.apiUrl);
+  }
+
+
 }

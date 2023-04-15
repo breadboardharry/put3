@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 
 const http = require('http');
-const WebSocket = require('ws');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Routes = require('./routes/routes');
@@ -19,7 +18,8 @@ const corsOptions = {
 // Setup servers
 const server = http.createServer(app);
 const sockets = require('socket.io')(server, {
-  cors: corsOptions
+  cors: corsOptions,
+  path: '/socket/',
 });
 
 // Allow requests from any origin

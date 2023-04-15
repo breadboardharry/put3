@@ -1,17 +1,14 @@
 version: '3'
 services:
-  client:
+  frontend:
     image: put3/frontend:0.1
     ports:
       - "80:80"
     networks:
       - put3
 
-  server:
+  backend:
     image: put3/backend:0.1
-    command: npm run start
-    ports:
-      - "3000:3000"
     networks:
       - put3
 

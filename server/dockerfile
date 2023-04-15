@@ -7,8 +7,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci --quiet
 
+# Bundle app source
+COPY . .
+
 # Expose port
 EXPOSE 3000
 
-# Bundle app source
-COPY . .
+# Run app
+CMD ["npm", "run", "start"]

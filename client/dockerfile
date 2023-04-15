@@ -19,7 +19,7 @@ FROM nginx:1.21.6-alpine
 
 # Remove default files
 RUN rm -rf /usr/share/nginx/html/*
-# COPY nginx.conf  /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy app in container
 COPY --from=build /usr/src/app/dist/put3/ /usr/share/nginx/html
