@@ -1,4 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { CodeName } from 'src/app/enums/code';
+import { AccessControlService } from 'src/app/services/access-control-service/access-control.service';
 
 @Component({
   selector: 'app-codelock',
@@ -7,22 +9,27 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@a
 })
 export class CodelockComponent implements OnInit {
 
-  @Input() accessCode!: number[];
+  @Input() codeName!: CodeName;
   @Output() passed: EventEmitter<void> = new EventEmitter<void>();
 
   code: number[] = [];
+  accessCodeLength: number = 0;
 
-  constructor() { }
+  constructor(private accessControl: AccessControlService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.accessControl.getCodeLength(this.codeName).then((length: number) => {
+      this.accessCodeLength = length;
+    });
+  }
 
-  keyPressed(key: number) {
+  async keyPressed(key: number) {
     this.code.push(key);
 
     // Check if the code is filled
-    if (this.code.length >= this.accessCode.length) {
-      // Code is correct
-      if(this.checkCode(this.code)) {
+    if (this.code.length >= this.accessCodeLength) {
+      // Check if code is correct
+      if (await this.accessControl.checkCode(this.codeName, this.code.join(''))) {
         this.passed.emit();
         return;
       };
@@ -32,12 +39,8 @@ export class CodelockComponent implements OnInit {
     };
   }
 
-  checkCode(code: number[]): boolean {
-    return JSON.stringify(code) == JSON.stringify(this.accessCode);
-  }
-
   createArray(size: number): number[] {
-    return Array.from({length: size}, (_, i) => i);
+    return Array.from({ length: size }, (_, i) => i);
   }
 
   @HostListener('document:keydown', ['$event'])

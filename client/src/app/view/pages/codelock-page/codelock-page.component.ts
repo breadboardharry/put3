@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
+import { CodeName } from 'src/app/enums/code';
 
 @Component({
   selector: 'app-codelock-page',
@@ -11,9 +11,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class CodelockPageComponent implements OnInit {
 
-  accessCode: number[] = environment.masterCode;
+  accessCode: CodeName = CodeName.MASTER;
   targetRoute: string = 'home';
-  cookieDuration = 2; // Hours
+  cookieDuration = 1; // Hours
 
   constructor(private router: Router, private cookie: CookieService, private route: ActivatedRoute) { }
 
@@ -22,8 +22,8 @@ export class CodelockPageComponent implements OnInit {
       if (params['route'])
         this.targetRoute = params['route'];
 
-        if (this.cookie.get('access'))
-          this.reRoute('/' + this.targetRoute);
+      if (this.cookie.get('access'))
+        this.reRoute('/' + this.targetRoute);
     });
   }
 
