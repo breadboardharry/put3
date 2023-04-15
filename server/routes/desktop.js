@@ -23,7 +23,6 @@ const upload = multer({ storage: storage });
 
 // Image upload
 router.post('/set', upload.single('image'), (req, res) => {
-    console.log('access to: desktop/set');
     // Upload via body
     if (req.body.image) {
         const base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, '');
@@ -54,8 +53,6 @@ router.post('/set', upload.single('image'), (req, res) => {
 
 // Get the image
 router.get('/get', (req, res) => {
-    console.log('access to: desktop/get');
-
     const filename = req.params.filename || 'default-desktop.jpg';
     res.sendFile(filename, { root: './uploads/' });
 });

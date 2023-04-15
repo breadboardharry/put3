@@ -36,14 +36,14 @@ let users = {};
 
 // Server starting
 server.listen(PORT, () => {
-  console.log(`[*] Server started on: http://localhost:${PORT}`);
+  console.log(`[*] Server started on port ${PORT}`);
 
   // setInterval(() => {
   //   console.log('Users: ' + JSON.stringify(users));
   // }, 2000);
 });
 
-// On every client connection
+// On each client connection
 sockets.on('connection', socket => {
   console.log('[-] New user connected: ' + socket.id);
   users[socket.id] =  {
