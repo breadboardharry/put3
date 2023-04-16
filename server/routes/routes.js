@@ -6,6 +6,6 @@ const Storage = require('./storage');
 
 router.use('/desktop', Desktop);
 router.use('/access-control', AccessControl);
-router.use('/upload', Storage);
+router.use('/', Storage);
 
 module.exports = router;

@@ -30,6 +30,10 @@ export class MasterDashboardPageComponent implements OnInit {
       this.fools = list;
       if (list.length <= 0) this.target = null;
     });
+
+    this.assetsService.getServerImages().then((data: any[]) => {
+      console.log(data);
+    });
   }
 
   selectTarget(fool: any) {
