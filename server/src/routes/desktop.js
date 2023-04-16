@@ -1,34 +1,25 @@
 import express from 'express';
 const router = express.Router();
+<<<<<<< dev:server/src/routes/desktop.js
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-
-/* --------------------------------- STORAGE -------------------------------- */
-
-// Define the storage location for the uploaded files
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploads/');
-    },
-    filename: function (req, file, cb) {
-        const extension = file.originalname.split('.').pop();
-        cb(null, 'default-desktop.' + extension);
-    }
-});
-
-const upload = multer({ storage: storage });
+=======
+const upload = require('./../storage/multer-config');
+const fs = require('fs');
+const path = require('path');
+>>>>>>> File upload:server/routes/desktop.js
 
 /* --------------------------------- ROUTES --------------------------------- */
 
 // Image upload
-router.post('/set', upload.single('image'), (req, res) => {
+router.post('/set', upload.desktopImage.single('image'), (req, res) => {
     // Upload via body
     if (req.body.image) {
         const base64Data = req.body.image.replace(/^data:image\/\w+;base64,/, '');
         const bufferData = Buffer.from(base64Data, 'base64');
-        const fileName = `default-desktop.jpg`;
-        const filePath = path.join('./uploads', fileName);
+        const fileName = 'desktop' + path.extname(req.body.filename);
+        const filePath = path.join('./public/assets', fileName);
 
         fs.writeFile(filePath, bufferData, (err) => {
             if (err) {
@@ -53,8 +44,8 @@ router.post('/set', upload.single('image'), (req, res) => {
 
 // Get the image
 router.get('/get', (req, res) => {
-    const filename = req.params.filename || 'default-desktop.jpg';
-    res.sendFile(filename, { root: './uploads/' });
+    const filename = 'default-desktop.jpg';
+    res.sendFile(filename, { root: './public/assets/' });
 });
 
 export default router;

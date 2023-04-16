@@ -11,6 +11,8 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class FoolHomePageComponent implements OnInit {
 
+  desktopBackground: string = 'assets/images/default-desktop-background.jpg';
+
   constructor( public hitboxService: HitboxService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService) { }
 
   ngOnInit(): void {

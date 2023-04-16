@@ -39,6 +39,8 @@ const server = http.createServer(app);
 
 // Setup routes
 app.use('/', Routes);
+// Host static files
+app.use(express.static('public'));
 
 // Server starting
 server.listen(PORT, () => {
