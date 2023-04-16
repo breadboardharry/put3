@@ -14,7 +14,7 @@ export class DesktopComponent implements OnInit {
   @ViewChild(ChildElementsDirective, { static: true }) childElements!: ChildElementsDirective;
   childElementsContainerRef!: ViewContainerRef;
 
-  constructor(private desktopService: DesktopService, private socket: WebSocketService) { }
+  constructor(private desktopService: DesktopService) { }
 
   ngOnInit(): void {
     // Get reference to the component container
@@ -22,10 +22,5 @@ export class DesktopComponent implements OnInit {
     this.childElementsContainerRef.clear();
     // And send it to the service
     this.desktopService.containerRef = this.childElementsContainerRef;
-
-    // Get desktop background image
-    this.desktopService.getBackground().then(image => {
-      this.backgroundImage = image;
-    });
   }
 }

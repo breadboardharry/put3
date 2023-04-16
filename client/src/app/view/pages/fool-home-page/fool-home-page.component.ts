@@ -3,6 +3,7 @@ import { CursorService } from 'src/app/services/cursor-service/cursor.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
+import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -13,7 +14,13 @@ export class FoolHomePageComponent implements OnInit {
 
   desktopBackground: string = 'assets/images/default-desktop-background.jpg';
 
-  constructor( public hitboxService: HitboxService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService) { }
+  constructor(
+    public hitboxService: HitboxService,
+    public cursorService: CursorService,
+    private websocket: WebSocketService,
+    private audio: AudioService,
+    private desktopService: DesktopService
+  ) { }
 
   ngOnInit(): void {
     // Update role if needed
@@ -24,6 +31,11 @@ export class FoolHomePageComponent implements OnInit {
 
     this.websocket.socket.on('action', (data: any) => {
       this.action(data);
+    });
+
+    // Get desktop background image
+    this.desktopService.getBackground().then(image => {
+      this.desktopBackground = image;
     });
   }
 
