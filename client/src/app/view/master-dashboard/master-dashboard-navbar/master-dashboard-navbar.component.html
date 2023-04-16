@@ -3,15 +3,8 @@
 
   </div>
   <div class="items">
-    <div class="menu-items">
-      <button class="menu-item" *ngFor="let item of items.menu">
-        <img class="menu-icon" [src]="'assets/icons/' + item.icon">
-        <span class="menu-title">{{item.title}}</span>
-      </button>
-    </div>
-
-    <div class="menu-items">
-      <button class="menu-item" *ngFor="let item of items.bottom">
+    <div class="menu-items" *ngFor="let menu of menus">
+      <button class="menu-item" *ngFor="let item of menu" (click)="selectItem(item)">
         <img class="menu-icon" [src]="'assets/icons/' + item.icon">
         <span class="menu-title">{{item.title}}</span>
       </button>

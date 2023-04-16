@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Menu } from 'src/app/types/menu';
+import { MenuItem } from 'src/app/types/menu-item';
 
 @Component({
   selector: 'app-master-dashboard-navbar',
@@ -7,8 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MasterDashboardNavbarComponent implements OnInit {
 
-  items = {
-    menu: [
+  @Input() selectedItem!: MenuItem;
+  @Output() selectedItemEvent: EventEmitter<MenuItem> = new EventEmitter<MenuItem>();
+
+  menus: Menu[] = [
+    [
       {
         title: 'Layout',
         icon: 'edit-image.png'
@@ -22,18 +27,21 @@ export class MasterDashboardNavbarComponent implements OnInit {
         icon: 'photo-gallery.png'
       }
     ],
-    bottom: [
+    [
       {
         title: 'Settings',
-        icon: 'gear.png',
-        location: 'bottom'
+        icon: 'gear.png'
       }
     ]
-  }
+  ]
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  selectItem(item: MenuItem) {
+    this.selectedItem = item;
+    this.selectedItemEvent.emit(item);
+  }
 }

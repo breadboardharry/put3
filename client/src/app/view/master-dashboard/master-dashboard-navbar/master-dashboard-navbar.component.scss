@@ -68,6 +68,10 @@ $width: 190px;
     background-color: rgb(255, 255, 255, 0.1);
   }
 
+  &.active {
+    background-color: rgb(255, 255, 255, 0.1);
+  }
+
   .menu-icon {
     width: 23px;
   }

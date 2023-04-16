@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
+import { MenuItem } from 'src/app/types/menu-item';
 
 @Component({
   selector: 'app-master-dashboard-page',
@@ -9,6 +10,9 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class MasterDashboardPageComponent implements OnInit {
 
+  selectedItem: MenuItem = {
+    title: 'Soundboard'
+  };
   fools: any[] = [];
   target: any = null;
 
@@ -29,5 +33,9 @@ export class MasterDashboardPageComponent implements OnInit {
 
   selectTarget(fool: any) {
     this.target = this.target === fool ? null : fool;
+  }
+
+  selectItem(item: MenuItem) {
+    this.selectedItem = item;
   }
 }
