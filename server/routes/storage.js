@@ -15,7 +15,10 @@ router.post('/upload', upload.file.single('file'), (req, res) => {
 router.get('/images', (req, res) => {
   const imagesPath = './public/images';
 
-  try {
+  try
+  {
+    if (!fs.existsSync(imagesPath)) return res.status(200).json([]);
+
     const files = fs.readdirSync(imagesPath);
 
     const images = files.map((file) => {

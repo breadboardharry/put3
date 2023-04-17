@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { assets } from 'src/app/data/assets';
+import { FileData } from 'src/app/types/fileData';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -35,13 +36,13 @@ export class AssetsService {
 
   /**
    * Get server hosted images data
-   * @returns {Promise<any[]>} Image data array
+   * @returns {Promise<FileData[]>} Image data array
    */
-  public getServerImages(): Promise<any[]> {
-    return new Promise<any[]>((resolve, reject) => {
-      this.http.get<any[]>(this.apiUrl + '/images', {
+  public getServerImages(): Promise<FileData[]> {
+    return new Promise<FileData[]>((resolve, reject) => {
+      this.http.get<FileData[]>(this.apiUrl + '/images', {
         responseType: 'json'
-      }).subscribe((data: any[]) => resolve(data));
+      }).subscribe((data: FileData[]) => resolve(data));
     });
   }
 }

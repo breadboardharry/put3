@@ -11,9 +11,10 @@
 
     <hr class="separator" />
 
-    <app-soundboard *ngIf="selectedItem.title.toLowerCase() == 'soundboard'"
-    [fools]="fools" [target]="target" [disabled]="!fools.length || target == null">
+    <app-soundboard *ngIf="selectedItem.title.toLowerCase() == 'soundboard'">
+      [fools]="fools" [target]="target" [disabled]="!fools.length || target == null">
     </app-soundboard>
+    <app-image-gallery *ngIf="selectedItem.title.toLowerCase() == 'images'"></app-image-gallery>
 
   </div>
 </div>

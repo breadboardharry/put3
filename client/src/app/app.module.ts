@@ -29,6 +29,8 @@ import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboa
 import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
+import { ImageGalleryComponent } from './view/master-dashboard/image-gallery/image-gallery.component';
+import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-card/image-card.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.
     SoundboardComponent,
     SoundboardButtonComponent,
     CodelockComponent,
-    CodelockPageComponent
+    CodelockPageComponent,
+    ImageGalleryComponent,
+    ImageCardComponent
   ],
   imports: [
     BrowserModule,

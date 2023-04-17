@@ -11,7 +11,7 @@ import { MenuItem } from 'src/app/types/menu-item';
 export class MasterDashboardPageComponent implements OnInit {
 
   selectedItem: MenuItem = {
-    title: 'Soundboard'
+    title: 'Images'
   };
   fools: any[] = [];
   target: any = null;
@@ -29,10 +29,6 @@ export class MasterDashboardPageComponent implements OnInit {
       console.log(list);
       this.fools = list;
       if (list.length <= 0) this.target = null;
-    });
-
-    this.assetsService.getServerImages().then((data: any[]) => {
-      console.log(data);
     });
   }
 
