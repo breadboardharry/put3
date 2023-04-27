@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 
 /* --------------------------------- ROUTES --------------------------------- */
@@ -43,4 +43,4 @@ router.get('/get/code/length/:codeName', (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

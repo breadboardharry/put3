@@ -9,4 +9,4 @@ function newName(users) {
     }
 }
 
-module.exports = { toArray, newName };
+export default { toArray, newName };

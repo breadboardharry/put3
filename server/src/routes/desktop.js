@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
 
 /* --------------------------------- STORAGE -------------------------------- */
 
@@ -57,4 +57,4 @@ router.get('/get', (req, res) => {
     res.sendFile(filename, { root: './uploads/' });
 });
 
-module.exports = router;
+export default router;
