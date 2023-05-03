@@ -1,3 +1,4 @@
 <div class="page" [@routeAnimations]="outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation']">
+    <app-drag-drop></app-drag-drop>
     <router-outlet #outlet="outlet"></router-outlet>
 </div>
