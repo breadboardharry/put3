@@ -77,11 +77,3 @@ app-image-gallery {
   text-align: center;
   overflow: hidden;
 }
-
-app-sticky-toolbar {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 50%;
-    z-index: 100;
-    transform: translateX(-50%);
-}
