@@ -6,7 +6,7 @@ import sizeOf from "image-size";
 import upload from "../storage/multer-config.js";
 
 // Upload file
-router.post("/upload", upload.file.single("file"), (req, res) => {
+router.post("/upload", upload.file.array('file'), (req, res) => {
     res.json({ message: "File uploaded successfully!" });
 });
 

@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import utils from "../utils/utils.js";
 
 const allowedFileTypes = /jpeg|jpg|png|gif|mp3|m4a|wma|wav/;
@@ -26,7 +27,7 @@ const storage = multer.diskStorage({
             );
 
         // Create directory if it doesn't exist
-        require("fs").mkdir(uploadPath, { recursive: true }, (err) => {
+        fs.mkdir(uploadPath, { recursive: true }, (err) => {
             cb(err, uploadPath);
         });
     },
