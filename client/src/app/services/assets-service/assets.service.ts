@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { assets } from 'src/app/data/assets';
-import { FileData } from 'src/app/types/fileData';
+import { FileData } from 'src/app/types/file-data';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

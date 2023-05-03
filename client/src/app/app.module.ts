@@ -31,6 +31,7 @@ import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
 import { ImageGalleryComponent } from './view/master-dashboard/image-gallery/image-gallery.component';
 import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-card/image-card.component';
+import { StickyToolbarComponent } from './view/master-dashboard/sticky-toolbar/sticky-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-
     CodelockComponent,
     CodelockPageComponent,
     ImageGalleryComponent,
-    ImageCardComponent
+    ImageCardComponent,
+    StickyToolbarComponent
   ],
   imports: [
     BrowserModule,

@@ -1,1 +1,9 @@
-<app-image-card *ngFor="let image of images" [image]="image"></app-image-card>
+<div class="card-container">
+    <div class="no-content-label" *ngIf="!images.length">No images</div>
+    <app-image-card *ngFor="let image of images"
+        (click)="select(image, $event)"
+        [image]="image"
+        [selected]="selection.includes(image)"
+    >
+    </app-image-card>
+</div>

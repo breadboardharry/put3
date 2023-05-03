@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FileData } from 'src/app/types/fileData';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FileData } from 'src/app/types/file-data';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 export class ImageCardComponent implements OnInit {
 
   @Input() image!: FileData;
+  @Input() selected: boolean = false;
 
   apiUrl = environment.serverUrl + '/' + environment.apiPath;
 
@@ -17,5 +18,4 @@ export class ImageCardComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

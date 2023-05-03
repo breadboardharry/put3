@@ -1,1 +1,12 @@
-<img [src]="apiUrl + image.url">{{image.name}}
+<div class="card" [ngClass]="{'selected': selected}">
+    <div class="image-container">
+        <img [src]="apiUrl + image.url" [ngClass]="{
+            'fit-height': image.dimensions!.ratio <= (16/9),
+            'fit-width': image.dimensions!.ratio > (16/9)
+          }">
+    </div>
+
+    <div class="label-container">
+        <label>{{image.name}}</label>
+    </div>
+</div>

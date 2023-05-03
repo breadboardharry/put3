@@ -1,0 +1,62 @@
+@import '~src/styles.scss';
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  background-color: transparent;
+  overflow: hidden;
+
+  width: 175px;
+  padding: .75rem;
+
+  &:hover {
+    background-color: rgb(26, 26, 52);
+  }
+
+  &.selected {
+    background-color: rgb(50, 50, 82);
+  }
+}
+
+.label-container {
+  width: 140px;
+  overflow: hidden;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+
+  white-space: pre-wrap;
+  text-align: center;
+  word-wrap: break-word;
+
+  label {
+    @extend %font-base;
+    line-height: 1.35;
+    font-size: 14px;
+  }
+}
+
+
+
+.image-container {
+  height: 98px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    &.fit-height {
+      height: 100%;
+    }
+
+    &.fit-width {
+      width: 100%;
+    }
+  }
+}

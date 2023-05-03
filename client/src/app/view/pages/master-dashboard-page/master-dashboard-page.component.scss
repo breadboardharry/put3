@@ -6,15 +6,22 @@
 
   display: flex;
   flex-direction: row;
-  gap: 3rem;
 
   overflow: hidden;
   background: $dark-linear-gradient;
 }
 
+.content-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+
+  padding: 0 3rem;
+}
+
 .content {
   width: 100%;
-  margin: 3rem 3rem 3rem 0;
+  margin: 3rem 0;
 
   overflow: hidden;
 
@@ -54,6 +61,10 @@ app-soundboard {
   height: 75%;
 }
 
+app-image-gallery {
+    width: 100%;
+}
+
 .no-fool {
   color: white;
   margin: 0;
@@ -65,4 +76,12 @@ app-soundboard {
   line-height: 2rem;
   text-align: center;
   overflow: hidden;
+}
+
+app-sticky-toolbar {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    z-index: 100;
+    transform: translateX(-50%);
 }

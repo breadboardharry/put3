@@ -6,5 +6,7 @@ export type FileData = {
   dimensions?: {
     width: number;
     height: number;
+    ratio: number;
+    orientation: 'landscape' | 'portrait';
   }
 }
