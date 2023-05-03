@@ -1,17 +1,8 @@
 import utils from "../utils/utils.js";
+import Users from "../models/users.js";
 
-/**
- * Get connected fool list
- * @return {Array} Fool list
- */
-const foolList = (users) => {
-  return Object.values(utils.toArray(users)).filter(
-    (user) => user.role == "fool"
-  );
-}
+const users = new Users();
 
-const UserModule = {
-  foolList
-}
+const UserModule = users;
 
 export default UserModule;

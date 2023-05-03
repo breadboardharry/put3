@@ -25,9 +25,10 @@ export class MasterDashboardPageComponent implements OnInit {
       this.websocket.socket.emit('role', 'master');
     }
 
-    this.websocket.socket.on('foolList', (foolList: any) => {
-      this.fools = foolList;
-      if (foolList.length <= 0) this.target = null;
+    this.websocket.socket.on('foolList', (list: any) => {
+      console.log(list);
+      this.fools = list;
+      if (list.length <= 0) this.target = null;
     });
   }
 
