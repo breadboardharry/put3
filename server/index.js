@@ -1,11 +1,11 @@
-const express = require('express');
-const app = express();
-const http = require('http');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const Routes = require('./routes/routes');
-
-require('dotenv').config()
+import express from 'express';
+import http from 'http';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import Routes from './src/routes/index.js';
+import Socket from './src/socket/index.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Constants and options
 const PORT = process.env.PORT || 3000;
@@ -15,6 +15,12 @@ const corsOptions = {
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type']
 };
+// Server options
+const socketOptions = {
+  cors: corsOptions,
+  path: '/socket/',
+}
+const app = express();
 
 /* -------------------------------------------------------------------------- */
 /*                                 HTTP SERVER                                */
@@ -44,13 +50,4 @@ server.listen(PORT, () => {
 /* -------------------------------------------------------------------------- */
 
 // Server options
-const socketOptions = {
-  cors: corsOptions,
-  path: '/socket/',
-}
-
-// Setup server
-const io = require('socket.io')(server, socketOptions);
-
-// Setup events
-require('./socket')(io);
+Socket.createServer(server, socketOptions);
