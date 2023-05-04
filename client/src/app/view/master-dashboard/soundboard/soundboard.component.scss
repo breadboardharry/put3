@@ -85,9 +85,7 @@ $background: #070817;
   overflow-x: hidden;
   overflow-y: scroll;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  @extend %hidden-scrollbar;
 }
 
 .options {

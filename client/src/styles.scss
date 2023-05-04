@@ -96,3 +96,10 @@ body {
 .mat-slider.mat-slider-disabled .mat-slider-track-background, .mat-slider.mat-slider-disabled .mat-slider-track-fill, .mat-slider.mat-slider-disabled .mat-slider-thumb {
   background-color: transparentize(#2e2e53, 0.4);
 }
+
+%hidden-scrollbar {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    scrollbar-width: none;
+}

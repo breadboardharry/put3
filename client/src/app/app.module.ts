@@ -31,6 +31,8 @@ import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
 import { ImageGalleryComponent } from './view/master-dashboard/image-gallery/image-gallery.component';
 import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-card/image-card.component';
+import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-
     CodelockComponent,
     CodelockPageComponent,
     ImageGalleryComponent,
-    ImageCardComponent
+    ImageCardComponent,
+    DragDropFileUploadDirective
   ],
   imports: [
     BrowserModule,
@@ -66,7 +69,8 @@ import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-
     MatMenuModule,
     HttpClientModule,
     MatSliderModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

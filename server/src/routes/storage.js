@@ -4,10 +4,14 @@ import fs from "fs";
 import path from "path";
 import sizeOf from "image-size";
 import upload from "../storage/multer-config.js";
+import Socket from "../socket/index.js";
 
 // Upload file
 router.post("/upload", upload.file.array('file'), (req, res) => {
     res.json({ message: "File uploaded successfully!" });
+    Socket.io.emit('event', {
+        type: 'assets'
+    });
 });
 
 // Get all images as json object

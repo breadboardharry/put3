@@ -1,4 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { assets } from 'src/app/data/assets';
 import { FileData } from 'src/app/types/file-data';
@@ -45,4 +47,39 @@ export class AssetsService {
       }).subscribe((data: FileData[]) => resolve(data));
     });
   }
+
+    addFiles(images: File) {
+        let arr: any[] = [];
+        console.log({arr});
+        let formData = new FormData();
+        console.log({formData});
+
+        arr.push(images);
+        arr[0].forEach((item: any, i: any) => {
+            formData.append('file', arr[0][i]);
+        })
+
+        console.log({formData});
+
+        return this.http.post(this.apiUrl + '/upload', formData, {
+            reportProgress: true,
+            observe: 'events'
+        }).pipe(
+            catchError(this.errorMgmt)
+        )
+    }
+
+    errorMgmt(error: HttpErrorResponse) {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+            // Get client-side error
+            errorMessage = error.error.message;
+        }
+        else {
+            // Get server-side error
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        }
+        console.log(errorMessage);
+        return throwError(errorMessage);
+    }
 }

@@ -3,7 +3,7 @@
         <img [src]="apiUrl + image.url" [ngClass]="{
             'fit-height': image.dimensions!.ratio <= (16/9),
             'fit-width': image.dimensions!.ratio > (16/9)
-          }">
+          }" draggable="false">
     </div>
 
     <div class="label-container">
