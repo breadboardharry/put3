@@ -161,8 +161,13 @@ export class ImageGalleryComponent implements OnInit {
         console.log('context menu clicked', event);
         this.contextMenu.show = false;
 
-        switch (event.action) {
+        switch (event.item.action) {
             case ContextMenuAction.DELETE:
+                console.log("DELETE");
+                const images = this.selectionService.getSelection().map((item: FileData) => item.name);
+                this.assetsService.deleteImages(images).then((res) => {
+                    console.log(res);
+                });
                 break;
 
             case ContextMenuAction.RENAME:

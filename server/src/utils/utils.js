@@ -52,11 +52,21 @@ const getBase64FileExtension = (base64) => {
     }
 };
 
+const isArrayOf = (type, array) => {
+    if (!Array.isArray(array)) return false;
+
+    for (let item of array) {
+        if (typeof item !== type) return false;
+    }
+    return true;
+};
+
 const Utils = {
     newName,
     getFileExtension,
     findDesktopImageName,
     getBase64FileExtension,
+    isArrayOf
 };
 
 export default Utils;

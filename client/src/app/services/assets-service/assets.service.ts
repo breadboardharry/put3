@@ -36,30 +36,41 @@ export class AssetsService {
     return result;
   }
 
-  /**
-   * Get server hosted images data
-   * @returns {Promise<FileData[]>} Image data array
-   */
-  public getServerImages(): Promise<FileData[]> {
-    return new Promise<FileData[]>((resolve, reject) => {
-      this.http.get<FileData[]>(this.apiUrl + '/images', {
-        responseType: 'json'
-      }).subscribe((data: FileData[]) => resolve(data));
-    });
-  }
+    /**
+     * Get server hosted images data
+     * @returns {Promise<FileData[]>} Image data array
+     */
+    public getServerImages(): Promise<FileData[]> {
+        return new Promise<FileData[]>((resolve, reject) => {
+            this.http.get<FileData[]>(this.apiUrl + '/images', {
+                responseType: 'json'
+            }).subscribe((data: FileData[]) => resolve(data));
+        });
+    }
+
+    /**
+     * Delete multiple images from the server
+     * @returns {Promise<any>} Server result
+     */
+    public deleteImages(imagenames: string[]): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.http.delete(this.apiUrl + '/resources/images', {
+                responseType: 'json',
+                body: imagenames
+            }).subscribe((data: any) => resolve(data));
+        });
+    }
+
+    
 
     addFiles(images: File) {
         let arr: any[] = [];
-        console.log({arr});
         let formData = new FormData();
-        console.log({formData});
 
         arr.push(images);
         arr[0].forEach((item: any, i: any) => {
             formData.append('file', arr[0][i]);
         })
-
-        console.log({formData});
 
         return this.http.post(this.apiUrl + '/upload', formData, {
             reportProgress: true,
@@ -79,7 +90,6 @@ export class AssetsService {
             // Get server-side error
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
-        console.log(errorMessage);
         return throwError(errorMessage);
     }
 }
