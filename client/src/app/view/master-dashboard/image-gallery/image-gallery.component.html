@@ -34,9 +34,16 @@
         <div class="no-content-label" *ngIf="!images.length">No images</div>
         <app-image-card *ngFor="let image of images"
             (click)="select(image, $event)"
+            (contextmenu)="select(image, $event, true)"
             [image]="image"
-            [selected]="selection.includes(image)"
+            [selected]="selectionService.getSelection().includes(image)"
         >
         </app-image-card>
+
+        <app-context-menu *ngIf="contextMenu.show"
+            [ngStyle]="contextMenu.style"
+            [items]="contextMenu.items"
+            (itemClick)="handleContextMenu($event)">
+        </app-context-menu>
     </form>
 </div>
