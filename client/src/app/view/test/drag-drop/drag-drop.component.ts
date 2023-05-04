@@ -17,11 +17,7 @@ export class DragDropComponent implements OnInit {
     msg: string = '';
     progress: number = 0;
 
-    constructor(
-        public fb: FormBuilder,
-        private sanitizer: DomSanitizer,
-        public assetsService: AssetsService
-    ) {
+    constructor( public fb: FormBuilder, private sanitizer: DomSanitizer, public assetsService: AssetsService ) {
         this.form = this.fb.group({
             file: [null],
         });

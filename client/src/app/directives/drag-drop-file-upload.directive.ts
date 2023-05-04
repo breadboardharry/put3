@@ -5,31 +5,42 @@ import { Directive, EventEmitter, Output, HostListener, HostBinding } from '@ang
 })
 
 export class DragDropFileUploadDirective {
+
     @Output() fileDropped = new EventEmitter<any>();
-    @HostBinding('style.background-color') private background = '#ffffff';
+    @HostBinding('class') private class = '';
+
+    private timeout = 300;
+    private timeoutRef: NodeJS.Timeout | undefined;
+
+    constructor() { }
 
     // Dragover Event
-    @HostListener('dragover', ['$event']) dragOver(event: any) {
-        console.log('dragover');
+    @HostListener('dragover', ['$event'])
+    public dragOver(event: any) {
+        clearTimeout(this.timeoutRef);
         event.preventDefault();
         event.stopPropagation();
-        this.background = '#e2eefd';
+        this.class = 'hover';
     }
 
     // Dragleave Event
-    @HostListener('dragleave', ['$event']) public dragLeave(event: any) {
-        console.log('dragleave');
+    @HostListener('dragleave', ['$event'])
+    public dragLeave(event: any) {
+        this.timeoutRef = setTimeout(() => {
+            this.class = '';
+        }, this.timeout);
+
         event.preventDefault();
         event.stopPropagation();
-        this.background = '#ffffff';
     }
 
     // Drop Event
-    @HostListener('drop', ['$event']) public drop(event: any) {
-        console.log('drop');
+    @HostListener('drop', ['$event'])
+    public drop(event: any) {
         event.preventDefault();
         event.stopPropagation();
-        this.background = '#ffffff';
+        this.class = '';
+
         const files = event.dataTransfer.files;
         if (files.length > 0) {
             this.fileDropped.emit(files);
