@@ -100,7 +100,6 @@ export class ImageGalleryComponent implements OnInit {
         this.uploading = true;
         this.assetsService.addFiles(this.form.value.file)
             .subscribe((event: HttpEvent<any>) => {
-                console.log('done');
                 switch (event.type) {
                     case HttpEventType.Sent:
                         console.log('Request has been made!');
@@ -158,12 +157,10 @@ export class ImageGalleryComponent implements OnInit {
     }
 
     handleContextMenu(event: any) {
-        console.log('context menu clicked', event);
         this.contextMenu.show = false;
 
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
-                console.log("DELETE");
                 const images = this.selectionService.getSelection().map((item: FileData) => item.name);
                 this.assetsService.deleteImages(images).then((res) => {
                     console.log(res);
@@ -171,6 +168,12 @@ export class ImageGalleryComponent implements OnInit {
                 break;
 
             case ContextMenuAction.RENAME:
+                this.assetsService.renameImage(
+                    this.selectionService.getSelection()[0].name,
+                    'test.png'
+                ).then((res) => {
+                    console.log(res);
+                });
                 break;
         };
     }

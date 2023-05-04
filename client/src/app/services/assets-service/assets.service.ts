@@ -61,7 +61,20 @@ export class AssetsService {
         });
     }
 
-    
+    /**
+     * Rename an image on the server
+     * @returns {Promise<any>} Server result
+     */
+    public renameImage(currentName: string, newName: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.http.post(this.apiUrl + '/resources/rename', {
+                currentName,
+                newName
+            },{
+                responseType: 'json',
+            }).subscribe((data: any) => resolve(data));
+        });
+    }
 
     addFiles(images: File) {
         let arr: any[] = [];

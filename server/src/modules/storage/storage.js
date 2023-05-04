@@ -2,6 +2,24 @@ import fs from "fs";
 import path from "path";
 import utils from "./utils.js";
 
+const renameFile = (currentName, newName, type) => {
+    const filepath = path.join("./public", type, currentName);
+    const newPath = path.join("./public", type, newName);
+
+    // Check if the file exists
+    if (!fs.existsSync(filepath)) return false;
+
+    // Rename the file
+    try {
+        fs.renameSync(filepath, newPath);
+        return true;
+    }
+    catch (err) {
+        console.log("[!] Error renaming file: " + filepath + "\n" + err + "\n");
+        return false;
+    }
+}
+
 const getResources = (dirname) => {
     const dirpath = path.join("./public", dirname);
 
@@ -47,7 +65,8 @@ const deleteFiles = (filenames, dirname) => {
 
 const StorageModule = {
     deleteFiles,
-    getResources
+    getResources,
+    renameFile
 };
 
 export default StorageModule;

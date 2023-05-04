@@ -5,6 +5,40 @@ import Socket from "../socket/index.js";
 import Utils from "../utils/utils.js";
 import Storage from "../modules/storage/storage.js";
 
+router.post("/resources/rename", (req, res) => {
+    const { currentName, newName } = req.body;
+
+    // Check parameters
+    if (typeof(currentName) !== "string" || typeof(newName) !== "string") {
+        return res.status(400).json({ success: false, message: "Invalid body parameters" });
+    }
+
+    // Check if names are the same
+    if (currentName == newName) {
+        return res.status(200).json({ success: true, message: "Success" });
+    }
+
+    const oldExt = Utils.getFileExtension(currentName), newExt = Utils.getFileExtension(newName);
+
+    // Check extensions
+    if (oldExt !== newExt) {
+        return res.status(400).json({ success: false, message: "Invalid file extension" });
+    }
+
+    const success = Storage.renameFile(currentName, newName, 'images');
+
+    res.json({
+        success,
+        message: success ? "Success" : "Failed"
+    });
+
+    if (success) {
+        Socket.io.emit('event', {
+            type: 'assets'
+        });
+    }
+});
+
 router.delete("/resources/images", (req, res) => {
     const files = req.body;
 
