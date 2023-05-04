@@ -1,5 +1,5 @@
 <div class="container" [ngClass]="{'uploading': uploading}" appDragDropFileUpload (fileDropped)="upload($event)">
-    <form [formGroup]="form" (contextmenu)="displayContextMenu($event); false" (click)="emptyClick()">
+    <form [formGroup]="form">
         <div class="file-upload-container">
             <mat-spinner *ngIf="uploading" [diameter]="50" color="primary"></mat-spinner>
 
@@ -34,8 +34,9 @@
         <div class="no-content-label" *ngIf="!images.length">No images</div>
         <app-image-card *ngFor="let image of images"
             (click)="select(image, $event)"
+            (contextmenu)="select(image, $event, true)"
             [image]="image"
-            [selected]="selection.includes(image)"
+            [selected]="selectionService.getSelection().includes(image)"
         >
         </app-image-card>
 

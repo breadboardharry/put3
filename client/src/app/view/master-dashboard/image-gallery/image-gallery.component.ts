@@ -2,9 +2,20 @@ import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
+import { ContextMenuItem } from 'src/app/types/context-menu-item';
 import { FileData } from 'src/app/types/file-data';
+
+type ContextMenu = {
+    show: boolean;
+    x: number;
+    y: number;
+    style: any;
+    items: ContextMenuItem[];
+}
 
 @Component({
     selector: 'app-image-gallery',
@@ -13,7 +24,8 @@ import { FileData } from 'src/app/types/file-data';
 })
 export class ImageGalleryComponent implements OnInit {
 
-    contextMenu: any = {
+    // Context menu
+    contextMenu: ContextMenu = {
         show: false,
         x: 0,
         y: 0,
@@ -25,9 +37,10 @@ export class ImageGalleryComponent implements OnInit {
         items: []
     };
 
+    // Selection
     images: FileData[] = [];
-    selection: FileData[] = [];
 
+    // File upload
     fileArr: any[] = [];
     imgArr: any[] = [];
     fileObj: any[] = [];
@@ -36,7 +49,7 @@ export class ImageGalleryComponent implements OnInit {
     progress: number = 0;
     uploading: boolean = false
 
-    constructor(private websocket: WebSocketService, private assetsService: AssetsService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
+    constructor(public selectionService: SelectionService, private websocket: WebSocketService, private assetsService: AssetsService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
         this.form = this.fb.group({
             file: [null],
         });
@@ -54,20 +67,16 @@ export class ImageGalleryComponent implements OnInit {
     updateAssets() {
         this.assetsService.getServerImages().then((data: FileData[]) => {
             this.images = data;
-            console.log(this.images);
+            this.selectionService.init(this.images);
         });
     }
 
-    select(image: FileData, event: any) {
-        const index = this.selection.indexOf(image);
+    select(image: FileData, event: any, rightClick: boolean = false) {
+        this.selectionService.handleSelect(event, image, rightClick);
 
-        if (event.ctrlKey) {
-            if (index == -1) this.selection.push(image);
-            else this.selection.splice(index, 1);
-        } else {
-            if (index == -1 || this.selection.length > 1)
-                this.selection = [image];
-            else this.selection = [];
+        // On right click, display context menu
+        if (rightClick) {
+            this.displayContextMenu(event);
         }
     }
 
@@ -126,22 +135,23 @@ export class ImageGalleryComponent implements OnInit {
     }
 
     displayContextMenu(event: any) {
-
         this.contextMenu.show = true;
 
         this.contextMenu.items = [
-          {
-            title: "Delete"
-          },
-          {
-            title: "Rename"
-          }
+            {
+                title: "Delete",
+                action: ContextMenuAction.DELETE
+            },
+            {
+                title: "Rename",
+                action: ContextMenuAction.RENAME
+            }
         ];
 
         this.contextMenu.x = event.clientX;
         this.contextMenu.y = event.clientY;
+        this.contextMenu.style.left = event.clientX + 1 + 'px';
         this.contextMenu.style.top = event.clientY + 'px';
-        this.contextMenu.style.left = event.clientX + 'px';
     }
 
     handleContextMenu(event: any) {
@@ -151,11 +161,16 @@ export class ImageGalleryComponent implements OnInit {
 
     @HostListener('document:click')
     documentClick(): void {
-        console.log('document clicked');
         this.contextMenu.show = false;
     }
 
-    emptyClick() {
-        console.log('empty clicked');
+    @HostListener('contextmenu', ['$event'])
+    onRightClick(event: any) {
+        // Click outside a card
+        if (!event.target.className.includes('card')) {
+            this.contextMenu.show = false;
+        }
+
+        event.preventDefault();
     }
 }
