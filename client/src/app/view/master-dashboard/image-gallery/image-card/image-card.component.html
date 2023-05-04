@@ -6,7 +6,12 @@
           }" draggable="false">
     </div>
 
-    <div class="label-container">
-        <label>{{image.name}}</label>
-    </div>
+    <textarea class="filename" rows="3"
+        [ngClass]="{'editing': editing}"
+        [(ngModel)]="name"
+        [readOnly]="!editing"
+        (focusout)="editDone()"
+        (keydown.enter)="editDone()"
+    >
+    </textarea>
 </div>

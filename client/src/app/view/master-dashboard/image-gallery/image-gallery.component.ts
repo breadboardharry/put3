@@ -39,6 +39,7 @@ export class ImageGalleryComponent implements OnInit {
 
     // Assets
     images: FileData[] = [];
+    editing: FileData | null = null;
 
     // File upload
     fileArr: any[] = [];
@@ -168,14 +169,19 @@ export class ImageGalleryComponent implements OnInit {
                 break;
 
             case ContextMenuAction.RENAME:
-                this.assetsService.renameImage(
-                    this.selectionService.getSelection()[0].name,
-                    'test.png'
-                ).then((res) => {
-                    console.log(res);
-                });
+                this.editing = this.selectionService.getSelection()[0];
                 break;
         };
+    }
+
+    rename(newName: string, image: FileData) {
+        this.assetsService.renameImage(
+            image.name,
+            newName
+        ).then((res) => {
+            console.log(res);
+        });
+        this.editing = null;
     }
 
     @HostListener('document:click')

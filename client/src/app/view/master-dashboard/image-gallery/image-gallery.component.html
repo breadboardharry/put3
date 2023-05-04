@@ -37,6 +37,8 @@
             (contextmenu)="select(image, $event, true)"
             [image]="image"
             [selected]="selectionService.getSelection().includes(image)"
+            [editing]="image === editing"
+            (editedEvent)="rename($event, image)"
         >
         </app-image-card>
 
