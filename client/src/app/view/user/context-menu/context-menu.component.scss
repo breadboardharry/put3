@@ -24,9 +24,11 @@
     margin: 0;
     padding: 0.25rem 0.6rem;
 
-    cursor: pointer;
-
-    &:hover {
+    &:hover:enabled {
         background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &:disabled {
+        color:rgba(255, 255, 255, 0.35)
     }
 }

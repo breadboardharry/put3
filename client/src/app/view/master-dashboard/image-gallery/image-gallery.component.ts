@@ -37,7 +37,7 @@ export class ImageGalleryComponent implements OnInit {
         items: []
     };
 
-    // Selection
+    // Assets
     images: FileData[] = [];
 
     // File upload
@@ -136,15 +136,18 @@ export class ImageGalleryComponent implements OnInit {
 
     displayContextMenu(event: any) {
         this.contextMenu.show = true;
+        const len = this.selectionService.getSelection().length
 
         this.contextMenu.items = [
             {
-                title: "Delete",
-                action: ContextMenuAction.DELETE
+                title: "Delete" + (len > 1 ? ` (${len})` : ''),
+                action: ContextMenuAction.DELETE,
+                disabled: len == 0
             },
             {
                 title: "Rename",
-                action: ContextMenuAction.RENAME
+                action: ContextMenuAction.RENAME,
+                disabled: len != 1
             }
         ];
 
@@ -157,6 +160,14 @@ export class ImageGalleryComponent implements OnInit {
     handleContextMenu(event: any) {
         console.log('context menu clicked', event);
         this.contextMenu.show = false;
+
+        switch (event.action) {
+            case ContextMenuAction.DELETE:
+                break;
+
+            case ContextMenuAction.RENAME:
+                break;
+        };
     }
 
     @HostListener('document:click')
