@@ -33,7 +33,6 @@ import { ImageGalleryComponent } from './view/master-dashboard/image-gallery/ima
 import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-card/image-card.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DragDropComponent } from './view/test/drag-drop/drag-drop.component';
 
 @NgModule({
   declarations: [
@@ -59,8 +58,7 @@ import { DragDropComponent } from './view/test/drag-drop/drag-drop.component';
     CodelockPageComponent,
     ImageGalleryComponent,
     ImageCardComponent,
-    DragDropFileUploadDirective,
-    DragDropComponent
+    DragDropFileUploadDirective
   ],
   imports: [
     BrowserModule,
