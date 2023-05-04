@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { FileData } from 'src/app/types/file-data';
 
 @Component({
@@ -23,13 +24,22 @@ export class ImageGalleryComponent implements OnInit {
     progress: number = 0;
     uploading: boolean = false
 
-    constructor(private assetsService: AssetsService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
+    constructor(private websocket: WebSocketService, private assetsService: AssetsService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
         this.form = this.fb.group({
             file: [null],
         });
     }
 
     ngOnInit(): void {
+        this.updateAssets();
+
+        this.websocket.socket.on('event', (data: any) => {
+            if (data.type != 'assets') return;
+            this.updateAssets();
+        });
+    }
+
+    updateAssets() {
         this.assetsService.getServerImages().then((data: FileData[]) => {
             this.images = data;
             console.log(this.images);

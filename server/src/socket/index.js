@@ -55,7 +55,8 @@ const init = () => {
 };
 
 const SocketModule = {
-  createServer
+  createServer,
+  get io() {return io}
 };
 
 export default SocketModule;
