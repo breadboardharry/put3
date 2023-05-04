@@ -1,0 +1,5 @@
+<div class="menu">
+    <button *ngFor="let item of items" class="item" (click)="onClick($event, item)">
+        {{item.title}}
+    </button>
+</div>

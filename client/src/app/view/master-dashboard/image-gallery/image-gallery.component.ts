@@ -1,5 +1,5 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
@@ -12,6 +12,18 @@ import { FileData } from 'src/app/types/file-data';
     styleUrls: ['./image-gallery.component.scss'],
 })
 export class ImageGalleryComponent implements OnInit {
+
+    contextMenu: any = {
+        show: false,
+        x: 0,
+        y: 0,
+        style: {
+            position: 'fixed',
+            top: '0px',
+            left: '0px'
+        },
+        items: []
+    };
 
     images: FileData[] = [];
     selection: FileData[] = [];
@@ -111,5 +123,39 @@ export class ImageGalleryComponent implements OnInit {
 
     sanitize(url: string) {
         return this.sanitizer.bypassSecurityTrustUrl(url);
+    }
+
+    displayContextMenu(event: any) {
+
+        this.contextMenu.show = true;
+
+        this.contextMenu.items = [
+          {
+            title: "Delete"
+          },
+          {
+            title: "Rename"
+          }
+        ];
+
+        this.contextMenu.x = event.clientX;
+        this.contextMenu.y = event.clientY;
+        this.contextMenu.style.top = event.clientY + 'px';
+        this.contextMenu.style.left = event.clientX + 'px';
+    }
+
+    handleContextMenu(event: any) {
+        console.log('context menu clicked', event);
+        this.contextMenu.show = false;
+    }
+
+    @HostListener('document:click')
+    documentClick(): void {
+        console.log('document clicked');
+        this.contextMenu.show = false;
+    }
+
+    emptyClick() {
+        console.log('empty clicked');
     }
 }
