@@ -6,6 +6,6 @@ import Storage from './storage.js';
 
 router.use('/desktop', Desktop);
 router.use('/access-control', AccessControl);
-router.use('/', Storage);
+router.use('/resources', Storage);
 
 export default router;

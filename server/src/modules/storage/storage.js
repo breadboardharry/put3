@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import utils from "./utils.js";
 
 const renameFile = (currentName, newName, type) => {
     const filepath = path.join("./public", type, currentName);
@@ -19,20 +18,6 @@ const renameFile = (currentName, newName, type) => {
         return false;
     }
 }
-
-const getResources = (dirname) => {
-    const dirpath = path.join("./public", dirname);
-
-    // Check if the directory exists
-    if (!fs.existsSync(dirpath)) throw new Error("Directory not found");
-
-    // For each file in the directory, get the file info
-    const files = fs.readdirSync(dirpath).map((file) => {
-        return utils.getFileData("image", file, dirpath);
-    });
-
-    return files;
-};
 
 const deleteFiles = (filenames, dirname) => {
     const count = {
@@ -65,7 +50,6 @@ const deleteFiles = (filenames, dirname) => {
 
 const StorageModule = {
     deleteFiles,
-    getResources,
     renameFile
 };
 

@@ -4,6 +4,29 @@ import upload from "../storage/multer-config.js";
 import Socket from "../socket/index.js";
 import Utils from "../utils/utils.js";
 import Storage from "../modules/storage/storage.js";
+import Resources from "../modules/resources/resources.js";
+
+router.get("/", (req, res) => {
+    try {
+        // Return the data from all directories
+        const data = Resources.getData();
+        res.status(200).json(data);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+router.get("/:dir", (req, res) => {
+    try {
+        // Return the data from the specified directory
+        const data = Resources.getData(req.params.dir);
+        res.status(200).json(data);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 router.post("/resources/rename", (req, res) => {
     const { currentName, newName } = req.body;
@@ -68,17 +91,6 @@ router.post("/upload", upload.file.array('file'), (req, res) => {
     Socket.io.emit('event', {
         type: 'assets'
     });
-});
-
-// Get all images as json object
-router.get("/images", (req, res) => {
-    try {
-        const images = Storage.getResources('images');
-        res.status(200).json(images);
-    } catch (err) {
-        console.log("[!] Error getting images: " + err + "\n");
-        res.status(500).json({ error: "Internal server error" });
-    }
 });
 
 export default router;
