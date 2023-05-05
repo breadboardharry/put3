@@ -18,11 +18,11 @@ type ContextMenu = {
 }
 
 @Component({
-    selector: 'app-image-gallery',
-    templateUrl: './image-gallery.component.html',
-    styleUrls: ['./image-gallery.component.scss'],
+    selector: 'app-assets-gallery',
+    templateUrl: './assets-gallery.component.html',
+    styleUrls: ['./assets-gallery.component.scss'],
 })
-export class ImageGalleryComponent implements OnInit {
+export class AssetsGalleryComponent implements OnInit {
 
     // Context menu
     contextMenu: ContextMenu = {

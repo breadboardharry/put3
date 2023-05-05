@@ -19,7 +19,8 @@
         @extend %hidden-scrollbar;
     }
 
-    &.hover, &.uploading {
+    &.hover,
+    &.uploading {
         .file-upload-container {
             display: flex;
         }
@@ -72,9 +73,6 @@
     text-align: center;
     font-size: 1.5rem;
 }
-
-
-
 
 // .progress {
 //     margin-bottom: 30px;

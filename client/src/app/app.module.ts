@@ -29,8 +29,8 @@ import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboa
 import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
-import { ImageGalleryComponent } from './view/master-dashboard/image-gallery/image-gallery.component';
-import { ImageCardComponent } from './view/master-dashboard/image-gallery/image-card/image-card.component';
+import { AssetsGalleryComponent } from './view/master-dashboard/assets-gallery/assets-gallery.component';
+import { AssetCardComponent } from './view/master-dashboard/assets-gallery/asset-card/asset-card.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
@@ -57,8 +57,8 @@ import { ContextMenuComponent } from './view/user/context-menu/context-menu.comp
     SoundboardButtonComponent,
     CodelockComponent,
     CodelockPageComponent,
-    ImageGalleryComponent,
-    ImageCardComponent,
+    AssetsGalleryComponent,
+    AssetCardComponent,
     DragDropFileUploadDirective,
     ContextMenuComponent
   ],

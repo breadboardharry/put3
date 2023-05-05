@@ -3,12 +3,12 @@ import { FileData } from 'src/app/types/file-data';
 import { environment } from 'src/environments/environment';
 
 @Component({
-    selector: 'app-image-card',
-    templateUrl: './image-card.component.html',
-    styleUrls: ['./image-card.component.scss'],
+    selector: 'app-asset-card',
+    templateUrl: './asset-card.component.html',
+    styleUrls: ['./asset-card.component.scss'],
 })
 
-export class ImageCardComponent implements OnInit {
+export class AssetCardComponent implements OnInit {
 
     @Input() image!: FileData;
     @Input() selected: boolean = false;

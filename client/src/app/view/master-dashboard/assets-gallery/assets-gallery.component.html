@@ -32,7 +32,7 @@
         </div> -->
 
         <div class="no-content-label" *ngIf="!images.length">No images</div>
-        <app-image-card *ngFor="let image of images"
+        <app-asset-card *ngFor="let image of images"
             (click)="select(image, $event)"
             (contextmenu)="select(image, $event, true)"
             [image]="image"
@@ -40,7 +40,7 @@
             [editing]="image === editing"
             (editedEvent)="rename($event, image)"
         >
-        </app-image-card>
+        </app-asset-card>
 
         <app-context-menu *ngIf="contextMenu.show"
             [ngStyle]="contextMenu.style"
