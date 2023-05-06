@@ -19,30 +19,37 @@ const renameFile = (currentName, newName, type) => {
     }
 }
 
+const deleteFile = (filename, dirpath) => {
+
+    const filepath = path.join("./public", dirpath, filename);
+
+    console.log(filepath);
+
+    // Check if the file exists
+    if (!fs.existsSync(filepath)) return false;
+
+    // Delete the file
+    try {
+        fs.unlinkSync(filepath);
+        return true;
+    }
+    catch (err) {
+        console.log("[!] Error deleting file: " + filepath + "\n" + err + "\n")
+        return false
+    }
+};
+
 const deleteFiles = (filenames, dirname) => {
     const count = {
         success: 0,
         failed: 0
     };
 
+    // Delete each file
     for (let filename of filenames) {
-        const filepath = path.join("./public", dirname, filename);
-
-        // Check if the file exists
-        if (!fs.existsSync(filepath)) {
-            count.failed++;
-            continue;
-        }
-
-        // Delete the file
-        try {
-            fs.unlinkSync(filepath);
+        if (deleteFile(filename, dirname))
             count.success++;
-        }
-        catch (err) {
-            console.log("[!] Error deleting file: " + filepath + "\n" + err + "\n")
-            count.failed++;
-        }
+        else count.failed++;
     }
 
     return count;
@@ -50,6 +57,7 @@ const deleteFiles = (filenames, dirname) => {
 
 const StorageModule = {
     deleteFiles,
+    deleteFile,
     renameFile
 };
 

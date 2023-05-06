@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
     try {
         // Return the data from all directories
         const data = Resources.getData();
-        res.status(200).json(data);
+        res.json(data);
     }
     catch (err) {
         res.status(500).json(err);
@@ -21,7 +21,7 @@ router.get("/:dir", (req, res) => {
     try {
         // Return the data from the specified directory
         const data = Resources.getData(req.params.dir);
-        res.status(200).json(data);
+        res.json(data);
     }
     catch (err) {
         res.status(500).json(err);
@@ -62,12 +62,23 @@ router.post("/resources/rename", (req, res) => {
     }
 });
 
-router.delete("/resources/images", (req, res) => {
+router.delete("/", (req, res) => {
+
+    try {
+        // Return the data from the specified directory
+        const data = Resources.unlink(req.body);
+        res.json(data);
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
+
+    return;
+
+
     const files = req.body;
 
-    if (!Utils.isArrayOf('string', files)) {
-        return res.status(400).json({ success: false, message: "Invalid body parameters" });
-    }
+    
 
     const count = Storage.deleteFiles(files, 'images');
 
