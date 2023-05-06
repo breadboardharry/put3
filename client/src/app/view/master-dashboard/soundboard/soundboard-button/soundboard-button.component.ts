@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { WebSocketService } from "../../../../services/websocket-service/websocket.service";
 import { FileData } from 'src/app/types/resources/file-data';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 
 @Component({
   selector: 'app-soundboard-button',
@@ -13,7 +14,7 @@ export class SoundboardButtonComponent implements OnInit {
     @Input() volume!: number;
     @Input() target!: any;
     @Input() disabled: boolean = false;
-    constructor(private websocket: WebSocketService) { }
+    constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
 
     ngOnInit(): void {
     }

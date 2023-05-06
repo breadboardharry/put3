@@ -17,6 +17,10 @@ export class ResourcesService {
 
     constructor(private http: HttpClient) { }
 
+    public removeFileExtension(filename: string) {
+        return filename.split('.').slice(0, -1).join('.');
+    }
+
     public typeToDir(type: ResourceType): ResourceDirectory {
         switch (type) {
             case ResourceType.Image:
