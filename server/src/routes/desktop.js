@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import upload from "../storage/multer-config.js";
 import utils from "../utils/utils.js"
+import StorageUtils from "../modules/storage/utils.js";
 
 /* --------------------------------- ROUTES --------------------------------- */
 
@@ -24,7 +25,7 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
         const filePath = path.join("./public/assets", fileName);
 
         // Delete an already existing file with a different extension
-        if (existingFile && utils.getFileExtension(existingFile) !== fileExt)
+        if (existingFile && StorageUtils.getFileExtension(existingFile) !== fileExt)
             fs.unlinkSync(path.join("./public/assets", existingFile));
 
         // Write the file

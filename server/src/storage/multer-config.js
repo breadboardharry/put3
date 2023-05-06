@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import utils from "../utils/utils.js";
+import StorageUtils from "../modules/storage/utils.js";
 
 const allowedFileTypes = /jpeg|jpg|png|gif|mp3|m4a|wma|wav/;
 const uploadFolder = {
@@ -13,7 +13,7 @@ const uploadFolder = {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         // Get file extension
-        const fileExt = utils.getFileExtension(file.originalname);
+        const fileExt = StorageUtils.getFileExtension(file.originalname);
 
         // Get the corresponding upload folder
         let uploadPath = "";
@@ -51,7 +51,7 @@ const desktopImageStorage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
     // Check extension
     const filetypes = req.filetypes || allowedFileTypes;
-    const validExt = filetypes.test(utils.getFileExtension(file.originalname));
+    const validExt = filetypes.test(StorageUtils.getFileExtension(file.originalname));
     // Check mime
     // const mimetype = filetypes.test(file.mimetype);
 

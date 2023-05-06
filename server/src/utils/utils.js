@@ -9,11 +9,6 @@ const newName = () => {
     // }
 };
 
-// Get a file extension without the dot
-const getFileExtension = (filename) => {
-    return filename.split(".").pop().toLowerCase();
-};
-
 const findDesktopImageName = (extensions = ["jpg", "png", "jpeg", "gif"]) => {
     return new Promise(async (resolve, reject) => {
         const filename = "desktop";
@@ -52,18 +47,18 @@ const getBase64FileExtension = (base64) => {
     }
 };
 
-const isArrayOf = (type, array) => {
+const isArrayOf = (type, array, notNull = false) => {
     if (!Array.isArray(array)) return false;
 
     for (let item of array) {
         if (typeof item !== type) return false;
+        if (notNull && !item) return false;
     }
     return true;
 };
 
 const Utils = {
     newName,
-    getFileExtension,
     findDesktopImageName,
     getBase64FileExtension,
     isArrayOf

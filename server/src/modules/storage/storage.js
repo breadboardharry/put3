@@ -1,9 +1,9 @@
 import fs from "fs";
 import path from "path";
 
-const renameFile = (currentName, newName, type) => {
-    const filepath = path.join("./public", type, currentName);
-    const newPath = path.join("./public", type, newName);
+const renameFile = (currentName, newName, dirpath) => {
+    const filepath = path.join(dirpath, currentName);
+    const newPath = path.join(dirpath, newName);
 
     // Check if the file exists
     if (!fs.existsSync(filepath)) return false;
@@ -21,9 +21,7 @@ const renameFile = (currentName, newName, type) => {
 
 const deleteFile = (filename, dirpath) => {
 
-    const filepath = path.join("./public", dirpath, filename);
-
-    console.log(filepath);
+    const filepath = path.join(dirpath, filename);
 
     // Check if the file exists
     if (!fs.existsSync(filepath)) return false;

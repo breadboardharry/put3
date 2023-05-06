@@ -3,6 +3,22 @@ import path from "path";
 import paths from "../../enums/paths.js";
 import Resource from "../../enums/resources.js";
 import data from "./data.js";
+import Utils from "../../utils/utils.js";
+import Storage from "../storage/storage.js";
+import StorageUtils from "../storage/utils.js";
+
+/**
+ * Rename a resource file
+ * @param {string} currentName Current file name
+ * @param {string} newName New file name
+ * @returns {boolean} True if the file has been renamed
+ */
+const rename = (currentName, newName) => {
+    const dirname = extToDir(StorageUtils.getFileExtension(currentName));
+    const dirpath = path.join(paths.RESOURCES, dirname);
+
+    return Storage.renameFile(currentName, newName, dirpath);
+}
 
 /**
  * Check if a file extension is valid
@@ -156,6 +172,7 @@ const ResourcesUtils = {
     getFilesData,
     getFileData,
     isValidDir,
+    rename
 };
 
 export default ResourcesUtils;
