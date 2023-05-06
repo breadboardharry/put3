@@ -61,7 +61,7 @@ export class AssetsGalleryComponent implements OnInit {
         this.updateResources();
 
         this.websocket.socket.on('event', (data: any) => {
-            if (data.type != 'assets') return;
+            if (data.type != 'resources') return;
             this.updateResources();
         });
     }
@@ -74,8 +74,8 @@ export class AssetsGalleryComponent implements OnInit {
         });
     }
 
-    select(image: FileData, event: any, rightClick: boolean = false) {
-        this.selectionService.handleSelect(event, image, rightClick);
+    select(file: FileData, event: any, rightClick: boolean = false) {
+        this.selectionService.handleSelect(event, file, rightClick);
 
         // On right click, display context menu
         if (rightClick) {
@@ -164,8 +164,8 @@ export class AssetsGalleryComponent implements OnInit {
 
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
-                const images = this.selectionService.getSelection().map((item: FileData) => item.name);
-                this.resourceService.deleteImages(images).then((res) => {
+                const file = this.selectionService.getSelection().map((item: FileData) => item.name);
+                this.resourceService.delete(file).then((res) => {
                     console.log(res);
                 });
                 break;
@@ -176,11 +176,8 @@ export class AssetsGalleryComponent implements OnInit {
         };
     }
 
-    rename(newName: string, image: FileData) {
-        this.resourceService.renameImage(
-            image.name,
-            newName
-        ).then((res) => {
+    rename(newName: string, file: FileData) {
+        this.resourceService.rename( file.name, newName ).then((res) => {
             console.log(res);
         });
         this.editing = null;

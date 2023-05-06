@@ -14,7 +14,7 @@ import { ResourceSet } from 'src/app/types/resources/data-set';
 })
 export class ResourcesService {
 
-    private apiUrl = environment.serverUrl + environment.apiPath;
+    private apiUrl = environment.serverUrl + environment.apiPath + '/resources';
 
     constructor(private http: HttpClient) { }
 
@@ -66,10 +66,8 @@ export class ResourcesService {
      * @returns {Promise<ResourceSet>} Resources
      */
     public getData(): Promise<ResourceSet> {
-        const endpoint = this.apiUrl + '/resources';
-
         return new Promise<ResourceSet>((resolve, reject) => {
-            this.http.get<ResourceSet>(endpoint, {
+            this.http.get<ResourceSet>(this.apiUrl, {
                 responseType: 'json'
             }).subscribe((data: ResourceSet) => {
                 resolve(data);
@@ -83,8 +81,7 @@ export class ResourcesService {
      * @returns {Promise<FileData[]>} Resources
      */
     public getDataByType(type: ResourceType): Promise<FileData[]> {
-        const dir = this.typeToDir(type);
-        const endpoint = this.apiUrl + '/resources' + dir;
+        const endpoint = this.apiUrl + this.typeToDir(type);
 
         return new Promise<FileData[]>((resolve, reject) => {
             this.http.get<FileData[]>(endpoint, {
@@ -107,14 +104,16 @@ export class ResourcesService {
 
     /**
      * Delete multiple images from the server
+     * @param {string[]} filenames Filenames to delete
      * @returns {Promise<any>} Server result
      */
-    public deleteImages(imagenames: string[]): Promise<any> {
+    public delete(filenames: string[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.http.delete(this.apiUrl + '/resources/images', {
+            this.http.delete(this.apiUrl, {
                 responseType: 'json',
-                body: imagenames
-            }).subscribe((data: any) => resolve(data));
+                body: filenames
+            })
+            .subscribe((data: any) => resolve(data));
         });
     }
 
@@ -122,14 +121,15 @@ export class ResourcesService {
      * Rename an image on the server
      * @returns {Promise<any>} Server result
      */
-    public renameImage(currentName: string, newName: string): Promise<any> {
+    public rename(currentName: string, newName: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.http.post(this.apiUrl + '/resources/rename', {
+            this.http.post(this.apiUrl + '/rename', {
                 currentName,
                 newName
             },{
                 responseType: 'json',
-            }).subscribe((data: any) => resolve(data));
+            })
+            .subscribe((data: any) => resolve(data));
         });
     }
 
