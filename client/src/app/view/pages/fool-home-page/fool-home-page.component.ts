@@ -4,6 +4,7 @@ import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -12,6 +13,7 @@ import { DesktopService } from 'src/app/services/desktop-service/desktop.service
 })
 export class FoolHomePageComponent implements OnInit {
 
+    private apiUrl = environment.serverUrl + environment.apiPath
   desktopBackground: string = 'assets/images/default-desktop-background.jpg';
 
   constructor(
@@ -30,7 +32,7 @@ export class FoolHomePageComponent implements OnInit {
     }
 
     this.websocket.socket.on('action', (data: any) => {
-      this.action(data);
+        this.action(data);
     });
 
     // Get desktop background image
@@ -66,7 +68,7 @@ export class FoolHomePageComponent implements OnInit {
       case 'audio':
         const volume = 'volume' in data.action ? data.action.volume : 1.0;
         if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-        else if ('track' in data.action) this.audio.play('assets/sounds/' + data.action.track, volume);
+        else if ('track' in data.action) this.audio.play(this.apiUrl + '/resources/audio/' + data.action.track, volume);
         break;
 
       default:

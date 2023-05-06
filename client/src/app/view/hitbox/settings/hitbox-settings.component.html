@@ -28,11 +28,11 @@
 
             <!-- ----------------------------- SOUNDS LIST ----------------------------- -->
             <mat-menu #soundsMenu="matMenu">
-              <button *ngFor="let sound of resourceService.getFlattenSounds()" mat-menu-item
-                (click)="assignAction($event, action, trigger, {track: sound})"
-                [ngClass]="{'bold': (hitbox.events[trigger.value] && hitbox.events[trigger.value].data.track == sound)}">
-                {{sound}}
-              </button>
+                <button *ngFor="let track of tracks" mat-menu-item
+                    (click)="assignAction($event, action, trigger, {track: track})"
+                    [ngClass]="{'bold': (hitbox.events[trigger.value] && hitbox.events[trigger.value].data.track == track)}">
+                    {{track.name}}
+                </button>
             </mat-menu>
           </ng-template>
 

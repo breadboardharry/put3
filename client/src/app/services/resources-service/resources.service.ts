@@ -2,7 +2,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { assets } from 'src/app/data/assets';
 import { FileData } from 'src/app/types/resources/file-data';
 import { environment } from 'src/environments/environment';
 import { ResourceType } from 'src/app/enums/resources/type';
@@ -40,26 +39,21 @@ export class ResourcesService {
         }
     }
 
-    public getFlattenSounds(): string[] {
-        const dir = assets['sounds'];
-        return this.flattenObject(dir);
+    public flattenObject(obj: any, path: string = '') {
+        let result: any[] = [];
+
+        for (let key in obj) {
+        let newPath = path ? path + '/' + key : key;
+
+        if (Array.isArray(obj[key])) {
+            result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
+        }
+        else if (typeof obj[key] === 'object') {
+            result = result.concat(this.flattenObject(obj[key], newPath));
+        }
+        }
+        return result;
     }
-
-  public flattenObject(obj: any, path: string = '') {
-    let result: any[] = [];
-
-    for (let key in obj) {
-      let newPath = path ? path + '/' + key : key;
-
-      if (Array.isArray(obj[key])) {
-        result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
-      }
-      else if (typeof obj[key] === 'object') {
-        result = result.concat(this.flattenObject(obj[key], newPath));
-      }
-    }
-    return result;
-  }
 
     /**
      * Get all resources data
@@ -81,12 +75,13 @@ export class ResourcesService {
      * @returns {Promise<FileData[]>} Resources
      */
     public getDataByType(type: ResourceType): Promise<FileData[]> {
-        const endpoint = this.apiUrl + this.typeToDir(type);
+        const endpoint = this.apiUrl + '/' + this.typeToDir(type);
 
         return new Promise<FileData[]>((resolve, reject) => {
             this.http.get<FileData[]>(endpoint, {
                 responseType: 'json'
             }).subscribe((data: FileData[]) => {
+                console.log(data);
                 resolve(data);
             });
         });

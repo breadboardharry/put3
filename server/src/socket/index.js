@@ -59,7 +59,7 @@ const status = (socket) => {
 const action = (socket) => {
     socket.on("action", (data) => {
         console.log("[-] Action from " + socket.id + " to " + data.target.id);
-        Socket.update.action();
+        Socket.update.action(data);
     });
 };
 

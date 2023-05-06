@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {WebSocketService} from "../../../../services/websocket-service/websocket.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { WebSocketService } from "../../../../services/websocket-service/websocket.service";
+import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
   selector: 'app-soundboard-button',
@@ -8,7 +9,7 @@ import {WebSocketService} from "../../../../services/websocket-service/websocket
 })
 export class SoundboardButtonComponent implements OnInit {
 
-  @Input() track!: any;
+  @Input() track!: FileData;
   @Input() volume!: number;
   @Input() target!: any;
   @Input() disabled: boolean = false;
@@ -17,12 +18,12 @@ export class SoundboardButtonComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  soundboard(track: string) {
+  play(track: FileData) {
     this.websocket.socket.emit('action', {
       target: this.target,
       action: {
         type: 'audio',
-        track: track,
+        track: track.name,
         volume: this.volume / 100
       }
     });

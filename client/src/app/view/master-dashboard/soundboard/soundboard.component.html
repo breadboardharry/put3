@@ -18,12 +18,16 @@
       </div>
     </div>
     <div class="buttons">
-      <app-soundboard-button *ngFor="let track of resourceService.getFlattenSounds()"
-                             [track]="track"
-                             [target]="target"
-                             [volume]="volume"
-                             [disabled]="disabled">
-      </app-soundboard-button>
+        <div class="no-content-container" *ngIf="!tracks.length">
+            <h4 class="no-content-label">No tracks</h4>
+        </div>
+
+        <app-soundboard-button *ngFor="let track of tracks"
+                                [track]="track"
+                                [target]="target"
+                                [volume]="volume"
+                                [disabled]="disabled">
+        </app-soundboard-button>
     </div>
   </div>
 </div>
