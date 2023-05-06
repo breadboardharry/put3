@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DashboardPage } from 'src/app/enums/dashboard-pages';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { MenuItem } from 'src/app/types/menu-item';
@@ -10,11 +11,12 @@ import { MenuItem } from 'src/app/types/menu-item';
 })
 export class MasterDashboardPageComponent implements OnInit {
 
-  selectedItem: MenuItem = {
-    title: 'Images'
-  };
-  fools: any[] = [];
-  target: any = null;
+    selectedItem: MenuItem = {
+        title: DashboardPage.Resources
+    };
+    fools: any[] = [];
+    target: any = null;
+    dashboardPage = DashboardPage;
 
   constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
 

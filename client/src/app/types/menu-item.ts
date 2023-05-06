@@ -1,4 +1,6 @@
+import { DashboardPage } from "../enums/dashboard-pages";
+
 export type MenuItem = {
-  title: string;
+  title: DashboardPage;
   icon?: string;
 };

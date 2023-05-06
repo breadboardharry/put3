@@ -21,13 +21,13 @@
             <hr class="separator" />
 
             <div class="app-container">
-                <app-soundboard *ngIf="selectedItem.title.toLowerCase() == 'soundboard'"
+                <app-soundboard *ngIf="selectedItem.title == dashboardPage.Soundboard"
                     [fools]="fools"
                     [target]="target"
                     [disabled]="!fools.length || target == null">
                 </app-soundboard>
 
-                <app-assets-gallery *ngIf="selectedItem.title.toLowerCase() == 'images'">
+                <app-assets-gallery *ngIf="selectedItem.title == dashboardPage.Resources">
                 </app-assets-gallery>
             </div>
         </div>

@@ -1,23 +1,24 @@
+import { DashboardPage } from '../enums/dashboard-pages';
 import { Menu } from '../types/menu';
 
 export const dashboardNavbarMenus: Menu[] = [
     [
         {
-            title: 'Layout',
+            title: DashboardPage.Layout,
             icon: 'edit-image.png',
         },
         {
-            title: 'Soundboard',
+            title: DashboardPage.Soundboard,
             icon: 'speaker.png',
         },
         {
-            title: 'Assets',
+            title: DashboardPage.Resources,
             icon: 'photo-gallery.png',
         },
     ],
     [
         {
-            title: 'Settings',
+            title: DashboardPage.Settings,
             icon: 'gear.png',
         },
     ],
