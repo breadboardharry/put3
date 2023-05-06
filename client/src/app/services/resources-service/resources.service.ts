@@ -97,25 +97,34 @@ export class ResourcesService {
     }
 
     /**
-     * Delete multiple images from the server
-     * @param {string[]} filenames Filenames to delete
+     * Delete multiple resource files
+     * @param {string[]} filespath Path of the files to delete
      * @returns {Promise<any>} Server result
      */
-    public delete(filenames: string[]): Promise<any> {
+    public delete(filespath: string[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.http.delete(this.apiUrl, {
                 responseType: 'json',
-                body: filenames
+                body: filespath
             })
             .subscribe((data: any) => resolve(data));
         });
     }
 
     /**
-     * Rename an image on the server
+     * Rename a resource file
+     * @param {string} currentPath Current relative path
+     * @param {string} newPath New relative path
      * @returns {Promise<any>} Server result
      */
-    public rename(currentName: string, newName: string): Promise<any> {
+
+    // TODO: Block same name as existing file
+    // TODO: When click on rename, select the content of the input
+    public rename(currentName: string, newName: string, path: string = ''): Promise<any> {
+        // Rename files placed in subfolders via their relative path
+        currentName = path ? path : currentName;
+        newName = currentName.replace(currentName, newName);
+
         return new Promise<any>((resolve, reject) => {
             this.http.post(this.apiUrl + '/rename', {
                 currentName,

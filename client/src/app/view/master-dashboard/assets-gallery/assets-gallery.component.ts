@@ -163,7 +163,7 @@ export class AssetsGalleryComponent implements OnInit {
 
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
-                const file = this.selectionService.getSelection().map((item: FileData) => item.name);
+                const file = this.selectionService.getSelection().map((item: FileData) => item.path);
                 this.resourceService.delete(file);
                 break;
 
@@ -174,7 +174,7 @@ export class AssetsGalleryComponent implements OnInit {
     }
 
     rename(newName: string, file: FileData) {
-        this.resourceService.rename( file.name, newName );
+        this.resourceService.rename( file.name, newName, file.path );
         this.editing = null;
     }
 

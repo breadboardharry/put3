@@ -5,16 +5,17 @@ import paths from "../../enums/paths.js";
 import StorageUtils from "../storage/utils.js";
 
 const getData = {
-    image: (filename) => {
-        const filePath = path.join(paths.RESOURCES, "images", filename);
-        const dimensions = sizeOf(filePath);
+    image: (filepath) => {
+        const publicPath = path.join(paths.RESOURCES, "images", filepath);
+        const dimensions = sizeOf(publicPath);
 
         return {
-            name: StorageUtils.getLastPathElement(filename),
+            name: StorageUtils.getLastPathElement(filepath),
+            path: filepath,
             type: 'image',
-            href: path.join("resources/images/", filename),
+            href: path.join("resources/images/", filepath),
             extension: dimensions.type,
-            size: fs.statSync(filePath).size,
+            size: fs.statSync(publicPath).size,
             dimensions: {
                 width: dimensions.width,
                 height: dimensions.height,
@@ -24,24 +25,26 @@ const getData = {
         };
     },
 
-    video: (filename) => {
-        const filePath = path.join(paths.RESOURCES, "videos", filename);
+    video: (filepath) => {
+        const publicPath = path.join(paths.RESOURCES, "videos", filepath);
 
         return {
-            name: StorageUtils.getLastPathElement(filename),
+            name: StorageUtils.getLastPathElement(filepath),
+            path: filepath,
             type: 'video',
-            href: path.join("resources/videos/", filename),
-            size: fs.statSync(filePath).size,
+            href: path.join("resources/videos/", filepath),
+            size: fs.statSync(publicPath).size,
         };
     },
 
-    audio: (filename) => {
-        const filePath = path.join(paths.RESOURCES, "audio", filename);
+    audio: (filepath) => {
+        const publicPath = path.join(paths.RESOURCES, "audio", filepath);
         return {
-            name: StorageUtils.getLastPathElement(filename),
+            name: StorageUtils.getLastPathElement(filepath),
+            path: filepath,
             type: 'audio',
-            href: path.join("resources/audio/", filename),
-            size: fs.statSync(filePath).size,
+            href: path.join("resources/audio/", filepath),
+            size: fs.statSync(publicPath).size,
         };
     }
 }
