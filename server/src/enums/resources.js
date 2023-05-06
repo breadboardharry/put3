@@ -8,7 +8,7 @@ const EXTENSIONS = {
     "image": ["jpg", "jpeg", "png", "gif"],
     "video": ["mp4", "mov", "avi", "mkv"],
     "audio": ["mp3", "wav"]
-}
+};
 
 const ResourcesEnums = {
     TYPE,

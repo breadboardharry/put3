@@ -133,11 +133,11 @@ export class ResourcesService {
         });
     }
 
-    addFiles(images: File) {
+    addFiles(file: File) {
         let arr: any[] = [];
         let formData = new FormData();
 
-        arr.push(images);
+        arr.push(file);
         arr[0].forEach((item: any, i: any) => {
             formData.append('file', arr[0][i]);
         })

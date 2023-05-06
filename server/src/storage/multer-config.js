@@ -2,29 +2,25 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import StorageUtils from "../modules/storage/utils.js";
-
-const allowedFileTypes = /jpeg|jpg|png|gif|mp3|m4a|wma|wav/;
-const uploadFolder = {
-    images: ["jpeg", "jpg", "png", "gif"],
-    audio: ["mp3", "m4a", "wma", "wav"],
-};
+import resources from "../enums/resources.js";
+import paths from "../enums/paths.js";
+import ResourcesUtils from "../modules/resources/utils.js";
 
 // Configure storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         // Get file extension
         const fileExt = StorageUtils.getFileExtension(file.originalname);
+        console.log(file.originalname)
 
         // Get the corresponding upload folder
-        let uploadPath = "";
-
-        if (uploadFolder.images.includes(fileExt)) uploadPath = "public/images";
-        else if (uploadFolder.audio.includes(fileExt))
-            uploadPath = "public/audio";
-        else
-            return cb(
-                new Error(`Undefined upload folder for .${fileExt} file`)
-            );
+        let uploadPath;
+        try {
+            uploadPath = path.join(paths.RESOURCES, ResourcesUtils.extToDir(fileExt));
+        }
+        catch (err) {
+            return cb(new Error(`Undefined upload folder for .${fileExt} file`));
+        }
 
         // Create directory if it doesn't exist
         fs.mkdir(uploadPath, { recursive: true }, (err) => {
@@ -32,7 +28,7 @@ const storage = multer.diskStorage({
         });
     },
     filename: (req, file, cb) => {
-        cb(null, filename(file));
+        cb(null, StorageUtils.generateFilename(file.originalname, "clean"));
     },
 });
 
@@ -43,45 +39,21 @@ const desktopImageStorage = multer.diskStorage({
         cb(null, "public/assets/");
     },
     filename: (req, file, cb) => {
-        cb(null, filename(file, "desktop"));
+        cb(null, StorageUtils.generateFilename(file.originalname, "desktop"));
     },
 });
 
 // File filter
 const fileFilter = (req, file, cb) => {
     // Check extension
-    const filetypes = req.filetypes || allowedFileTypes;
-    const validExt = filetypes.test(StorageUtils.getFileExtension(file.originalname));
+    const fileExt = StorageUtils.getFileExtension(file.originalname);
+    const validExt = ResourcesUtils.isValidExt(fileExt);
+
     // Check mime
     // const mimetype = filetypes.test(file.mimetype);
 
     if (validExt) return cb(null, true);
     return cb(new Error("Only " + filetypes + " files are allowed."));
-};
-
-// Generate a custom filename
-const filename = (file, config = "none") => {
-    let filename;
-
-    switch (config) {
-        case "timestamp":
-            filename =
-                Date.now() + path.extname(file.originalname).toLowerCase();
-            break;
-
-        case "desktop":
-            filename =
-                "desktop" + path.extname(file.originalname).toLowerCase();
-            break;
-
-        case "original":
-        case "none":
-        default:
-            filename = file.originalname;
-            break;
-    }
-
-    return filename;
 };
 
 // Create multer object
