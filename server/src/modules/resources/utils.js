@@ -5,6 +5,7 @@ import Resource from "../../enums/resources.js";
 import data from "./data.js";
 import Storage from "../storage/storage.js";
 import StorageUtils from "../storage/utils.js";
+import StorageModule from "../storage/storage.js";
 
 /**
  * Rename a resource file
@@ -127,7 +128,7 @@ const getDirectories = () => {
 const getFilesData = (dirname) => {
     const dirpath = path.join(paths.RESOURCES, dirname);
 
-    return fs.readdirSync(dirpath).map((file) => {
+    return StorageModule.getFileList(dirpath, '').map((file) => {
         return getFileData(ResourcesUtils.dirToType(dirname), file);
     });
 };

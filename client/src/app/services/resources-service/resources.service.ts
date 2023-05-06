@@ -81,7 +81,6 @@ export class ResourcesService {
             this.http.get<FileData[]>(endpoint, {
                 responseType: 'json'
             }).subscribe((data: FileData[]) => {
-                console.log(data);
                 resolve(data);
             });
         });

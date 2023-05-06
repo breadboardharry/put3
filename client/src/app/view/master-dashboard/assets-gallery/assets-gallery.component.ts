@@ -69,7 +69,6 @@ export class AssetsGalleryComponent implements OnInit {
     updateResources() {
         this.resourceService.getData().then((resources: ResourceSet) => {
             this.resources = resources;
-            console.log(this.resourceService.flatten(this.resources));
             this.selectionService.init(this.resourceService.flatten(this.resources));
         });
     }
@@ -165,9 +164,7 @@ export class AssetsGalleryComponent implements OnInit {
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
                 const file = this.selectionService.getSelection().map((item: FileData) => item.name);
-                this.resourceService.delete(file).then((res) => {
-                    console.log(res);
-                });
+                this.resourceService.delete(file);
                 break;
 
             case ContextMenuAction.RENAME:
@@ -177,9 +174,7 @@ export class AssetsGalleryComponent implements OnInit {
     }
 
     rename(newName: string, file: FileData) {
-        this.resourceService.rename( file.name, newName ).then((res) => {
-            console.log(res);
-        });
+        this.resourceService.rename( file.name, newName );
         this.editing = null;
     }
 

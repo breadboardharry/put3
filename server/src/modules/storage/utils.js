@@ -1,5 +1,9 @@
 import iconv from "iconv-lite";
 
+const getLastPathElement = (path) => {
+    return path.split('\\').slice(-1)[0];
+};
+
 const removeFileExtension = (filename) => {
     return filename.split('.').slice(0, -1).join('.').trim();
 };
@@ -43,7 +47,8 @@ const generateFilename = (filename, config = "none") => {
 const StorageUtils = {
     removeFileExtension,
     getFileExtension,
-    generateFilename
+    generateFilename,
+    getLastPathElement
 };
 
 export default StorageUtils;

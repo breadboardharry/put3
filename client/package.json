@@ -3,11 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run index-assets& ng serve --host 0.0.0.0",
-    "build": "npm run index-assets& ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "index-assets": "node ./src/assets/index-assets.js"
+    "start": "ng serve --host 0.0.0.0",
+    "build": "ng build",
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {

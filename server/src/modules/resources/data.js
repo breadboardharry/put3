@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import sizeOf from "image-size";
 import paths from "../../enums/paths.js";
+import StorageUtils from "../storage/utils.js";
 
 const getData = {
     image: (filename) => {
@@ -9,9 +10,9 @@ const getData = {
         const dimensions = sizeOf(filePath);
 
         return {
-            name: filename,
+            name: StorageUtils.getLastPathElement(filename),
             type: 'image',
-            href: `resources/images/${filename}`,
+            href: path.join("resources/images/", filename),
             extension: dimensions.type,
             size: fs.statSync(filePath).size,
             dimensions: {
@@ -27,9 +28,9 @@ const getData = {
         const filePath = path.join(paths.RESOURCES, "videos", filename);
 
         return {
-            name: filename,
+            name: StorageUtils.getLastPathElement(filename),
             type: 'video',
-            href: `resources/videos/${filename}`,
+            href: path.join("resources/videos/", filename),
             size: fs.statSync(filePath).size,
         };
     },
@@ -37,9 +38,9 @@ const getData = {
     audio: (filename) => {
         const filePath = path.join(paths.RESOURCES, "audio", filename);
         return {
-            name: filename,
+            name: StorageUtils.getLastPathElement(filename),
             type: 'audio',
-            href: `resources/audio/${filename}`,
+            href: path.join("resources/audio/", filename),
             size: fs.statSync(filePath).size,
         };
     }

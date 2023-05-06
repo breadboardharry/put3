@@ -2,7 +2,6 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import StorageUtils from "../modules/storage/utils.js";
-import resources from "../enums/resources.js";
 import paths from "../enums/paths.js";
 import ResourcesUtils from "../modules/resources/utils.js";
 
@@ -11,7 +10,6 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         // Get file extension
         const fileExt = StorageUtils.getFileExtension(file.originalname);
-        console.log(file.originalname)
 
         // Get the corresponding upload folder
         let uploadPath;

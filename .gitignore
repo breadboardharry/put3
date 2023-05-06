@@ -11,9 +11,13 @@ client/bazel-out
 client/src/app/data/assets.ts
 
 # Express Server
-server/public/*
-!server/public/assets/
-server/public/assets/desktop.*
+server/public/resources/audio/*
+server/public/resources/images/*
+server/public/resources/videos/*
+!server/public/resources/**/.default/
+
+server/public/assets/
+!server/public/assets/default-desktop.*
 
 # Dependencies
 node_modules/

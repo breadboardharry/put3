@@ -53,10 +53,33 @@ const deleteFiles = (filenames, dirname) => {
     return count;
 };
 
+/**
+ * Get a list of all files in a directory
+ * @param {string} dirname Directory path
+ * @returns {string[]} List of filenames
+ */
+const getFileList = (dirpath, dirname) => {
+    let files = [];
+    const items = fs.readdirSync(path.join(dirpath, dirname), { withFileTypes: true });
+
+    for (const item of items) {
+        if (item.isDirectory()) {
+            files = [
+                ...files,
+                ...(getFileList(dirpath, path.join(dirname, item.name))),
+            ];
+        }
+        else files.push(path.join(dirname, item.name));
+    }
+
+    return files;
+};
+
 const StorageModule = {
     deleteFiles,
     deleteFile,
-    renameFile
+    renameFile,
+    getFileList
 };
 
 export default StorageModule;
