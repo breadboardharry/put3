@@ -2,9 +2,8 @@ import express from "express";
 const router = express.Router();
 import upload from "../storage/multer-config.js";
 import Socket from "../socket/index.js";
-import Utils from "../utils/utils.js";
-import Storage from "../modules/storage/storage.js";
 import Resources from "../modules/resources/resources.js";
+import Response from "../enums/response.js";
 
 router.get("/", (req, res) => {
     try {
@@ -60,7 +59,7 @@ router.post("/rename", (req, res) => {
 
 // Upload file
 router.post("/upload", upload.file.array('file'), (req, res) => {
-    res.json({ message: "File uploaded successfully!" });
+    res.json(Response.SUCCESS.UPLOAD);
 
     Socket.io.emit('event', { type: 'resources' });
 });

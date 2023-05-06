@@ -5,7 +5,7 @@ import paths from "../../enums/paths.js";
 import ResourcesUtils from "./utils.js";
 import Storage from "../storage/storage.js";
 import Utils from "../../utils/utils.js";
-import { Response } from "../../enums/response.js"
+import Response from "../../enums/response.js"
 import Paths from "../../enums/paths.js";
 import StorageUtils from "../storage/utils.js";
 
@@ -18,7 +18,7 @@ const getData = (dirname) => {
 
     try {
         const dirnames = dirname ? [dirname] : utils.getDirectories();
-        const files = {};
+        let files = {};
 
         for (let dirname of dirnames) {
             const dirpath = path.join(paths.RESOURCES, dirname);
@@ -27,7 +27,8 @@ const getData = (dirname) => {
             if (!fs.existsSync(dirpath)) throw new Error("Directory not found");
 
             // For each file in the directory, get the file info
-            files[dirname] = utils.getFilesData(dirname);
+            const data = utils.getFilesData(dirname);
+            dirnames.length > 1 ? files[dirname] = data : files = data;
         }
 
         return files;
@@ -94,7 +95,7 @@ const rename = (currentName, newName) => {
     }
     // Check if names are the same
     if (currentName == newName) {
-        throw Response.SUCCESS;
+        throw Response.SUCCESS.DEFAULT;
     }
     // Check if file extension is the same
     if (StorageUtils.getFileExtension(currentName) !== StorageUtils.getFileExtension(newName)) {
