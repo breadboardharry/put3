@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FileData } from 'src/app/types/file-data';
+import { FileData } from 'src/app/types/resources/file-data';
 import { environment } from 'src/environments/environment';
 
 @Component({
-    selector: 'app-asset-card',
-    templateUrl: './asset-card.component.html',
-    styleUrls: ['./asset-card.component.scss'],
+    selector: 'app-file-card',
+    templateUrl: './file-card.component.html',
+    styleUrls: ['./file-card.component.scss'],
 })
 
-export class AssetCardComponent implements OnInit {
+export class FileCardComponent implements OnInit {
 
     @Input() image!: FileData;
     @Input() selected: boolean = false;

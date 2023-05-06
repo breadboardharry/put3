@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { assets } from 'src/app/data/assets';
 import { ETrigger } from 'src/app/enums/trigger';
 import { Action } from 'src/app/interfaces/action';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
-import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 
 @Component({
   selector: 'app-hitbox-settings',
@@ -19,7 +18,7 @@ export class HitboxSettingsComponent implements OnInit {
   @Input() hover!: boolean;
   @Output() hoverChange = new EventEmitter<boolean>();
 
-  constructor(public assetsService: AssetsService) { }
+  constructor(public resourceService: ResourcesService) { }
 
   ngOnInit(): void { }
 

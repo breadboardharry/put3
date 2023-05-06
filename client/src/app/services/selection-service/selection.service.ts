@@ -53,7 +53,6 @@ export class SelectionService {
     handleSelect(event: any, item: any, rightClick: boolean = false) {
         const index = this.selection.indexOf(item);
         const position = this.sources.indexOf(item);
-        console.log({index, position, lastPosition: this.lastPosition});
 
         // SHIFT + Left click
         if (event.shiftKey) {

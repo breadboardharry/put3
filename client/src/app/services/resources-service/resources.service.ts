@@ -3,22 +3,47 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { assets } from 'src/app/data/assets';
-import { FileData } from 'src/app/types/file-data';
+import { FileData } from 'src/app/types/resources/file-data';
 import { environment } from 'src/environments/environment';
+import { ResourceType } from 'src/app/enums/resources/type';
+import { ResourceDirectory } from 'src/app/enums/resources/directory';
+import { ResourceSet } from 'src/app/types/resources/data-set';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AssetsService {
+export class ResourcesService {
 
-  private apiUrl = environment.serverUrl + environment.apiPath;
+    private apiUrl = environment.serverUrl + environment.apiPath;
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
-  public getFlattenSounds(): string[] {
-    const dir = assets['sounds'];
-    return this.flattenObject(dir);
-  }
+    public typeToDir(type: ResourceType): ResourceDirectory {
+        switch (type) {
+            case ResourceType.Image:
+                return ResourceDirectory.Images;
+            case ResourceType.Video:
+                return ResourceDirectory.Videos;
+            case ResourceType.Audio:
+                return ResourceDirectory.Audio;
+        }
+    }
+
+    public dirToType(dir: ResourceDirectory): ResourceType {
+        switch (dir) {
+            case ResourceDirectory.Images:
+                return ResourceType.Image;
+            case ResourceDirectory.Videos:
+                return ResourceType.Video;
+            case ResourceDirectory.Audio:
+                return ResourceType.Audio;
+        }
+    }
+
+    public getFlattenSounds(): string[] {
+        const dir = assets['sounds'];
+        return this.flattenObject(dir);
+    }
 
   public flattenObject(obj: any, path: string = '') {
     let result: any[] = [];
@@ -37,15 +62,47 @@ export class AssetsService {
   }
 
     /**
-     * Get server hosted images data
-     * @returns {Promise<FileData[]>} Image data array
+     * Get all resources data
+     * @returns {Promise<ResourceSet>} Resources
      */
-    public getServerImages(): Promise<FileData[]> {
-        return new Promise<FileData[]>((resolve, reject) => {
-            this.http.get<FileData[]>(this.apiUrl + '/images', {
+    public getData(): Promise<ResourceSet> {
+        const endpoint = this.apiUrl + '/resources';
+
+        return new Promise<ResourceSet>((resolve, reject) => {
+            this.http.get<ResourceSet>(endpoint, {
                 responseType: 'json'
-            }).subscribe((data: FileData[]) => resolve(data));
+            }).subscribe((data: ResourceSet) => {
+                resolve(data);
+            });
         });
+    }
+
+    /**
+     * Get resources data by type
+     * @param {ResourceType} type Resource type
+     * @returns {Promise<FileData[]>} Resources
+     */
+    public getDataByType(type: ResourceType): Promise<FileData[]> {
+        const dir = this.typeToDir(type);
+        const endpoint = this.apiUrl + '/resources' + dir;
+
+        return new Promise<FileData[]>((resolve, reject) => {
+            this.http.get<FileData[]>(endpoint, {
+                responseType: 'json'
+            }).subscribe((data: FileData[]) => {
+                resolve(data);
+            });
+        });
+    }
+
+    public flatten(set: ResourceSet) {
+        let result: any[] = [];
+
+        for (let files of Object.values(set)) {
+            result = result.concat(files);
+        }
+
+        return result;
     }
 
     /**

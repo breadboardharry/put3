@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class SoundboardComponent implements OnInit {
   @Input() disabled: boolean = false;
   volume: number = 50;
 
-  constructor(private websocket: WebSocketService, public assetsService: AssetsService) { }
+  constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
 
   ngOnInit(): void {
   }

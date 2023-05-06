@@ -31,16 +31,16 @@
             <p class="message">{{msg}}</p>
         </div> -->
 
-        <div class="no-content-label" *ngIf="!images.length">No images</div>
-        <app-asset-card *ngFor="let image of images"
-            (click)="select(image, $event)"
-            (contextmenu)="select(image, $event, true)"
-            [image]="image"
-            [selected]="selectionService.getSelection().includes(image)"
-            [editing]="image === editing"
-            (editedEvent)="rename($event, image)"
+        <div class="no-content-label" *ngIf="!resourceService.flatten(resources).length">No resources</div>
+        <app-file-card *ngFor="let file of resourceService.flatten(resources)"
+            (click)="select(file, $event)"
+            (contextmenu)="select(file, $event, true)"
+            [image]="file"
+            [selected]="selectionService.getSelection().includes(file)"
+            [editing]="file === editing"
+            (editedEvent)="rename($event, file)"
         >
-        </app-asset-card>
+        </app-file-card>
 
         <app-context-menu *ngIf="contextMenu.show"
             [ngStyle]="contextMenu.style"

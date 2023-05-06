@@ -3,11 +3,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
-import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ContextMenuItem } from 'src/app/types/context-menu-item';
-import { FileData } from 'src/app/types/file-data';
+import { ResourceSet } from 'src/app/types/resources/data-set';
+import { FileData } from 'src/app/types/resources/file-data';
 
 type ContextMenu = {
     show: boolean;
@@ -38,7 +39,7 @@ export class AssetsGalleryComponent implements OnInit {
     };
 
     // Assets
-    images: FileData[] = [];
+    resources: ResourceSet = {};
     editing: FileData | null = null;
 
     // File upload
@@ -50,25 +51,26 @@ export class AssetsGalleryComponent implements OnInit {
     progress: number = 0;
     uploading: boolean = false
 
-    constructor(public selectionService: SelectionService, private websocket: WebSocketService, private assetsService: AssetsService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
+    constructor(public selectionService: SelectionService, private websocket: WebSocketService, public resourceService: ResourcesService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
         this.form = this.fb.group({
             file: [null],
         });
     }
 
     ngOnInit(): void {
-        this.updateAssets();
+        this.updateResources();
 
         this.websocket.socket.on('event', (data: any) => {
             if (data.type != 'assets') return;
-            this.updateAssets();
+            this.updateResources();
         });
     }
 
-    updateAssets() {
-        this.assetsService.getServerImages().then((data: FileData[]) => {
-            this.images = data;
-            this.selectionService.init(this.images);
+    updateResources() {
+        this.resourceService.getData().then((resources: ResourceSet) => {
+            this.resources = resources;
+            console.log(this.resourceService.flatten(this.resources));
+            this.selectionService.init(this.resourceService.flatten(this.resources));
         });
     }
 
@@ -99,7 +101,7 @@ export class AssetsGalleryComponent implements OnInit {
         this.form.get('file')!.updateValueAndValidity();
         // Upload to server
         this.uploading = true;
-        this.assetsService.addFiles(this.form.value.file)
+        this.resourceService.addFiles(this.form.value.file)
             .subscribe((event: HttpEvent<any>) => {
                 switch (event.type) {
                     case HttpEventType.Sent:
@@ -163,7 +165,7 @@ export class AssetsGalleryComponent implements OnInit {
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
                 const images = this.selectionService.getSelection().map((item: FileData) => item.name);
-                this.assetsService.deleteImages(images).then((res) => {
+                this.resourceService.deleteImages(images).then((res) => {
                     console.log(res);
                 });
                 break;
@@ -175,7 +177,7 @@ export class AssetsGalleryComponent implements OnInit {
     }
 
     rename(newName: string, image: FileData) {
-        this.assetsService.renameImage(
+        this.resourceService.renameImage(
             image.name,
             newName
         ).then((res) => {

@@ -1,7 +1,10 @@
+import { ResourceType } from "src/app/enums/resources/type";
+
 export type FileData = {
   name: string;
-  url: string;
-  type: string;
+  href: string;
+  type: ResourceType;
+  extension: string;
   size: number;
   dimensions?: {
     width: number;

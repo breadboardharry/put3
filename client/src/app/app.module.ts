@@ -30,7 +30,7 @@ import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/so
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
 import { AssetsGalleryComponent } from './view/master-dashboard/assets-gallery/assets-gallery.component';
-import { AssetCardComponent } from './view/master-dashboard/assets-gallery/asset-card/asset-card.component';
+import { FileCardComponent } from './view/master-dashboard/assets-gallery/file-card/file-card.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
@@ -58,7 +58,7 @@ import { ContextMenuComponent } from './view/user/context-menu/context-menu.comp
     CodelockComponent,
     CodelockPageComponent,
     AssetsGalleryComponent,
-    AssetCardComponent,
+    FileCardComponent,
     DragDropFileUploadDirective,
     ContextMenuComponent
   ],

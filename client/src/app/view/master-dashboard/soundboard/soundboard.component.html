@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="buttons">
-      <app-soundboard-button *ngFor="let track of assetsService.getFlattenSounds()"
+      <app-soundboard-button *ngFor="let track of resourceService.getFlattenSounds()"
                              [track]="track"
                              [target]="target"
                              [volume]="volume"

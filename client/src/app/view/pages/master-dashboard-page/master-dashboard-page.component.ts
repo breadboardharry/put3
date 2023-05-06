@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { MenuItem } from 'src/app/types/menu-item';
 
@@ -16,7 +16,7 @@ export class MasterDashboardPageComponent implements OnInit {
   fools: any[] = [];
   target: any = null;
 
-  constructor(private websocket: WebSocketService, public assetsService: AssetsService) { }
+  constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
 
   ngOnInit(): void {
     // Update role if needed

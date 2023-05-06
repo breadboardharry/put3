@@ -10,8 +10,9 @@ const getData = {
 
         return {
             name: filename,
-            url: `images/${filename}`,
-            type: dimensions.type,
+            type: 'image',
+            href: `resources/images/${filename}`,
+            extension: dimensions.type,
             size: fs.statSync(filePath).size,
             dimensions: {
                 width: dimensions.width,
@@ -27,7 +28,8 @@ const getData = {
 
         return {
             name: filename,
-            url: `videos/${filename}`,
+            type: 'video',
+            href: `resources/videos/${filename}`,
             size: fs.statSync(filePath).size,
         };
     },
@@ -36,7 +38,8 @@ const getData = {
         const filePath = path.join(paths.RESOURCES, "audio", filename);
         return {
             name: filename,
-            url: `audio/${filename}`,
+            type: 'audio',
+            href: `resources/audio/${filename}`,
             size: fs.statSync(filePath).size,
         };
     }

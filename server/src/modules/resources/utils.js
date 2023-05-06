@@ -3,7 +3,6 @@ import path from "path";
 import paths from "../../enums/paths.js";
 import Resource from "../../enums/resources.js";
 import data from "./data.js";
-import Utils from "../../utils/utils.js";
 import Storage from "../storage/storage.js";
 import StorageUtils from "../storage/utils.js";
 
