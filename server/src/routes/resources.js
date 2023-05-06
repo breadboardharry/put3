@@ -1,9 +1,9 @@
 import express from "express";
 const router = express.Router();
 import upload from "../storage/multer-config.js";
-import Socket from "../socket/index.js";
 import Resources from "../modules/resources/resources.js";
 import Response from "../enums/response.js";
+import Socket from "../modules/socket/socket.js";
 
 router.get("/", (req, res) => {
     try {
@@ -35,7 +35,7 @@ router.delete("/", (req, res) => {
         res.json(data);
 
         // Alert clients that the resources have been updated
-        if (data.success) Socket.io.emit('event', { type: 'resources' });
+        if (data.success) Socket.update.resources();
     }
     catch (err) {
         res.status(500).json(err);
@@ -50,7 +50,7 @@ router.post("/rename", (req, res) => {
         res.json(result);
 
         // Alert clients that the resources have been updated
-        if (result.success) Socket.io.emit('event', { type: 'resources' });
+        if (result.success) Socket.update.resources();
     }
     catch (err) {
         res.status(500).json(err);
@@ -61,7 +61,7 @@ router.post("/rename", (req, res) => {
 router.post("/upload", upload.file.array('file'), (req, res) => {
     res.json(Response.SUCCESS.UPLOAD);
 
-    Socket.io.emit('event', { type: 'resources' });
+    Socket.update.resources();
 });
 
 export default router;

@@ -1,62 +1,68 @@
-import { Server } from "socket.io";
-import utils from "./../utils/utils.js";
-import Users from "../modules/users.js";
+import Users from "../modules/users/users.js";
+import Socket from "../modules/socket/socket.js";
 
-let io;
-
-const createServer = (httpServer, options) => {
-  console.log("[*] Socket server started");
-  io = new Server(httpServer, options);
-  init();
-};
-
+/**
+ * Initialize socket routes
+ */
 const init = () => {
-  // On client connection
-  io.on("connection", (socket) => {
+    // On client connection
+    Socket.io.on("connection", (socket) => {
+        connection(socket);
+        disconnection(socket);
+        role(socket);
+        status(socket);
+        action(socket);
+    });
+};
+
+// Client connection
+const connection = (socket) => {
     console.log("[-] New user connected: " + socket.id);
-
     Users.new(socket.id);
-
     socket.emit("id", socket.id);
+}
 
-    // Client disconnection
+// Client disconnection
+const disconnection = (socket) => {
     socket.on("disconnect", (data) => {
-      console.log("[-] User disconnected: " + socket.id);
-      Users.remove(socket.id);
+        console.log("[-] User disconnected: " + socket.id);
+        Users.remove(socket.id);
 
-      // Send updated fool list
-      io.emit("foolList", Users.getFools());
+        // Send updated fool list
+        Socket.update.fools();
     });
+};
 
-    // Client role attribution
+// Client role attribution
+const role = (socket) => {
     socket.on("role", (role) => {
-      console.log("[-] User " + socket.id + " selected role " + role);
-      Users.user(socket.id).newRole(role);
+        console.log("[-] User " + socket.id + " selected role " + role);
+        Users.user(socket.id).newRole(role);
 
-      // Send updated fool list
-      io.emit("foolList", Users.getFools());
+        // Send updated fool list
+        Socket.update.fools();
     });
+};
 
-    // Client status update
+// Client status update
+const status = (socket) => {
     socket.on("status", (status) => {
-      console.log("[-] User " + socket.id + " new status " + status);
-      Users.user(socket.id).status = status;
+        console.log("[-] User " + socket.id + " new status " + status);
+        Users.user(socket.id).status = status;
 
-      // Send updated fool list
-      io.emit("foolList", Users.getFools());
+        // Send updated fool list
+        Socket.update.fools();
     });
+};
 
-    // Client interaction
+// Client interaction
+const action = (socket) => {
     socket.on("action", (data) => {
-      console.log("[-] Action from " + socket.id + " to " + data.target.id);
-      io.emit("action", data);
+        console.log("[-] Action from " + socket.id + " to " + data.target.id);
+        Socket.update.action();
     });
-  });
 };
 
-const SocketModule = {
-  createServer,
-  get io() {return io}
-};
+const SocketRoutes = { init };
 
-export default SocketModule;
+export default SocketRoutes;
