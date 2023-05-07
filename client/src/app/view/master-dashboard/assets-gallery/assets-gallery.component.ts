@@ -1,10 +1,12 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
+import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ContextMenuItem } from 'src/app/types/context-menu-item';
 import { ResourceSet } from 'src/app/types/resources/data-set';
@@ -51,7 +53,7 @@ export class AssetsGalleryComponent implements OnInit {
     progress: number = 0;
     uploading: boolean = false
 
-    constructor(public selectionService: SelectionService, private websocket: WebSocketService, public resourceService: ResourcesService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
+    constructor(private snackbar: SnackbarService, public selectionService: SelectionService, private websocket: WebSocketService, public resourceService: ResourcesService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
         this.form = this.fb.group({
             file: [null],
         });
@@ -163,8 +165,8 @@ export class AssetsGalleryComponent implements OnInit {
 
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
-                const file = this.selectionService.getSelection().map((item: FileData) => item.path);
-                this.resourceService.delete(file);
+                const filespath = this.selectionService.getSelection().map((item: FileData) => item.path);
+                this.resourceService.delete(filespath);
                 break;
 
             case ContextMenuAction.RENAME:
@@ -174,8 +176,30 @@ export class AssetsGalleryComponent implements OnInit {
     }
 
     rename(newName: string, file: FileData) {
-        this.resourceService.rename( file.name, newName, file.path );
         this.editing = null;
+
+        this.resourceService.rename( file.name, newName, file.dirpath ).then(
+            (res) => {
+                this.snackbar.openSuccess(file.name + " renamed to " + newName);
+            },
+            (err) => {
+                switch (err.error.message.toLowerCase()) {
+                    case "file already exists":
+                        this.snackbar.openError(newName + " already exists");
+                        break;
+
+                    case "invalid file extension":
+                        this.snackbar.openError(err.error.message);
+                        break;
+
+                    case "invalid parameters":
+                        this.snackbar.openError("Invalid filename");
+                        break;
+                }
+
+                this.editing = file;
+            }
+        );
     }
 
     @HostListener('document:click')

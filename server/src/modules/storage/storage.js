@@ -2,27 +2,24 @@ import fs from "fs";
 import path from "path";
 
 const renameFile = (currentName, newName, dirpath) => {
-    const filepath = path.join(dirpath, currentName);
+    const currentPath = path.join(dirpath, currentName);
     const newPath = path.join(dirpath, newName);
 
     // Check if the file exists
-    if (!fs.existsSync(filepath)) return false;
+    if (!fs.existsSync(currentPath)) return false;
 
     // Rename the file
     try {
-        fs.renameSync(filepath, newPath);
+        fs.renameSync(currentPath, newPath);
         return true;
     }
     catch (err) {
-        console.log("[!] Error renaming file: " + filepath + "\n" + err + "\n");
+        console.log("[!] Error renaming file: " + currentPath + "\n" + err + "\n");
         return false;
     }
 }
 
-const deleteFile = (filename, dirpath) => {
-
-    const filepath = path.join(dirpath, filename);
-
+const deleteFile = (filepath) => {
     // Check if the file exists
     if (!fs.existsSync(filepath)) return false;
 
@@ -37,16 +34,15 @@ const deleteFile = (filename, dirpath) => {
     }
 };
 
-const deleteFiles = (filenames, dirname) => {
+const deleteFiles = (filespath) => {
     const count = {
-        success: 0,
+        affected: 0,
         failed: 0
     };
 
     // Delete each file
-    for (let filename of filenames) {
-        if (deleteFile(filename, dirname))
-            count.success++;
+    for (let filepath of filespath) {
+        if (deleteFile(filepath)) count.affected++;
         else count.failed++;
     }
 
@@ -55,10 +51,10 @@ const deleteFiles = (filenames, dirname) => {
 
 /**
  * Get a list of all files in a directory
- * @param {string} dirname Directory path
+ * @param {string} dirpath Directory path
  * @returns {string[]} List of filenames
  */
-const getFileList = (dirpath, dirname) => {
+const getFileList = (dirpath, dirname = '') => {
     let files = [];
     const items = fs.readdirSync(path.join(dirpath, dirname), { withFileTypes: true });
 
@@ -75,11 +71,21 @@ const getFileList = (dirpath, dirname) => {
     return files;
 };
 
+/**
+ * Check if a file exists
+ * @param {string} filepath File path
+ * @returns {boolean} True if the file exists
+ */
+const fileExists = (filepath) => {
+    return fs.existsSync(filepath);
+};
+
 const StorageModule = {
     deleteFiles,
     deleteFile,
     renameFile,
-    getFileList
+    getFileList,
+    fileExists
 };
 
 export default StorageModule;

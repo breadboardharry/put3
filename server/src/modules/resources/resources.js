@@ -39,24 +39,16 @@ const getData = (dirname) => {
         console.log("[!] Error getting ressources data: " + err + "\n");
         throw Response.ERROR.INTERNAL_SERVER;
     };
-
 };
 
-const unlink = (filesname) => {
-
-    let files = [];
-
+const unlink = (filespath) => {
     // Check input
     try {
-        if (!Utils.isArrayOf("string", filesname)) throw 1;
+        if (!Utils.isArrayOf("string", filespath)) throw 1;
 
-        files = filesname.map((filename) => {
-            const dirname = ResourcesUtils.extToDir(StorageUtils.getFileExtension(filename));
-
-            return {
-                name: filename,
-                dirpath: path.join(Paths.RESOURCES, dirname)
-            }
+        filespath = filespath.map((filepath) => {
+            // Convert to absolute path
+            return path.join(Paths.RESOURCES, filepath);
         });
     }
     catch (err) {
@@ -65,15 +57,12 @@ const unlink = (filesname) => {
 
     // Delete files
     try {
-        let success = 0, failed = 0;
-
-        for (const file of files)
-            Storage.deleteFile(file.name, file.dirpath) ? success++ :failed++;
+        const count = Storage.deleteFiles(filespath);
 
         return {
-            success: success > 0,
-            affected: success,
-            failed
+            success: count.affected > 0,
+            message: count.affected + " file(s) deleted",
+            ...count
         };
     }
 
@@ -84,13 +73,23 @@ const unlink = (filesname) => {
     };
 };
 
-const rename = (currentName, newName) => {
+const rename = (currentName, newName, dirpath) => {
     // Check parameters type
     if (typeof(currentName) !== "string" || typeof(newName) !== "string") {
         throw Response.ERROR.INVALID_PARAMS;
     }
-    // Check if parameters are empty
-    if (!StorageUtils.removeFileExtension(currentName) || !StorageUtils.removeFileExtension(newName)) {
+
+    try {
+        // Remove spaces
+        newName = StorageUtils.removeSpaces(newName);
+    }
+    catch (err) {
+        console.log("[!] Error renaming file: " + err + "\n");
+        throw Response.ERROR.INTERNAL_SERVER;
+    };
+
+    // Check if filenames are empty
+    if (!currentName || !newName) {
         throw Response.ERROR.INVALID_PARAMS;
     }
     // Check if names are the same
@@ -101,9 +100,13 @@ const rename = (currentName, newName) => {
     if (StorageUtils.getFileExtension(currentName) !== StorageUtils.getFileExtension(newName)) {
         throw Response.ERROR.INVALID_FILE_EXTENSION;
     }
+    // Check if a file with the same name, at the same location already exists
+    if (ResourcesUtils.doFileExists(newName)) {
+        throw Response.ERROR.FILE_ALREADY_EXISTS;
+    }
 
     try {
-        const success = ResourcesUtils.rename(currentName, newName);
+        const success = ResourcesUtils.rename(currentName, newName, dirpath);
 
         return {
             success,

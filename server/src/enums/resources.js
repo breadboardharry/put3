@@ -4,6 +4,12 @@ const TYPE = {
     "Audio": "audio",
 };
 
+const DIRECTORY = {
+    "Image": "images",
+    "Video": "videos",
+    "Audio": "audio",
+};
+
 const EXTENSIONS = {
     "image": ["jpg", "jpeg", "png", "gif"],
     "video": ["mp4", "mov", "avi", "mkv"],
@@ -12,6 +18,7 @@ const EXTENSIONS = {
 
 const ResourcesEnums = {
     TYPE,
+    DIRECTORY,
     EXTENSIONS
 };
 

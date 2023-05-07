@@ -1,5 +1,21 @@
 import iconv from "iconv-lite";
 
+const getPathElem = (path, index) => {
+    return path.split('\\')[index];
+}
+
+const getDirPath = (path) => {
+    return path.split('\\').slice(0, -1).join('\\');
+}
+
+const removeSpaces = (string) => {
+    return string.replace(/\s/g, '');
+};
+
+const getFilename = (filepath) => {
+    return removeFileExtension(getLastPathElement(filepath));
+};
+
 const getLastPathElement = (path) => {
     return path.split('\\').slice(-1)[0];
 };
@@ -48,7 +64,11 @@ const StorageUtils = {
     removeFileExtension,
     getFileExtension,
     generateFilename,
-    getLastPathElement
+    getLastPathElement,
+    getFilename,
+    removeSpaces,
+    getDirPath,
+    getPathElem
 };
 
 export default StorageUtils;

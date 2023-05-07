@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
         res.json(data);
     }
     catch (err) {
-        res.status(500).json(err);
+        res.status(err.status || 500).json(err);
     }
 });
 
@@ -23,37 +23,37 @@ router.get("/:dir", (req, res) => {
         res.json(data);
     }
     catch (err) {
-        res.status(500).json(err);
+        res.status(err.status || 500).json(err);
     }
 });
 
 router.delete("/", (req, res) => {
-    const filesname = req.body;
+    const filespath = req.body;
 
     try {
-        const data = Resources.unlink(filesname);
+        const data = Resources.unlink(filespath);
         res.json(data);
 
         // Alert clients that the resources have been updated
         if (data.success) Socket.update.resources();
     }
     catch (err) {
-        res.status(500).json(err);
+        res.status(err.status || 500).json(err);
     }
 });
 
 router.post("/rename", (req, res) => {
-    const { currentName, newName } = req.body;
+    const { currentName, newName, dirpath } = req.body;
 
     try {
-        const result = Resources.rename(currentName, newName);
+        const result = Resources.rename(currentName, newName, dirpath);
         res.json(result);
 
         // Alert clients that the resources have been updated
         if (result.success) Socket.update.resources();
     }
     catch (err) {
-        res.status(500).json(err);
+        res.status(err.status || 500).json(err);
     }
 });
 

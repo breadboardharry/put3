@@ -8,17 +8,37 @@ import StorageUtils from "../storage/utils.js";
 import StorageModule from "../storage/storage.js";
 
 /**
+ * Check if a file exists
+ * @param {string} filename File name
+ * @returns {boolean} True if the file exists
+ */
+const doFileExists = (filename) => {
+    const ext = StorageUtils.getFileExtension(filename);
+    const filepath = path.join(paths.RESOURCES, extToDir(ext), filename);
+
+    return Storage.fileExists(filepath);
+};
+
+/**
  * Rename a resource file
  * @param {string} currentName Current file name
  * @param {string} newName New file name
  * @returns {boolean} True if the file has been renamed
  */
-const rename = (currentName, newName) => {
-    const dirname = extToDir(StorageUtils.getFileExtension(currentName));
-    const dirpath = path.join(paths.RESOURCES, dirname);
+const rename = (currentName, newName, dirpath) => {
+    dirpath = path.join(paths.RESOURCES, dirpath);
 
     return Storage.renameFile(currentName, newName, dirpath);
 }
+
+/**
+ * Check if a resource type is valid
+ * @param {string} type Resource type
+ * @returns {boolean} True if the resource type is valid
+ */
+const isValidType = (type) => {
+    return Object.values(Resource.TYPE).includes(type);
+};
 
 /**
  * Check if a file extension is valid
@@ -63,8 +83,7 @@ const extToDir = (ext) => {
  */
 const isValidDir = (dirname) => {
     return (
-        typeof dirname == "string" &&
-        fs.existsSync(path.join(paths.RESOURCES, dirname))
+        typeof dirname == "string" && fs.existsSync(path.join(paths.RESOURCES, dirname))
     );
 };
 
@@ -128,7 +147,7 @@ const getDirectories = () => {
 const getFilesData = (dirname) => {
     const dirpath = path.join(paths.RESOURCES, dirname);
 
-    return StorageModule.getFileList(dirpath, '').map((file) => {
+    return StorageModule.getFileList(dirpath).map((file) => {
         return getFileData(ResourcesUtils.dirToType(dirname), file);
     });
 };
@@ -143,23 +162,10 @@ const getFilesData = (dirname) => {
  */
 const getFileData = (type, file) => {
     // If type is not a valid resource type
-    if (!Object.values(Resource.TYPE).includes(type))
-        throw new Error("Invalid resource type");
+    if (!isValidType(type)) throw new Error("Invalid resource type");
 
-    // Get the data from the file
-    switch (type) {
-        case Resource.TYPE.Image:
-            return data.getData.image(file);
-
-        case Resource.TYPE.Video:
-            return data.getData.video(file);
-
-        case Resource.TYPE.Audio:
-            return data.getData.audio(file);
-
-        default:
-            return {};
-    }
+    // Get data from the file
+    return data.getData(path.join(typeToDir(type), file), type);
 };
 
 const ResourcesUtils = {
@@ -172,7 +178,9 @@ const ResourcesUtils = {
     getFilesData,
     getFileData,
     isValidDir,
-    rename
+    rename,
+    doFileExists,
+    isValidType
 };
 
 export default ResourcesUtils;

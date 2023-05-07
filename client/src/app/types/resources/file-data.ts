@@ -3,6 +3,7 @@ import { ResourceType } from "src/app/enums/resources/type";
 export type FileData = {
   name: string;
   href: string;
+  dirpath: string;
   path: string;
   type: ResourceType;
   extension: string;

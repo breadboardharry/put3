@@ -1,9 +1,14 @@
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-$dark-linear-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
-$dark-linear-gradient-2: linear-gradient(145deg, rgb(4, 7, 43), rgb(2, 2, 31));
-$dark-linear-gradient-3: linear-gradient(145deg, rgb(6, 10, 54), rgb(4, 4, 42));
-$light-linear-gradient: linear-gradient(145deg, rgb(49, 49, 89), rgb(30, 33, 83));
+$dark-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
+$dark-gradient-2: linear-gradient(145deg, rgb(4, 7, 43), rgb(2, 2, 31));
+$dark-gradient-3: linear-gradient(145deg, rgb(6, 10, 54), rgb(4, 4, 42));
+$light-gradient: linear-gradient(145deg, rgb(49, 49, 89), rgb(30, 33, 83));
+
+$success-gradient: linear-gradient(145deg, rgb(49, 89, 56), rgb(27, 80, 40));
+$error-gradient: linear-gradient(145deg, rgb(134, 34, 34), rgb(109, 16, 16));
+$warning-gradient: linear-gradient(145deg, rgb(145, 96, 33),rgb(143, 96, 25));
+$info-gradient: $light-gradient;
 
 /* -------------------------------------------------------------------------- */
 /*                                    FONTS                                   */
@@ -49,7 +54,7 @@ body {
   overflow: hidden;
   @extend %prevent-select;
 
-  background: $dark-linear-gradient;
+  background: $dark-gradient;
   color: white;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -102,4 +107,30 @@ body {
         display: none;
     }
     scrollbar-width: none;
+}
+
+
+/* -------------------------------- SNACKBAR -------------------------------- */
+%snackbar {
+    color: white;
+}
+
+.snackbar-success {
+    @extend %snackbar;
+    background: $success-gradient;
+}
+
+.snackbar-error {
+    @extend %snackbar;
+    background: $error-gradient;
+}
+
+.snackbar-warning {
+    @extend %snackbar;
+    background: $warning-gradient;
+}
+
+.snackbar-info {
+    @extend %snackbar;
+    background: $info-gradient;
 }

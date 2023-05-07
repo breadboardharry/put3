@@ -121,22 +121,20 @@ export class ResourcesService {
      * @param {string} newPath New relative path
      * @returns {Promise<any>} Server result
      */
-
-    // TODO: Block same name as existing file
-    // TODO: When click on rename, select the content of the input
-    public rename(currentName: string, newName: string, path: string = ''): Promise<any> {
-        // Rename files placed in subfolders via their relative path
-        currentName = path ? path : currentName;
-        newName = currentName.replace(currentName, newName);
-
+    public rename(currentName: string, newName: string, dirpath: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.http.post(this.apiUrl + '/rename', {
                 currentName,
-                newName
-            },{
+                newName,
+                dirpath
+            },
+            {
                 responseType: 'json',
             })
-            .subscribe((data: any) => resolve(data));
+            .subscribe({
+                next: (data: any) => resolve(data),
+                error: (error: any) => reject(error)
+            });
         });
     }
 

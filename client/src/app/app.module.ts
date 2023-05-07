@@ -8,6 +8,7 @@ import { WindowsButtonComponent } from './view/windows-button/windows-button.com
 import { WindowsMenuComponent } from './view/windows-menu/windows-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -34,6 +35,7 @@ import { FileCardComponent } from './view/master-dashboard/assets-gallery/file-c
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
+import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-snackbar.component';
 
 @NgModule({
   declarations: [
@@ -60,21 +62,23 @@ import { ContextMenuComponent } from './view/user/context-menu/context-menu.comp
     AssetsGalleryComponent,
     FileCardComponent,
     DragDropFileUploadDirective,
-    ContextMenuComponent
+    ContextMenuComponent,
+    CustomSnackbarComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatProgressSpinnerModule,
-    DragDropModule,
-    MatMenuModule,
-    HttpClientModule,
-    MatSliderModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+            MatProgressSpinnerModule,
+            MatSnackBarModule,
+        DragDropModule,
+        MatMenuModule,
+        HttpClientModule,
+        MatSliderModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
