@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { assets } from 'src/app/data/assets';
 import { ETrigger } from 'src/app/enums/trigger';
 import { Action } from 'src/app/interfaces/action';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
-import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { ResourceType } from 'src/app/enums/resources/type';
+import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
   selector: 'app-hitbox-settings',
@@ -19,9 +20,15 @@ export class HitboxSettingsComponent implements OnInit {
   @Input() hover!: boolean;
   @Output() hoverChange = new EventEmitter<boolean>();
 
-  constructor(public assetsService: AssetsService) { }
+    tracks: FileData[] = [];
 
-  ngOnInit(): void { }
+    constructor(public resourceService: ResourcesService) { }
+
+    ngOnInit(): void {
+        this.resourceService.getDataByType(ResourceType.Audio).then((data) => {
+            this.tracks = data;
+        })
+    }
 
   assignAction(event: any, action: Action, trigger: Trigger, data: any = {}) {
     // Set data to action

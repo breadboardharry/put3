@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AssetsService } from 'src/app/services/assets-service/assets.service';
+import { DashboardPage } from 'src/app/enums/dashboard-pages';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { MenuItem } from 'src/app/types/menu-item';
 
@@ -10,13 +11,14 @@ import { MenuItem } from 'src/app/types/menu-item';
 })
 export class MasterDashboardPageComponent implements OnInit {
 
-  selectedItem: MenuItem = {
-    title: 'Soundboard'
-  };
-  fools: any[] = [];
-  target: any = null;
+    selectedItem: MenuItem = {
+        title: DashboardPage.Resources
+    };
+    fools: any[] = [];
+    target: any = null;
+    dashboardPage = DashboardPage;
 
-  constructor(private websocket: WebSocketService, public assetsService: AssetsService) { }
+  constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
 
   ngOnInit(): void {
     // Update role if needed
@@ -26,7 +28,6 @@ export class MasterDashboardPageComponent implements OnInit {
     }
 
     this.websocket.socket.on('foolList', (list: any) => {
-      console.log(list);
       this.fools = list;
       if (list.length <= 0) this.target = null;
     });

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AssetsService } from './assets.service';
+import { SelectionService } from './selection.service';
 
-describe('AssetsService', () => {
-  let service: AssetsService;
+describe('SelectionService', () => {
+  let service: SelectionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AssetsService);
+    service = TestBed.inject(SelectionService);
   });
 
   it('should be created', () => {

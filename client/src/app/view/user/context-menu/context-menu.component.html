@@ -1,0 +1,5 @@
+<div class="menu" *ngIf="items.length">
+    <button *ngFor="let item of items" class="item" [disabled]="item.disabled" (click)="onClick($event, item)">
+        {{item.title}}
+    </button>
+</div>

@@ -29,6 +29,11 @@ import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboa
 import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
+import { AssetsGalleryComponent } from './view/master-dashboard/assets-gallery/assets-gallery.component';
+import { FileCardComponent } from './view/master-dashboard/assets-gallery/file-card/file-card.component';
+import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +56,11 @@ import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.
     SoundboardComponent,
     SoundboardButtonComponent,
     CodelockComponent,
-    CodelockPageComponent
+    CodelockPageComponent,
+    AssetsGalleryComponent,
+    FileCardComponent,
+    DragDropFileUploadDirective,
+    ContextMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +71,8 @@ import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.
     MatMenuModule,
     HttpClientModule,
     MatSliderModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

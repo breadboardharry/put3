@@ -1,0 +1,76 @@
+@import "~src/styles.scss";
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    background-color: transparent;
+    overflow: hidden;
+
+    width: 175px;
+    padding: 0.75rem;
+
+    &:hover {
+        background-color: rgb(26, 26, 52);
+    }
+
+    &.selected {
+        background-color: rgb(50, 50, 82);
+    }
+}
+
+.filename {
+    width: 140px;
+    overflow-y: scroll;
+    @extend %hidden-scrollbar;
+
+    @extend %font-base;
+    line-height: 1.35;
+    font-size: 14px;
+
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+    margin: 0;
+    padding: 0;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+
+    white-space: pre-wrap;
+    text-align: center;
+    word-wrap: break-word;
+
+    &.editing {
+        border: 2px solid rgba(255, 255, 255, 0.4);
+    }
+
+    &:not(.editing) {
+        pointer-events: none;
+    }
+}
+
+.image-container {
+    height: 98px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: none;
+
+    img {
+        &.fit-height {
+            height: 100%;
+        }
+
+        &.fit-width {
+            width: 100%;
+        }
+    }
+}

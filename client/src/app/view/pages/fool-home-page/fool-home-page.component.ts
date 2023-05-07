@@ -3,6 +3,8 @@ import { CursorService } from 'src/app/services/cursor-service/cursor.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
+import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -11,7 +13,16 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class FoolHomePageComponent implements OnInit {
 
-  constructor( public hitboxService: HitboxService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService) { }
+    private apiUrl = environment.serverUrl + environment.apiPath
+  desktopBackground: string = 'assets/images/default-desktop-background.jpg';
+
+  constructor(
+    public hitboxService: HitboxService,
+    public cursorService: CursorService,
+    private websocket: WebSocketService,
+    private audio: AudioService,
+    private desktopService: DesktopService
+  ) { }
 
   ngOnInit(): void {
     // Update role if needed
@@ -21,7 +32,12 @@ export class FoolHomePageComponent implements OnInit {
     }
 
     this.websocket.socket.on('action', (data: any) => {
-      this.action(data);
+        this.action(data);
+    });
+
+    // Get desktop background image
+    this.desktopService.getBackground().then(image => {
+      this.desktopBackground = image;
     });
   }
 
@@ -52,7 +68,7 @@ export class FoolHomePageComponent implements OnInit {
       case 'audio':
         const volume = 'volume' in data.action ? data.action.volume : 1.0;
         if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-        else if ('track' in data.action) this.audio.play('assets/sounds/' + data.action.track, volume);
+        else if ('track' in data.action) this.audio.play(this.apiUrl + '/' + data.action.track.href, volume);
         break;
 
       default:

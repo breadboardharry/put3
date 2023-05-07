@@ -1,4 +1,4 @@
 <div class="draggable-zone overwrite-cursor">
   <app-hitbox *ngFor="let hitbox of hitboxService.hitboxes" [hitbox]="hitbox"></app-hitbox>
 </div>
-<app-desktop></app-desktop>
+<app-desktop [backgroundImage]="desktopBackground"></app-desktop>

@@ -85,10 +85,26 @@ $background: #070817;
   overflow-x: hidden;
   overflow-y: scroll;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  @extend %hidden-scrollbar;
 }
+
+.no-content-container {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .no-content-label {
+        margin: 0;
+        padding: 0;
+
+        @extend %font-base;
+        font-size: 24px;
+    }
+}
+
 
 .options {
   display: flex;
