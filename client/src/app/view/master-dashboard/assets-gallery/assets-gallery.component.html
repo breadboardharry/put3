@@ -35,7 +35,7 @@
         <app-file-card *ngFor="let file of resourceService.flatten(resources)"
             (click)="select(file, $event)"
             (contextmenu)="select(file, $event, true)"
-            [image]="file"
+            [file]="file"
             [selected]="selectionService.getSelection().includes(file)"
             [editing]="file === editing"
             (editedEvent)="rename($event, file)"

@@ -1,21 +1,22 @@
 import fs from "fs";
 import path from "path";
 import sizeOf from "image-size";
-import paths from "../../enums/paths.js";
 import StorageUtils from "../storage/utils.js";
 import Resources from "../../enums/resources.js";
 
 const getData = (filepath, type = undefined) => {
+    console.log(filepath);
     type = type ? type : StorageUtils.getPathElem(filepath, 0);
+    console.log(type);
 
     switch (type) {
-        case Resources.DIRECTORY.Image:
+        case Resources.TYPE.Image:
             return getImageData(filepath);
 
-        case Resources.DIRECTORY.Video:
+        case Resources.TYPE.Video:
             return getVideoData(filepath);
 
-        case Resources.DIRECTORY.Audio:
+        case Resources.TYPE.Audio:
             return getAudioData(filepath);
     }
 };
@@ -42,19 +43,20 @@ const getGeneralData = (filepath) => {
 * @param {string} filepath File path (relative to the resources directory) e.g. "images/../image.jpg"
 */
 const getImageData = (filepath) => {
-   const dimensions = sizeOf(publicPath);
+    const generalData = getGeneralData(filepath);
+    const dimensions = sizeOf(path.join("public", generalData.href));
 
-   return {
-       ...getGeneralData(filepath),
-       type: 'image',
-       extension: dimensions.type,
-       dimensions: {
-           width: dimensions.width,
-           height: dimensions.height,
-           ratio: dimensions.width / dimensions.height,
-           orientation: dimensions.width > dimensions.height ? "landscape" : "portrait",
-       },
-   };
+    return {
+        ...generalData,
+        type: 'image',
+        extension: dimensions.type,
+        dimensions: {
+            width: dimensions.width,
+            height: dimensions.height,
+            ratio: dimensions.width / dimensions.height,
+            orientation: dimensions.width > dimensions.height ? "landscape" : "portrait",
+        },
+    };
 };
 
 /**

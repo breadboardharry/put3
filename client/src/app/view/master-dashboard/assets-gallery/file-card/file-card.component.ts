@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 
 export class FileCardComponent implements OnInit {
 
-    @Input() image!: FileData;
+    @Input() file!: FileData;
     @Input() selected: boolean = false;
     @Input() editing: boolean = false;
     @Output() editedEvent: EventEmitter<string> = new EventEmitter<string>();
@@ -22,7 +22,8 @@ export class FileCardComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {
-        this.name = this.image.name;
+        console.log(this.file);
+        this.name = this.file.name;
     }
 
     editDone() {
