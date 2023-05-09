@@ -12,6 +12,7 @@ const init = () => {
         role(socket);
         action(socket);
         window(socket);
+        hitboxes(socket);
     });
 };
 
@@ -60,6 +61,13 @@ const window = (socket) => {
 
         // Send updated fool list
         Socket.update.fools();
+    });
+}
+
+const hitboxes = (socket) => {
+    socket.on("hitboxes", (data) => {
+        console.log("[-] Hitboxes set recieved from " + socket.id + " to " + data.target.id);
+        Socket.update.hitboxes(data);
     });
 }
 

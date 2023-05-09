@@ -2,7 +2,7 @@ import { Component, HostListener, Input, OnInit  } from '@angular/core';
 import { Size } from 'src/app/interfaces/size';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { Position } from 'src/app/interfaces/position';
-import { CdkDragEnd } from "@angular/cdk/drag-drop";
+import { CdkDragEnd, CdkDragStart } from "@angular/cdk/drag-drop";
 import { triggers } from 'src/app/data/triggers'
 import { actions } from 'src/app/data/actions'
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
@@ -23,7 +23,7 @@ export class HitboxComponent implements OnInit {
 
   prevSize!: Size;
 
-    constructor(private hitboxService: HitboxService) {  }
+    constructor() {  }
 
   ngOnInit(): void {
     // Initialize the previous size
@@ -44,9 +44,17 @@ export class HitboxComponent implements OnInit {
   hover: boolean = false;
   settingsPos: 'top' | 'bottom' = 'bottom';
 
+  dragStart(event: CdkDragStart) {
+    console.log(event.source.getFreeDragPosition());
+  }
+
   dragEnd(event: CdkDragEnd) {
     let yPos = event.source.getRootElement().getBoundingClientRect().y;
     this.updateSettingsPanelPos(yPos);
+    const position = event.source.getFreeDragPosition();
+    this.hitbox.position.x = position.x;
+    this.hitbox.position.y = position.y;
+    console.log(event.source.getFreeDragPosition());
   }
 
   resizeStart(handle: ResizeHandle): void {
@@ -102,4 +110,14 @@ export class HitboxComponent implements OnInit {
 
     this.settingsPos = windowHeight-(yPos + this.hitbox.size.height) <= 160 ? 'top' : 'bottom';
   }
+
+    get style() {
+        return this.hitbox.active ? {
+            'width.%': 100,
+            'height.%': 100,
+        } : {
+            'width.px': this.hitbox.size.width,
+            'height.px': this.hitbox.size.height,
+        };
+    }
 }
