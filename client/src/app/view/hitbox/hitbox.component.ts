@@ -82,11 +82,22 @@ export class HitboxComponent implements OnInit {
         if (this.resizing === 'right' || this.resizing === 'corner') {
             this.dx = this.mouse.x - this.lastMouse.x;
             this.hitbox.size.width = this.prevSize.width + this.hitboxService.toXpercent(this.dx);
+
+            // Prevent the hitbox from going off screen
+            if (this.hitbox.size.width + this.hitbox.position.x > 100) {
+                this.hitbox.size.width = 100 - this.hitbox.position.x;
+            }
         }
 
         if (this.resizing === 'bottom' || this.resizing === 'corner') {
             this.dy = this.mouse.y - this.lastMouse.y;
             this.hitbox.size.height = this.prevSize.height + this.hitboxService.toYpercent(this.dy);
+
+            // Prevent the hitbox from going off screen
+            if (this.hitbox.size.height + this.hitbox.position.y > 100) {
+                this.hitbox.size.height = 100 - this.hitbox.position.y;
+            }
+
             this.updateSettingsPanelPos(this.mouse.y - this.hitbox.size.height);
         }
     }
@@ -102,8 +113,19 @@ export class HitboxComponent implements OnInit {
         if (this.resizing === 'right' || this.resizing === 'corner')
             this.hitbox.size.width = this.prevSize.width + this.hitboxService.toXpercent(this.dx);
 
+            // Prevent the hitbox from going off screen
+            if (this.hitbox.size.width + this.hitbox.position.x > 100) {
+                this.hitbox.size.width = 100 - this.hitbox.position.x;
+            }
+
         if (this.resizing === 'bottom' || this.resizing === 'corner') {
             this.hitbox.size.height = this.prevSize.height + this.hitboxService.toYpercent(this.dy);
+
+            // Prevent the hitbox from going off screen
+            if (this.hitbox.size.height + this.hitbox.position.y > 100) {
+                this.hitbox.size.height = 100 - this.hitbox.position.y;
+            }
+
             this.updateSettingsPanelPos(this.mouse.y - this.hitbox.size.height);
         }
 
