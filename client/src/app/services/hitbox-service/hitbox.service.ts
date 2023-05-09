@@ -1,23 +1,38 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { WebSocketService } from '../websocket-service/websocket.service';
-import { Size } from 'src/app/interfaces/size';
 
 @Injectable({
     providedIn: 'root'
 })
 export class HitboxService {
 
-    public window: Size = {
-        width: 0,
-        height: 0
-    };
+    private window: (() => any) | undefined;
     public hitboxes: Hitbox[] = [];
 
     constructor(private websocket: WebSocketService) { }
 
-    public setWindow(window: Size) {
+    /**
+     * Set window element
+     * @param window Window element getter
+     */
+    public setWindow(window: () => ElementRef) {
         this.window = window;
+    }
+
+    public get windowSize(): any {
+        return {
+            width: this.window!().nativeElement.offsetWidth,
+            height: this.window!().nativeElement.offsetHeight
+        };
+    }
+
+    public toXpercent(x: number): number {
+        return (x / this.windowSize.width) * 100;
+    }
+
+    public toYpercent(y: number): number {
+        return (y / this.windowSize.height) * 100;
     }
 
     /**
@@ -27,8 +42,8 @@ export class HitboxService {
         // Add new hitbox only if not running
         this.hitboxes.push({
             size: {
-                width: 88,
-                height: 88
+                width: 25,
+                height: 25
             },
             position: {
                 x: 0,
@@ -65,21 +80,7 @@ export class HitboxService {
     public send(target: any) {
         this.websocket.socket.emit('hitboxes', {
             target: target,
-            hitboxes: this.format(this.hitboxes),
-        });
-    }
-
-    public format(hitboxes: Hitbox[]): Hitbox[] {
-        // CLone the array
-        let hitboxesCopy = JSON.parse(JSON.stringify(hitboxes));
-
-        // Modify the values to be percentages
-        return hitboxesCopy.map((hitbox: Hitbox) => {
-            hitbox.position.x = Math.round((hitbox.position.x / this.window.width) * 100);
-            hitbox.position.y = Math.round((hitbox.position.y / this.window.height) * 100);
-            hitbox.size.width = Math.round((hitbox.size.width / this.window.width) * 100);
-            hitbox.size.height = Math.round((hitbox.size.height / this.window.height) * 100);
-            return hitbox;
+            hitboxes: this.hitboxes,
         });
     }
 }

@@ -26,6 +26,12 @@ export class LayoutEditorComponent implements OnInit {
         });
     }
 
+    ngAfterViewInit(): void {
+        this.hitboxService.setWindow(() => {
+            return this.editor
+        });
+    }
+
     isWindowDefined(): boolean {
         return this.target && this.target.data && this.target.data.window;
     }
@@ -35,10 +41,6 @@ export class LayoutEditorComponent implements OnInit {
     }
 
     sendConfig() {
-        this.hitboxService.setWindow({
-            width: this.editor.nativeElement.offsetWidth,
-            height: this.content.nativeElement.offsetHeight
-        });
         this.hitboxService.send(this.target);
     }
 }

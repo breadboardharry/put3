@@ -3,19 +3,16 @@
     [cdkDragDisabled]="hitbox.active"
     (mouseenter)="mouseEnter()"
     (mouseleave)="mouseLeave()"
-    (cdkDragStarted)="dragStart($event)"
     (cdkDragEnded)="dragEnd($event)"
-    [ngStyle]="hitbox.active ? {
+    [ngStyle]="{
         'left.%': hitbox.position.x,
         'top.%': hitbox.position.y,
         'width.%': hitbox.size.width,
-        'height.%': hitbox.size.height
-    } : {
-        'left.%': 0,
-        'top.%': 0
+        'height.%': hitbox.size.height,
+        'background-color': 'rgba(0, 0, 0, 0.3)'
     }"
     >
-    <div [ngStyle]="style">
+    <div class="active-area">
         <!-- ---------------------------- RESIZE & MOVE ---------------------------- -->
         <div *ngIf="!hitbox.active" class="resize-handle-container" [ngClass]="{'hover': hover}">
             <div class="resize-handle-right" (mousedown)="resizeStart('right')"></div>
