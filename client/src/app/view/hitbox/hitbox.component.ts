@@ -5,6 +5,7 @@ import { Position } from 'src/app/interfaces/position';
 import { CdkDragEnd } from "@angular/cdk/drag-drop";
 import { triggers } from 'src/app/data/triggers'
 import { actions } from 'src/app/data/actions'
+import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 
 type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 
@@ -16,13 +17,13 @@ type ResizeHandle = 'none' | 'right' | 'bottom' | 'corner';
 export class HitboxComponent implements OnInit {
 
   @Input() hitbox!: Hitbox;
-  
+
   triggers = triggers;
   actions = actions;
 
   prevSize!: Size;
 
-  constructor() {  }
+    constructor(private hitboxService: HitboxService) {  }
 
   ngOnInit(): void {
     // Initialize the previous size

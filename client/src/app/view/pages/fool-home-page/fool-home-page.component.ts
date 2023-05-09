@@ -14,21 +14,16 @@ import { environment } from 'src/environments/environment';
 export class FoolHomePageComponent implements OnInit {
 
     private apiUrl = environment.serverUrl + environment.apiPath
-  desktopBackground: string = 'assets/images/default-desktop-background.jpg';
+    desktopBackground: string = 'assets/images/default-desktop-background.jpg';
 
-  constructor(
-    public hitboxService: HitboxService,
-    public cursorService: CursorService,
-    private websocket: WebSocketService,
-    private audio: AudioService,
-    private desktopService: DesktopService
-  ) { }
+  constructor( public hitboxService: HitboxService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService, private desktopService: DesktopService ) {}
 
   ngOnInit(): void {
     // Update role if needed
     if (this.websocket.role !== 'fool') {
       this.websocket.role = 'fool';
       this.websocket.socket.emit('role', 'fool');
+      this.websocket.socket.emit('window', this.hitboxService.getWindowSize());
     }
 
     this.websocket.socket.on('action', (data: any) => {
@@ -59,6 +54,18 @@ export class FoolHomePageComponent implements OnInit {
   onRightClick(event: any) {
     event.preventDefault();
   }
+
+    timeout: NodeJS.Timeout | undefined;
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any) {
+        // Send window size to server
+        if (this.timeout) clearTimeout(this.timeout);
+
+        this.timeout = setTimeout(() => {
+            this.websocket.socket.emit('window', this.hitboxService.getWindowSize());
+        }, 500);
+
+    }
 
   action(data: any) {
     // Check if this user is the target

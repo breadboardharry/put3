@@ -36,6 +36,8 @@ import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
 import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-snackbar.component';
+import { LayoutEditorComponent } from './view/master-dashboard/layout-editor/layout-editor.component';
+import { ButtonRaisedComponent } from './view/global/buttons/button-raised/button-raised.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-sn
     FileCardComponent,
     DragDropFileUploadDirective,
     ContextMenuComponent,
-    CustomSnackbarComponent
+    CustomSnackbarComponent,
+    LayoutEditorComponent,
+    ButtonRaisedComponent
   ],
     imports: [
         BrowserModule,

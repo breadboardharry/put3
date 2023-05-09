@@ -1,0 +1,18 @@
+<div class="layout-editor">
+    <div class="content" #content>
+        <div class="editor" *ngIf="isWindowDefined()"
+            [ngStyle]="{'aspectRatio': target.data.window.ratio}">
+            <img [src]="desktopBackground">
+        </div>
+
+        <div class="no-target" *ngIf="!isWindowDefined()">
+            Select a fool
+        </div>
+
+        <div class="toolbar">
+            <app-button-raised (click)="addHitbox()" [disabled]="!isWindowDefined()">
+                Add hitbox
+            </app-button-raised>
+        </div>
+    </div>
+</div>

@@ -27,11 +27,29 @@ export class HitboxService {
 
   public run() {
     this.running = true;
-    this.websocket.socket.emit('status', 'running');
-    console.log(this.hitboxes);
     this.hitboxes.forEach(hitbox => {
-      hitbox.active = true;
+        hitbox.active = true;
     });
     console.log('Running...');
   }
+
+    public getWindowHeight() {
+        return window.innerHeight;
+    }
+
+    public getWindowWidth() {
+        return window.innerWidth;
+    }
+
+    public getWindowRatio() {
+        return this.getWindowWidth() / this.getWindowHeight();
+    }
+
+    public getWindowSize() {
+        return {
+            width: this.getWindowWidth(),
+            height: this.getWindowHeight(),
+            ratio: this.getWindowRatio()
+        }
+    }
 }

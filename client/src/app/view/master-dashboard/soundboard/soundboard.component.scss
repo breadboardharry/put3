@@ -1,22 +1,19 @@
 @import '~src/styles.scss';
 
 $border-radius: 14px;
-$border-width: 2px;
+$border-width: 3px;
 $border-gradient: $light-gradient;
 $background: #070817;
 
 .soundboard {
-  width: 100%;
-  height: 100%;
+  @extend %dashboard-page;
 
   padding: $border-width;
-  overflow: hidden;
 
   border: 0;
   border-radius: $border-radius;
   box-sizing: border-box;
 
-  display: flex;
   flex-direction: column;
 
   background: $border-gradient;
