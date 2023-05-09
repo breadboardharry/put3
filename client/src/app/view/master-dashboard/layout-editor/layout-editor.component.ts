@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 

@@ -49,7 +49,7 @@ export class HitboxService {
                 x: 0,
                 y: 0
             },
-            events: [],
+            events: {},
             active: false
         });
     }
@@ -78,6 +78,8 @@ export class HitboxService {
      * Update hitboxes to server
      */
     public send(target: any) {
+        console.log(this.hitboxes[0].events);
+
         this.websocket.socket.emit('hitboxes', {
             target: target,
             hitboxes: this.hitboxes,

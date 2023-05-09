@@ -9,7 +9,10 @@ export const actions: Action[] = [
   {
     name: 'Desktop Icon',
     value: 'desktop-icon',
-    view: DesktopIconComponent,
+    component: {
+        name: 'DesktopIconComponent',
+        class: DesktopIconComponent
+    },
     location: ComponentLocation.Core,
     triggers: [ETrigger.Default],
     lockedTriggers: [ETrigger.Hover, ETrigger.Click]
@@ -17,14 +20,20 @@ export const actions: Action[] = [
   {
     name: 'Rick Roll',
     value: 'rick-roll',
-    view: RickRollComponent,
+    component: {
+        name: 'RickRollComponent',
+        class: RickRollComponent
+    },
     location: ComponentLocation.Desktop,
     triggers: [ETrigger.Click, ETrigger.DoubleClick]
   },
   {
     name: 'Audio',
     value: 'audio-player',
-    view: AudioPlayerComponent,
+    component: {
+        name: 'AudioPlayerComponent',
+        class: AudioPlayerComponent
+    },
     location: ComponentLocation.Desktop,
     triggers: [ETrigger.All]
   },

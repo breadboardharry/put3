@@ -68,6 +68,7 @@ const hitboxes = (socket) => {
     socket.on("hitboxes", (data) => {
         console.log("[-] Hitboxes set recieved from " + socket.id + " to " + data.target.id);
         Socket.update.hitboxes(data);
+        console.log(data.hitboxes);
     });
 }
 
