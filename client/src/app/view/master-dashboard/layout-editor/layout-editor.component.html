@@ -3,7 +3,7 @@
         <div class="editor" *ngIf="isWindowDefined()" [ngStyle]="{'aspectRatio': target.data.window.ratio}" #editor>
             <!-- Hitboxes -->
             <div class="draggable-zone">
-                <app-hitbox *ngFor="let hitbox of hitboxService.hitboxes" [hitbox]="hitbox"></app-hitbox>
+                <app-hitbox *ngFor="let hitbox of hitboxService.hitboxes[target.id]" [hitbox]="hitbox"></app-hitbox>
             </div>
             <!-- Background Image -->
             <img [src]="desktopBackground" draggable="false">

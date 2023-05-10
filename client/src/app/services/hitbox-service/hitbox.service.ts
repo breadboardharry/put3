@@ -8,7 +8,21 @@ import { WebSocketService } from '../websocket-service/websocket.service';
 export class HitboxService {
 
     private window: (() => any) | undefined;
-    public hitboxes: Hitbox[] = [];
+    public hitboxes: {[key: string]: Hitbox[]} = {
+        '_active': [],
+    };
+    private DEFAULT_HITBOX = {
+        size: {
+            width: 25,
+            height: 25
+        },
+        position: {
+            x: 0,
+            y: 0
+        },
+        events: {},
+        active: false
+    }
 
     constructor(private websocket: WebSocketService) { }
 
@@ -38,20 +52,10 @@ export class HitboxService {
     /**
      * Add new hitbox to set
      */
-    public addNew() {
-        // Add new hitbox only if not running
-        this.hitboxes.push({
-            size: {
-                width: 25,
-                height: 25
-            },
-            position: {
-                x: 0,
-                y: 0
-            },
-            events: {},
-            active: false
-        });
+    public addNew(id: string = '_active') {
+        // Add
+        if (this.hitboxes[id]) this.hitboxes[id].push(JSON.parse(JSON.stringify(this.DEFAULT_HITBOX)));
+        else this.hitboxes[id] = [JSON.parse(JSON.stringify(this.DEFAULT_HITBOX))];
     }
 
     /**
@@ -60,8 +64,7 @@ export class HitboxService {
      * @param run Run hitboxes after import
      */
     public import(hitboxes: Hitbox[], run: boolean = false) {
-        this.hitboxes = hitboxes;
-        console.log(this.hitboxes);
+        this.hitboxes['_active'] = hitboxes;
         if (run) this.run();
     }
 
@@ -69,7 +72,7 @@ export class HitboxService {
      * Run hitboxes
      */
     public run() {
-        for (let hitbox of this.hitboxes) {
+        for (let hitbox of this.hitboxes['_active']) {
             hitbox.active = true;
         }
     }
@@ -78,11 +81,9 @@ export class HitboxService {
      * Update hitboxes to server
      */
     public send(target: any) {
-        console.log(this.hitboxes[0].events);
-
         this.websocket.socket.emit('hitboxes', {
             target: target,
-            hitboxes: this.hitboxes,
+            hitboxes: this.hitboxes[target.id] || [],
         });
     }
 }

@@ -17,31 +17,32 @@ export class FoolHomePageComponent implements OnInit {
     private apiUrl = environment.serverUrl + environment.apiPath
     desktopBackground: string = 'assets/images/default-desktop-background.jpg';
 
-  constructor(private windowService: WindowService, public hitboxService: HitboxService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService, private desktopService: DesktopService ) {}
+    constructor(private windowService: WindowService, public hitboxService: HitboxService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService, private desktopService: DesktopService ) {}
 
-  ngOnInit(): void {
-    // Update role if needed
-    if (this.websocket.role !== 'fool') {
-      this.websocket.role = 'fool';
-      this.websocket.socket.emit('role', 'fool');
-      this.websocket.socket.emit('window', this.windowService.getWindowSize());
+    ngOnInit(): void {
+        // Update role if needed
+        if (this.websocket.role !== 'fool') {
+            this.websocket.role = 'fool';
+            this.websocket.socket.emit('role', 'fool');
+        }
+
+        // Send window size to server
+        this.websocket.socket.emit('window', this.windowService.getWindowSize());
+
+        this.websocket.socket.on('action', (data: any) => {
+            this.action(data);
+        });
+
+        this.websocket.socket.on('hitboxes', (data: any) => {
+            if (data.target.id !== this.websocket.id) return;
+            this.hitboxService.import(data.hitboxes, true);
+        });
+
+        // Get desktop background image
+        this.desktopService.getBackground().then(image => {
+            this.desktopBackground = image;
+        });
     }
-
-    this.websocket.socket.on('action', (data: any) => {
-        this.action(data);
-    });
-
-    this.websocket.socket.on('hitboxes', (data: any) => {
-        if (data.target.id !== this.websocket.id) return;
-        console.log('hitboxes', data);
-        this.hitboxService.import(data.hitboxes, true);
-    });
-
-    // Get desktop background image
-    this.desktopService.getBackground().then(image => {
-      this.desktopBackground = image;
-    });
-  }
 
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: any) {
@@ -72,7 +73,7 @@ export class FoolHomePageComponent implements OnInit {
         break;
 
       default:
-        console.log(data);
+        console.log({data});
         break;
     }
   }

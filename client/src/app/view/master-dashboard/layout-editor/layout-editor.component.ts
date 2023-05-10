@@ -37,7 +37,7 @@ export class LayoutEditorComponent implements OnInit {
     }
 
     addHitbox() {
-        this.hitboxService.addNew();
+        this.hitboxService.addNew(this.target.id);
     }
 
     sendConfig() {

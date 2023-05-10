@@ -106,23 +106,23 @@ export class AssetsGalleryComponent implements OnInit {
             .subscribe((event: HttpEvent<any>) => {
                 switch (event.type) {
                     case HttpEventType.Sent:
-                        console.log('Request has been made!');
+                        console.log('[-] Request has been made!');
                         break;
 
                     case HttpEventType.ResponseHeader:
-                        console.log('Response header has been received!');
+                        console.log('[-] Response header has been received!');
                         break;
 
                     case HttpEventType.UploadProgress:
                         this.progress = Math.round(
                             (event.loaded / event.total!) * 100
                         );
-                        console.log(`Uploaded! ${this.progress}%`);
+                        console.log(`[-] Uploaded! ${this.progress}%`);
                         break;
 
                     case HttpEventType.Response:
                         this.uploading = false;
-                        console.log('File uploaded successfully!', event.body);
+                        console.log('[-] File uploaded successfully!', event.body);
                         setTimeout(() => {
                             this.progress = 0;
                             this.fileArr = [];
