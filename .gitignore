@@ -16,9 +16,6 @@ server/public/resources/images/*
 server/public/resources/videos/*
 !server/public/resources/**/.default/
 
-server/public/assets/
-!server/public/assets/default-desktop.*
-
 # Dependencies
 node_modules/
 */npm-debug.log

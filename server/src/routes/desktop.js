@@ -45,7 +45,7 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
 router.get("/get", async (req, res) => {
     const filename =
         (await utils.findDesktopImageName()) || "default-desktop.jpg";
-    res.sendFile(filename, { root: "./public/assets/" });
+    res.sendFile(filename, { root: "./public/images" });
 });
 
 export default router;

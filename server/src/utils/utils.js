@@ -16,7 +16,7 @@ const findDesktopImageName = (extensions = ["jpg", "png", "jpeg", "gif"]) => {
         // For each extension, check if the file exists
         for (let extension of extensions) {
             try {
-                fs.accessSync(`./public/assets/${filename}.${extension}`);
+                fs.accessSync(`./public/images/${filename}.${extension}`);
                 resolve(`${filename}.${extension}`);
                 return;
             } catch (err) {}
