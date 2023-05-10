@@ -19,26 +19,29 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
             /^data:image\/\w+;base64,/,
             ""
         );
+
         const bufferData = Buffer.from(base64Data, "base64");
         const fileExt = utils.getBase64FileExtension(base64Data);
         const fileName = "desktop." + fileExt;
-        const filePath = path.join("./public/assets", fileName);
+        const filePath = path.join("./public/images", fileName);
 
         // Delete an already existing file with a different extension
         if (existingFile && StorageUtils.getFileExtension(existingFile) !== fileExt)
-            fs.unlinkSync(path.join("./public/assets", existingFile));
+            fs.unlinkSync(path.join("./public/images", existingFile));
 
         // Write the file
         fs.writeFile(filePath, bufferData, (err) => {
-            if (err)
+            if (err) {
                 return res.status(500).json({ error: "Error uploading image" });
+            }
 
             res.status(200).json({
                 message: "Image uploaded successfully",
                 filename: fileName,
             });
         });
-    } else return res.status(400).json({ error: "No file uploaded" });
+    }
+    else return res.status(400).json({ error: "No file uploaded" });
 });
 
 // Get the image

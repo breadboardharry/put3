@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
 const desktopImageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         // Upload the image in assets folder
-        cb(null, "public/assets/");
+        cb(null, "public/images/");
     },
     filename: (req, file, cb) => {
         cb(null, StorageUtils.generateFilename(file.originalname, "desktop"));
