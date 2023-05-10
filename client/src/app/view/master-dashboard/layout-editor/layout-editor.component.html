@@ -6,7 +6,7 @@
                 <app-hitbox *ngFor="let hitbox of hitboxService.hitboxes[target.id]" [hitbox]="hitbox"></app-hitbox>
             </div>
             <!-- Background Image -->
-            <img [src]="desktopBackground" draggable="false">
+            <img [src]="isWallpaperDefined() ? (apiUrl + '/' + target.data.window.wallpaper.href) : defaultWallpaper" draggable="false">
         </div>
 
         <div class="no-target" *ngIf="!isWindowDefined()">

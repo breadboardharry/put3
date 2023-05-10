@@ -40,3 +40,11 @@ app-file-card {
     // flex: 1 0;
 }
 
+.buttons {
+    flex: 0 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+

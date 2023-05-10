@@ -71,7 +71,7 @@ export class SelectionService {
                 this.lastPosition = position;
                 // If not selected, select only this one or clear if already selected
                 if (index == -1) this.selection = [item];
-                else this.selection = [];
+                else if (this.multiple) this.selection = [];
             }
         }
         else {
@@ -86,7 +86,7 @@ export class SelectionService {
                 // If not selected or multiple selection, select only this one
                 if (index == -1 || (!rightClick && this.selection.length > 1)) this.selection = [item];
                 // If already selected, remove from selection
-                else if (!rightClick) this.selection = [];
+                else if (!rightClick && this.multiple) this.selection = [];
                 // Set last position for range selection
                 this.lastPosition = position;
             }

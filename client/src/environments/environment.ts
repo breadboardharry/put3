@@ -8,7 +8,8 @@ export const environment = {
   production: false,
   serverUrl: backendUrl,
   apiPath: '',
-  socketPath: '/socket'
+  socketPath: '/socket',
+  defaultWallpaper: 'assets/images/default-desktop-background.jpg'
 };
 
 /*

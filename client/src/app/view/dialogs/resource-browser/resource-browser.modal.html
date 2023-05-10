@@ -8,4 +8,8 @@
         >
         </app-file-card>
     </div>
+    <div class="buttons">
+        <button (click)="close()">Cancel</button>
+        <button (click)="close()" [disabled]="!selectionService.getSelection().length">Select</button>
+    </div>
 </div>

@@ -27,6 +27,7 @@ export class ResourceBrowserModal implements OnInit {
     }
 
     close() {
-        this.dialogRef.close('jaj');
+        const file = this.selectionService.getSelection()[0];
+        this.dialogRef.close(file);
     }
 }
