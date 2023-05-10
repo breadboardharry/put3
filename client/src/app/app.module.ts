@@ -3,9 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DesktopComponent } from './view/desktop/desktop.component';
-import { WindowsButtonComponent } from './view/windows-button/windows-button.component';
-import { WindowsMenuComponent } from './view/windows-menu/windows-menu.component';
+import { DesktopComponent } from './view/fool/desktop/desktop.component';
+import { WindowsButtonComponent } from './view/fool/windows-button/windows-button.component';
+import { WindowsMenuComponent } from './view/fool/windows-menu/windows-menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -25,19 +25,19 @@ import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page
 import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-page.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
-import { MasterDashboardNavbarComponent } from './view/master-dashboard/master-dashboard-navbar/master-dashboard-navbar.component';
-import { MasterDashboardFoolCardComponent } from './view/master-dashboard/master-dashboard-fool-card/master-dashboard-fool-card.component';
-import { SoundboardComponent } from './view/master-dashboard/soundboard/soundboard.component';
-import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/soundboard-button/soundboard-button.component';
+import { DashboardNavbarComponent } from './view/dashboard/dashboard-navbar/dashboard-navbar.component';
+import { FoolCardComponent } from './view/cards/fool-card/fool-card.component';
+import { SoundboardComponent } from './view/dashboard/soundboard/soundboard.component';
+import { SoundboardButtonComponent } from './view/dashboard/soundboard/soundboard-button/soundboard-button.component';
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
-import { AssetsGalleryComponent } from './view/master-dashboard/assets-gallery/assets-gallery.component';
+import { AssetsGalleryComponent } from './view/dashboard/assets-gallery/assets-gallery.component';
 import { FileCardComponent } from './view/cards/file-card/file-card.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
+import { ContextMenuComponent } from './view/global/context-menu/context-menu.component';
 import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-snackbar.component';
-import { LayoutEditorComponent } from './view/master-dashboard/layout-editor/layout-editor.component';
+import { LayoutEditorComponent } from './view/dashboard/layout-editor/layout-editor.component';
 import { ButtonRaisedComponent } from './view/global/buttons/button-raised/button-raised.component';
 import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-browser.modal';
 
@@ -57,8 +57,8 @@ import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-b
     HomePageComponent,
     MasterDashboardPageComponent,
     FoolHomePageComponent,
-    MasterDashboardNavbarComponent,
-    MasterDashboardFoolCardComponent,
+    DashboardNavbarComponent,
+    FoolCardComponent,
     SoundboardComponent,
     SoundboardButtonComponent,
     CodelockComponent,

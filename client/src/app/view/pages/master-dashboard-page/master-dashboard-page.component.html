@@ -1,18 +1,18 @@
 <div class="page">
-    <app-master-dashboard-navbar
+    <app-dashboard-navbar
         [selectedItem]="selectedItem"
         (selectedItemEvent)="selectItem($event)"
-    ></app-master-dashboard-navbar>
+    ></app-dashboard-navbar>
     <div class="content-container">
         <div class="content">
             <div class="fools-container">
-                <app-master-dashboard-fool-card
+                <app-fool-card
                     *ngFor="let fool of fools"
                     [selected]="target && fool.id == target.id"
                     [fool]="fool"
                     (click)="selectTarget(fool)"
                 >
-                </app-master-dashboard-fool-card>
+                </app-fool-card>
                 <p class="no-fool" *ngIf="!fools.length">
                     No fool connected
                 </p>
