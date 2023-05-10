@@ -61,20 +61,24 @@ export class FoolHomePageComponent implements OnInit {
 
     }
 
-  action(data: any) {
-    // Check if this user is the target
-    if (data.target.id !== this.websocket.id) return;
+    action(data: any) {
+        // Check if this user is the target
+        if (data.target.id !== this.websocket.id) return;
 
-    switch (data.action.type) {
-      case 'audio':
-        const volume = 'volume' in data.action ? data.action.volume : 1.0;
-        if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-        else if ('track' in data.action) this.audio.play(this.apiUrl + '/' + data.action.track.href, volume);
-        break;
+        switch (data.action.type) {
+            case 'audio':
+                const volume = 'volume' in data.action ? data.action.volume : 1.0;
+                if ('stop' in data.action && data.action.stop) this.audio.stopAll();
+                else if ('track' in data.action) this.audio.play(this.apiUrl + '/' + data.action.track.href, volume);
+                break;
 
-      default:
-        console.log({data});
-        break;
+            case 'wallpaper':
+                this.desktopBackground = this.apiUrl + '/' + data.action.image.href;
+                break;
+
+            default:
+                console.log({data});
+                break;
+        }
     }
-  }
 }

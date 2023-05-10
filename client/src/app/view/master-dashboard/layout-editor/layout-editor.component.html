@@ -18,6 +18,10 @@
                 Add hitbox
             </app-button-raised>
 
+            <app-button-raised (click)="changeBackground()" [disabled]="!isWindowDefined()">
+                Background
+            </app-button-raised>
+
             <app-button-raised (click)="sendConfig()" [disabled]="!isWindowDefined()">
                 Send
             </app-button-raised>

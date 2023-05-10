@@ -1,6 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ResourceType } from 'src/app/enums/resources/type';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
     selector: 'app-layout-editor',
@@ -17,7 +20,7 @@ export class LayoutEditorComponent implements OnInit {
 
     desktopBackground: string = 'assets/images/default-desktop-background.jpg';
 
-    constructor(private desktopService: DesktopService, public hitboxService: HitboxService) {}
+    constructor(private resourceService: ResourcesService, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
 
     ngOnInit(): void {
         // Get desktop background image
@@ -42,5 +45,15 @@ export class LayoutEditorComponent implements OnInit {
 
     sendConfig() {
         this.hitboxService.send(this.target);
+    }
+
+    async changeBackground() {
+        this.websocket.socket.emit('action', {
+            target: this.target,
+            action: {
+                type: 'wallpaper',
+                image: (await this.resourceService.getDataByType(ResourceType.Image))[0],
+            }
+        });
     }
 }
