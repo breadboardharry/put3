@@ -57,11 +57,19 @@ const isArrayOf = (type, array, notNull = false) => {
     return true;
 };
 
+const ipv6ToIpv4 = (ipv6Address) => {
+    if (ipv6Address.startsWith("::ffff:")) {
+      return ipv6Address.substr(7);
+    }
+    return ipv6Address;
+  }
+
 const Utils = {
     newName,
     findDesktopImageName,
     getBase64FileExtension,
-    isArrayOf
+    isArrayOf,
+    ipv6ToIpv4
 };
 
 export default Utils;

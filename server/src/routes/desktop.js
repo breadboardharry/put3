@@ -3,17 +3,20 @@ const router = express.Router();
 import fs from "fs";
 import path from "path";
 import upload from "../storage/multer-config.js";
-import utils from "../utils/utils.js"
+import Utils from "../utils/utils.js"
 import StorageUtils from "../modules/storage/utils.js";
 
 /* --------------------------------- ROUTES --------------------------------- */
 
 // Image upload
 router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
+    const ip = Utils.ipv6ToIpv4(req.ip);
+    console.log("IP: " + ip)
+
     // Upload via body
     if (req.body.image) {
         // Get the existing file name
-        const existingFile = await utils.findDesktopImageName();
+        const existingFile = await Utils.findDesktopImageName();
 
         const base64Data = req.body.image.replace(
             /^data:image\/\w+;base64,/,
@@ -21,7 +24,7 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
         );
 
         const bufferData = Buffer.from(base64Data, "base64");
-        const fileExt = utils.getBase64FileExtension(base64Data);
+        const fileExt = Utils.getBase64FileExtension(base64Data);
         const fileName = "desktop." + fileExt;
         const filePath = path.join("./public/images", fileName);
 
@@ -46,8 +49,11 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
 
 // Get the image
 router.get("/get", async (req, res) => {
+    const ip = Utils.ipv6ToIpv4(req.ip);
+    console.log("IP: " + ip)
+
     const filename =
-        (await utils.findDesktopImageName()) || "default-desktop.jpg";
+        (await Utils.findDesktopImageName()) || "default-desktop.jpg";
     res.sendFile(filename, { root: "./public/images" });
 });
 

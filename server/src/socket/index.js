@@ -1,5 +1,6 @@
 import Users from "../modules/users/users.js";
 import Socket from "../modules/socket/socket.js";
+import Utils from "../utils/utils.js";
 
 /**
  * Initialize socket routes
@@ -7,6 +8,9 @@ import Socket from "../modules/socket/socket.js";
 const init = () => {
     // On client connection
     Socket.io.on("connection", (socket) => {
+        const ipAddress = Utils.ipv6ToIpv4(socket.handshake.address);
+        console.log(`Client connected from IP address ${ipAddress}`);
+
         connection(socket);
         disconnection(socket);
         role(socket);
