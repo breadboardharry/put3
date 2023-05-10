@@ -1,5 +1,5 @@
 export enum ResourceDirectory {
     Images = 'images',
-    Videos = 'video',
+    Videos = 'videos',
     Audio = 'audio'
 }

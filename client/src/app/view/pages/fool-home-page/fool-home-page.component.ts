@@ -47,7 +47,7 @@ export class FoolHomePageComponent implements OnInit {
   @HostListener('contextmenu', ['$event'])
   onRightClick(event: any) {
     event.preventDefault();
-  }
+  } 
 
     timeout: NodeJS.Timeout | undefined;
     @HostListener('window:resize', ['$event'])

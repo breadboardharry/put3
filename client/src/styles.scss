@@ -144,3 +144,11 @@ body {
     @extend %snackbar;
     background: $info-gradient;
 }
+
+/* ---------------------------------- DIALOG --------------------------------- */
+
+mat-dialog-container {
+    background: $light-gradient !important;
+    color: white !important;
+    border-radius: 12px !important;
+}

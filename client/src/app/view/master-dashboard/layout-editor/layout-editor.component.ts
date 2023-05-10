@@ -1,9 +1,12 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ResourceType } from 'src/app/enums/resources/type';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
+import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
+import { ResourceDirectory } from 'src/app/enums/resources/directory';
 
 @Component({
     selector: 'app-layout-editor',
@@ -20,7 +23,7 @@ export class LayoutEditorComponent implements OnInit {
 
     desktopBackground: string = 'assets/images/default-desktop-background.jpg';
 
-    constructor(private resourceService: ResourcesService, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
+    constructor(private dialog: MatDialog, private resourceService: ResourcesService, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
 
     ngOnInit(): void {
         // Get desktop background image
@@ -48,12 +51,21 @@ export class LayoutEditorComponent implements OnInit {
     }
 
     async changeBackground() {
-        this.websocket.socket.emit('action', {
-            target: this.target,
-            action: {
-                type: 'wallpaper',
-                image: (await this.resourceService.getDataByType(ResourceType.Image))[0],
-            }
+        const dialogRef = this.dialog.open(ResourceBrowserModal, {
+            data: { type: ResourceType.Image }
+        });
+
+        dialogRef.afterClosed().subscribe(async result => {
+            console.log('The dialog was closed');
+            console.log(result);
+
+            this.websocket.socket.emit('action', {
+                target: this.target,
+                action: {
+                    type: 'wallpaper',
+                    image: (await this.resourceService.getDataByType(ResourceType.Image))[0],
+                }
+            });
         });
     }
 }

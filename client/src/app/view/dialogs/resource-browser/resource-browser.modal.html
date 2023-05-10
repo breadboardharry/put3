@@ -1,0 +1,11 @@
+<div class="modal">
+    <div class="gallery">
+        <div class="no-content-label" *ngIf="!resourceService.getResources(type)!.length">No resources</div>
+        <app-file-card *ngFor="let file of resourceService.getResources(type)"
+            (click)="select(file, $event)"
+            [file]="file"
+            [selected]="selectionService.getSelection().includes(file)"
+        >
+        </app-file-card>
+    </div>
+</div>

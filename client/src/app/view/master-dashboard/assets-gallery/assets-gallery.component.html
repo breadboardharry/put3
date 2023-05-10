@@ -31,8 +31,8 @@
             <p class="message">{{msg}}</p>
         </div> -->
 
-        <div class="no-content-label" *ngIf="!resourceService.flatten(resources).length">No resources</div>
-        <app-file-card *ngFor="let file of resourceService.flatten(resources)"
+        <div class="no-content-label" *ngIf="!resourceService.flatten().length">No resources</div>
+        <app-file-card *ngFor="let file of resourceService.flatten()"
             (click)="select(file, $event)"
             (contextmenu)="select(file, $event, true)"
             [file]="file"

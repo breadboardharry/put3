@@ -1,7 +1,6 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
@@ -9,7 +8,6 @@ import { SelectionService } from 'src/app/services/selection-service/selection.s
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ContextMenuItem } from 'src/app/types/context-menu-item';
-import { ResourceSet } from 'src/app/types/resources/data-set';
 import { FileData } from 'src/app/types/resources/file-data';
 
 type ContextMenu = {
@@ -41,7 +39,6 @@ export class AssetsGalleryComponent implements OnInit {
     };
 
     // Assets
-    resources: ResourceSet = {};
     editing: FileData | null = null;
 
     // File upload
@@ -60,19 +57,7 @@ export class AssetsGalleryComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.updateResources();
-
-        this.websocket.socket.on('event', (data: any) => {
-            if (data.type != 'resources') return;
-            this.updateResources();
-        });
-    }
-
-    updateResources() {
-        this.resourceService.getData().then((resources: ResourceSet) => {
-            this.resources = resources;
-            this.selectionService.init(this.resourceService.flatten(this.resources));
-        });
+        this.selectionService.init(this.resourceService.getResources(), true);
     }
 
     select(file: FileData, event: any, rightClick: boolean = false) {

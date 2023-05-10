@@ -9,6 +9,7 @@ import { WindowsMenuComponent } from './view/windows-menu/windows-menu.component
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -31,13 +32,14 @@ import { SoundboardButtonComponent } from './view/master-dashboard/soundboard/so
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
 import { AssetsGalleryComponent } from './view/master-dashboard/assets-gallery/assets-gallery.component';
-import { FileCardComponent } from './view/master-dashboard/assets-gallery/file-card/file-card.component';
+import { FileCardComponent } from './view/cards/file-card/file-card.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContextMenuComponent } from './view/user/context-menu/context-menu.component';
 import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-snackbar.component';
 import { LayoutEditorComponent } from './view/master-dashboard/layout-editor/layout-editor.component';
 import { ButtonRaisedComponent } from './view/global/buttons/button-raised/button-raised.component';
+import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-browser.modal';
 
 @NgModule({
   declarations: [
@@ -67,14 +69,16 @@ import { ButtonRaisedComponent } from './view/global/buttons/button-raised/butto
     ContextMenuComponent,
     CustomSnackbarComponent,
     LayoutEditorComponent,
-    ButtonRaisedComponent
+    ButtonRaisedComponent,
+    ResourceBrowserModal
   ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-            MatProgressSpinnerModule,
-            MatSnackBarModule,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        MatDialogModule,
         DragDropModule,
         MatMenuModule,
         HttpClientModule,

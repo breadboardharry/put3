@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class SelectionService {
 
+    private multiple: boolean = false;
     private sources: any[] = [];
     private selection: any[] = [];
     private lastPosition: number = -1;
@@ -15,8 +16,9 @@ export class SelectionService {
      * Initialize the selection service with the given sources
      * @param sources Array of sources to select from
      */
-    init(sources: any[]) {
+    init(sources: any[], multiple: boolean = true) {
         this.clear();
+        this.multiple = multiple;
         this.sources = sources;
     }
 
@@ -57,7 +59,7 @@ export class SelectionService {
         // SHIFT + Left click
         if (event.shiftKey) {
             // If lastposition set
-            if (this.lastPosition != -1) {
+            if (this.multiple && this.lastPosition != -1) {
                 // Define selection range
                 const min = this.lastPosition < position ? this.lastPosition : position;
                 const max = 1 + (this.lastPosition > position ? this.lastPosition : position);
@@ -74,7 +76,7 @@ export class SelectionService {
         }
         else {
             // CTRL + Left click
-            if (!rightClick && event.ctrlKey) {
+            if (!rightClick && this.multiple && event.ctrlKey) {
                 // If not selected, add to selection or remove if already selected
                 if (index == -1) this.selection.push(item);
                 else this.selection.splice(index, 1);
