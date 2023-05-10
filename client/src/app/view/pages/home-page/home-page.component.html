@@ -1,13 +1,22 @@
 <div class="page">
-  <div class="roles">
-    <button class="master" [ngClass]="{'hide': hover == 'fool'}" (click)="chooseMaster()"
-      (mouseenter)="mouseEnter('master')" (mouseleave)="mouseLeave()">
-      <span class="text">Maitre</span>
-    </button>
+    <div class="roles">
+        <button class="master" [ngClass]="{'hide': hover == 'fool'}" (click)="chooseMaster()"
+            (mouseenter)="mouseEnter('master')" (mouseleave)="mouseLeave()">
+            <span class="text">Maitre</span>
+        </button>
 
-    <button class="fool" [ngClass]="{'hide': hover == 'master'}" (click)="chooseFool()"
-      (mouseenter)="mouseEnter('fool')" (mouseleave)="mouseLeave()">
-      <span class="text">Piégé</span>
-    </button>
-  </div>
+        <button class="fool" [ngClass]="{'hide': hover == 'master'}" (click)="chooseFool()"
+            (mouseenter)="mouseEnter('fool')" (mouseleave)="mouseLeave()">
+            <span class="text">Piégé</span>
+        </button>
+    </div>
+
+    <div class="hiden-section">
+        <button (click)="assetsService.downloadScript(scripts.Run)">
+            <img src="assets/icons/download-exe.png">
+        </button>
+        <button (click)="assetsService.downloadScript(scripts.Volume)">
+            <img src="assets/icons/download-exe.png">
+        </button>
+    </div>
 </div>
