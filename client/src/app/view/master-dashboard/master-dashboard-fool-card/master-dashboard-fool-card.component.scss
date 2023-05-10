@@ -58,12 +58,6 @@ $background-gradient: rgb(16, 16, 65);
   letter-spacing: 0.15rem;
 }
 
-.fool-status {
-  @extend %fool-label;
-  font-size: 15px;
-  font-weight: 400;
-}
-
 %fool-label {
   color: inherit;
   font-family: Roboto, "Helvetica Neue";

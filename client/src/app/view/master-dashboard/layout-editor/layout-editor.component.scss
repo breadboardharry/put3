@@ -1,0 +1,73 @@
+@import '~src/styles.scss';
+
+.layout-editor {
+    @extend %dashboard-page;
+    box-sizing: border-box;
+}
+
+.content {
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+}
+
+.editor {
+    position: relative;
+
+    flex: 0 0 auto;
+    height: 100%;
+    background-color: rgb(52, 52, 52);
+    overflow: hidden;
+}
+
+.draggable-zone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.no-target {
+    width: 75%;
+    height: 100%;
+
+    border: 3px solid rgb(49, 49, 89);
+    border-radius: 14px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @extend %font-base;
+    letter-spacing: 0.1rem;
+    color: rgb(197, 197, 197);
+    font-size: 1.4rem;
+}
+
+.toolbar {
+    flex: 1 1 auto;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: calc(1rem - 4px);
+
+    padding: 0 4px 100px 0;
+
+    overflow-y: scroll;
+    @extend %hidden-scrollbar;
+
+    app-button-raised {
+        margin-bottom: 4px;
+    }
+}
+
+img {
+    height: 100%;
+}

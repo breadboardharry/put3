@@ -1,11 +1,11 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Hitbox } from 'src/app/interfaces/hitbox';
 import { ChildElementsDirective } from 'src/app/directives/child-elements.directive';
-import { DesktopIconComponent } from '../../interaction/desktop-icon/desktop-icon.component';
 import { Action } from 'src/app/interfaces/action';
 import { ComponentLocation } from 'src/app/enums/component-location';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { ETrigger } from 'src/app/enums/trigger';
+import { ComponentService } from 'src/app/services/component-service/component.service';
 
 @Component({
   selector: 'app-hitbox-core',
@@ -29,7 +29,7 @@ export class HitboxCoreComponent implements OnInit {
   doubleClickEvent = new EventEmitter();
   outsideClickEvent = new EventEmitter();
 
-  constructor(private elementRef: ElementRef, private desktopService: DesktopService) { }
+  constructor(private elementRef: ElementRef, private componentService: ComponentService, private desktopService: DesktopService) { }
 
   ngOnInit(): void {
     // Get reference to the component container
@@ -38,36 +38,37 @@ export class HitboxCoreComponent implements OnInit {
 
     const events = this.hitbox.events;
     // Generate interaction component for each trigger
-    if(ETrigger.Default in events && events.default)
-      this.addComponent(events.default);
+    if(ETrigger.Default in events && events[ETrigger.Default])
+      this.addComponent(events[ETrigger.Default]);
   }
 
-  addComponent(action: Action) {
-    let componentRef;
+    addComponent(action: Action) {
+        let componentRef;
+        const component = this.componentService.resolve(action.component.name)
 
-    // Add the component to the correct location
-    switch (action.location) {
-      case ComponentLocation.Core:
-        componentRef = this.childElementsContainerRef.createComponent<any>(action.view);
-        break;
+        // Add the component to the correct location
+        switch (action.location) {
+            case ComponentLocation.Core:
+                componentRef = this.childElementsContainerRef.createComponent<any>(component);
+                break;
 
-      case ComponentLocation.Desktop:
-        componentRef = this.desktopService.containerRef.createComponent<any>(action.view);
-        break;
-    }
+            case ComponentLocation.Desktop:
+                componentRef = this.desktopService.containerRef.createComponent<any>(component);
+                break;
+        }
 
-    componentRef.instance.data = action.data;
-    componentRef.instance.hoverEvent = this.hoverEvent;
-    componentRef.instance.clickEvent = this.clickEvent;
-    componentRef.instance.singleClickEvent = this.singleClickEvent;
-    componentRef.instance.doubleClickEvent = this.doubleClickEvent;
-    componentRef.instance.outsideClickEvent = this.outsideClickEvent;
+        componentRef.instance.data = action.data;
+        componentRef.instance.hoverEvent = this.hoverEvent;
+        componentRef.instance.clickEvent = this.clickEvent;
+        componentRef.instance.singleClickEvent = this.singleClickEvent;
+        componentRef.instance.doubleClickEvent = this.doubleClickEvent;
+        componentRef.instance.outsideClickEvent = this.outsideClickEvent;
   }
 
   mouseEnter() {
     const events = this.hitbox.events;
-    if(ETrigger.Hover in events && events.hover)
-      this.addComponent(events.hover);
+    if(ETrigger.Hover in events && events[ETrigger.Hover])
+      this.addComponent(events[ETrigger.Hover]);
 
     this.hoverEvent.emit(true);
   }
@@ -99,16 +100,16 @@ export class HitboxCoreComponent implements OnInit {
 
   private singleClick() {
     const events = this.hitbox.events;
-    if(ETrigger.Click in events && events.click)
-      this.addComponent(events.click);
+    if(ETrigger.Click in events && events[ETrigger.Click])
+      this.addComponent(events[ETrigger.Click]);
 
     this.singleClickEvent.emit();
   }
 
   private doubleClick() {
     const events = this.hitbox.events;
-    if(ETrigger.DoubleClick in events && events.doubleClick)
-      this.addComponent(events.doubleClick);
+    if(ETrigger.DoubleClick in events && events[ETrigger.DoubleClick])
+      this.addComponent(events[ETrigger.DoubleClick]);
 
     this.doubleClickEvent.emit();
   }

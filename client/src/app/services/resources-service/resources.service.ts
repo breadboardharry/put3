@@ -1,12 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { FileData } from 'src/app/types/resources/file-data';
 import { environment } from 'src/environments/environment';
 import { ResourceType } from 'src/app/enums/resources/type';
 import { ResourceDirectory } from 'src/app/enums/resources/directory';
 import { ResourceSet } from 'src/app/types/resources/data-set';
+import { WebSocketService } from '../websocket-service/websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,23 @@ import { ResourceSet } from 'src/app/types/resources/data-set';
 export class ResourcesService {
 
     private apiUrl = environment.serverUrl + environment.apiPath + '/resources';
+    private resources: ResourceSet = {};
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private websocket: WebSocketService) {
+        this.update();
+
+        this.websocket.socket.on('event', (data: any) => {
+            if (data.type != 'resources') return;
+            this.update();
+        });
+    }
+
+    public update() {
+        this.getData().then((resources: ResourceSet) => {
+            this.resources = resources;
+            console.log(this.resources);
+        });
+    }
 
     public removeFileExtension(filename: string) {
         return filename.split('.').slice(0, -1).join('.');
@@ -90,7 +106,18 @@ export class ResourcesService {
         });
     }
 
-    public flatten(set: ResourceSet) {
+    public getResources(type: ResourceType | null = null): FileData[] {
+        // Return resources of a specific type
+        if (type) {
+            const dir = this.typeToDir(type);
+            return this.resources[dir]!;
+        }
+
+        // Return all resources if no type is specified
+        return this.flatten();
+    }
+
+    public flatten(set: ResourceSet = this.resources) {
         let result: any[] = [];
 
         for (let files of Object.values(set)) {

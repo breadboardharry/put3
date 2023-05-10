@@ -12,7 +12,7 @@ import { MenuItem } from 'src/app/types/menu-item';
 export class MasterDashboardPageComponent implements OnInit {
 
     selectedItem: MenuItem = {
-        title: DashboardPage.Resources
+        title: DashboardPage.Layout
     };
     fools: any[] = [];
     target: any = null;
@@ -29,9 +29,16 @@ export class MasterDashboardPageComponent implements OnInit {
 
     this.websocket.socket.on('foolList', (list: any) => {
       this.fools = list;
+      this.updateTarget();
       if (list.length <= 0) this.target = null;
     });
   }
+
+    updateTarget() {
+        if (this.target) {
+            this.target = this.fools.find((fool) => fool.id === this.target.id);
+        }
+    }
 
   selectTarget(fool: any) {
     this.target = this.target === fool ? null : fool;

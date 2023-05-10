@@ -5,9 +5,7 @@ import StorageUtils from "../storage/utils.js";
 import Resources from "../../enums/resources.js";
 
 const getData = (filepath, type = undefined) => {
-    console.log(filepath);
     type = type ? type : StorageUtils.getPathElem(filepath, 0);
-    console.log(type);
 
     switch (type) {
         case Resources.TYPE.Image:

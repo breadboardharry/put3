@@ -20,15 +20,22 @@
 
             <hr class="separator" />
 
-            <div class="app-container">
-                <app-soundboard *ngIf="selectedItem.title == dashboardPage.Soundboard"
+            <div class="app-container" [ngSwitch]="selectedItem.title">
+                <app-soundboard *ngSwitchCase="dashboardPage.Soundboard"
                     [fools]="fools"
                     [target]="target"
-                    [disabled]="!fools.length || target == null">
+                    [disabled]="!fools.length || target == null"
+                >
                 </app-soundboard>
 
-                <app-assets-gallery *ngIf="selectedItem.title == dashboardPage.Resources">
+                <app-assets-gallery *ngSwitchCase="dashboardPage.Resources">
                 </app-assets-gallery>
+
+                <app-layout-editor *ngSwitchCase="dashboardPage.Layout"
+                    [fools]="fools"
+                    [target]="target"
+                    [disabled]="!fools.length || target == null"
+                ></app-layout-editor>
             </div>
         </div>
     </div>

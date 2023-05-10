@@ -22,7 +22,6 @@ export class FileCardComponent implements OnInit {
     constructor() {}
 
     ngOnInit(): void {
-        console.log(this.file);
         this.name = this.file.name;
     }
 

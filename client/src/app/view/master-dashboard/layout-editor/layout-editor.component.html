@@ -1,0 +1,30 @@
+<div class="layout-editor">
+    <div class="content" #content>
+        <div class="editor" *ngIf="isWindowDefined()" [ngStyle]="{'aspectRatio': target.data.window.ratio}" #editor>
+            <!-- Hitboxes -->
+            <div class="draggable-zone">
+                <app-hitbox *ngFor="let hitbox of hitboxService.hitboxes[target.id]" [hitbox]="hitbox"></app-hitbox>
+            </div>
+            <!-- Background Image -->
+            <img [src]="isWallpaperDefined() ? (apiUrl + '/' + target.data.window.wallpaper.href) : defaultWallpaper" draggable="false">
+        </div>
+
+        <div class="no-target" *ngIf="!isWindowDefined()">
+            Select a fool
+        </div>
+
+        <div class="toolbar">
+            <app-button-raised (click)="addHitbox()" [disabled]="!isWindowDefined()">
+                Add hitbox
+            </app-button-raised>
+
+            <app-button-raised (click)="changeBackground()" [disabled]="!isWindowDefined()">
+                Background
+            </app-button-raised>
+
+            <app-button-raised (click)="sendConfig()" [disabled]="!isWindowDefined()">
+                Send
+            </app-button-raised>
+        </div>
+    </div>
+</div>

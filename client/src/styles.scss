@@ -1,3 +1,5 @@
+// What is the difference between unix socket and websocket
+
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
 $dark-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
@@ -109,6 +111,14 @@ body {
     scrollbar-width: none;
 }
 
+/* ----------------------------- DASHBOARD PAGES ---------------------------- */
+%dashboard-page {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    overflow: hidden;
+}
 
 /* -------------------------------- SNACKBAR -------------------------------- */
 %snackbar {
@@ -133,4 +143,12 @@ body {
 .snackbar-info {
     @extend %snackbar;
     background: $info-gradient;
+}
+
+/* ---------------------------------- DIALOG --------------------------------- */
+
+mat-dialog-container {
+    background: $light-gradient !important;
+    color: white !important;
+    border-radius: 12px !important;
 }

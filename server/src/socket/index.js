@@ -10,8 +10,9 @@ const init = () => {
         connection(socket);
         disconnection(socket);
         role(socket);
-        status(socket);
         action(socket);
+        window(socket);
+        hitboxes(socket);
     });
 };
 
@@ -44,17 +45,6 @@ const role = (socket) => {
     });
 };
 
-// Client status update
-const status = (socket) => {
-    socket.on("status", (status) => {
-        console.log("[-] User " + socket.id + " new status " + status);
-        Users.user(socket.id).status = status;
-
-        // Send updated fool list
-        Socket.update.fools();
-    });
-};
-
 // Client interaction
 const action = (socket) => {
     socket.on("action", (data) => {
@@ -62,6 +52,24 @@ const action = (socket) => {
         Socket.update.action(data);
     });
 };
+
+// Client window change
+const window = (socket) => {
+    socket.on("window", (data) => {
+        console.log("[-] Window changed from " + socket.id + " to width: " + data.width + ", height: " + data.height);
+        Users.user(socket.id).data.window = data;
+
+        // Send updated fool list
+        Socket.update.fools();
+    });
+}
+
+const hitboxes = (socket) => {
+    socket.on("hitboxes", (data) => {
+        console.log("[-] Hitboxes set recieved from " + socket.id + " to " + data.target.id);
+        Socket.update.hitboxes(data);
+    });
+}
 
 const SocketRoutes = { init };
 

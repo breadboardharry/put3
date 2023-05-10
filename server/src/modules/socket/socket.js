@@ -22,6 +22,9 @@ const update = {
     },
     action: (data) => {
         io.emit('action', data);
+    },
+    hitboxes: (data) => {
+        io.emit('hitboxes', data);
     }
 }
 
