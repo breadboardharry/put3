@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Fool } from 'src/app/classes/fool';
 import { ResourceType } from 'src/app/enums/resources/type';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
@@ -11,8 +12,8 @@ import { FileData } from 'src/app/types/resources/file-data';
 })
 export class SoundboardComponent implements OnInit {
 
-  @Input() fools: any[] = [];
-  @Input() target!: any;
+  @Input() fools: Fool[] = [];
+  @Input() target!: Fool | undefined;
   @Input() disabled: boolean = false;
   volume: number = 50;
 
@@ -26,13 +27,13 @@ export class SoundboardComponent implements OnInit {
         })
     }
 
-  stopAll() {
-    this.websocket.socket.emit('action', {
-      target: this.target,
-      action: {
-        type: 'audio',
-        stop: true
-      }
-    });
-  }
+    stopAll() {
+        this.websocket.socket.emit('action', {
+            target: this.target,
+            action: {
+                type: 'audio',
+                stop: true
+            }
+        });
+    }
 }

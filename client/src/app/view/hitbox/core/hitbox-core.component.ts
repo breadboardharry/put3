@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { Hitbox } from 'src/app/interfaces/hitbox';
+import { Hitbox } from 'src/app/classes/hitbox';
 import { ChildElementsDirective } from 'src/app/directives/child-elements.directive';
 import { Action } from 'src/app/interfaces/action';
 import { ComponentLocation } from 'src/app/enums/component-location';

@@ -1,28 +1,28 @@
 <div class="layout-editor">
     <div class="content" #content>
-        <div class="editor" *ngIf="isWindowDefined()" [ngStyle]="{'aspectRatio': target.data.window.ratio}" #editor>
+        <div class="editor" *ngIf="target" [ngStyle]="{'aspectRatio': target.window.ratio}" #editor>
             <!-- Hitboxes -->
             <div class="draggable-zone">
-                <app-hitbox *ngFor="let hitbox of hitboxService.hitboxes[target.id]" [hitbox]="hitbox"></app-hitbox>
+                <app-hitbox *ngFor="let hitbox of target.layout.hitboxes" [hitbox]="hitbox"></app-hitbox>
             </div>
             <!-- Background Image -->
-            <img [src]="isWallpaperDefined() ? (apiUrl + '/' + target.data.window.wallpaper.href) : defaultWallpaper" draggable="false">
+            <img [src]="(target && target.layout.desktop.image) ? (apiUrl + '/' + target.layout.desktop.image) : defaultDesktopImage" draggable="false">
         </div>
 
-        <div class="no-target" *ngIf="!isWindowDefined()">
+        <div class="no-target" *ngIf="!target">
             Select a fool
         </div>
 
         <div class="toolbar">
-            <app-button-raised (click)="addHitbox()" [disabled]="!isWindowDefined()">
+            <app-button-raised (click)="addHitbox()" [disabled]="!target">
                 Add hitbox
             </app-button-raised>
 
-            <app-button-raised (click)="changeBackground()" [disabled]="!isWindowDefined()">
+            <app-button-raised (click)="changeBackground()" [disabled]="!target">
                 Background
             </app-button-raised>
 
-            <app-button-raised (click)="sendConfig()" [disabled]="!isWindowDefined()">
+            <app-button-raised (click)="sendConfig()" [disabled]="!target">
                 Send
             </app-button-raised>
         </div>

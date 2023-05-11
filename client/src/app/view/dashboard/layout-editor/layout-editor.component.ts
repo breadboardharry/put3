@@ -6,6 +6,9 @@ import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
 import { environment } from 'src/environments/environment';
+import { Fool } from 'src/app/classes/fool';
+import { Hitbox } from 'src/app/classes/hitbox';
+import { FoolService } from 'src/app/services/fool-service/fool.service';
 
 @Component({
     selector: 'app-layout-editor',
@@ -16,19 +19,19 @@ export class LayoutEditorComponent implements OnInit {
 
     @ViewChild('content') content!: ElementRef;
     @ViewChild('editor') editor!: ElementRef;
-    @Input() fools: any[] = [];
-    @Input() target!: any;
+    @Input() fools: Fool[] = [];
+    @Input() target!: Fool | undefined;
     @Input() disabled: boolean = false;
 
     apiUrl = environment.serverUrl + environment.apiPath;
-    defaultWallpaper = environment.defaultWallpaper;
+    defaultDesktopImage = environment.defaultDesktopImage;
 
-    constructor(private dialog: MatDialog, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
+    constructor(private foolService: FoolService, private dialog: MatDialog, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
 
     ngOnInit(): void {
         // Get desktop background image
         this.desktopService.getBackground().then((image) => {
-            this.defaultWallpaper = image;
+            this.defaultDesktopImage = image;
         });
     }
 
@@ -38,27 +41,8 @@ export class LayoutEditorComponent implements OnInit {
         });
     }
 
-    isWindowDefined(): boolean {
-        return this.target && this.target.data && this.target.data.window;
-    }
-
-    isWallpaperDefined(): boolean {
-        return this.isWindowDefined() && this.target.data.window.wallpaper;
-    }
-
     addHitbox() {
-        this.hitboxService.addNew(this.target.id);
-    }
-
-    sendConfig() {
-        this.hitboxService.send(this.target);
-        this.websocket.socket.emit('action', {
-            target: this.target,
-            action: {
-                type: 'wallpaper',
-                image: this.target.data.window.wallpaper
-            }
-        });
+        this.target!.layout.hitboxes.push(new Hitbox());
     }
 
     changeBackground() {
@@ -68,9 +52,11 @@ export class LayoutEditorComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(image => {
             if (!image) return;
-
-            this.target.data.window.wallpaper = image;
-            console.log(this.target);
+            this.target!.layout.desktop.image = image.href;
         });
+    }
+
+    sendConfig() {
+        this.foolService.sendConfig(this.target!);
     }
 }

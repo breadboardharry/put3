@@ -1,4 +1,8 @@
 import fs from "fs";
+import path from "path";
+import paths from "../enums/paths.js";
+import storage from "../modules/storage/storage.js";
+import StorageUtils from "../modules/storage/utils.js";
 
 let nameIndex = 1;
 const newName = () => {
@@ -9,17 +13,45 @@ const newName = () => {
     // }
 };
 
+const getLastDesktopImage = () => {
+    let defaultImage;
+    let image;
+    const files = storage.getFileList(paths.DESKTOPS);
+
+    for (const file of files) {
+        // Get the filename
+        const filename = StorageUtils.getFilename(file);
+
+        // Skip the default image
+        if (filename === "default-desktop") {
+            defaultImage = file;
+            continue;
+        }
+
+        // Get the timestamp and check if it's the latest
+        const timestamp = parseInt(filename.split("_")[1]);
+        if (!image || timestamp > image.timestamp) image = {
+            filename: file,
+            timestamp
+        }
+    }
+
+    // Return the latest image or the default image if no image was found
+    return image ? image.filename : defaultImage;
+};
+
 const findDesktopImageName = (extensions = ["jpg", "png", "jpeg", "gif"]) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const filename = "desktop";
 
         // For each extension, check if the file exists
         for (let extension of extensions) {
             try {
-                fs.accessSync(`./public/images/${filename}.${extension}`);
+                fs.accessSync(path.join(paths.DESKTOPS, `${filename}.${extension}`));
                 resolve(`${filename}.${extension}`);
                 return;
-            } catch (err) {}
+            }
+            catch (err) {}
         }
         // No image found
         resolve(null);
@@ -30,20 +62,15 @@ const findDesktopImageName = (extensions = ["jpg", "png", "jpeg", "gif"]) => {
 // https://stackoverflow.com/questions/27886677/javascript-get-extension-from-base64-image
 const getBase64FileExtension = (base64) => {
     switch (base64.charAt(0)) {
-        case "/":
-            return "jpg";
+        case "/": return "jpg";
 
-        case "i":
-            return "png";
+        case "i": return "png";
 
-        case "R":
-            return "gif";
+        case "R": return "gif";
 
-        case "U":
-            return "webp";
+        case "U": return "webp";
 
-        default:
-            return null;
+        default: return null;
     }
 };
 
@@ -62,11 +89,12 @@ const ipv6ToIpv4 = (ipv6Address) => {
       return ipv6Address.substr(7);
     }
     return ipv6Address;
-  }
+}
 
 const Utils = {
     newName,
     findDesktopImageName,
+    getLastDesktopImage,
     getBase64FileExtension,
     isArrayOf,
     ipv6ToIpv4

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ETrigger } from 'src/app/enums/trigger';
 import { Action } from 'src/app/interfaces/action';
-import { Hitbox } from 'src/app/interfaces/hitbox';
+import { Hitbox } from 'src/app/classes/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { ResourceType } from 'src/app/enums/resources/type';

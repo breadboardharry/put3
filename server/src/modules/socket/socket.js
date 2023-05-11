@@ -25,6 +25,9 @@ const update = {
     },
     hitboxes: (data) => {
         io.emit('hitboxes', data);
+    },
+    layout: (data) => {
+        io.emit('layout', data);
     }
 }
 

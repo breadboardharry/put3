@@ -4,7 +4,8 @@ import fs from "fs";
 import path from "path";
 import upload from "../storage/multer-config.js";
 import Utils from "../utils/utils.js"
-import StorageUtils from "../modules/storage/utils.js";
+import Paths from "../enums/paths.js"
+import Response from "../enums/response.js";
 
 /* --------------------------------- ROUTES --------------------------------- */
 
@@ -15,27 +16,19 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
 
     // Upload via body
     if (req.body.image) {
-        // Get the existing file name
-        const existingFile = await Utils.findDesktopImageName();
 
-        const base64Data = req.body.image.replace(
-            /^data:image\/\w+;base64,/,
-            ""
-        );
+        const base64Data = req.body.image.replace( /^data:image\/\w+;base64,/, "");
 
         const bufferData = Buffer.from(base64Data, "base64");
         const fileExt = Utils.getBase64FileExtension(base64Data);
-        const fileName = "desktop." + fileExt;
-        const filePath = path.join("./public/images", fileName);
-
-        // Delete an already existing file with a different extension
-        if (existingFile && StorageUtils.getFileExtension(existingFile) !== fileExt)
-            fs.unlinkSync(path.join("./public/images", existingFile));
+        const now = new Date();
+        const fileName = "desktop_" + now.getTime() + "." + fileExt;
+        const filePath = path.join(Paths.DESKTOPS, fileName);
 
         // Write the file
         fs.writeFile(filePath, bufferData, (err) => {
             if (err) {
-                return res.status(500).json({ error: "Error uploading image" });
+                return res.status(500).json(Response.ERROR.FILE_UPLOAD);
             }
 
             res.status(200).json({
@@ -44,17 +37,16 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
             });
         });
     }
-    else return res.status(400).json({ error: "No file uploaded" });
+    else return res.status(400).json(Response.INVALID_PARAMS);
 });
 
 // Get the image
 router.get("/get", async (req, res) => {
     const ip = Utils.ipv6ToIpv4(req.ip);
-    console.log("IP: " + ip)
+    console.log("IP: " + ip);
 
-    const filename =
-        (await Utils.findDesktopImageName()) || "default-desktop.jpg";
-    res.sendFile(filename, { root: "./public/images" });
+    const filename = Utils.getLastDesktopImage();
+    res.sendFile(filename, { root: Paths.DESKTOPS });
 });
 
 export default router;

@@ -17,6 +17,7 @@ const init = () => {
         action(socket);
         window(socket);
         hitboxes(socket);
+        layout(socket);
     });
 };
 
@@ -72,6 +73,13 @@ const hitboxes = (socket) => {
     socket.on("hitboxes", (data) => {
         console.log("[-] Hitboxes set recieved from " + socket.id + " to " + data.target.id);
         Socket.update.hitboxes(data);
+    });
+}
+
+const layout = (socket) => {
+    socket.on("layout", (data) => {
+        console.log("[-] Layout changed for " + data.target.id + " by " + socket.id);
+        Socket.update.layout(data);
     });
 }
 

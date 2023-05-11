@@ -1,7 +1,7 @@
 import { Component, HostListener, Input, OnInit  } from '@angular/core';
-import { Size } from 'src/app/interfaces/size';
-import { Hitbox } from 'src/app/interfaces/hitbox';
-import { Position } from 'src/app/interfaces/position';
+import { Size } from 'src/app/types/size';
+import { Hitbox } from 'src/app/classes/hitbox';
+import { Position } from 'src/app/types/position';
 import { CdkDragEnd } from "@angular/cdk/drag-drop";
 import { triggers } from 'src/app/data/triggers'
 import { actions } from 'src/app/data/actions'

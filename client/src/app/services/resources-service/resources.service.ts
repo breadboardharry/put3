@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FileData } from 'src/app/types/resources/file-data';
 import { environment } from 'src/environments/environment';
 import { ResourceType } from 'src/app/enums/resources/type';
@@ -14,7 +14,8 @@ import { WebSocketService } from '../websocket-service/websocket.service';
 })
 export class ResourcesService {
 
-    private apiUrl = environment.serverUrl + environment.apiPath + '/resources';
+    private apiUrl = environment.serverUrl + environment.apiPath;
+    private routeUrl = this.apiUrl + '/resources';
     private resources: ResourceSet = {};
 
     constructor(private http: HttpClient, private websocket: WebSocketService) {
@@ -29,7 +30,6 @@ export class ResourcesService {
     public update() {
         this.getData().then((resources: ResourceSet) => {
             this.resources = resources;
-            console.log(this.resources);
         });
     }
 
@@ -77,7 +77,7 @@ export class ResourcesService {
      */
     public getData(): Promise<ResourceSet> {
         return new Promise<ResourceSet>((resolve, reject) => {
-            this.http.get<ResourceSet>(this.apiUrl, {
+            this.http.get<ResourceSet>(this.routeUrl, {
                 responseType: 'json'
             }).subscribe((data: ResourceSet) => {
                 resolve(data);
@@ -91,7 +91,7 @@ export class ResourcesService {
      * @returns {Promise<FileData[]>} Resources
      */
     public getDataByType(type: ResourceType): Promise<FileData[]> {
-        const endpoint = this.apiUrl + '/' + this.typeToDir(type);
+        const endpoint = this.routeUrl + '/' + this.typeToDir(type);
 
         return new Promise<FileData[]>((resolve, reject) => {
             this.http.get<FileData[]>(endpoint, {
@@ -130,11 +130,23 @@ export class ResourcesService {
      */
     public delete(filespath: string[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.http.delete(this.apiUrl, {
+            this.http.delete(this.routeUrl, {
                 responseType: 'json',
                 body: filespath
             })
             .subscribe((data: any) => resolve(data));
+        });
+    }
+
+    public exists(file: FileData | string): Promise<boolean> {
+        return new Promise<boolean>((resolve, reject) => {
+            let path = typeof file === 'string' ? file : file.href;
+            this.http.get(this.apiUrl + '/' + path, {
+                responseType: 'blob'
+            }).subscribe({
+                next: () => resolve(true),
+                error: () =>  resolve(false)
+            });
         });
     }
 
@@ -146,7 +158,7 @@ export class ResourcesService {
      */
     public rename(currentName: string, newName: string, dirpath: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.http.post(this.apiUrl + '/rename', {
+            this.http.post(this.routeUrl + '/rename', {
                 currentName,
                 newName,
                 dirpath
@@ -168,7 +180,7 @@ export class ResourcesService {
             formData.append('file', arr[0][i]);
         })
 
-        return this.http.post(this.apiUrl + '/upload', formData, {
+        return this.http.post(this.routeUrl + '/upload', formData, {
             reportProgress: true,
             observe: 'events'
         }).pipe(

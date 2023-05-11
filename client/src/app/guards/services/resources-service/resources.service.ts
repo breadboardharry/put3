@@ -29,7 +29,6 @@ export class ResourcesService {
     public update() {
         this.getData().then((resources: ResourceSet) => {
             this.resources = resources;
-            console.log(this.resources);
         });
     }
 
