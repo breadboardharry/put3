@@ -51,32 +51,19 @@ export class FoolHomePageComponent implements OnInit {
         this.setDesktopImage();
     }
 
-    async setDesktopImage() {
+    setDesktopImage() {
         // Check in cookies if there a previous desktop image is set
         const prevDesktop: any = this.preferences.getDesktop();
 
         if (prevDesktop) {
             // Check if the image still exists
-            const imageExists = await this.resourceService.exists(prevDesktop.image);
-            if (imageExists) this.layout.desktop.image = prevDesktop.image;
+            this.resourceService.exists(prevDesktop.image).then((exists: boolean) => {
+                if (exists) {
+                    this.layout.desktop.image = prevDesktop.image;
+                    this.websocket.socket.emit('desktop', this.layout.desktop);
+                }
+            });
         }
-    }
-
-    @HostListener('contextmenu', ['$event'])
-    onRightClick(event: any) {
-        event.preventDefault();
-    }
-
-    timeout: NodeJS.Timeout | undefined;
-    @HostListener('window:resize', ['$event'])
-    onResize(event: any) {
-        // Send window size to server
-        if (this.timeout) clearTimeout(this.timeout);
-
-        this.timeout = setTimeout(() => {
-            this.websocket.socket.emit('window', this.windowService.getWindowSize());
-        }, 500);
-
     }
 
     action(data: any) {
@@ -94,5 +81,22 @@ export class FoolHomePageComponent implements OnInit {
                 console.log({data});
                 break;
         }
+    }
+
+    @HostListener('contextmenu', ['$event'])
+    onRightClick(event: any) {
+        event.preventDefault();
+    }
+
+    private timeout: NodeJS.Timeout | undefined;
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any) {
+        // Send window size to server
+        if (this.timeout) clearTimeout(this.timeout);
+
+        this.timeout = setTimeout(() => {
+            this.websocket.socket.emit('window', this.windowService.getWindowSize());
+        }, 500);
+
     }
 }

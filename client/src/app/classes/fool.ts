@@ -17,5 +17,6 @@ export class Fool {
         this.id = fool.id;
         this.name = fool.name;
         this.window = fool.data.window;
+        if ('desktop' in fool.data) this.layout.desktop = fool.data.desktop;
     }
 }

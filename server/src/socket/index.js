@@ -16,7 +16,7 @@ const init = () => {
         role(socket);
         action(socket);
         window(socket);
-        hitboxes(socket);
+        desktop(socket);
         layout(socket);
     });
 };
@@ -67,21 +67,31 @@ const window = (socket) => {
         // Send updated fool list
         Socket.update.fools();
     });
-}
+};
 
-const hitboxes = (socket) => {
-    socket.on("hitboxes", (data) => {
-        console.log("[-] Hitboxes set recieved from " + socket.id + " to " + data.target.id);
-        Socket.update.hitboxes(data);
+// Fool desktop retrieved from cookies
+const desktop = (socket) => {
+    socket.on("desktop", (data) => {
+        console.log("[-] Desktop retrived from cookies by " + socket.id);
+        Users.user(socket.id).data.desktop = data;
+
+        // Send updated fool list
+        Socket.update.fools();
     });
-}
+};
 
 const layout = (socket) => {
     socket.on("layout", (data) => {
         console.log("[-] Layout changed for " + data.target.id + " by " + socket.id);
         Socket.update.layout(data);
+
+        // Update user desktop
+        Users.user(data.target.id).data.desktop = data.layout.desktop;
+
+        // Send updated fool list
+        Socket.update.fools();
     });
-}
+};
 
 const SocketRoutes = { init };
 
