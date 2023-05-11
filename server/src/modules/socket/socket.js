@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import Users from "../users/users.js";
+import Resources from "../resources/resources.js";
 
 let io;
 
@@ -15,7 +16,7 @@ const createServer = (httpServer, options) => {
 
 const update = {
     resources: () => {
-        io.emit('event', { type: 'resources' });
+        io.emit('event', { type: 'resources', resources: Resources.getData()});
     },
     fools: () => {
         io.emit('foolList', Users.getFools());

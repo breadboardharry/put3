@@ -23,7 +23,7 @@ export class ResourcesService {
 
         this.websocket.socket.on('event', (data: any) => {
             if (data.type != 'resources') return;
-            this.update();
+            this.resources = data.resources;
         });
     }
 
