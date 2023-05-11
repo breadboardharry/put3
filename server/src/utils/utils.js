@@ -16,7 +16,7 @@ const findDesktopImageName = (extensions = ["jpg", "png", "jpeg", "gif"]) => {
         // For each extension, check if the file exists
         for (let extension of extensions) {
             try {
-                fs.accessSync(`./public/assets/${filename}.${extension}`);
+                fs.accessSync(`./public/images/${filename}.${extension}`);
                 resolve(`${filename}.${extension}`);
                 return;
             } catch (err) {}
@@ -57,11 +57,19 @@ const isArrayOf = (type, array, notNull = false) => {
     return true;
 };
 
+const ipv6ToIpv4 = (ipv6Address) => {
+    if (ipv6Address.startsWith("::ffff:")) {
+      return ipv6Address.substr(7);
+    }
+    return ipv6Address;
+  }
+
 const Utils = {
     newName,
     findDesktopImageName,
     getBase64FileExtension,
-    isArrayOf
+    isArrayOf,
+    ipv6ToIpv4
 };
 
 export default Utils;

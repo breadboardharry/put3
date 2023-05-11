@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Script } from 'src/app/enums/assets/scrips';
+import { AssetsService } from 'src/app/services/assets-service/assets.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
@@ -10,8 +12,9 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 export class HomePageComponent implements OnInit {
 
   hover: 'master' | 'fool' | null = null;
+  scripts = Script;
 
-  constructor(private router: Router, private websocket: WebSocketService) { }
+  constructor(public assetsService: AssetsService, private router: Router, private websocket: WebSocketService) { }
 
   ngOnInit(): void {
   }

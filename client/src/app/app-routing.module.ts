@@ -8,7 +8,7 @@ import { AccessGuard } from './guards/access.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomePageComponent, canActivate: [AccessGuard], data: { animation: 'Home' } },
+  { path: 'home', component: HomePageComponent, data: { animation: 'Home' } },
   { path: 'master', component: MasterDashboardPageComponent, canActivate: [AccessGuard], data: { animation: 'Master' } },
   { path: 'fool', component: FoolHomePageComponent, data: { animation: 'Fool' } },
   { path: 'control', component: CodelockPageComponent, data: { animation: 'Control' } }

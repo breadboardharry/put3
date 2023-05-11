@@ -33,10 +33,6 @@ export class ResourcesService {
         });
     }
 
-    public removeFileExtension(filename: string) {
-        return filename.split('.').slice(0, -1).join('.');
-    }
-
     public typeToDir(type: ResourceType): ResourceDirectory {
         switch (type) {
             case ResourceType.Image:
@@ -155,9 +151,7 @@ export class ResourcesService {
                 newName,
                 dirpath
             },
-            {
-                responseType: 'json',
-            })
+            { responseType: 'json' })
             .subscribe({
                 next: (data: any) => resolve(data),
                 error: (error: any) => reject(error)

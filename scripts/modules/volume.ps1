@@ -1,3 +1,11 @@
+param(
+    [bool]$loop = $true
+)
+
+# ---------------------------------------------------------------------------- #
+
+Write-Output "[*] Turn the volume up"
+
 # Function from https://stackoverflow.com/questions/21355891/change-audio-level-from-powershell
 Add-Type -TypeDefinition @'
    using System.Runtime.InteropServices;
@@ -50,10 +58,11 @@ Add-Type -TypeDefinition @'
 }
 '@
 
-while($true) {
+# Loop forever if $loop is true
+do {
     # Disable mute
     [audio]::Mute = $false
     # Sets volume to 100%
     [audio]::Volume = 1
     Start-Sleep -Seconds 5
-}
+} while($loop)
