@@ -14,17 +14,20 @@
         </div>
 
         <div class="toolbar">
-            <app-button-raised (click)="addHitbox()" [disabled]="!target">
-                Add hitbox
-            </app-button-raised>
+            <div class="upper buttons">
+                <app-button-raised (click)="addHitbox()" [disabled]="!target">
+                    Add hitbox
+                </app-button-raised>
 
-            <app-button-raised (click)="changeBackground()" [disabled]="!target">
-                Background
-            </app-button-raised>
-
-            <app-button-raised (click)="sendConfig()" [disabled]="!target">
-                Send
-            </app-button-raised>
+                <app-button-raised (click)="changeBackground()" [disabled]="!target">
+                    Background
+                </app-button-raised>
+            </div>
+            <div class="lower buttons">
+                <app-button-raised (click)="sendConfig()" [disabled]="!target">
+                    Send
+                </app-button-raised>
+            </div>
         </div>
     </div>
 </div>

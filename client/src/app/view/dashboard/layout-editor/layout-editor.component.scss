@@ -56,16 +56,20 @@
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: calc(1rem - 4px);
 
     padding: 0 4px 100px 0;
+}
 
-    overflow-y: scroll;
-    @extend %hidden-scrollbar;
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: calc(1rem - 4px);
+}
 
-    app-button-raised {
-        margin-bottom: 4px;
-    }
+app-button-raised {
+    margin-bottom: 4px;
 }
 
 img {

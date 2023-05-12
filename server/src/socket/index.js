@@ -15,7 +15,7 @@ const init = () => {
         disconnection(socket);
         role(socket);
         action(socket);
-        window(socket);
+        infos(socket);
         desktop(socket);
         layout(socket);
     });
@@ -59,11 +59,10 @@ const action = (socket) => {
 };
 
 // Client window change
-const window = (socket) => {
-    socket.on("window", (data) => {
-        console.log("[-] Window changed from " + socket.id + " to width: " + data.width + ", height: " + data.height);
-        Users.user(socket.id).data.window = data;
-
+const infos = (socket) => {
+    socket.on("infos", (data) => {
+        console.log("[-] Infos changed for " + socket.id);
+        Users.user(socket.id).infos = {...Users.user(socket.id).infos, ...data};
         // Send updated fool list
         Socket.update.fools();
     });
@@ -74,7 +73,6 @@ const desktop = (socket) => {
     socket.on("desktop", (data) => {
         console.log("[-] Desktop retrived from cookies by " + socket.id);
         Users.user(socket.id).data.desktop = data;
-
         // Send updated fool list
         Socket.update.fools();
     });

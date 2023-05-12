@@ -13,9 +13,11 @@ export class BrowserService {
      * @returns {Browser} Browser
      * @see https://www.positronx.io/angular-detect-browser-name-and-version-tutorial-example/
      */
-    public get get(): Browser {
-        const agent = window.navigator.userAgent.toLowerCase()
+    public get(): Browser {
+        const agent = window.navigator.userAgent.toLowerCase();
+
         switch (true) {
+            case agent.indexOf('edg') > -1:
             case agent.indexOf('edge') > -1: return Browser.Edge;
 
             case agent.indexOf('opr') > -1 && !!(<any>window).opr: return Browser.Opera;
@@ -37,9 +39,19 @@ export class BrowserService {
      * @returns {string} Browser icon
      */
     public get icon(): string {
-        const browser = this.get, dir = "assets/icons/browsers/";
+        const browser = this.get();
+        return this.toIcon(browser);
+    }
 
-        if (browser === Browser.Other || browser === Browser.IE) return '';
+    /**
+     * Returns the icon of a browser passed in parameter
+     * @param {Browser} browser Browser
+     * @returns {string} Browser icon
+     */
+    public toIcon(browser: Browser): string {
+        const dir = "assets/icons/browsers/";
+
+        if (!browser || browser === Browser.Other || browser === Browser.IE) return '';
         return dir + browser + '.png';
     }
 }

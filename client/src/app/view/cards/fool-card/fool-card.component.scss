@@ -1,68 +1,108 @@
 $width: 210px;
 $border-radius: 14px;
-$border-width: 6px;
-$border-gradient: linear-gradient(145deg, rgb(99, 99, 124), rgb(77, 77, 103));
-$background-gradient: rgb(16, 16, 65);
+$border-width: 7px;
+$border-color: rgb(59, 46, 109);
+$background: rgb(31, 31, 97);
 
 .card {
-  width: $width;
-  padding: $border-width;
+    position: relative;
+    width: $width;
+    padding: $border-width;
 
-  border: 0;
-  border-radius: $border-radius;
-  box-sizing: border-box;
+    border: 0;
+    border-radius: $border-radius;
+    box-sizing: border-box;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  background: $background-gradient;
+    background: $background;
 
-  &.selected {
-    background: $border-gradient;
-  }
+    filter: brightness(0.80);
 
-  color: white;
+    &.selected {
+        filter: brightness(1);
+    }
 
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  cursor: pointer;
-  transition: all .15s,
-  color 50ms;
+    .card:hover {
+        filter: brightness(0.94);
+    }
+
+    color: white;
+
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    cursor: pointer;
+    transition: all .15s,
+    color 50ms;
 }
 
-.card .labels {
-  background: $background-gradient;
-  padding: 24px 24px;
-  border-radius: $border-radius - $border-width;
-  width: 100%;
-  height: 100%;
-  transition: .2s;
+.label {
+    padding: 24px 24px;
+    border-radius: $border-radius - $border-width;
+    width: 100%;
+    height: 100%;
+    transition: .2s;
 }
 
-.card:hover .labels {
-  background: rgb(10, 10, 60);
-}
-
-.labels {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
+.label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
 }
 
 .fool-name {
-  @extend %fool-label;
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: 0.15rem;
+    @extend %fool-label;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.15rem;
+}
+
+.selection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    box-sizing: border-box;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+}
+
+.shadow {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 110%;
+    height: 120%;
+    z-index: 10;
+    box-shadow: inset -5px -5px 10px 0px #10104166,
+                inset -5px -5px 20px 0px #101041AA,
+                inset -5px -5px 50px 0px #101041;
+}
+
+.browser {
+    position: absolute;
+    z-index: 1;
+    bottom: -40px;
+    right: -30px;
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 %fool-label {
-  color: inherit;
-  font-family: Roboto, "Helvetica Neue";
-  line-height: 1em;
-  text-decoration: none;
-  white-space: nowrap;
-  letter-spacing: 0.08rem;
+    color: inherit;
+    font-family: Roboto, "Helvetica Neue";
+    line-height: 1em;
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: 0.08rem;
 }

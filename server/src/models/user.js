@@ -5,6 +5,7 @@ export default class User {
   name = undefined;
   role = undefined;
   data = {};
+  infos = {};
 
   constructor(id) {
     this.id = id;

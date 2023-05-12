@@ -29,7 +29,9 @@ export class MasterDashboardPageComponent implements OnInit {
         }
 
         this.websocket.socket.on('foolList', (list: any) => {
+            console.log(list);
             this.fools = list.map((fool: any) => new Fool(fool));
+            console.log(this.fools);
             this.updateTarget();
         });
     }

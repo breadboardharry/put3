@@ -1,6 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CursorService } from 'src/app/services/cursor-service/cursor.service';
-import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
@@ -10,6 +9,7 @@ import { PreferencesService } from 'src/app/services/preferences-service/prefere
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { Layout } from 'src/app/types/layout';
 import { LayoutService } from 'src/app/services/layout-service/layout.service';
+import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -27,7 +27,7 @@ export class FoolHomePageComponent implements OnInit {
     };
     defaultDesktopImage = environment.defaultDesktopImage;
 
-    constructor(private layoutService: LayoutService, private resourceService: ResourcesService, private preferences: PreferencesService, private windowService: WindowService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService, private desktopService: DesktopService ) {}
+    constructor(private browser: BrowserService, private layoutService: LayoutService, private resourceService: ResourcesService, private preferences: PreferencesService, private windowService: WindowService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService, private desktopService: DesktopService ) {}
 
     ngOnInit(): void {
         // Update role if needed
@@ -36,8 +36,11 @@ export class FoolHomePageComponent implements OnInit {
             this.websocket.socket.emit('role', 'fool');
         }
 
-        // Send window size to server
-        this.websocket.socket.emit('window', this.windowService.getWindowSize());
+        // Send window size and browser infos
+        this.websocket.socket.emit('infos', {
+            browser: this.browser.get(),
+            window: this.windowService.getWindowSize()
+        });
 
         this.websocket.socket.on('action', (data: any) => {
             this.action(data);
@@ -95,8 +98,9 @@ export class FoolHomePageComponent implements OnInit {
         if (this.timeout) clearTimeout(this.timeout);
 
         this.timeout = setTimeout(() => {
-            this.websocket.socket.emit('window', this.windowService.getWindowSize());
+            this.websocket.socket.emit('infos', {
+                window: this.windowService.getWindowSize()
+            });
         }, 500);
-
     }
 }
