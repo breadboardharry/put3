@@ -9,6 +9,17 @@ export class PreferencesService {
 
     constructor(private cookie: CookieService) {}
 
+    public get() {
+        console.log({
+            desktop: this.getDesktop(),
+            name: this.getName()
+        });
+        return {
+            desktop: this.getDesktop(),
+            name: this.getName()
+        };
+    }
+
     /**
      * Set the fool desktop preferences
      * @param preferences Desktop preferences
@@ -24,5 +35,22 @@ export class PreferencesService {
     public getDesktop (): DesktopPreference | null {
         const desktop = this.cookie.get('desktop');
         return desktop ? JSON.parse(desktop) : null;
+    }
+
+    /**
+     * Set name
+     * @param name Name
+     */
+    public setName (name: string): void {
+        this.cookie.set('name', JSON.stringify(name));
+    }
+
+    /**
+     * Get name
+     * @returns Name or null
+     */
+    public getName (): string | null {
+        const name = this.cookie.get('name');
+        return name ? JSON.parse(name) : null;
     }
 }

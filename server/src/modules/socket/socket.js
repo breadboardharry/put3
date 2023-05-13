@@ -24,11 +24,11 @@ const update = {
     action: (data) => {
         io.emit('action', data);
     },
-    hitboxes: (data) => {
-        io.emit('hitboxes', data);
-    },
     layout: (data) => {
         io.emit('layout', data);
+    },
+    name: (data) => {
+        io.emit('name', data);
     }
 }
 

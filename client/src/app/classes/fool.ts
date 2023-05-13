@@ -15,11 +15,12 @@ export class Fool {
         hitboxes: []
     }
 
-    constructor(fool: {id: string, name: string, data: any, infos: any}) {
+    constructor(fool: {id: string, name: string, desktop: any, infos: any}) {
+        console.log(fool);
         this.id = fool.id;
         this.name = fool.name;
         this.window = fool.infos.window;
         this.browser = fool.infos.browser;
-        if ('desktop' in fool.data) this.layout.desktop = fool.data.desktop;
+        if (fool.desktop) this.layout.desktop = fool.desktop;
     }
 }

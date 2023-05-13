@@ -10,7 +10,10 @@
                     *ngFor="let fool of fools"
                     [selected]="target && fool.id == target.id"
                     [fool]="fool"
-                    (click)="selectTarget(fool)"
+                    (click)="clickFool(fool)"
+                    (contextmenu)="rightClickFool(fool, $event)"
+                    [rename]="renaming == fool"
+                    (editedEvent)="renameFool($event, fool)"
                 >
                 </app-fool-card>
                 <p class="no-fool" *ngIf="!fools.length">
@@ -40,3 +43,8 @@
         </div>
     </div>
 </div>
+<app-context-menu *ngIf="contextMenu.show"
+    [ngStyle]="contextMenu.style"
+    [items]="contextMenu.items"
+    (itemClick)="handleContextMenu($event)">
+</app-context-menu>

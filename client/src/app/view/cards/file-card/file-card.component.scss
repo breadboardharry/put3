@@ -31,12 +31,7 @@
     line-height: 1.35;
     font-size: 14px;
 
-    background-color: transparent;
-    border: none;
-    outline: none;
-
-    margin: 0;
-    padding: 0;
+    @extend %reset-style;
 
     display: -webkit-box;
     -webkit-box-orient: vertical;
