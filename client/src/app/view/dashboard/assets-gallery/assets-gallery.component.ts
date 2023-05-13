@@ -7,16 +7,8 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
-import { ContextMenuItem } from 'src/app/types/context-menu-item';
+import { ContextMenu } from 'src/app/types/context-menu';
 import { FileData } from 'src/app/types/resources/file-data';
-
-type ContextMenu = {
-    show: boolean;
-    x: number;
-    y: number;
-    style: any;
-    items: ContextMenuItem[];
-}
 
 @Component({
     selector: 'app-assets-gallery',

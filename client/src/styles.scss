@@ -111,6 +111,15 @@ body {
     scrollbar-width: none;
 }
 
+%reset-style {
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+    margin: 0;
+    padding: 0;
+}
+
 /* ----------------------------- DASHBOARD PAGES ---------------------------- */
 %dashboard-page {
     width: 100%;

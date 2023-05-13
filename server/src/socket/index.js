@@ -16,8 +16,8 @@ const init = () => {
         role(socket);
         action(socket);
         infos(socket);
-        desktop(socket);
         layout(socket);
+        rename(socket);
     });
 };
 
@@ -39,18 +39,24 @@ const disconnection = (socket) => {
     });
 };
 
-// Client role attribution
+/**
+ * Client select role
+ */
 const role = (socket) => {
-    socket.on("role", (role) => {
-        console.log("[-] User " + socket.id + " selected role " + role);
-        Users.user(socket.id).newRole(role);
+    socket.on("role", (data) => {
+        //console.log(data);
+
+        console.log("[-] User " + socket.id + " selected role " + data.role);
+        Users.user(socket.id).setRole(data.role, data.preferences);
 
         // Send updated fool list
         Socket.update.fools();
     });
 };
 
-// Client interaction
+/**
+ * Master send action to fool
+ */
 const action = (socket) => {
     socket.on("action", (data) => {
         console.log("[-] Action from " + socket.id + " to " + data.target.id);
@@ -58,7 +64,9 @@ const action = (socket) => {
     });
 };
 
-// Client window change
+/**
+ * Fool window infos changed
+ */
 const infos = (socket) => {
     socket.on("infos", (data) => {
         console.log("[-] Infos changed for " + socket.id);
@@ -68,23 +76,39 @@ const infos = (socket) => {
     });
 };
 
-// Fool desktop retrieved from cookies
-const desktop = (socket) => {
-    socket.on("desktop", (data) => {
-        console.log("[-] Desktop retrived from cookies by " + socket.id);
-        Users.user(socket.id).data.desktop = data;
-        // Send updated fool list
-        Socket.update.fools();
-    });
-};
-
+/**
+ * Master change fool layout
+ */
 const layout = (socket) => {
     socket.on("layout", (data) => {
         console.log("[-] Layout changed for " + data.target.id + " by " + socket.id);
         Socket.update.layout(data);
 
         // Update user desktop
-        Users.user(data.target.id).data.desktop = data.layout.desktop;
+        Users.user(data.target.id).desktop = data.layout.desktop;
+
+        // Send updated fool list
+        Socket.update.fools();
+    });
+};
+
+/**
+ * Master rename fool
+ */
+const rename = (socket) => {
+    socket.on("rename", (data) => {
+        console.log(data);
+
+        if (!Users.exists(data.target.id)) {
+            console.log("[!] User " + data.target.id + " doesn't exist");
+            return;
+        };
+
+        console.log("[-] Rename " + data.target.name + " (" + data.target.id + ") to " + data.name);
+        // Update name
+        Users.user(data.target.id).name = data.name;
+
+        Socket.update.name(data);
 
         // Send updated fool list
         Socket.update.fools();

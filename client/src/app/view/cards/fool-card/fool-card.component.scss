@@ -1,4 +1,7 @@
+@import "~src/styles.scss";
+
 $width: 210px;
+$height: 90px;
 $border-radius: 14px;
 $border-width: 7px;
 $border-color: rgb(59, 46, 109);
@@ -7,9 +10,9 @@ $background: rgb(31, 31, 97);
 .card {
     position: relative;
     width: $width;
+    height: $height;
     padding: $border-width;
 
-    border: 0;
     border-radius: $border-radius;
     box-sizing: border-box;
 
@@ -25,11 +28,9 @@ $background: rgb(31, 31, 97);
         filter: brightness(1);
     }
 
-    .card:hover {
+    &:hover {
         filter: brightness(0.94);
     }
-
-    color: white;
 
     overflow: hidden;
     user-select: none;
@@ -40,26 +41,39 @@ $background: rgb(31, 31, 97);
     color 50ms;
 }
 
-.label {
-    padding: 24px 24px;
-    border-radius: $border-radius - $border-width;
+.name {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    transition: .2s;
-}
+    z-index: 1000;
 
-.label {
     display: flex;
     flex-direction: row;
     align-items: center;
+    align-items: center;
     gap: .5rem;
-}
 
-.fool-name {
-    @extend %fool-label;
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: 0.15rem;
+    padding: 0 24px;
+
+    .name-input {
+        @extend %fool-label;
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.15rem;
+
+        @extend %reset-style;
+
+        &.editing {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            cursor: default;
+        }
+
+        &:not(.editing) {
+            pointer-events: none;
+        }
+    }
 }
 
 .selection {

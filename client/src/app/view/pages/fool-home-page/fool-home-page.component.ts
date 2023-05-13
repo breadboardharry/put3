@@ -10,6 +10,7 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 import { Layout } from 'src/app/types/layout';
 import { LayoutService } from 'src/app/services/layout-service/layout.service';
 import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
+import { Role } from 'src/app/enums/role';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -31,15 +32,12 @@ export class FoolHomePageComponent implements OnInit {
 
     ngOnInit(): void {
         // Update role if needed
-        if (this.websocket.role !== 'fool') {
-            this.websocket.role = 'fool';
-            this.websocket.socket.emit('role', 'fool');
-        }
+        this.websocket.declare(Role.Fool, this.preferences.get());
 
         // Send window size and browser infos
         this.websocket.socket.emit('infos', {
             browser: this.browser.get(),
-            window: this.windowService.getWindowSize()
+            window: this.windowService.getWindowSize(),
         });
 
         this.websocket.socket.on('action', (data: any) => {
@@ -50,6 +48,19 @@ export class FoolHomePageComponent implements OnInit {
             if (data.target.id !== this.websocket.id) return;
             this.layout = this.layoutService.newFoolLayout(data.layout);
         });
+
+        this.websocket.socket.on('name', (data: any) => {
+            console.log(data);
+            if (data.target.id !== this.websocket.id) return;
+            console.log("data");
+
+            this.preferences.setName(data.name);
+        });
+
+        // if (this.preferences.getName()) {
+        //     this.websocket.socket.emit('rename', this.preferences.getName());
+        // }
+
 
         this.setDesktopImage();
     }

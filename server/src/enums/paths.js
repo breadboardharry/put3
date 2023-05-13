@@ -1,9 +1,6 @@
-const RESOURCES = "./public/resources";
-const DESKTOPS = "./public/resources/images/.desktop";
-
 const Paths = {
-    RESOURCES,
-    DESKTOPS
+    RESOURCES: "./public/resources",
+    DESKTOPS: "./public/resources/images/.desktop"
 };
 
 export default Paths;
