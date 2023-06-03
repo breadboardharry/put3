@@ -84,6 +84,12 @@
               "browserTarget": "put3:build:development"
             }
           },
+          "options": {
+            "browserTarget": "app:build",
+            "ssl": true,
+            "sslKey": "../ssl/server.key",
+            "sslCert": "../ssl/server.crt"
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
