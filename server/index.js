@@ -1,6 +1,7 @@
 import express from 'express';
-import http from 'http';
+import https from 'https';
 import bodyParser from 'body-parser';
+import fs from 'fs';
 import cors from 'cors';
 import Routes from './src/routes/index.js';
 import Socket from './src/modules/socket/socket.js';
@@ -10,6 +11,11 @@ dotenv.config();
 
 // Constants and options
 const PORT = process.env.PORT || 3000;
+// Server options
+const serverOptions = {
+    key: fs.readFileSync(process.env.SSL_KEY),
+    cert: fs.readFileSync(process.env.SSL_CERT),
+}
 // Cors options - allow requests from any origin
 const corsOptions = {
   origin: '*',
@@ -24,7 +30,7 @@ const socketOptions = {
 const app = express();
 
 /* -------------------------------------------------------------------------- */
-/*                                 HTTP SERVER                                */
+/*                                HTTPS SERVER                                */
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------ Configuration ----------------------------- */
@@ -36,7 +42,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 /* ----------------------------------- Setup --------------------------------- */
 // Create server
-const server = http.createServer(app);
+const server = https.createServer(serverOptions, app);
 
 // Setup routes
 app.use('/', Routes);
