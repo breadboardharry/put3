@@ -1,4 +1,4 @@
 <div class="hitboxes overwrite-cursor" *ngIf="layout">
   <app-hitbox *ngFor="let hitbox of layout.hitboxes" [hitbox]="hitbox"></app-hitbox>
 </div>
-<app-desktop [backgroundImage]="layout.desktop.image ? (apiUrl + '/' + layout.desktop.image) : defaultDesktopImage"></app-desktop>
+<app-desktop [backgroundImage]="apiUrl + '/' + (layout.desktop.image ? layout.desktop.image : defaultDesktopImage)"></app-desktop>

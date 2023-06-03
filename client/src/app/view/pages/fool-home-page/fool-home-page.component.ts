@@ -61,22 +61,21 @@ export class FoolHomePageComponent implements OnInit {
         //     this.websocket.socket.emit('rename', this.preferences.getName());
         // }
 
-
         this.setDesktopImage();
     }
 
-    setDesktopImage() {
+    async setDesktopImage() {
         // Check in cookies if there a previous desktop image is set
         const prevDesktop: any = this.preferences.getDesktop();
 
         if (prevDesktop) {
             // Check if the image still exists
-            this.resourceService.exists(prevDesktop.image).then((exists: boolean) => {
-                if (exists) {
-                    this.layout.desktop.image = prevDesktop.image;
-                    this.websocket.socket.emit('desktop', this.layout.desktop);
-                }
-            });
+            const exists = await this.resourceService.exists(prevDesktop.image)
+            if (exists) {
+                this.layout.desktop.image = prevDesktop.image;
+                this.websocket.socket.emit('desktop', this.layout.desktop);
+                return;
+            }
         }
     }
 

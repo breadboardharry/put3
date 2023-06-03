@@ -5,5 +5,5 @@ export const environment = {
   serverUrl: backendUrl,
   apiPath: '/api',
   socketPath: '/socket',
-  defaultDesktopImage: 'assets/images/default-desktop-background.jpg'
+  defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg'
 };

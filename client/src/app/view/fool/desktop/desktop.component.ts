@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ChildElementsDirective } from 'src/app/directives/child-elements.directive';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-desktop',
@@ -9,7 +10,7 @@ import { DesktopService } from 'src/app/services/desktop-service/desktop.service
 })
 export class DesktopComponent implements OnInit {
   // Background image set default
-  @Input() backgroundImage: string = 'assets/images/default-desktop-background.jpg';
+  @Input() backgroundImage: string = environment.defaultDesktopImage;
   @ViewChild(ChildElementsDirective, { static: true }) childElements!: ChildElementsDirective;
   childElementsContainerRef!: ViewContainerRef;
 
