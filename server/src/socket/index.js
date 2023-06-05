@@ -44,8 +44,6 @@ const disconnection = (socket) => {
  */
 const role = (socket) => {
     socket.on("role", (data) => {
-        //console.log(data);
-
         console.log("[-] User " + socket.id + " selected role " + data.role);
         Users.user(socket.id).setRole(data.role, data.preferences);
 
@@ -97,8 +95,6 @@ const layout = (socket) => {
  */
 const rename = (socket) => {
     socket.on("rename", (data) => {
-        console.log(data);
-
         if (!Users.exists(data.target.id)) {
             console.log("[!] User " + data.target.id + " doesn't exist");
             return;

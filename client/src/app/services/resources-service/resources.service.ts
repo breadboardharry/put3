@@ -78,7 +78,8 @@ export class ResourcesService {
     public getData(): Promise<ResourceSet> {
         return new Promise<ResourceSet>((resolve, reject) => {
             this.http.get<ResourceSet>(this.routeUrl, {
-                responseType: 'json'
+                responseType: 'json',
+                withCredentials: true
             }).subscribe((data: ResourceSet) => {
                 resolve(data);
             });
@@ -95,7 +96,8 @@ export class ResourcesService {
 
         return new Promise<FileData[]>((resolve, reject) => {
             this.http.get<FileData[]>(endpoint, {
-                responseType: 'json'
+                responseType: 'json',
+                withCredentials: true
             }).subscribe((data: FileData[]) => {
                 resolve(data);
             });
@@ -132,7 +134,8 @@ export class ResourcesService {
         return new Promise<any>((resolve, reject) => {
             this.http.delete(this.routeUrl, {
                 responseType: 'json',
-                body: filespath
+                body: filespath,
+                withCredentials: true
             })
             .subscribe((data: any) => resolve(data));
         });
@@ -161,9 +164,12 @@ export class ResourcesService {
             this.http.post(this.routeUrl + '/rename', {
                 currentName,
                 newName,
-                dirpath
+                dirpath,
             },
-            { responseType: 'json' })
+            {
+                responseType: 'json',
+                withCredentials: true
+            })
             .subscribe({
                 next: (data: any) => resolve(data),
                 error: (error: any) => reject(error)
@@ -182,7 +188,8 @@ export class ResourcesService {
 
         return this.http.post(this.routeUrl + '/upload', formData, {
             reportProgress: true,
-            observe: 'events'
+            observe: 'events',
+            withCredentials: true
         }).pipe(
             catchError(this.errorMgmt)
         )

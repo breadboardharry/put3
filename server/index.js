@@ -1,6 +1,7 @@
 import express from 'express';
 import https from 'https';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import fs from 'fs';
 import cors from 'cors';
 import Routes from './src/routes/index.js';
@@ -18,9 +19,10 @@ const serverOptions = {
 }
 // Cors options - allow requests from any origin
 const corsOptions = {
-  origin: '*',
+  origin: 'https://localhost:4200',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 };
 // Server options
 const socketOptions = {
@@ -39,6 +41,8 @@ app.use(cors(corsOptions));
 // Body limits
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+
+app.use(cookieParser());
 
 /* ----------------------------------- Setup --------------------------------- */
 // Create server

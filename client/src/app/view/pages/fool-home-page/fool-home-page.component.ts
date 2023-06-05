@@ -50,9 +50,7 @@ export class FoolHomePageComponent implements OnInit {
         });
 
         this.websocket.socket.on('name', (data: any) => {
-            console.log(data);
             if (data.target.id !== this.websocket.id) return;
-            console.log("data");
 
             this.preferences.setName(data.name);
         });

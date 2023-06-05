@@ -29,7 +29,7 @@ export class CodelockComponent implements OnInit {
     // Check if the code is filled
     if (this.code.length >= this.accessCodeLength) {
       // Check if code is correct
-      if (await this.accessControl.checkCode(this.codeName, this.code.join(''))) {
+      if (await this.accessControl.login(this.code.join(''))) {
         this.passed.emit();
         return;
       };
