@@ -1,23 +1,13 @@
-import jwt from 'jsonwebtoken';
+import AuthModule from '../modules/auth/auth.js';
 
 const AuthMiddleware = (req, res, next) => {
     const token = req.cookies.token;
-    console.log("token");
-    console.log(token);
-    if (!token) {
-        // No token found in the cookie
-        return res.status(401).json({ error: 'Unauthorized' });
-    }
 
-    // Verify the token and check the expiration time
-    jwt.verify(token, 'your-secret-key', (err, decoded) => {
-        // Token verification failed
-        if (err) {
+    // Check if the token is valid
+    AuthModule.isLogged(token).then((logged) => {
+        if (!logged) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
-
-        // Token verification succeeded
-        // You can access the decoded payload with decoded.user
 
         next();
     });

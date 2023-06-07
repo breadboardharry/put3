@@ -1,5 +1,5 @@
 import express from 'express';
-import AuthMiddleware from '../middlewares/auth.js';
+import AuthModule from '../modules/auth/auth.js';
 import jwt from 'jsonwebtoken';
 const router = express.Router();
 
@@ -7,12 +7,11 @@ const router = express.Router();
 
 router.post('/login', (req, res) => {
     const { code } = req.body;
+    const login = AuthModule.login(code);
 
-    if (code == process.env.MASTER_CODE) {
-        const token = jwt.sign({ user: 'master' }, 'your-secret-key', { expiresIn: '1h' });
-
-        return res.cookie('token', token, {
-            maxAge: 3600000,
+    if (login.success) {
+        return res.cookie('token', login.token, {
+            maxAge: login.millis,
             httpOnly: true
         }).json({
             success: true,
@@ -30,9 +29,15 @@ router.post('/login', (req, res) => {
  * @description This route is protected by the AuthMiddleware
  * @returns A JSON object with a success property
 */
-router.get('/islogged', AuthMiddleware, (req, res) => {
-    res.json({
-        success: true
+router.get('/islogged', (req, res) => {
+    const token = req.cookies.token;
+
+    AuthModule.isLogged(token).then((logged) => {
+        console.log("logged");
+        console.log(logged);
+        res.json({
+            logged
+        });
     });
 });
 

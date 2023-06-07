@@ -49,7 +49,7 @@ app.use(cookieParser());
 const server = https.createServer(serverOptions, app);
 
 // Setup routes
-app.use('/', Routes);
+app.use('/api/', Routes);
 // Host static files
 app.use(express.static('public'));
 

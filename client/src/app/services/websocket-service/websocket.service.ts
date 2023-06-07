@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { io } from 'socket.io-client';
 import { Role } from 'src/app/enums/role';
+import { BackendService } from '../backend/backend.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +13,9 @@ export class WebSocketService {
     private _id: string = '';
     private _role: Role = Role.Undefined;
 
-    constructor() {
+    constructor(private backend: BackendService) {
         // Connect Socket with server URL
-        this._socket = io(environment.serverUrl, {
+        this._socket = io(this.backend.serverUrl, {
             path: environment.socketPath
         });
 

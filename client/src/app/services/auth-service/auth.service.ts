@@ -1,24 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CodeName } from 'src/app/enums/code';
-import { environment } from 'src/environments/environment';
+import { BackendService } from '../backend/backend.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class AccessControlService {
-    private apiUrl = environment.serverUrl + environment.apiPath;
+export class AuthService {
 
-    constructor(private http: HttpClient) {}
+    constructor(private backend: BackendService, private http: HttpClient) {}
 
     /**
      * Authenticate user with a code
      * @param {string} code Code
      */
-    public login(code: string): Promise<number> {
+    public login(code: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.http.post(
-                    this.apiUrl + '/auth/login',
+                    this.backend.apiUrl + '/auth/login',
                     { code },
                     {
                         responseType: 'json',
@@ -37,19 +36,15 @@ export class AccessControlService {
      */
     public isLogged(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.http.get(this.apiUrl + '/auth/islogged',
+            this.http.get(this.backend.apiUrl + '/auth/islogged',
                 {
                     responseType: 'json',
                     withCredentials: true
                 },
             )
             .subscribe({
-                next: (res: any) => {
-                    resolve(res.success);
-                },
-                error: (err) => {
-                    resolve(false);
-                }
+                next: (res: any) => { resolve(res.logged) },
+                error: (err) => { resolve(false) }
             });
         });
     }
@@ -62,7 +57,7 @@ export class AccessControlService {
     public getCodeLength(codeName: CodeName): Promise<number> {
         return new Promise((resolve, reject) => {
             this.http.get<number>(
-                this.apiUrl + '/auth/codelen/' + codeName,
+                this.backend.apiUrl + '/auth/codelen/' + codeName,
                 { responseType: 'json' }
             )
             .subscribe((length: number) => {

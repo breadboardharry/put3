@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { BackendService } from 'src/app/services/backend/backend.service';
 import { FileData } from 'src/app/types/resources/file-data';
-import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-file-card',
@@ -17,9 +17,7 @@ export class FileCardComponent implements OnInit {
 
     name: string = '';
 
-    apiUrl = environment.serverUrl + '/' + environment.apiPath;
-
-    constructor() {}
+    constructor(public backend: BackendService) {}
 
     ngOnInit(): void {
         this.name = this.file.name;

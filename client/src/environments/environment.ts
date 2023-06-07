@@ -7,7 +7,7 @@ const backendUrl = `https://${window.location.hostname}:3000`;
 export const environment = {
   production: false,
   serverUrl: backendUrl,
-  apiPath: '',
+  apiPath: '/api',
   socketPath: '/socket',
   defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg'
 };
