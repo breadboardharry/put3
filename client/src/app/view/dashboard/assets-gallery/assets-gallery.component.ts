@@ -155,27 +155,29 @@ export class AssetsGalleryComponent implements OnInit {
     rename(newName: string, file: FileData) {
         this.editing = null;
 
-        this.resourceService.rename( file.name, newName, file.dirpath ).then(
-            (res) => {
-                this.snackbar.openSuccess(file.name + " renamed to " + newName);
-            },
-            (err) => {
-                switch (err.error.message.toLowerCase()) {
-                    case "file already exists":
-                        this.snackbar.openError(newName + " already exists");
-                        break;
+        this.resourceService.rename( file.name, newName, file.dirpath )
+            .then((res) => {
+                    this.snackbar.openSuccess(file.name + " renamed to " + newName);
+                },
+                (err) => {
+                    if (!err.error.message) return;
 
-                    case "invalid file extension":
-                        this.snackbar.openError(err.error.message);
-                        break;
+                    switch (err.error.message.toLowerCase()) {
+                        case "file already exists":
+                            this.snackbar.openError(newName + " already exists");
+                            break;
 
-                    case "invalid parameters":
-                        this.snackbar.openError("Invalid filename");
-                        break;
+                        case "invalid file extension":
+                            this.snackbar.openError(err.error.message);
+                            break;
+
+                        case "invalid parameters":
+                            this.snackbar.openError("Invalid filename");
+                            break;
+                    }
+
+                    this.editing = file;
                 }
-
-                this.editing = file;
-            }
         );
     }
 

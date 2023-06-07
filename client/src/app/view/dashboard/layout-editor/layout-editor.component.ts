@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { Fool } from 'src/app/classes/fool';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
+import { BackendService } from 'src/app/services/backend/backend.service';
 
 @Component({
     selector: 'app-layout-editor',
@@ -23,10 +24,9 @@ export class LayoutEditorComponent implements OnInit {
     @Input() target!: Fool | undefined;
     @Input() disabled: boolean = false;
 
-    apiUrl = environment.serverUrl + environment.apiPath;
     defaultDesktopImage = environment.defaultDesktopImage;
 
-    constructor(private foolService: FoolService, private dialog: MatDialog, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
+    constructor(public backend: BackendService, private foolService: FoolService, private dialog: MatDialog, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
 
     ngOnInit(): void {
         // Get desktop background image

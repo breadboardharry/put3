@@ -16,7 +16,6 @@ export class Fool {
     }
 
     constructor(fool: {id: string, name: string, desktop: any, infos: any}) {
-        console.log(fool);
         this.id = fool.id;
         this.name = fool.name;
         this.window = fool.infos.window;

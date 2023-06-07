@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Script } from 'src/app/enums/assets/scrips';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
 import { FileService } from '../utils/file-service/file.service';
+import { BackendService } from '../backend/backend.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AssetsService {
 
-    private apiUrl = environment.serverUrl + environment.apiPath;
-
-    constructor(private fileService: FileService, private http: HttpClient) {}
+    constructor(private backend: BackendService, private fileService: FileService, private http: HttpClient) {}
 
     downloadScript(script: Script) {
         this.getScript(script).then((file: Blob) => {
@@ -21,7 +19,7 @@ export class AssetsService {
 
     getScript(script: Script): Promise<Blob> {
         return new Promise<Blob>((resolve, reject) => {
-            this.http.get(this.apiUrl + '/scripts/' + script , {
+            this.http.get(this.backend.apiUrl + '/scripts/' + script , {
                 responseType: 'blob'
             }).subscribe({
                 next: (file: Blob) => resolve(file),

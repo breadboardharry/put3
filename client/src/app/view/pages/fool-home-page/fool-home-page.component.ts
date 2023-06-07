@@ -11,6 +11,7 @@ import { Layout } from 'src/app/types/layout';
 import { LayoutService } from 'src/app/services/layout-service/layout.service';
 import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
 import { Role } from 'src/app/enums/role';
+import { BackendService } from 'src/app/services/backend/backend.service';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -19,7 +20,6 @@ import { Role } from 'src/app/enums/role';
 })
 export class FoolHomePageComponent implements OnInit {
 
-    apiUrl = environment.serverUrl + environment.apiPath;
     layout: Layout = {
         hitboxes: [],
         desktop: {
@@ -28,7 +28,16 @@ export class FoolHomePageComponent implements OnInit {
     };
     defaultDesktopImage = environment.defaultDesktopImage;
 
-    constructor(private browser: BrowserService, private layoutService: LayoutService, private resourceService: ResourcesService, private preferences: PreferencesService, private windowService: WindowService, public cursorService: CursorService, private websocket: WebSocketService, private audio: AudioService, private desktopService: DesktopService ) {}
+    constructor(
+        public backend: BackendService,
+        private browser: BrowserService,
+        private layoutService: LayoutService,
+        private resourceService: ResourcesService,
+        private preferences: PreferencesService,
+        private windowService: WindowService,
+        public cursorService: CursorService,
+        private websocket: WebSocketService,
+        private audio: AudioService ) {}
 
     ngOnInit(): void {
         // Update role if needed
@@ -50,9 +59,7 @@ export class FoolHomePageComponent implements OnInit {
         });
 
         this.websocket.socket.on('name', (data: any) => {
-            console.log(data);
             if (data.target.id !== this.websocket.id) return;
-            console.log("data");
 
             this.preferences.setName(data.name);
         });
@@ -87,7 +94,7 @@ export class FoolHomePageComponent implements OnInit {
             case 'audio':
                 const volume = 'volume' in data.action ? data.action.volume : 1.0;
                 if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-                else if ('track' in data.action) this.audio.play(this.apiUrl + '/' + data.action.track.href, volume);
+                else if ('track' in data.action) this.audio.play(this.backend.serverUrl + '/' + data.action.track.href, volume);
                 break;
 
             default:
