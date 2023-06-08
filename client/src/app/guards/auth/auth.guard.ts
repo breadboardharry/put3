@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Route } from 'src/app/enums/routes';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 
 @Injectable({
@@ -15,11 +16,11 @@ export class AuthGuard implements CanActivate {
         return this.authService.isLogged().then((logged: boolean) => {
             if (logged) return true;
 
-            this.router.navigate(['/control'], { queryParams: { route: state.url.replace('/', '') } });
+            this.router.navigate(['/' + Route.LOGIN], { queryParams: { route: state.url.replace('/', '') } });
             return false;
         })
         .catch(() => {
-            this.router.navigate(['/control'], { queryParams: { route: state.url.replace('/', '') } });
+            this.router.navigate(['/' + Route.LOGIN], { queryParams: { route: state.url.replace('/', '') } });
             return false;
         });
     }

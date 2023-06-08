@@ -14,7 +14,7 @@
         <img *ngSwitchCase="'audio'" src="assets/icons/audio-file.png" draggable="false">
     </div>
 
-    <textarea class="filename" rows="3"
+    <textarea class="filename" rows="2"
         [ngClass]="{'editing': editing}"
         [(ngModel)]="name"
         [readOnly]="!editing"

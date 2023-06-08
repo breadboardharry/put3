@@ -6,7 +6,6 @@ import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 import { FileData } from 'src/app/types/resources/file-data';
 
@@ -40,9 +39,15 @@ export class AssetsGalleryComponent implements OnInit {
     form: FormGroup;
     msg: string = '';
     progress: number = 0;
-    uploading: boolean = false
+    uploading: boolean = false;
 
-    constructor(private snackbar: SnackbarService, public selectionService: SelectionService, private websocket: WebSocketService, public resourceService: ResourcesService, public fb: FormBuilder, private sanitizer: DomSanitizer) {
+    constructor(
+        private snackbar: SnackbarService,
+        public selectionService: SelectionService,
+        public resourceService: ResourcesService,
+        public fb: FormBuilder,
+        private sanitizer: DomSanitizer
+    ) {
         this.form = this.fb.group({
             file: [null],
         });
@@ -154,6 +159,9 @@ export class AssetsGalleryComponent implements OnInit {
 
     rename(newName: string, file: FileData) {
         this.editing = null;
+
+        // Stop here if the name hasn't changed
+        if (newName == file.name) return;
 
         this.resourceService.rename( file.name, newName, file.dirpath )
             .then((res) => {
