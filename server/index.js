@@ -1,5 +1,6 @@
 import express from 'express';
 import https from 'https';
+import http from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import fs from 'fs';
@@ -8,18 +9,23 @@ import Routes from './src/routes/index.js';
 import Socket from './src/modules/socket/socket.js';
 import dotenv from 'dotenv';
 import SocketRoutes from './src/socket/index.js';
-dotenv.config();
+
+// Config .env
+dotenv.config(process.env.NODE_ENV === 'development' ? '.env.dev' : '.env');
 
 // Constants and options
+const MODE = process.env.NODE_ENV;
 const PORT = process.env.PORT || 3000;
+
 // Server options
-const serverOptions = {
+const servOptions = MODE === 'development' ? {
     key: fs.readFileSync(process.env.SSL_KEY),
     cert: fs.readFileSync(process.env.SSL_CERT),
-}
+} : {}
+
 // Cors options - allow requests from any origin
 const corsOptions = {
-  origin: 'https://localhost:4200',
+  origin: process.env.CLIENT_ORIGIN,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -45,17 +51,38 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(cookieParser());
 
 /* ----------------------------------- Setup --------------------------------- */
-// Create server
-const server = https.createServer(serverOptions, app);
 
-// Setup routes
-app.use('/api/', Routes);
+// Create server
+let server;
+if (MODE === 'development') server = https.createServer(servOptions, app);
+else server = http.createServer(app);
+
+app.use((req, res, next) => {
+    console.log('Request Origin:', req.headers.origin);
+    console.log('Request Path:', req.path);
+    next();
+});
+
 // Host static files
 app.use(express.static('public'));
+// Setup routes
+app.use('/api/', Routes);
+
+// Welcome message
+app.use('/', (req, res) => {
+    res.send(
+        `Welcome tothe PUT3 server!
+
+        MODE: ${process.env.NODE_ENV}
+        CORS Origin: ${process.env.CLIENT_ORIGIN}`
+    );
+})
 
 // Server starting
 server.listen(PORT, () => {
-  console.log(`[*] Server started on port ${PORT}`);
+    console.log(
+        `[*] Server started on port ${PORT}`
+    );
 });
 
 /* -------------------------------------------------------------------------- */
