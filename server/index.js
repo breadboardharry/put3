@@ -11,17 +11,17 @@ import dotenv from 'dotenv';
 import SocketRoutes from './src/socket/index.js';
 
 // Config .env
-dotenv.config(process.env.NODE_ENV === 'development' ? '.env.dev' : '.env');
+dotenv.config({path: process.env.NODE_ENV == 'development' ? '.env.dev' : '.env'});
 
 // Constants and options
 const MODE = process.env.NODE_ENV;
 const PORT = process.env.PORT || 3000;
 
 // Server options
-const servOptions = MODE === 'development' ? {
+const servOptions = MODE == 'development' ? {
     key: fs.readFileSync(process.env.SSL_KEY),
     cert: fs.readFileSync(process.env.SSL_CERT),
-} : {}
+} : {};
 
 // Cors options - allow requests from any origin
 const corsOptions = {
@@ -57,11 +57,12 @@ let server;
 if (MODE === 'development') server = https.createServer(servOptions, app);
 else server = http.createServer(app);
 
-app.use((req, res, next) => {
-    console.log('Request Origin:', req.headers.origin);
-    console.log('Request Path:', req.path);
-    next();
-});
+// Log requests
+// app.use((req, res, next) => {
+//     console.log('Request Origin:', req.headers.origin);
+//     console.log('Request Path:', req.path);
+//     next();
+// });
 
 // Host static files
 app.use(express.static('public'));
@@ -70,8 +71,8 @@ app.use('/api/', Routes);
 
 // Welcome message
 app.use('/', (req, res) => {
-    res.send(
-        `Welcome tothe PUT3 server!
+    res.status(200).send(
+        `Welcome to PUT3 server!
 
         MODE: ${process.env.NODE_ENV}
         CORS Origin: ${process.env.CLIENT_ORIGIN}`

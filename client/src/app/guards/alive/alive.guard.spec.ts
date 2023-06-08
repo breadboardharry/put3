@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RoleAttributionGuard } from './role-attribution.guard';
+import { AliveGuard } from './alive.guard';
 
-describe('RoleAttributionGuard', () => {
-  let guard: RoleAttributionGuard;
+describe('AliveGuard', () => {
+  let guard: AliveGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(RoleAttributionGuard);
+    guard = TestBed.inject(AliveGuard);
   });
 
   it('should be created', () => {

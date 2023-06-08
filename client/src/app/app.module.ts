@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DesktopComponent } from './view/fool/desktop/desktop.component';
@@ -40,38 +39,40 @@ import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-sn
 import { LayoutEditorComponent } from './view/dashboard/layout-editor/layout-editor.component';
 import { ButtonRaisedComponent } from './view/global/buttons/button-raised/button-raised.component';
 import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-browser.modal';
+import { GradientLoaderComponent } from './view/global/loaders/gradient-loader/gradient-loader.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DesktopComponent,
-    WindowsButtonComponent,
-    WindowsMenuComponent,
-    HitboxComponent,
-    HitboxCoreComponent,
-    HitboxSettingsComponent,
-    DesktopIconComponent,
-    ChildElementsDirective,
-    RickRollComponent,
-    AudioPlayerComponent,
-    HomePageComponent,
-    MasterDashboardPageComponent,
-    FoolHomePageComponent,
-    DashboardNavbarComponent,
-    FoolCardComponent,
-    SoundboardComponent,
-    SoundboardButtonComponent,
-    CodelockComponent,
-    CodelockPageComponent,
-    AssetsGalleryComponent,
-    FileCardComponent,
-    DragDropFileUploadDirective,
-    ContextMenuComponent,
-    CustomSnackbarComponent,
-    LayoutEditorComponent,
-    ButtonRaisedComponent,
-    ResourceBrowserModal
-  ],
+    declarations: [
+        AppComponent,
+        DesktopComponent,
+        WindowsButtonComponent,
+        WindowsMenuComponent,
+        HitboxComponent,
+        HitboxCoreComponent,
+        HitboxSettingsComponent,
+        DesktopIconComponent,
+        ChildElementsDirective,
+        RickRollComponent,
+        AudioPlayerComponent,
+        HomePageComponent,
+        MasterDashboardPageComponent,
+        FoolHomePageComponent,
+        DashboardNavbarComponent,
+        FoolCardComponent,
+        SoundboardComponent,
+        SoundboardButtonComponent,
+        CodelockComponent,
+        CodelockPageComponent,
+        AssetsGalleryComponent,
+        FileCardComponent,
+        DragDropFileUploadDirective,
+        ContextMenuComponent,
+        CustomSnackbarComponent,
+        LayoutEditorComponent,
+        ButtonRaisedComponent,
+        ResourceBrowserModal,
+        GradientLoaderComponent
+    ],
     imports: [
         BrowserModule,
         AppRoutingModule,

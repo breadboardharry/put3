@@ -10,22 +10,18 @@ export class BackendService {
     private _serverUrl = environment.serverUrl;
     private _apiUrl = this.serverUrl + environment.apiPath;
 
-    constructor(private http: HttpClient) {
-        this.alive().then((alive) => {
-            if (alive) {
-                console.log('Backend is alive');
-            } else {
-                console.log('Backend is not alive');
-            }
-        });
-    }
+    constructor(private http: HttpClient) {}
 
-    public alive(): Promise<boolean> {
+    public alive(timeout: number = 20000): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.http.get(this._apiUrl).subscribe({
+            this.http.get(this._apiUrl, {
+                responseType: 'text'
+            }).subscribe({
                 next: (res) => resolve(true),
                 error: (err) => resolve(false),
             });
+
+            setTimeout(() => resolve(false), timeout);
         });
     }
 

@@ -5,13 +5,14 @@ import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-pag
 import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page/master-dashboard-page.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { Route } from './enums/routes';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomePageComponent, data: { animation: 'Home' } },
-  { path: 'master', component: MasterDashboardPageComponent, canActivate: [AuthGuard], data: { animation: 'Master' } },
-  { path: 'fool', component: FoolHomePageComponent, data: { animation: 'Fool' } },
-  { path: 'control', component: CodelockPageComponent, data: { animation: 'Control' } }
+  { path: '', redirectTo: '/' + Route.HOME, pathMatch: 'full' },
+  { path: Route.HOME, component: HomePageComponent, data: { animation: 'Home' } },
+  { path: Route.MASTER, component: MasterDashboardPageComponent, canActivate: [AuthGuard], data: { animation: 'Master' } },
+  { path: Route.FOOL, component: FoolHomePageComponent, data: { animation: 'Fool' } },
+  { path: Route.LOGIN, component: CodelockPageComponent, data: { animation: 'Control' } }
 ];
 
 @NgModule({

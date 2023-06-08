@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
     styleUrls: ['./codelock.component.scss'],
 })
 export class CodelockComponent implements OnInit {
-    
+
     @Input() codeName!: CodeName;
     @Output() passed: EventEmitter<void> = new EventEmitter<void>();
 

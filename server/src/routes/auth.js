@@ -33,8 +33,6 @@ router.get('/islogged', (req, res) => {
     const token = req.cookies.token;
 
     AuthModule.isLogged(token).then((logged) => {
-        console.log("logged");
-        console.log(logged);
         res.json({
             logged
         });
