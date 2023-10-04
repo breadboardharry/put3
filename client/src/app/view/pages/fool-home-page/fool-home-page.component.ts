@@ -2,7 +2,6 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { CursorService } from 'src/app/services/cursor-service/cursor.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
-import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { environment } from 'src/environments/environment';
 import { WindowService } from 'src/app/services/window-service/window.service';
 import { PreferencesService } from 'src/app/services/preferences-service/preferences.service';
@@ -37,7 +36,8 @@ export class FoolHomePageComponent implements OnInit {
         private windowService: WindowService,
         public cursorService: CursorService,
         private websocket: WebSocketService,
-        private audio: AudioService ) {}
+        private audio: AudioService
+    ) {}
 
     ngOnInit(): void {
         // Update role if needed
@@ -63,10 +63,6 @@ export class FoolHomePageComponent implements OnInit {
 
             this.preferences.setName(data.name);
         });
-
-        // if (this.preferences.getName()) {
-        //     this.websocket.socket.emit('rename', this.preferences.getName());
-        // }
 
         this.setDesktopImage();
     }
