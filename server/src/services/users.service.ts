@@ -1,7 +1,7 @@
 import { EnumUserRole } from "../enums/role";
-import { User } from "./user";
+import { User } from "../models/user";
 
-export default class Users {
+export default class UsersService {
 
     private static users: User[] = [];
 

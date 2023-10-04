@@ -49,7 +49,7 @@ export class ResourcesService {
             case ResourceType.Video:
                 return ResourceDirectory.Videos;
             case ResourceType.Audio:
-                return ResourceDirectory.Audio;
+                return ResourceDirectory.Audios;
         }
     }
 
@@ -59,7 +59,7 @@ export class ResourcesService {
                 return ResourceType.Image;
             case ResourceDirectory.Videos:
                 return ResourceType.Video;
-            case ResourceDirectory.Audio:
+            case ResourceDirectory.Audios:
                 return ResourceType.Audio;
         }
     }

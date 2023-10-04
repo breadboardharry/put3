@@ -1,4 +1,6 @@
-export const Response = {
+import { APIResponse } from "../types/response";
+
+export const Response: { [key: string]: { [key: string]: APIResponse}} = {
     "ERROR": {
         "INTERNAL_SERVER": { status: 500, success: false, message: "Internal server error" },
         "INVALID_PARAMS": { status: 400, success: false, message: "Invalid parameters" },

@@ -6,6 +6,7 @@ import { SocketServer } from "../../socket-server/socket-server";
 const router = express.Router();
 
 router.get("/", (req, res) => {
+    console.log("GET /resources");
     try {
         // Return the data from all directories
         const data = getData();
@@ -53,6 +54,7 @@ router.post("/rename", (req, res) => {
         if (success) SocketServer.update.resources();
     }
     catch (err: any) {
+        console.log(err);
         res.status(err.status || 500).json(err);
     }
 });

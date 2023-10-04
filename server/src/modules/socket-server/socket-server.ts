@@ -1,11 +1,11 @@
-import { Server } from "socket.io";
+import { Server as SocketIOServer } from "socket.io";
 import { corsOptions } from "../../config/cors";
 import { Express } from "express";
 import http from 'http';
 import https from 'https';
 import { ipv6ToIpv4 } from "../../services/ip.service";
 import { getData } from "../resources/resources";
-import Users from "../../models/users";
+import UsersService from "../../services/users.service";
 
 export class SocketServer {
 
@@ -15,12 +15,12 @@ export class SocketServer {
     };
 
     private static app: Express;
-    private static server: any;
-    private static io: Server;
+    private static io: SocketIOServer;
 
     public static init(app: Express, httpServer: http.Server | https.Server) {
         this.app = app;
-        this.io = new Server(httpServer, this.options);
+        this.io = new SocketIOServer(httpServer, this.options);
+        
         this.io.on("connection", (socket) => {
             const ipAddress = ipv6ToIpv4(socket.handshake.address);
             console.log(`Client connected from IP address ${ipAddress}`);
@@ -38,7 +38,7 @@ export class SocketServer {
     // Client connection
     private static connection(socket) {
         console.log("[-] New user connected: " + socket.id);
-        Users.new(socket.id);
+        UsersService.new(socket.id);
         socket.emit("id", socket.id);
     }
 
@@ -46,7 +46,7 @@ export class SocketServer {
     private static disconnection(socket) {
         socket.on("disconnect", (data) => {
             console.log("[-] User disconnected: " + socket.id);
-            Users.remove(socket.id);
+            UsersService.remove(socket.id);
 
             // Send updated fool list
             this.update.fools();
@@ -59,7 +59,7 @@ export class SocketServer {
     private static role(socket) {
         socket.on("role", (data) => {
             console.log("[-] User " + socket.id + " selected role " + data.role);
-            Users.get(socket.id)!.setRole(data.role, data.preferences);
+            UsersService.get(socket.id)!.setRole(data.role, data.preferences);
 
             // Send updated fool list
             this.update.fools();
@@ -79,7 +79,7 @@ export class SocketServer {
     private static infos(socket) {
         socket.on("infos", (data) => {
             console.log("[-] Infos changed for " + socket.id);
-            Users.get(socket.id)!.infos = {...Users.get(socket.id)!.infos, ...data};
+            UsersService.get(socket.id)!.infos = {...UsersService.get(socket.id)!.infos, ...data};
             // Send updated fool list
             this.update.fools();
         });
@@ -94,7 +94,7 @@ export class SocketServer {
             this.update.layout(data);
 
             // Update user desktop
-            Users.get(data.target.id)!.desktop = data.layout.desktop;
+            UsersService.get(data.target.id)!.desktop = data.layout.desktop;
 
             // Send updated fool list
             this.update.fools();
@@ -107,14 +107,14 @@ export class SocketServer {
      */
     private static rename = (socket) => {
         socket.on("rename", (data) => {
-            if (!Users.exists(data.target.id)) {
+            if (!UsersService.exists(data.target.id)) {
                 console.log("[!] User " + data.target.id + " doesn't exist");
                 return;
             };
 
             console.log("[-] Rename " + data.target.name + " (" + data.target.id + ") to " + data.name);
             // Update name
-            Users.get(data.target.id)!.name = data.name;
+            UsersService.get(data.target.id)!.name = data.name;
 
             this.update.name(data);
 
@@ -128,7 +128,7 @@ export class SocketServer {
             this.io.emit('event', { type: 'resources', resources: getData()});
         },
         fools: () => {
-            this.io.emit('foolList', Users.getFools());
+            this.io.emit('foolList', UsersService.getFools());
         },
         action: (data) => {
             this.io.emit('action', data);

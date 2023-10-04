@@ -4,7 +4,7 @@ import { doFileExists, isValidDir } from "../../services/resource-file.service";
 import { Response } from "../../enums/response";
 import { Paths } from "../../enums/paths";
 import { getFileExtension, removeSpaces } from "../../services/file.service";
-import { deleteFiles, getDirectories, getFilesData } from "../../services/resource.service";
+import { deleteFiles, getDirectories, getFilesData, renameFile } from "../../services/resource.service";
 import { isArrayOf } from "../../services/type.service";
 import { EnumResourceDirectory } from "../../enums/resources";
 
@@ -19,7 +19,7 @@ export function getData(dirname?: string) {
         const dirnames = dirname ? [dirname] : getDirectories();
         let files = {};
 
-        for (let dirname of dirnames) {
+        for (const dirname of dirnames) {
             const dirpath = path.join(Paths.RESOURCES, dirname);
 
             // Check if the directory exists
@@ -105,8 +105,7 @@ export function rename(currentName: string, newName: string, dirpath: string): b
     }
 
     try {
-        const success = rename(currentName, newName, dirpath);
-
+        const success = renameFile(currentName, newName, dirpath);
         return success;
     }
     catch (err) {

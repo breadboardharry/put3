@@ -20,6 +20,8 @@ export class HTTPServer {
         if (env.NODE_ENV === 'development') this.server = https.createServer(this.servOptions, app);
         else this.server = http.createServer(app);
 
+        this.app.use('/api/', Routes);
+
         // Welcome message
         this.app.use('/', (req, res) => {
             res.status(200).send(
@@ -30,7 +32,6 @@ export class HTTPServer {
             );
         });
 
-        app.use('/api/', Routes);
 
         this.listen();
         return this.server;

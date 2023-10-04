@@ -1,9 +1,9 @@
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { Paths } from "../enums/paths.js";
-import { getFileExtension } from "./file.service.js";
-import { extToDir, generateFilename, isValidExt } from "./resource-file.service.js";
+import { Paths } from "../enums/paths";
+import { getFileExtension } from "./file.service";
+import { extToDir, generateFilename, isValidExt } from "./resource-file.service";
 
 // Configure storage
 const storage = multer.diskStorage({

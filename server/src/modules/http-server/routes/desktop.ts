@@ -12,7 +12,7 @@ import { getLastDesktopImage } from "../../../services/desktop.service";
 /* --------------------------------- ROUTES --------------------------------- */
 
 // Image upload
-router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
+router.post("/set", upload.desktopImage.single("image"), (req, res) => {
     const ip = ipv6ToIpv4(req.ip);
     console.log("IP: " + ip)
 
@@ -38,6 +38,7 @@ router.post("/set", upload.desktopImage.single("image"), async (req, res) => {
                 filename: fileName,
             });
         });
+        return;
     }
     else return res.status(400).json(Response.ERROR.INVALID_PARAMS);
 });

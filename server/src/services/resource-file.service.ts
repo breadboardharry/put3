@@ -108,7 +108,9 @@ export function extToType(ext: string): EnumFileType {
 
     // Get the resource type
     for (const [type, exts] of Object.entries(Extensions)) {
-        if (exts.includes(ext)) return type as EnumFileType;
+        if (exts.includes(ext)) {
+            return dirToType(type as EnumResourceDirectory);
+        }
     }
     throw new Error("Invalid extension");
 };
@@ -118,10 +120,9 @@ export function extToType(ext: string): EnumFileType {
  * @param filename File name
  * @returns True if the file exists
  */
-export function doFileExists(filename): boolean {
+export function doFileExists(filename: string): boolean {
     const ext = getFileExtension(filename);
     const filepath = path.join(Paths.RESOURCES, extToDir(ext), filename);
-
     return fileExists(filepath);
 };
 
