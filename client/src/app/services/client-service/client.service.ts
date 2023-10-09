@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { EnumEventName } from 'src/app/enums/event-name';
-import { EventUuidDTO } from 'src/app/models/dtos/events/uuid.dto';
-import { EventService } from '../event-service/event.service';
+import { EventService, RoleResponseData } from '../event-service/event.service';
 import { EnumUserRole } from 'src/app/enums/role';
+import { UserPreferences } from 'src/app/types/preferences/user-preferences';
 
 @Injectable({
     providedIn: 'root',
@@ -11,6 +10,8 @@ export class ClientService {
 
     public static UUID: string;
     public static ROLE: EnumUserRole;
+    public static NAME: string;
+    public static SESSION_CODE?: string;
 
     constructor(
         private eventService: EventService
@@ -19,14 +20,16 @@ export class ClientService {
     }
 
     private initSubscriptions() {
-        this.eventService.onUuid.subscribe((uuid: string) => {
-            console.log(`UUID: ${uuid}`);
-            ClientService.UUID = uuid;
+        this.eventService.onRole.subscribe((data: RoleResponseData) => {
+            console.log("Role accepted", data);
+            ClientService.UUID = data.uuid;
+            ClientService.ROLE = data.role;
+            ClientService.NAME = data.name;
+            ClientService.SESSION_CODE = data.sessionCode;
         });
     }
 
-    public setRole(role: EnumUserRole, preferences: {} = {}) {
-        ClientService.ROLE = role;
+    public askForRole(role: EnumUserRole, preferences?: UserPreferences) {
         this.eventService.changeSelfRole(role, preferences);
     }
 

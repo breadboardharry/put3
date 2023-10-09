@@ -3,11 +3,12 @@ const router = express.Router();
 import Auth from './auth';
 import Resources from './resources';
 import Desktop from './desktop';
-import AuthMiddleware from '../../../middlewares/auth';
+import Session from './session';
 
+router.use('/session', Session);
 router.use('/desktop', Desktop);
-router.use('/auth', Auth);
-router.use('/resources', AuthMiddleware, Resources);
+// router.use('/auth', Auth);
+router.use('/resources', Resources);
 
 router.use('/', (req: Request, res: Response) => {
     res.status(200).send('Welcome to PUT3 API!');

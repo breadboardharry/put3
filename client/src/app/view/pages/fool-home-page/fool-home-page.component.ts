@@ -43,7 +43,7 @@ export class FoolHomePageComponent implements OnInit {
 
     ngOnInit(): void {
         // Update role if needed
-        this.clientService.setRole(EnumUserRole.FOOL, this.preferences.get());
+        this.clientService.askForRole(EnumUserRole.FOOL, this.preferences.get());
 
         // Send window size and browser infos
         this.eventService.changeSelfInfos({
@@ -56,7 +56,6 @@ export class FoolHomePageComponent implements OnInit {
         });
 
         this.eventService.onLayout.subscribe((data) => {
-            console.log('[-] Layout received', data);
             this.layout = this.layoutService.newFoolLayout(data);
         });
 

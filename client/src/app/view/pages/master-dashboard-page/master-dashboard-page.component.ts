@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Fool } from 'src/app/classes/fool';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { DashboardPage } from 'src/app/enums/dashboard-pages';
@@ -16,6 +17,7 @@ import { MenuItem } from 'src/app/types/menu-item';
 })
 export class MasterDashboardPageComponent implements OnInit {
 
+    private sessionCode!: string;
     selectedItem: MenuItem = {
         title: DashboardPage.Layout
     };
@@ -40,15 +42,20 @@ export class MasterDashboardPageComponent implements OnInit {
     constructor(
         private clientService: ClientService,
         public resourceService: ResourcesService,
-        private eventService: EventService
+        private eventService: EventService,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
-        // Update role if needed
-        this.clientService.setRole(EnumUserRole.MASTER);
+        this.route.queryParams.subscribe(params => {
+            this.sessionCode = params['code'];
+            console.log('Code Parameter:', this.sessionCode);
 
-        this.eventService.onFoolsUpdate.subscribe((fools) => {
-            this.updateFools(fools);
+            this.clientService.askForRole(EnumUserRole.MASTER);
+
+            this.eventService.onFoolsUpdate.subscribe((fools) => {
+                this.updateFools(fools);
+            });
         });
     }
 

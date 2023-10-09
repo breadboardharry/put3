@@ -1,14 +1,14 @@
 @import '~src/styles.scss';
 
 .page {
-  width: 100vw;
-  height: 100vh;
+    width: 100vw;
+    height: 100vh;
 
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 
-  overflow: hidden;
-  background: $dark-gradient;
+    overflow: hidden;
+    background: $dark-gradient;
 }
 
 app-dashboard-navbar {
@@ -16,9 +16,9 @@ app-dashboard-navbar {
 }
 
 .content-container {
-  position: relative;
-  flex: 1 1 auto;
-  height: 100%;
+    position: relative;
+    flex: 1 1 auto;
+    height: 100%;
 }
 
 .content {
@@ -35,19 +35,19 @@ app-dashboard-navbar {
 }
 
 .fools-container {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 
-  flex: 0 0 auto;
+    flex: 0 0 auto;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 2rem;
 
-  overflow-x: scroll;
-  overflow-y: hidden;
-  @extend %hidden-scrollbar;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    @extend %hidden-scrollbar;
 }
 
 .separator {
@@ -68,14 +68,14 @@ app-dashboard-navbar {
 }
 
 .no-fool {
-  color: white;
-  margin: 0;
+    color: white;
+    margin: 0;
 
-  font-family: Roboto;
-  font-size: 22px;
-  font-weight: 500;
-  letter-spacing: 0.1rem;
-  line-height: 2rem;
-  text-align: center;
-  overflow: hidden;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.1rem;
+    line-height: 2rem;
+    text-align: center;
+    overflow: hidden;
 }

@@ -1,5 +1,6 @@
 import { EnumUserRole } from "../enums/role";
 import { User } from "../models/user";
+import { UserPreferences } from "../types/user-preferences";
 
 export default class UsersService {
 
@@ -7,8 +8,10 @@ export default class UsersService {
 
     constructor() {}
 
-    public static new(uuid: string) {
-        this.users.push(new User(uuid));
+    public static new(uuid: string, role: EnumUserRole, preferences?: UserPreferences): User {
+        const user = new User(uuid, role, preferences);
+        this.users.push(user);
+        return user;
     }
 
     public static get(uuid: string): User | undefined {

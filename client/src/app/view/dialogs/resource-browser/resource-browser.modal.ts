@@ -12,12 +12,17 @@ import { FileData } from 'src/app/types/resources/file-data';
 })
 export class ResourceBrowserModal implements OnInit {
 
-    type: ResourceType | null = null;
+    public type?: ResourceType;
 
-    constructor(@Inject(MAT_DIALOG_DATA) private data: any, private dialogRef: MatDialogRef<ResourceBrowserModal>, public resourceService: ResourcesService, public selectionService: SelectionService) {}
+    constructor(
+        @Inject(MAT_DIALOG_DATA) private data: any,
+        private dialogRef: MatDialogRef<ResourceBrowserModal>,
+        public resourceService: ResourcesService,
+        public selectionService: SelectionService
+    ) {}
 
     ngOnInit(): void {
-        if (this.data) this.type = this.data.type || null;
+        if (this.data) this.type = this.data.type || undefined;
 
         this.selectionService.init(this.resourceService.getResources(this.type), false);
     }

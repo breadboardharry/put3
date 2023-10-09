@@ -17,14 +17,27 @@ import { EventUpdateDTO } from 'src/app/models/dtos/events/update.dto';
 import { ResourceSet } from 'src/app/types/resources/data-set';
 import { EnumUpdateType } from 'src/app/enums/type-update';
 import { Action } from 'src/app/types/action';
-import { EventUuidDTO } from 'src/app/models/dtos/events/uuid.dto';
+import { UserPreferences } from 'src/app/types/preferences/user-preferences';
+
+export type RoleRequestData = {
+    role: EnumUserRole;
+    sessionCode?: string;
+    preferences?: UserPreferences;
+};
+
+export type RoleResponseData = {
+    uuid: string;
+    name: string;
+    role: EnumUserRole;
+    sessionCode?: string;
+};
 
 @Injectable({
     providedIn: 'root',
 })
 export class EventService {
 
-    public onUuid: Subject<string> = new Subject<string>();
+    public onRole: Subject<RoleResponseData> = new Subject<RoleResponseData>();
     public onAction: Subject<Action> = new Subject<Action>();
     public onLayout: Subject<Layout> = new Subject<Layout>();
     public onRename: Subject<string> = new Subject<string>();
@@ -38,10 +51,16 @@ export class EventService {
     }
 
     private initSubscriptions() {
-        this.websocket.socket.on(EnumEventName.UUID, (event: EventUuidDTO) => {
+        this.websocket.socket.on(EnumEventName.ROLE, (event: EventRoleDTO) => {
             // Get the UUID of this client only once
-            this.onUuid.next(event.data);
-            this.websocket.socket.off(EnumEventName.UUID);
+            const data = event.data as RoleResponseData;
+            this.onRole.next({
+                uuid: data.uuid!,
+                name: data.name!,
+                role: data.role,
+                sessionCode: data.sessionCode!,
+            });
+            this.websocket.socket.off(EnumEventName.ROLE);
         });
 
         this.websocket.socket.on(EnumEventName.ACTION, (event: EventActionDTO) => {
@@ -87,7 +106,7 @@ export class EventService {
         this.websocket.socket.emit(EnumEventName.RENAME, dto);
     }
 
-    public changeSelfRole(role: EnumUserRole, preferences?: { [key: string]: any }): void {
+    public changeSelfRole(role: EnumUserRole, preferences?: UserPreferences): void {
         const dto = plainToClass(EventRoleDTO, { data: { role, preferences }});
         this.websocket.socket.emit(EnumEventName.ROLE, dto);
     }

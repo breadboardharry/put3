@@ -40,6 +40,8 @@ import { LayoutEditorComponent } from './view/dashboard/layout-editor/layout-edi
 import { ButtonRaisedComponent } from './view/global/buttons/button-raised/button-raised.component';
 import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-browser.modal';
 import { GradientLoaderComponent } from './view/global/loaders/gradient-loader/gradient-loader.component';
+import { SessionEnterPageComponent } from './view/pages/session-enter-page/session-enter-page.component';
+import { SessionCodeDirective } from './directives/session-code.directive';
 
 @NgModule({
     declarations: [
@@ -71,7 +73,9 @@ import { GradientLoaderComponent } from './view/global/loaders/gradient-loader/g
         LayoutEditorComponent,
         ButtonRaisedComponent,
         ResourceBrowserModal,
-        GradientLoaderComponent
+        GradientLoaderComponent,
+        SessionEnterPageComponent,
+        SessionCodeDirective
     ],
     imports: [
         BrowserModule,

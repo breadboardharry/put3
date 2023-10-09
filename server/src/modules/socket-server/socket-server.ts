@@ -22,8 +22,8 @@ export class SocketServer {
         });
 
         this.io.on("connection", (socket) => {
-            const ipAddress = ipv6ToIpv4(socket.handshake.address);
-            console.log(`Client connected from IP address ${ipAddress}`);
+            // const ipAddress = ipv6ToIpv4(socket.handshake.address);
+            // console.log(`Client connected from IP address ${ipAddress}`);
 
             UserModule.connect(socket.id);
 
@@ -32,7 +32,10 @@ export class SocketServer {
             });
 
             socket.on(EnumEventName.ROLE, (message) => {
-                UserModule.changeRole(socket.id, message.data.role, message.data.preferences);
+                UserModule.setRole(socket.id, message.data.role, {
+                    sessionCode: message.data.sessionCode,
+                    preferences: message.data.preferences
+                });
             });
 
             socket.on(EnumEventName.ACTION, (message) => {

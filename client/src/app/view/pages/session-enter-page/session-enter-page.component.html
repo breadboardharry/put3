@@ -1,0 +1,9 @@
+<div class="page">
+
+    <input sessionCodeInput type="text" [(ngModel)]="code"  placeholder="Session code"/>
+
+    <button (click)="validate()" [disabled]="disabled">
+        {{ loading ? '...' : 'Enter' }}
+    </button>
+
+</div>

@@ -4,11 +4,12 @@ import { Subject } from "rxjs";
 import { getData } from "../resources/resources";
 import { APIResponse } from "../../types/response";
 import { EnumUpdateType } from "../../enums/update-type";
+import { SessionModule } from "../session/sessions.module";
+import { UserPreferences } from "../../types/user-preferences";
 
 type EmitParams = {key: string, data: any};
 
 export enum EnumEventName {
-    UUID = "uuid",
     ROLE = "role",
     ACTION = "action",
     INFOS = "infos",
@@ -30,17 +31,7 @@ export class UserModule {
     }
 
     public static connect(uuid: string): APIResponse {
-        const checkUuid = this.checkUuid(uuid, false);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
-        }
-
-        console.log("[-] New user connected: " + uuid);
-        UsersService.new(uuid);
-        this.emit(EnumEventName.UUID, undefined, uuid);
-
-        return { success: true, message: "User created" };
+        return { success: true };
     }
 
     public static disconnect(uuid: string): APIResponse {
@@ -51,13 +42,19 @@ export class UserModule {
         }
 
         console.log("[-] User disconnected: " + uuid);
+        const user = UsersService.get(uuid);
+        if (user?.role == EnumUserRole.FOOL) {
+            const sessions = SessionModule.getSessions();
+            const session = sessions.find((session) => session.getFool().uuid == uuid);
+            if (session) SessionModule.remove(session.getCode());
+        }
         UsersService.remove(uuid);
         this.emitUpdate.fools();
 
         return { success: true, message: "User deleted" };
     }
 
-    public static changeRole(uuid: string, role: string, preferences: any): APIResponse {
+    public static setRole(uuid: string, role: string, data: { sessionCode?: string, preferences?: UserPreferences }): APIResponse {
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
             console.log(checkUuid.message);
@@ -71,9 +68,38 @@ export class UserModule {
         }
 
         console.log("[-] User " + uuid + " selected role " + role);
-        const user = UsersService.get(uuid)!;
-        const newName = user.setRole(role as EnumUserRole, preferences);
-        if (newName) this.emit(EnumEventName.RENAME, uuid, newName);
+
+        const user = UsersService.get(uuid);
+        if (user) {
+            // TODO
+            console.log("[-] User " + uuid + " already exists");
+        }
+        else {
+
+            if (role == EnumUserRole.MASTER) {
+                console.log("Test code:", data.sessionCode);
+            }
+
+            const user = UsersService.new(uuid, role as EnumUserRole, data.preferences);
+            if (role == EnumUserRole.FOOL) {
+                const session = SessionModule.new(user);
+                this.emit(EnumEventName.ROLE, uuid, {
+                    uuid: user.uuid,
+                    name: user.name,
+                    role: user.role,
+                    sessionCode: session.getCode(),
+                });
+            }
+            else if (role == EnumUserRole.MASTER) {
+                this.emit(EnumEventName.ROLE, uuid, {
+                    uuid: user.uuid,
+                    name: user.name,
+                    role: user.role,
+                });
+            }
+
+        }
+
         this.emitUpdate.fools();
 
         return { success: true, message: "Role changed" };
@@ -107,9 +133,6 @@ export class UserModule {
     }
 
     public static changeLayout(uuid: string, layout: any): APIResponse {
-        console.log("[-] Layout changed for " + uuid);
-        console.log(layout);
-
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
             console.log(checkUuid.message);
