@@ -13,7 +13,6 @@ export enum EnumEventName {
     ACTION = "action",
     INFOS = "infos",
     LAYOUT = "layout",
-    NAME = "name",
     RENAME = "rename",
     UPDATE = "update",
 };
@@ -74,7 +73,7 @@ export class UserModule {
         console.log("[-] User " + uuid + " selected role " + role);
         const user = UsersService.get(uuid)!;
         const newName = user.setRole(role as EnumUserRole, preferences);
-        if (newName) this.emit(EnumEventName.NAME, uuid, newName);
+        if (newName) this.emit(EnumEventName.RENAME, uuid, newName);
         this.emitUpdate.fools();
 
         return { success: true, message: "Role changed" };
@@ -135,7 +134,7 @@ export class UserModule {
 
         console.log("[-] Rename " + uuid + " to " + newName);
         UsersService.get(uuid)!.name = newName;
-        this.emit(EnumEventName.NAME, uuid, newName);
+        this.emit(EnumEventName.RENAME, uuid, newName);
         this.emitUpdate.fools();
 
         return { success: true, message: "User renamed" };
