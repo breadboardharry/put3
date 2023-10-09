@@ -1,31 +1,29 @@
 import { EnumUserRole } from "../enums/role";
-import { SocketServer } from "../modules/socket-server/socket-server";
+import { UserModule } from "../modules/users/users";
 
 export class User {
 
     private static NAME_INDEX = 1;
 
-    public id: number;
+    public uuid: string;
     public name!: string;
     public role: EnumUserRole = EnumUserRole.UNDEFINED;
     public infos: { [key: string]: any } = {};
     public desktop: { [key: string]: any } = {};
 
-    constructor(id: number) {
-        this.id = id;
+    constructor(uuid: string) {
+        this.uuid = uuid;
     }
 
-    public setRole(role: EnumUserRole, preferences: { [key: string]: any } = {}) {
+    public setRole(role: EnumUserRole, preferences: { [key: string]: any } = {}): string | undefined {
+        let newName: string | undefined;
         this.role = role;
         if (role == EnumUserRole.FOOL && !preferences.name) {
             this.name = User.newName();
-            // TODO
-            SocketServer.update.name({
-                target: this,
-                name: this.name
-            });
+            newName = this.name;
         }
         this.setPreferences(preferences);
+        return newName;
     }
 
     public setPreferences(preferences: { [key: string]: any } = {}) {
@@ -35,7 +33,7 @@ export class User {
 
     public toString() {
         return `User ${this.name} :
-        id: ${this.id}
+        uuid: ${this.uuid}
         role: ${this.role}`;
     }
 

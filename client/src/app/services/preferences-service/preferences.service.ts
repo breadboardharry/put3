@@ -10,10 +10,6 @@ export class PreferencesService {
     constructor(private cookie: CookieService) {}
 
     public get() {
-        // console.log({
-        //     desktop: this.getDesktop(),
-        //     name: this.getName()
-        // });
         return {
             desktop: this.getDesktop(),
             name: this.getName()

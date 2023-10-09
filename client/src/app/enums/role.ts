@@ -1,5 +1,5 @@
-export enum Role {
-    Fool = 'fool',
-    Master = 'master',
-    Undefined = 'undefined'
-}
+export enum EnumUserRole {
+    FOOL = 'fool',
+    MASTER = 'master',
+    UNDEFINED = 'undefined'
+};

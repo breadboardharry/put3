@@ -6,9 +6,9 @@ import { FileData } from 'src/app/types/resources/file-data';
 import { ResourceType } from 'src/app/enums/resources/type';
 import { ResourceDirectory } from 'src/app/enums/resources/directory';
 import { ResourceSet } from 'src/app/types/resources/data-set';
-import { WebSocketService } from '../websocket-service/websocket.service';
 import { BackendService } from '../backend/backend.service';
 import { AuthService } from '../auth-service/auth.service';
+import { EventService } from '../event-service/event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +20,14 @@ export class ResourcesService {
 
     constructor(
         private http: HttpClient,
-        private websocket: WebSocketService,
         private backend: BackendService,
-        private authService: AuthService
+        private authService: AuthService,
+        private eventService: EventService
     ) {
         this.update();
 
-        this.websocket.socket.on('event', (data: any) => {
-            if (data.type != 'resources') return;
-            this.resources = data.resources;
+        this.eventService.onResourcesUpdate.subscribe((resources) => {
+            this.resources = resources;
         });
     }
 

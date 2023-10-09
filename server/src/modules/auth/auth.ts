@@ -43,7 +43,7 @@ export class AuthModule {
                 });
             }
             catch (err) {
-                console.log(err);
+                console.error(err);
                 return resolve(false);
             }
         });

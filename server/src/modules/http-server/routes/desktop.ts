@@ -5,7 +5,7 @@ import path from "path";
 import { ipv6ToIpv4 } from "../../../services/ip.service";
 import { getBase64FileExtension } from "../../../services/file.service";
 import { Paths } from "../../../enums/paths";
-import { Response } from "../../../enums/response";
+import { Response } from "../../../services/response.service";
 import { upload } from "../../../services/multer";
 import { getLastDesktopImage } from "../../../services/desktop.service";
 

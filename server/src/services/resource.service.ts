@@ -5,16 +5,8 @@ import { EnumResourceDirectory } from "../enums/resources";
 import { dirToType, getData, isValidType, typeToDir } from "./resource-file.service";
 
 export function renameFile(currentName: string, newName: string, dirpath: string): boolean {
-    console.log("renameFile");
-    console.log(currentName);
-    console.log(newName);
-    console.log(dirpath);
-
     const currentPath = path.join(Paths.RESOURCES, dirpath, currentName);
     const newPath = path.join(Paths.RESOURCES, dirpath, newName);
-
-    console.log('currentPath', currentPath);
-    console.log('newPath', newPath);
 
     // Check if the file exists
     if (!fs.existsSync(currentPath)) return false;

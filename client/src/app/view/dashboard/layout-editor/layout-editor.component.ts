@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ResourceType } from 'src/app/enums/resources/type';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
 import { environment } from 'src/environments/environment';
 import { Fool } from 'src/app/classes/fool';
@@ -26,7 +25,13 @@ export class LayoutEditorComponent implements OnInit {
 
     defaultDesktopImage = environment.defaultDesktopImage;
 
-    constructor(public backend: BackendService, private foolService: FoolService, private dialog: MatDialog, private websocket: WebSocketService, private desktopService: DesktopService, public hitboxService: HitboxService) {}
+    constructor(
+        public backend: BackendService,
+        private foolService: FoolService,
+        private dialog: MatDialog,
+        private desktopService: DesktopService,
+        public hitboxService: HitboxService
+    ) {}
 
     ngOnInit(): void {
         // Get desktop background image

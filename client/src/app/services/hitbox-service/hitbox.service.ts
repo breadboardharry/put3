@@ -1,6 +1,5 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { Hitbox } from 'src/app/classes/hitbox';
-import { WebSocketService } from '../websocket-service/websocket.service';
 
 @Injectable({
     providedIn: 'root'

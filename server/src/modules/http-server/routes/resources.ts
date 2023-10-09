@@ -1,12 +1,11 @@
 import express from "express";
 import { upload } from "../../../services/multer";
-import { Response } from "../../../enums/response";
+import { Response } from "../../../services/response.service";
 import { getData, rename, unlink } from "../../resources/resources";
-import { SocketServer } from "../../socket-server/socket-server";
+import { UserModule } from "../../users/users";
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    console.log("GET /resources");
     try {
         // Return the data from all directories
         const data = getData();
@@ -36,7 +35,7 @@ router.delete("/", (req, res) => {
         res.json(data);
 
         // Alert clients that the resources have been updated
-        if (data.success) SocketServer.update.resources();
+        if (data.success) UserModule.emitUpdate.resources();
     }
     catch (err: any) {
         res.status(err.status || 500).json(err);
@@ -51,7 +50,7 @@ router.post("/rename", (req, res) => {
         res.json(success);
 
         // Alert clients that the resources have been updated
-        if (success) SocketServer.update.resources();
+        if (success) UserModule.emitUpdate.resources();
     }
     catch (err: any) {
         console.log(err);
@@ -63,7 +62,7 @@ router.post("/rename", (req, res) => {
 router.post("/upload", upload.file.array('file'), (req, res) => {
     res.json(Response.SUCCESS.UPLOAD);
 
-    SocketServer.update.resources();
+    UserModule.emitUpdate.resources();
 });
 
 export default router;

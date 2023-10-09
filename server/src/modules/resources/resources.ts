@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { doFileExists, isValidDir } from "../../services/resource-file.service";
-import { Response } from "../../enums/response";
+import { Response } from "../../services/response.service";
 import { Paths } from "../../enums/paths";
 import { getFileExtension, removeSpaces } from "../../services/file.service";
 import { deleteFiles, getDirectories, getFilesData, renameFile } from "../../services/resource.service";

@@ -7,16 +7,16 @@ export default class UsersService {
 
     constructor() {}
 
-    public static new(id: number) {
-        this.users.push(new User(id));
+    public static new(uuid: string) {
+        this.users.push(new User(uuid));
     }
 
-    public static get(id: number): User | undefined {
-        return this.users.find((user) => user.id == id);
+    public static get(uuid: string): User | undefined {
+        return this.users.find((user) => user.uuid == uuid);
     }
 
-    public static remove(id: number) {
-        const user = this.get(id);
+    public static remove(uuid: string) {
+        const user = this.get(uuid);
         if (!user) return;
         const index = this.users.indexOf(user);
         if (index > -1) this.users.splice(index, 1);
@@ -32,10 +32,10 @@ export default class UsersService {
 
     /**
      * Check if a user exists
-     * @param id User id
+     * @param uuid User id
      * @return User exists
      */
-    public static exists(id: number) {
-        return !!this.get(id);
+    public static exists(uuid: string) {
+        return !!this.get(uuid);
     }
 }

@@ -15,4 +15,4 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 const httpServer = HTTPServer.init(app);
-SocketServer.init(app, httpServer);
+SocketServer.init(httpServer);

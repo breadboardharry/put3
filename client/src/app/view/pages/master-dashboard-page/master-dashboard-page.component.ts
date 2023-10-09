@@ -2,9 +2,10 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Fool } from 'src/app/classes/fool';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { DashboardPage } from 'src/app/enums/dashboard-pages';
-import { Role } from 'src/app/enums/role';
+import { EnumUserRole } from 'src/app/enums/role';
+import { ClientService } from 'src/app/services/client-service/client.service';
+import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 import { MenuItem } from 'src/app/types/menu-item';
 
@@ -19,10 +20,9 @@ export class MasterDashboardPageComponent implements OnInit {
         title: DashboardPage.Layout
     };
     fools: Fool[] = [];
-    target: Fool | undefined = undefined;
+    target?: Fool;
     dashboardPage = DashboardPage;
 
-    // Context menu
     contextMenu: ContextMenu = {
         show: false,
         x: 0,
@@ -34,17 +34,21 @@ export class MasterDashboardPageComponent implements OnInit {
         },
         items: []
     };
-    contextFocus: Fool | undefined = undefined;
-    renaming: Fool | undefined = undefined;
+    contextFocus?: Fool;
+    renaming?: Fool;
 
-    constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
+    constructor(
+        private clientService: ClientService,
+        public resourceService: ResourcesService,
+        private eventService: EventService
+    ) { }
 
     ngOnInit(): void {
         // Update role if needed
-        this.websocket.declare(Role.Master);
+        this.clientService.setRole(EnumUserRole.MASTER);
 
-        this.websocket.socket.on('foolList', (list: any) => {
-            this.updateFools(list);
+        this.eventService.onFoolsUpdate.subscribe((fools) => {
+            this.updateFools(fools);
         });
     }
 
@@ -53,7 +57,7 @@ export class MasterDashboardPageComponent implements OnInit {
             // Create a new fool object
             const foolObj = new Fool(fool);
             // Find if a fool with the same id already exists
-            let existing = this.fools.find((f) => f.id === foolObj.id);
+            let existing = this.fools.find((f) => f.uuid === foolObj.uuid);
             // If it exists, keep its hitboxes
             if (existing) {
                 foolObj.layout.hitboxes = existing.layout.hitboxes;
@@ -67,7 +71,7 @@ export class MasterDashboardPageComponent implements OnInit {
     private updateTarget() {
         // If a target is defined, check if it still exists
         if (this.target && this.fools.length) {
-            this.target = this.fools.find((fool) => fool.id === this.target!.id);
+            this.target = this.fools.find((fool) => fool.uuid === this.target!.uuid);
         }
         else this.target = undefined;
     }
@@ -118,8 +122,7 @@ export class MasterDashboardPageComponent implements OnInit {
     public renameFool(name: string, fool: Fool) {
         this.contextFocus = undefined;
         this.renaming = undefined;
-
-        this.websocket.socket.emit('rename', { target: fool, name });
+        this.eventService.renameFool(fool, name);
     }
 
     private selectTarget(fool: Fool) {
