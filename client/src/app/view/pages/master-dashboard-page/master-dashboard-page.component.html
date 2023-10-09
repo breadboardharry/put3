@@ -8,7 +8,7 @@
             <div class="fools-container">
                 <app-fool-card
                     *ngFor="let fool of fools"
-                    [selected]="target && fool.id == target.id"
+                    [selected]="target && fool.uuid == target.uuid"
                     [fool]="fool"
                     (click)="clickFool(fool)"
                     (contextmenu)="rightClickFool(fool, $event)"

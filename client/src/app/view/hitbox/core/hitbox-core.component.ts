@@ -14,33 +14,37 @@ import { ComponentService } from 'src/app/services/component-service/component.s
 })
 export class HitboxCoreComponent implements OnInit {
 
-  @ViewChild(ChildElementsDirective, {static: true}) childElements!: ChildElementsDirective;
-  childElementsContainerRef!: ViewContainerRef;
+    @ViewChild(ChildElementsDirective, {static: true}) childElements!: ChildElementsDirective;
+    childElementsContainerRef!: ViewContainerRef;
 
-  @Input() hitbox!: Hitbox;
+    @Input() hitbox!: Hitbox;
 
-  nbClick: number = 0;
-  timeout!: any;
-  doubleClickTimeout: number = 220;
+    nbClick: number = 0;
+    timeout!: any;
+    doubleClickTimeout: number = 220;
 
-  hoverEvent = new EventEmitter<boolean>();
-  clickEvent = new EventEmitter();
-  singleClickEvent = new EventEmitter();
-  doubleClickEvent = new EventEmitter();
-  outsideClickEvent = new EventEmitter();
+    hoverEvent = new EventEmitter<boolean>();
+    clickEvent = new EventEmitter();
+    singleClickEvent = new EventEmitter();
+    doubleClickEvent = new EventEmitter();
+    outsideClickEvent = new EventEmitter();
 
-  constructor(private elementRef: ElementRef, private componentService: ComponentService, private desktopService: DesktopService) { }
+    constructor(
+        private elementRef: ElementRef,
+        private componentService: ComponentService,
+        private desktopService: DesktopService
+    ) { }
 
-  ngOnInit(): void {
-    // Get reference to the component container
-    this.childElementsContainerRef = this.childElements.viewContainerRef;
-    this.childElementsContainerRef.clear();
+    ngOnInit(): void {
+        // Get reference to the component container
+        this.childElementsContainerRef = this.childElements.viewContainerRef;
+        this.childElementsContainerRef.clear();
 
-    const events = this.hitbox.events;
-    // Generate interaction component for each trigger
-    if(ETrigger.Default in events && events[ETrigger.Default])
-      this.addComponent(events[ETrigger.Default]);
-  }
+        const events = this.hitbox.events;
+        // Generate interaction component for each trigger
+        if(ETrigger.Default in events && events[ETrigger.Default])
+            this.addComponent(events[ETrigger.Default]);
+    }
 
     addComponent(action: Action) {
         let componentRef;
@@ -65,67 +69,67 @@ export class HitboxCoreComponent implements OnInit {
         componentRef.instance.outsideClickEvent = this.outsideClickEvent;
   }
 
-  mouseEnter() {
-    const events = this.hitbox.events;
-    if(ETrigger.Hover in events && events[ETrigger.Hover])
-      this.addComponent(events[ETrigger.Hover]);
+    mouseEnter() {
+        const events = this.hitbox.events;
+        if(ETrigger.Hover in events && events[ETrigger.Hover])
+            this.addComponent(events[ETrigger.Hover]);
 
-    this.hoverEvent.emit(true);
-  }
-
-  mouseLeave() {
-    this.hoverEvent.emit(false);
-  }
-
-  click() {
-    this.clickEvent.emit();
-
-    clearTimeout(this.timeout);
-
-    // Double click
-    if (++this.nbClick > 1) {
-      this.nbClick = 0;
-      this.doubleClick();
+        this.hoverEvent.emit(true);
     }
 
-    // Single click
-    else {
-      this.timeout = setTimeout(() => {
-        this.nbClick = 0;
-        this.singleClick();
-      },
-      this.doubleClickTimeout);
+    mouseLeave() {
+        this.hoverEvent.emit(false);
     }
-  }
 
-  private singleClick() {
-    const events = this.hitbox.events;
-    if(ETrigger.Click in events && events[ETrigger.Click])
-      this.addComponent(events[ETrigger.Click]);
+    click() {
+        this.clickEvent.emit();
 
-    this.singleClickEvent.emit();
-  }
+        clearTimeout(this.timeout);
 
-  private doubleClick() {
-    const events = this.hitbox.events;
-    if(ETrigger.DoubleClick in events && events[ETrigger.DoubleClick])
-      this.addComponent(events[ETrigger.DoubleClick]);
+        // Double click
+        if (++this.nbClick > 1) {
+            this.nbClick = 0;
+            this.doubleClick();
+        }
 
-    this.doubleClickEvent.emit();
-  }
-
-  private outsideClick() {
-    this.outsideClickEvent.emit();
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
-    const clickedElement = event.target as HTMLElement;
-    const isClickInside = this.elementRef.nativeElement.contains(clickedElement);
-
-    // CLose the menu if the click is outside the menu and the last trigger source is not the button
-    if (!isClickInside) {
-      this.outsideClick();
+        // Single click
+        else {
+            this.timeout = setTimeout(() => {
+                this.nbClick = 0;
+                this.singleClick();
+            },
+            this.doubleClickTimeout);
+        }
     }
-  }
+
+    private singleClick() {
+        const events = this.hitbox.events;
+        if(ETrigger.Click in events && events[ETrigger.Click])
+            this.addComponent(events[ETrigger.Click]);
+
+        this.singleClickEvent.emit();
+    }
+
+    private doubleClick() {
+        const events = this.hitbox.events;
+        if(ETrigger.DoubleClick in events && events[ETrigger.DoubleClick])
+            this.addComponent(events[ETrigger.DoubleClick]);
+
+        this.doubleClickEvent.emit();
+    }
+
+    private outsideClick() {
+        this.outsideClickEvent.emit();
+    }
+
+    @HostListener('document:click', ['$event'])
+    onClick(event: MouseEvent) {
+        const clickedElement = event.target as HTMLElement;
+        const isClickInside = this.elementRef.nativeElement.contains(clickedElement);
+
+        // CLose the menu if the click is outside the menu and the last trigger source is not the button
+        if (!isClickInside) {
+            this.outsideClick();
+        }
+    }
 }

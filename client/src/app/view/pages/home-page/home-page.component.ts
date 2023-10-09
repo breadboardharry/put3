@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Script } from 'src/app/enums/assets/scrips';
-import { Role } from 'src/app/enums/role';
+import { EnumUserRole } from 'src/app/enums/role';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
     selector: 'app-home-page',
@@ -12,9 +11,9 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class HomePageComponent implements OnInit {
 
-    hover: Role.Master | Role.Fool | null = null;
+    hover: EnumUserRole.MASTER | EnumUserRole.FOOL | null = null;
     scripts = Script;
-    role = Role;
+    EnumUserRole = EnumUserRole;
 
     constructor(public assetsService: AssetsService, private router: Router) {}
 
@@ -28,7 +27,7 @@ export class HomePageComponent implements OnInit {
         this.router.navigate(['/fool']);
     }
 
-    mouseEnter(elem: Role.Master | Role.Fool) {
+    mouseEnter(elem: EnumUserRole.MASTER | EnumUserRole.FOOL) {
         this.hover = elem;
     }
 

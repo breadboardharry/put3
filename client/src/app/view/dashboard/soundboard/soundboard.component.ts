@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Fool } from 'src/app/classes/fool';
 import { ResourceType } from 'src/app/enums/resources/type';
+import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
@@ -19,7 +19,10 @@ export class SoundboardComponent implements OnInit {
 
     tracks: FileData[] = [];
 
-    constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
+    constructor(
+        private eventService: EventService,
+        public resourceService: ResourcesService
+    ) { }
 
     ngOnInit(): void {
         this.resourceService.getDataByType(ResourceType.Audio).then((data) => {
@@ -28,12 +31,10 @@ export class SoundboardComponent implements OnInit {
     }
 
     stopAll() {
-        this.websocket.socket.emit('action', {
-            target: this.target,
-            action: {
-                type: 'audio',
-                stop: true
-            }
+        if (!this.target) return;
+        this.eventService.sendAction(this.target, {
+            type: 'audio',
+            stop: true
         });
     }
 }

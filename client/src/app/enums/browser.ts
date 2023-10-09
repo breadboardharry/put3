@@ -1,9 +1,9 @@
-export enum Browser {
-    Edge = 'edge',
-    Opera = 'opera',
-    Chrome = 'chrome',
+export enum EnumBrowser {
+    EDGE = 'edge',
+    OPERA = 'opera',
+    CHROME = 'chrome',
     IE = 'ie',
-    Firefox = 'firefox',
-    Safari = 'safari',
-    Other = 'other'
+    FIREFOX = 'firefox',
+    SAFARI = 'safari',
+    OTHER = 'other'
 }

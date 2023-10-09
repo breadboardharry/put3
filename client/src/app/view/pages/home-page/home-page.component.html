@@ -1,12 +1,12 @@
 <div class="page">
     <div class="roles">
         <button class="master" [ngClass]="{'hide': hover == 'fool'}" (click)="chooseMaster()"
-            (mouseenter)="mouseEnter(role.Master)" (mouseleave)="mouseLeave()">
+            (mouseenter)="mouseEnter(EnumUserRole.MASTER)" (mouseleave)="mouseLeave()">
             <span class="text">Maitre</span>
         </button>
 
         <button class="fool" [ngClass]="{'hide': hover == 'master'}" (click)="chooseFool()"
-            (mouseenter)="mouseEnter(role.Fool)" (mouseleave)="mouseLeave()">
+            (mouseenter)="mouseEnter(EnumUserRole.FOOL)" (mouseleave)="mouseLeave()">
             <span class="text">Piégé</span>
         </button>
     </div>

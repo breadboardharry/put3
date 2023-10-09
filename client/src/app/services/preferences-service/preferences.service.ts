@@ -10,10 +10,6 @@ export class PreferencesService {
     constructor(private cookie: CookieService) {}
 
     public get() {
-        console.log({
-            desktop: this.getDesktop(),
-            name: this.getName()
-        });
         return {
             desktop: this.getDesktop(),
             name: this.getName()
@@ -53,4 +49,14 @@ export class PreferencesService {
         const name = this.cookie.get('name');
         return name ? JSON.parse(name) : null;
     }
+
+    public setUuid (uuid: string): void {
+        this.cookie.set('uuid', JSON.stringify(uuid));
+    }
+
+    public getUuid (): string | null {
+        const uuid = this.cookie.get('uuid');
+        return uuid ? JSON.parse(uuid) : null;
+    }
+
 }

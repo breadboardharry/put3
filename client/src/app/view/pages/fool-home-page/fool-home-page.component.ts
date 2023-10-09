@@ -1,8 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CursorService } from 'src/app/services/cursor-service/cursor.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
-import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { environment } from 'src/environments/environment';
 import { WindowService } from 'src/app/services/window-service/window.service';
 import { PreferencesService } from 'src/app/services/preferences-service/preferences.service';
@@ -10,8 +8,10 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 import { Layout } from 'src/app/types/layout';
 import { LayoutService } from 'src/app/services/layout-service/layout.service';
 import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
-import { Role } from 'src/app/enums/role';
+import { EnumUserRole } from 'src/app/enums/role';
 import { BackendService } from 'src/app/services/backend/backend.service';
+import { EventService } from 'src/app/services/event-service/event.service';
+import { ClientService } from 'src/app/services/client-service/client.service';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -29,6 +29,7 @@ export class FoolHomePageComponent implements OnInit {
     defaultDesktopImage = environment.defaultDesktopImage;
 
     constructor(
+        private clientService: ClientService,
         public backend: BackendService,
         private browser: BrowserService,
         private layoutService: LayoutService,
@@ -36,37 +37,32 @@ export class FoolHomePageComponent implements OnInit {
         private preferences: PreferencesService,
         private windowService: WindowService,
         public cursorService: CursorService,
-        private websocket: WebSocketService,
-        private audio: AudioService ) {}
+        private audio: AudioService,
+        private eventService: EventService
+    ) {}
 
     ngOnInit(): void {
         // Update role if needed
-        this.websocket.declare(Role.Fool, this.preferences.get());
+        this.clientService.setRole(EnumUserRole.FOOL, this.preferences.get());
 
         // Send window size and browser infos
-        this.websocket.socket.emit('infos', {
+        this.eventService.changeSelfInfos({
             browser: this.browser.get(),
             window: this.windowService.getWindowSize(),
         });
 
-        this.websocket.socket.on('action', (data: any) => {
+        this.eventService.onAction.subscribe((data) => {
             this.action(data);
         });
 
-        this.websocket.socket.on('layout', (data: any) => {
-            if (data.target.id !== this.websocket.id) return;
-            this.layout = this.layoutService.newFoolLayout(data.layout);
+        this.eventService.onLayout.subscribe((data) => {
+            console.log('[-] Layout received', data);
+            this.layout = this.layoutService.newFoolLayout(data);
         });
 
-        this.websocket.socket.on('name', (data: any) => {
-            if (data.target.id !== this.websocket.id) return;
-
-            this.preferences.setName(data.name);
+        this.eventService.onRename.subscribe((newName) => {
+            this.preferences.setName(newName);
         });
-
-        // if (this.preferences.getName()) {
-        //     this.websocket.socket.emit('rename', this.preferences.getName());
-        // }
 
         this.setDesktopImage();
     }
@@ -75,30 +71,26 @@ export class FoolHomePageComponent implements OnInit {
         // Check in cookies if there a previous desktop image is set
         const prevDesktop: any = this.preferences.getDesktop();
 
-        if (prevDesktop) {
-            // Check if the image still exists
-            const exists = await this.resourceService.exists(prevDesktop.image)
-            if (exists) {
-                this.layout.desktop.image = prevDesktop.image;
-                this.websocket.socket.emit('desktop', this.layout.desktop);
-                return;
-            }
-        }
+        if (!prevDesktop) return;
+
+        // Check if the image still exists
+        const exists = await this.resourceService.exists(prevDesktop.image);
+        if (!exists) return;
+
+        this.layout.desktop.image = prevDesktop.image;
+        return;
     }
 
-    action(data: any) {
-        // Check if this user is the target
-        if (data.target.id !== this.websocket.id) return;
-
-        switch (data.action.type) {
+    action(data: { [key: string]: any }) {
+        switch (data['type']) {
             case 'audio':
-                const volume = 'volume' in data.action ? data.action.volume : 1.0;
-                if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-                else if ('track' in data.action) this.audio.play(this.backend.serverUrl + '/' + data.action.track.href, volume);
+                const volume = 'volume' in data ? data['volume'] : 1.0;
+                if ('stop' in data && data['stop']) this.audio.stopAll();
+                else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data['track'].href, volume);
                 break;
 
             default:
-                console.log({data});
+                console.error('Unknown action type', data);
                 break;
         }
     }
@@ -115,7 +107,7 @@ export class FoolHomePageComponent implements OnInit {
         if (this.timeout) clearTimeout(this.timeout);
 
         this.timeout = setTimeout(() => {
-            this.websocket.socket.emit('infos', {
+            this.eventService.changeSelfInfos({
                 window: this.windowService.getWindowSize()
             });
         }, 500);
