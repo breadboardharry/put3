@@ -1,0 +1,33 @@
+<div class="soundboard">
+  <div class="content">
+    <div class="sidebar">
+      <div class="title" [ngClass]="{'disabled': disabled}">
+        Soundboard
+      </div>
+      <div class="options">
+        <div class="volume">
+          <img class="speaker-icon" [ngClass]="{'disabled': disabled}"
+               src="assets/icons/speaker.png">
+          <mat-slider min="1" max="100" color="primary" thumbLabel
+                      [(ngModel)]="volume"
+                      [disabled]="disabled">
+          </mat-slider>
+        </div>
+
+        <button class="stop" (click)="stopAll()" [disabled]="disabled">STOP</button>
+      </div>
+    </div>
+    <div class="buttons">
+        <div class="no-content-container" *ngIf="!tracks.length">
+            <h4 class="no-content-label">No tracks</h4>
+        </div>
+
+        <app-soundboard-button *ngFor="let track of tracks"
+                                [track]="track"
+                                [target]="target"
+                                [volume]="volume"
+                                [disabled]="disabled">
+        </app-soundboard-button>
+    </div>
+  </div>
+</div>

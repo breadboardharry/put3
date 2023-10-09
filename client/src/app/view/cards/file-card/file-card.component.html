@@ -1,0 +1,25 @@
+<div class="card" [ngClass]="{'selected': selected}">
+    <div class="image-container" [ngSwitch]="file.type">
+        <!-- ---------------------------- TYPE : IMAGE ----------------------------- -->
+        <img *ngSwitchCase="'image'" [src]="backend.serverUrl + '/' + file.href" [ngClass]="{
+            'fit-height': file.dimensions!.ratio <= (16/9),
+            'fit-width': file.dimensions!.ratio > (16/9)
+        }"
+        draggable="false">
+
+        <!-- ---------------------------- TYPE : VIDEO ----------------------------- -->
+        <img *ngSwitchCase="'video'" src="assets/icons/video-file.png" draggable="false">
+
+        <!-- ---------------------------- TYPE : AUDIO ----------------------------- -->
+        <img *ngSwitchCase="'audio'" src="assets/icons/audio-file.png" draggable="false">
+    </div>
+
+    <textarea class="filename" rows="2"
+        [ngClass]="{'editing': editing}"
+        [(ngModel)]="name"
+        [readOnly]="!editing"
+        (focusout)="editDone()"
+        (keydown.enter)="editDone()"
+    >
+    </textarea>
+</div>

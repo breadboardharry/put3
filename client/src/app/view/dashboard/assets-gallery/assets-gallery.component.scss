@@ -1,0 +1,153 @@
+@import "~src/styles.scss";
+
+.container {
+    width: 100%;
+    height: 100%;
+
+    form {
+        position: relative;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        overflow: scroll;
+
+        @extend %hidden-scrollbar;
+    }
+
+    &.hover,
+    &.uploading {
+        .file-upload-container {
+            display: flex;
+        }
+    }
+}
+
+.file-upload-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: $light-gradient;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    .label-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+
+        img {
+            width: 64px;
+        }
+
+        span {
+            @extend %font-base;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.file-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.no-content-label {
+    @extend %font-base;
+    width: 100%;
+    padding: 1rem 0;
+
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+// .progress {
+//     margin-bottom: 30px;
+// }
+
+// .fileupload {
+//     // background-image: url("./assets/icons/upload.png");
+//     background-repeat: no-repeat;
+//     background-size: 100px;
+//     background-position: center;
+//     background-color: #ffffff;
+//     height: 200px;
+//     width: 100%;
+//     cursor: pointer;
+//     /* border: 2px dashed #0f68ff; */
+//     border-radius: 6px;
+//     margin-bottom: 25px;
+//     background-position: center 28px;
+
+//     &.hover {
+//         background-color: #cae1fc;
+//     }
+// }
+
+// .image-list {
+//     display: flex;
+//     width: 100%;
+//     background: #C2DFFC;
+//     border: 1px solid;
+//     border-radius: 3px;
+//     padding: 10px 10px 10px 15px;
+//     margin-bottom: 10px;
+// }
+
+// .image-list p {
+//     line-height: normal;
+//     padding: 0;
+//     margin: 0 0 0 14px;
+//     display: inline-block;
+//     position: relative;
+//     top: -2px;
+//     color: #150938;
+//     font-size: 14px;
+// }
+
+// .message {
+//     text-align: center;
+//     color: #C2DFFC;
+// }
+
+// .remove {
+//     background: transparent;
+//     border: none;
+//     cursor: pointer;
+// }
+
+// .profile {
+//     width: 40px;
+//     height: 40px;
+//     overflow: hidden;
+//     border-radius: 4px;
+//     display: inline-block;
+// }
+
+// .profile img {
+//     width: 100%;
+// }
+
+// .remove img {
+//     width: 15px;
+//     position: relative;
+//     top: -2px;
+// }
+
+// .fileUploadWrapper .card-body {
+//     max-height: 330px;
+//     overflow: hidden;
+//     overflow-y: auto;
+// }

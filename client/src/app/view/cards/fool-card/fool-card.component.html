@@ -1,0 +1,16 @@
+<div class="card" [ngClass]="{'selected': selected}">
+    <div class="name">
+        <input class="name-input" type="text" placeholder="Fool name"
+            [ngClass]="{'editing': rename}"
+            [(ngModel)]="name"
+            [readOnly]="!rename"
+            (focusout)="editDone()"
+            (keydown.enter)="editDone()"
+        >
+    </div>
+    <div *ngIf="selected" class="selection"></div>
+    <div class="shadow"></div>
+    <div class="browser">
+        <img [src]="browser.toIcon(fool.browser)">
+    </div>
+</div>

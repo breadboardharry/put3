@@ -1,0 +1,50 @@
+<div class="page">
+    <app-dashboard-navbar
+        [selectedItem]="selectedItem"
+        (selectedItemEvent)="selectItem($event)"
+    ></app-dashboard-navbar>
+    <div class="content-container">
+        <div class="content">
+            <div class="fools-container">
+                <app-fool-card
+                    *ngFor="let fool of fools"
+                    [selected]="target && fool.id == target.id"
+                    [fool]="fool"
+                    (click)="clickFool(fool)"
+                    (contextmenu)="rightClickFool(fool, $event)"
+                    [rename]="renaming == fool"
+                    (editedEvent)="renameFool($event, fool)"
+                >
+                </app-fool-card>
+                <p class="no-fool" *ngIf="!fools.length">
+                    No fool connected
+                </p>
+            </div>
+
+            <hr class="separator" />
+
+            <div class="app-container" [ngSwitch]="selectedItem.title">
+                <app-soundboard *ngSwitchCase="dashboardPage.Soundboard"
+                    [fools]="fools"
+                    [target]="target"
+                    [disabled]="!fools.length || target == null"
+                >
+                </app-soundboard>
+
+                <app-assets-gallery *ngSwitchCase="dashboardPage.Resources">
+                </app-assets-gallery>
+
+                <app-layout-editor *ngSwitchCase="dashboardPage.Layout"
+                    [fools]="fools"
+                    [target]="target"
+                    [disabled]="!fools.length || target == null"
+                ></app-layout-editor>
+            </div>
+        </div>
+    </div>
+</div>
+<app-context-menu *ngIf="contextMenu.show"
+    [ngStyle]="contextMenu.style"
+    [items]="contextMenu.items"
+    (itemClick)="handleContextMenu($event)">
+</app-context-menu>

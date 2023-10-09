@@ -1,0 +1,34 @@
+@import '~src/styles.scss';
+
+.menu {
+    padding: 0.2rem 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: $light-gradient;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+
+.item {
+    @extend %font-base;
+    font-size: 12px;
+    font-weight: 200;
+    letter-spacing: 0.02rem;
+    text-align: start;
+
+    background-color: transparent;
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0.25rem 0.6rem;
+
+    &:hover:enabled {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &:disabled {
+        color:rgba(255, 255, 255, 0.35)
+    }
+}

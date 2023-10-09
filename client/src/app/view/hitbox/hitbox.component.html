@@ -1,0 +1,29 @@
+<div class="container" cdkDrag
+    cdkDragBoundary=".draggable-zone"
+    [cdkDragDisabled]="hitbox.active"
+    (mouseenter)="mouseEnter()"
+    (mouseleave)="mouseLeave()"
+    (cdkDragEnded)="dragEnd($event)"
+    [ngStyle]="{
+        'left.%': hitbox.position.x,
+        'top.%': hitbox.position.y,
+        'width.%': hitbox.size.width,
+        'height.%': hitbox.size.height,
+        'background-color': 'rgba(0, 0, 0, 0.3)'
+    }"
+    >
+    <div class="active-area">
+        <!-- ---------------------------- RESIZE & MOVE ---------------------------- -->
+        <div *ngIf="!hitbox.active" class="resize-handle-container" [ngClass]="{'hover': hover}">
+            <div class="resize-handle-right" (mousedown)="resizeStart('right')"></div>
+            <div class="resize-handle-bottom" (mousedown)="resizeStart('bottom')"></div>
+            <div class="resize-handle-corner" (mousedown)="resizeStart('corner')"></div>
+            <div class="drag-handle" cdkDragHandle></div>
+        </div>
+        <!-- ------------------------- BUTTON WHEN ACTIVE -------------------------- -->
+        <app-hitbox-core *ngIf="hitbox.active" [hitbox]="hitbox"></app-hitbox-core>
+    </div>
+
+    <!-- -------------------------- SETTINGS SECTION --------------------------- -->
+    <app-hitbox-settings [class]="'pos-' + settingsPos" *ngIf="!hitbox.active" [hitbox]="hitbox" [triggers]="triggers" [actions]="actions" [(hover)]="hover"></app-hitbox-settings>
+</div>

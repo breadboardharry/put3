@@ -1,15 +1,27 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+# Angular
+client/.angular/
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+# Compiled output
+client/dist
+client/tmp
+client/out-tsc
+client/bazel-out
+
+# Express Server
+server/public/images/desktop.*
+
+server/public/resources/audio/*
+server/public/resources/images/*
+server/public/resources/videos/*
+!server/public/resources/**/.default/
+!server/public/resources/**/.desktop/default-desktop.*
+
+# Dependencies
+node_modules/
+*/npm-debug.log
+*/yarn-error.log
 
 # IDEs and editors
 .idea/
