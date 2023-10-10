@@ -1,4 +1,29 @@
-<div class="hitboxes overwrite-cursor" *ngIf="layout">
-    <app-hitbox *ngFor="let hitbox of layout.hitboxes" [hitbox]="hitbox"></app-hitbox>
+<div class="page">
+    <div class="landing-page {{ running ? 'closed' : ''}}">
+        <mat-spinner *ngIf="loading"></mat-spinner>
+
+        <div class="landing-page-content" *ngIf="!loading">
+            <button class="session-code-button" [cdkCopyToClipboard]="sessionCode" (click)="copiedToClipboard()">
+                <h1 class="session-code">{{ sessionCode }}</h1>
+            </button>
+
+            <a [href]="masterUrl" target="_blank">
+                <qrcode *ngIf="sessionCode"
+                    [qrdata]="masterUrl"
+                    [width]="200"
+                    [margin]="3"
+                    [errorCorrectionLevel]="'M'"
+                ></qrcode>
+            </a>
+
+            <button (click)="run()">Run</button>
+        </div>
+    </div>
+
+    <div class="fool-app-page" *ngIf="running">
+        <div class="hitboxes overwrite-cursor" *ngIf="layout">
+            <app-hitbox *ngFor="let hitbox of layout.hitboxes" [hitbox]="hitbox"></app-hitbox>
+        </div>
+        <app-desktop [backgroundImage]="backgroundImage"></app-desktop>
+    </div>
 </div>
-<app-desktop [backgroundImage]="backend.serverUrl + '/' + (layout.desktop.image ? layout.desktop.image : defaultDesktopImage)"></app-desktop>

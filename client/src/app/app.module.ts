@@ -42,6 +42,10 @@ import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-b
 import { GradientLoaderComponent } from './view/global/loaders/gradient-loader/gradient-loader.component';
 import { SessionEnterPageComponent } from './view/pages/session-enter-page/session-enter-page.component';
 import { SessionCodeDirective } from './directives/session-code.directive';
+import { QRCodeModule } from 'angularx-qrcode';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { CodeInputModule } from 'angular-code-input';
+import { CodeInputComponent } from './view/common/code-input/code-input.component';
 
 @NgModule({
     declarations: [
@@ -75,9 +79,11 @@ import { SessionCodeDirective } from './directives/session-code.directive';
         ResourceBrowserModal,
         GradientLoaderComponent,
         SessionEnterPageComponent,
-        SessionCodeDirective
+        SessionCodeDirective,
+        CodeInputComponent,
     ],
     imports: [
+        CodeInputModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -89,7 +95,9 @@ import { SessionCodeDirective } from './directives/session-code.directive';
         HttpClientModule,
         MatSliderModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        QRCodeModule,
+        ClipboardModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

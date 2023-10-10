@@ -1,4 +1,4 @@
-import { User } from "../../models/user";
+import { User } from "../models/user";
 
 export class Session {
 
@@ -18,8 +18,21 @@ export class Session {
         return this.fool;
     }
 
+    public getMasters(): User[] {
+        return this.masters;
+    }
+
     public addMaster(master: User) {
         this.masters.push(master);
+    }
+
+    public getUsers(): User[] {
+        return [this.fool, ...this.masters];
+    }
+
+    public removeMaster(uuid: string) {
+        const index = this.masters.findIndex((master) => master.uuid == uuid);
+        if (index > -1) this.masters.splice(index, 1);
     }
 
     private generateCode(): string {
@@ -33,7 +46,7 @@ export class Session {
 
 }
 
-export class SessionModule {
+export class SessionService {
 
     private static sessions: Session[] = [];
 
@@ -47,12 +60,20 @@ export class SessionModule {
         return this.sessions;
     }
 
+    public static getMasterAssociatedSessions(uuid: string): Session[] {
+        return this.sessions.filter((session) => session.getMasters().find((master) => master.uuid == uuid));
+    }
+
+    public static getFoolAssociatedSession(uuid: string): Session | undefined {
+        return this.sessions.find((session) => session.getFool().uuid == uuid);
+    }
+
     public static find(code: string): Session | undefined {
         return this.sessions.find((session) => session.getCode() == code);
     }
 
     public static remove(code: string) {
-        const session = SessionModule.find(code);
+        const session = SessionService.find(code);
         if (!session) return;
         const index = this.sessions.indexOf(session);
         if (index > -1) this.sessions.splice(index, 1);

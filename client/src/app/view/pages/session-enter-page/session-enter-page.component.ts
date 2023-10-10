@@ -1,16 +1,21 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Route } from 'src/app/enums/routes';
 import { SessionService } from 'src/app/services/session-service/session.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
+import { CodeInputComponent } from '../../common/code-input/code-input.component';
 
 @Component({
     selector: 'app-session-enter-page',
     templateUrl: './session-enter-page.component.html',
     styleUrls: ['./session-enter-page.component.scss']
 })
-export class SessionEnterPageComponent {
+export class SessionEnterPageComponent implements AfterViewInit {
 
+    @ViewChild('codeInput')
+    public codeInput!: CodeInputComponent;
+
+    public codeLength: number = 5;
     public code: string = "";
     public loading: boolean = false;
 
@@ -20,6 +25,10 @@ export class SessionEnterPageComponent {
         private snackbar: SnackbarService
     ) { }
 
+    ngAfterViewInit(): void {
+        this.codeInput.focusOnField(0);
+    }
+
     public validate(): void {
         if (!this.code) return;
         this.loading = true;
@@ -27,6 +36,9 @@ export class SessionEnterPageComponent {
         this.sessionService.exists(this.code).then((exists: boolean) => {
             this.loading = false;
             if (!exists) {
+                setTimeout(() => {
+                    this.codeInput.focusOnField(this.code.length - 1);
+                }, 100);
                 this.snackbar.openError("No session found");
                 return;
             }
@@ -36,6 +48,14 @@ export class SessionEnterPageComponent {
 
     public get disabled(): boolean {
         return this.code.length < 5;
+    }
+
+    public onCodeChanged(code: string) {
+        this.code = code;
+    }
+
+    public onEnterPressed() {
+        this.validate();
     }
 
 }

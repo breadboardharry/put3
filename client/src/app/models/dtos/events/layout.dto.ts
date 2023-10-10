@@ -6,9 +6,8 @@ import { Layout } from "src/app/types/layout";
 export class EventLayoutDTO {
 
     @Expose()
-    @IsDefined()
     @Type(() => EventTargetDTO)
-    target!: EventTargetDTO;
+    target?: EventTargetDTO;
 
     @Expose()
     @IsDefined()

@@ -2,6 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
 
+export type SessionData = {
+    code: string
+    masters: {}[];
+    fool: {};
+};
+
 @Injectable({
     providedIn: 'root',
 })

@@ -13,9 +13,6 @@ import { getLastDesktopImage } from "../../../services/desktop.service";
 
 // Image upload
 router.post("/set", upload.desktopImage.single("image"), (req, res) => {
-    // const ip = ipv6ToIpv4(req.ip);
-    // console.log("IP: " + ip)
-
     // Upload via body
     if (req.body.image) {
 

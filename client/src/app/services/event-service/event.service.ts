@@ -12,7 +12,6 @@ import { EventRoleDTO } from 'src/app/models/dtos/events/role.dto';
 import { FoolInfos } from 'src/app/types/fool-infos';
 import { EventInfosDTO } from 'src/app/models/dtos/events/infos.dto';
 import { Subject } from 'rxjs';
-import { ClientService } from '../client-service/client.service';
 import { EventUpdateDTO } from 'src/app/models/dtos/events/update.dto';
 import { ResourceSet } from 'src/app/types/resources/data-set';
 import { EnumUpdateType } from 'src/app/enums/type-update';
@@ -37,6 +36,7 @@ export type RoleResponseData = {
 })
 export class EventService {
 
+    public onSession: Subject<any> = new Subject<any>();
     public onRole: Subject<RoleResponseData> = new Subject<RoleResponseData>();
     public onAction: Subject<Action> = new Subject<Action>();
     public onLayout: Subject<Layout> = new Subject<Layout>();
@@ -64,20 +64,14 @@ export class EventService {
         });
 
         this.websocket.socket.on(EnumEventName.ACTION, (event: EventActionDTO) => {
-            // Check if this user is the target
-            if (event.target.uuid !== ClientService.UUID) return;
             this.onAction.next(event.data);
         });
 
         this.websocket.socket.on(EnumEventName.LAYOUT, (event: EventLayoutDTO) => {
-            // Check if this user is the target
-            if (event.target.uuid !== ClientService.UUID) return;
             this.onLayout.next(event.data);
         });
 
         this.websocket.socket.on(EnumEventName.RENAME, (event: EventRenameDTO) => {
-            // Check if this user is the target
-            if (event.target.uuid !== ClientService.UUID) return;
             this.onRename.next(event.data);
         });
 
@@ -89,6 +83,10 @@ export class EventService {
                 this.onFoolsUpdate.next(event.data.value as any[]);
             }
         });
+
+        this.websocket.socket.on(EnumEventName.SESSION, (event: any) => {
+            this.onSession.next(event.data);
+        });
     }
 
     public sendAction(target: Fool, action: Action): void {
@@ -97,7 +95,7 @@ export class EventService {
     }
 
     public sendLayout(target: Fool, layout: Layout): void {
-        const dto = plainToClass(EventLayoutDTO, { target, data: layout });
+        const dto = plainToClass(EventLayoutDTO, { target: target, data: layout });
         this.websocket.socket.emit(EnumEventName.LAYOUT, dto);
     }
 
@@ -106,8 +104,12 @@ export class EventService {
         this.websocket.socket.emit(EnumEventName.RENAME, dto);
     }
 
-    public changeSelfRole(role: EnumUserRole, preferences?: UserPreferences): void {
-        const dto = plainToClass(EventRoleDTO, { data: { role, preferences }});
+    public changeSelfRole(role: EnumUserRole, data: {sessionCode?: string, preferences?: UserPreferences}): void {
+        const dto = plainToClass(EventRoleDTO, { data: {
+            role,
+            preferences: data.preferences,
+            sessionCode: data.sessionCode
+        }});
         this.websocket.socket.emit(EnumEventName.ROLE, dto);
     }
 

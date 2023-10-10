@@ -7,6 +7,7 @@ import { EnumUserRole } from 'src/app/enums/role';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 import { MenuItem } from 'src/app/types/menu-item';
 
@@ -18,14 +19,16 @@ import { MenuItem } from 'src/app/types/menu-item';
 export class MasterDashboardPageComponent implements OnInit {
 
     private sessionCode!: string;
-    selectedItem: MenuItem = {
+    public loading = true;
+
+    public selectedItem: MenuItem = {
         title: DashboardPage.Layout
     };
-    fools: Fool[] = [];
-    target?: Fool;
-    dashboardPage = DashboardPage;
+    public fools: Fool[] = [];
+    public target?: Fool;
+    public dashboardPage = DashboardPage;
 
-    contextMenu: ContextMenu = {
+    public contextMenu: ContextMenu = {
         show: false,
         x: 0,
         y: 0,
@@ -36,32 +39,44 @@ export class MasterDashboardPageComponent implements OnInit {
         },
         items: []
     };
-    contextFocus?: Fool;
-    renaming?: Fool;
+    public contextFocus?: Fool;
+    public renaming?: Fool;
 
     constructor(
         private clientService: ClientService,
         public resourceService: ResourcesService,
         private eventService: EventService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private snackbar: SnackbarService
     ) { }
 
     ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
             this.sessionCode = params['code'];
-            console.log('Code Parameter:', this.sessionCode);
 
-            this.clientService.askForRole(EnumUserRole.MASTER);
-
-            this.eventService.onFoolsUpdate.subscribe((fools) => {
-                this.updateFools(fools);
+            // Ask for role
+            this.clientService.roleChanged.subscribe(() => {
+                this.init();
+                this.loading = false;
             });
+            this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
+        });
+    }
+
+    private init() {
+        this.eventService.onSession.subscribe((session) => {
+            // Do something
+            console.log("Session message", session);
+            this.snackbar.openInfo("Session message");
+        });
+
+        this.eventService.onFoolsUpdate.subscribe((fools) => {
+            this.updateFools(fools);
         });
     }
 
     private updateFools(newList: any[]): void {
         this.fools = newList.map((fool: any) => {
-            // Create a new fool object
             const foolObj = new Fool(fool);
             // Find if a fool with the same id already exists
             let existing = this.fools.find((f) => f.uuid === foolObj.uuid);

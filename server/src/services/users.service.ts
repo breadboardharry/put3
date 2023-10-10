@@ -25,12 +25,12 @@ export default class UsersService {
         if (index > -1) this.users.splice(index, 1);
     }
 
-    /**
-     * Get connected fool list
-     * @return Fool list
-     */
     public static getFools() {
-        return JSON.parse(JSON.stringify(this.users.filter((user) => user.role == EnumUserRole.FOOL)));
+        return [...this.users.filter((user) => user.role == EnumUserRole.FOOL)];
+    }
+
+    public static getMasters() {
+        return [...this.users.filter((user) => user.role == EnumUserRole.MASTER)];
     }
 
     /**

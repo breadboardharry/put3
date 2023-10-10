@@ -6,9 +6,8 @@ import { RoleRequestData, RoleResponseData } from "src/app/services/event-servic
 export class EventRoleDTO {
 
     @Expose()
-    @IsDefined()
     @Type(() => EventTargetDTO)
-    target!: EventTargetDTO;
+    target?: EventTargetDTO;
 
     @Expose()
     @IsDefined()

@@ -61,7 +61,7 @@ export class LayoutEditorComponent implements OnInit {
         });
     }
 
-    sendConfig() {
+    public sendConfig() {
         this.foolService.sendConfig(this.target!);
     }
 }

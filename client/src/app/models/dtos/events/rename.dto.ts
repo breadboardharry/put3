@@ -6,9 +6,8 @@ import 'reflect-metadata';
 export class EventRenameDTO {
 
     @Expose()
-    @IsDefined()
     @Type(() => EventTargetDTO)
-    target!: EventTargetDTO;
+    target?: EventTargetDTO;
 
     @Expose()
     @IsDefined()

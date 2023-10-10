@@ -1,9 +1,18 @@
 <div class="page">
 
-    <input sessionCodeInput type="text" [(ngModel)]="code"  placeholder="Session code"/>
+    <div class="form">
+        <app-code-input #codeInput
+            [inputType]="'number'"
+            [codeLength]="codeLength"
+            (codeChanged)="onCodeChanged($event)"
+            (enterPressed)="onEnterPressed()"
+            [disabled]="loading"
+        >
+        </app-code-input>
 
-    <button (click)="validate()" [disabled]="disabled">
-        {{ loading ? '...' : 'Enter' }}
-    </button>
+        <button class="enter-button" (click)="validate()" [disabled]="loading || disabled">
+            <div class="icon"></div>
+        </button>
+    </div>
 
 </div>

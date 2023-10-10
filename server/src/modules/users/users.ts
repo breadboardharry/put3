@@ -4,50 +4,38 @@ import { Subject } from "rxjs";
 import { getData } from "../resources/resources";
 import { APIResponse } from "../../types/response";
 import { EnumUpdateType } from "../../enums/update-type";
-import { SessionModule } from "../session/sessions.module";
 import { UserPreferences } from "../../types/user-preferences";
-
-type EmitParams = {key: string, data: any};
-
-export enum EnumEventName {
-    ROLE = "role",
-    ACTION = "action",
-    INFOS = "infos",
-    LAYOUT = "layout",
-    RENAME = "rename",
-    UPDATE = "update",
-};
+import { EnumEventName } from "../../enums/event-name";
+import { SessionService } from "../../services/sessions.service";
+import { SessionModule } from "../session/sessions";
+import { EmitParams } from "../socket-server/socket-server";
 
 export class UserModule {
 
     public static emitSubject: Subject<EmitParams> = new Subject<EmitParams>();
 
-    private static emit(key: string, targetUuid?: string, data?: any) {
-        const params = { key, data: {
-            target: {uuid: targetUuid},
-            data
-        }};
+    private static emit(key: string, data?: any, targetUuids?: string[]) {
+        const params: EmitParams = { key, targetIds: targetUuids, data: {data} };
         this.emitSubject.next(params);
     }
 
     public static connect(uuid: string): APIResponse {
+        console.log("[-] New user connected: " + uuid);
         return { success: true };
     }
 
     public static disconnect(uuid: string): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
+        console.log("[-] try disconnection: " + uuid);
+        const checkUuid = this.checkUuid(uuid, true);
         if (!checkUuid.success) {
-            console.log(checkUuid.message);
+            console.error(checkUuid.message);
             return checkUuid;
         }
 
         console.log("[-] User disconnected: " + uuid);
         const user = UsersService.get(uuid);
-        if (user?.role == EnumUserRole.FOOL) {
-            const sessions = SessionModule.getSessions();
-            const session = sessions.find((session) => session.getFool().uuid == uuid);
-            if (session) SessionModule.remove(session.getCode());
-        }
+
+        SessionModule.disconnect(user!);
         UsersService.remove(uuid);
         this.emitUpdate.fools();
 
@@ -57,13 +45,13 @@ export class UserModule {
     public static setRole(uuid: string, role: string, data: { sessionCode?: string, preferences?: UserPreferences }): APIResponse {
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
-            console.log(checkUuid.message);
+            console.error(checkUuid.message);
             return checkUuid;
         }
 
         const checkRole = this.checkRole(role);
         if (!checkRole.success) {
-            console.log(checkRole.message);
+            console.error(checkRole.message);
             return checkRole;
         }
 
@@ -77,27 +65,29 @@ export class UserModule {
         else {
 
             if (role == EnumUserRole.MASTER) {
-                console.log("Test code:", data.sessionCode);
+                if (!SessionService.find(data.sessionCode!)) {
+                    return { success: false, message: "Session doesn't exist" };
+                }
             }
 
             const user = UsersService.new(uuid, role as EnumUserRole, data.preferences);
             if (role == EnumUserRole.FOOL) {
-                const session = SessionModule.new(user);
-                this.emit(EnumEventName.ROLE, uuid, {
+                const session = SessionService.new(user);
+                this.emit(EnumEventName.ROLE, {
                     uuid: user.uuid,
                     name: user.name,
                     role: user.role,
                     sessionCode: session.getCode(),
-                });
+                }, [uuid]);
             }
             else if (role == EnumUserRole.MASTER) {
-                this.emit(EnumEventName.ROLE, uuid, {
+                this.emit(EnumEventName.ROLE, {
                     uuid: user.uuid,
                     name: user.name,
                     role: user.role,
-                });
+                }, [uuid]);
+                SessionModule.connect(user, data.sessionCode!);
             }
-
         }
 
         this.emitUpdate.fools();
@@ -108,25 +98,26 @@ export class UserModule {
     public static sendAction(uuid: string, action: any): APIResponse {
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
-            console.log(checkUuid.message);
+            console.error(checkUuid.message);
             return checkUuid;
         }
 
         console.log("[-] Action sent to " + uuid);
-        this.emit(EnumEventName.ACTION, uuid, action);
+        this.emit(EnumEventName.ACTION, action, [uuid]);
 
         return { success: true, message: "Action sent" };
     }
 
     public static changeInfos(uuid: string, infos: any): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
+        const checkUuid = this.checkUuid(uuid, true);
         if (!checkUuid.success) {
-            console.log(checkUuid.message);
+            console.error(checkUuid.message);
             return checkUuid;
         }
 
         console.log("[-] Infos changed for " + uuid);
-        UsersService.get(uuid)!.infos = {...UsersService.get(uuid)!.infos, ...infos};
+        const user = UsersService.get(uuid)!;
+        user.infos = {...user.infos, ...infos};
         this.emitUpdate.fools();
 
         return { success: true, message: "Infos changed" };
@@ -135,12 +126,12 @@ export class UserModule {
     public static changeLayout(uuid: string, layout: any): APIResponse {
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
-            console.log(checkUuid.message);
+            console.error(checkUuid.message);
             return checkUuid;
         }
 
         console.log("[-] Layout changed for " + uuid);
-        this.emit(EnumEventName.LAYOUT, uuid, layout);
+        this.emit(EnumEventName.LAYOUT, layout, [uuid]);
         const user = UsersService.get(uuid)!;
         user.desktop = layout.desktop;
         this.emitUpdate.fools();
@@ -151,13 +142,13 @@ export class UserModule {
     public static rename(uuid: string, newName: string): APIResponse {
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
-            console.log(checkUuid.message);
+            console.error(checkUuid.message);
             return checkUuid;
         }
 
         console.log("[-] Rename " + uuid + " to " + newName);
         UsersService.get(uuid)!.name = newName;
-        this.emit(EnumEventName.RENAME, uuid, newName);
+        this.emit(EnumEventName.RENAME, newName, [uuid]);
         this.emitUpdate.fools();
 
         return { success: true, message: "User renamed" };
@@ -183,10 +174,10 @@ export class UserModule {
 
     public static emitUpdate = {
         resources: () => {
-            this.emit(EnumEventName.UPDATE, undefined, { type: EnumUpdateType.RESOURCES, value: getData()});
+            this.emit(EnumEventName.UPDATE, { type: EnumUpdateType.RESOURCES, value: getData()});
         },
         fools: () => {
-            this.emit(EnumEventName.UPDATE, undefined, { type: EnumUpdateType.FOOLS, value: UsersService.getFools()});
+            this.emit(EnumEventName.UPDATE, { type: EnumUpdateType.FOOLS, value: UsersService.getFools()});
         },
     }
 
