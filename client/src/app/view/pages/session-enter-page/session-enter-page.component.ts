@@ -58,4 +58,25 @@ export class SessionEnterPageComponent implements AfterViewInit {
         this.validate();
     }
 
+    private adminAccess: { timeoutDuration: number, neededTries: number, timeout?: NodeJS.Timeout, activeTries: number } = {
+        timeoutDuration: 500,
+        neededTries: 5,
+        timeout: undefined,
+        activeTries: 0,
+    }
+    public tryAdminAccess(): void {
+        this.adminAccess.activeTries++;
+
+        if (this.adminAccess.activeTries >= this.adminAccess.neededTries) {
+            this.snackbar.openSuccess("Admin access :)");
+            this.router.navigate([Route.LOGIN], { queryParams: { route: Route.MASTER } });
+            return;
+        }
+
+        if (this.adminAccess.timeout) clearTimeout(this.adminAccess.timeout);
+        this.adminAccess.timeout = setTimeout(() => {
+            this.adminAccess.activeTries = 0;
+        }, this.adminAccess.timeoutDuration);
+    }
+
 }

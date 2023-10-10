@@ -47,3 +47,14 @@
         font-size: 24px;
     }
 }
+
+.admin-access-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: none;
+    outline: none;
+    width: 8%;
+    height: 8%;
+    opacity: 0;
+}

@@ -7,7 +7,7 @@ import Session from './session';
 
 router.use('/session', Session);
 router.use('/desktop', Desktop);
-// router.use('/auth', Auth);
+router.use('/auth', Auth);
 router.use('/resources', Resources);
 
 router.use('/', (req: Request, res: Response) => {

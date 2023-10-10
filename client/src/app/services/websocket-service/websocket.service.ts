@@ -15,7 +15,8 @@ export class WebSocketService {
     ) {
         // Connect Socket with server URL
         this._socket = io(this.backend.serverUrl, {
-            path: environment.socketPath
+            path: environment.socketPath,
+            withCredentials: true
         });
     }
 

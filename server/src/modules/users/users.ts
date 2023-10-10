@@ -42,7 +42,9 @@ export class UserModule {
         return { success: true, message: "User deleted" };
     }
 
-    public static setRole(uuid: string, role: string, data: { sessionCode?: string, preferences?: UserPreferences }): APIResponse {
+    public static setRole(uuid: string, role: string, data: { sessionCode?: string, preferences?: UserPreferences, isAdmin: boolean }): APIResponse {
+        console.log("[-] Is admin: " + data.isAdmin);
+
         const checkUuid = this.checkUuid(uuid);
         if (!checkUuid.success) {
             console.error(checkUuid.message);
@@ -64,7 +66,7 @@ export class UserModule {
         }
         else {
 
-            if (role == EnumUserRole.MASTER) {
+            if (role == EnumUserRole.MASTER && !data.isAdmin) {
                 if (!SessionService.find(data.sessionCode!)) {
                     return { success: false, message: "Session doesn't exist" };
                 }
@@ -86,12 +88,11 @@ export class UserModule {
                     name: user.name,
                     role: user.role,
                 }, [uuid]);
-                SessionModule.connect(user, data.sessionCode!);
+                if (!data.isAdmin) SessionModule.connect(user, data.sessionCode!);
             }
         }
-
+        
         this.emitUpdate.fools();
-
         return { success: true, message: "Role changed" };
     }
 

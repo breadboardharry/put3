@@ -13,9 +13,7 @@ const routes: Routes = [
     { path: Route.HOME, component: HomePageComponent, data: { animation: 'Home' } },
     { path: Route.FOOL, component: FoolHomePageComponent, data: { animation: 'Fool' } },
     { path: Route.MASTER + '/session', component: SessionEnterPageComponent, data: { animation: 'Control' }},
-    { path: Route.MASTER, component: MasterDashboardPageComponent, canActivate: [MasterValidSessionGuard], data: { animation: 'Master' }, children: [
-
-    ]},
+    { path: Route.MASTER, component: MasterDashboardPageComponent, canActivate: [MasterValidSessionGuard], data: { animation: 'Master' }},
     { path: Route.LOGIN, component: CodelockPageComponent, data: { animation: 'Control' } }
 ];
 

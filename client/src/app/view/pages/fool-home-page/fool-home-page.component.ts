@@ -132,7 +132,7 @@ export class FoolHomePageComponent implements OnInit {
         event.preventDefault();
     }
 
-    private timeout: NodeJS.Timeout | undefined;
+    private timeout?: NodeJS.Timeout;
     @HostListener('window:resize', ['$event'])
     onResize(event: any) {
         // Send window size to server

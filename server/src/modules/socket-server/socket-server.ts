@@ -5,6 +5,10 @@ import https from 'https';
 import { UserModule } from "../users/users";
 import { EnumEventName } from "../../enums/event-name";
 import { SessionModule } from "../session/sessions";
+import { AuthModule } from "../auth/auth";
+import AuthMiddleware from "../../middlewares/auth";
+import { parse } from "cookie";
+import cookieParser from "socket.io-cookie-parser";
 
 export type EmitParams = { key: string, targetIds?: string[], data?: any };
 
@@ -13,6 +17,7 @@ export class SocketServer {
     private static options = {
         cors: corsOptions,
         path: '/socket/',
+        cookie: true
     };
 
     private static io: SocketIOServer;
@@ -20,6 +25,15 @@ export class SocketServer {
 
     public static init(httpServer: http.Server | https.Server) {
         this.io = new SocketIOServer(httpServer, this.options);
+        this.io.use(cookieParser());
+        // this.io.use(this.toSocketMiddleware(AuthMiddleware));
+        this.io.use(async (socket, next) => {
+            console.log(socket.request['cookies']);
+            const token = socket.request['cookies'].token;
+            const isLogged = await AuthModule.isLogged(token);
+            socket.request['isLogged'] = isLogged;
+            next();
+        });
 
         UserModule.emitSubject.subscribe((params) => {
             this.emit(params);
@@ -41,7 +55,8 @@ export class SocketServer {
                 setTimeout(() => {
                     UserModule.setRole(socket.id, message.data.role, {
                         sessionCode: message.data.sessionCode,
-                        preferences: message.data.preferences
+                        preferences: message.data.preferences,
+                        isAdmin: socket.request['isLogged']
                     });
                 }, 1000);
             });
