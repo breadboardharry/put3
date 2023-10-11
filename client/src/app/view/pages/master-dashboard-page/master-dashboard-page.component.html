@@ -1,10 +1,12 @@
 <div class="page">
+
     <mat-spinner *ngIf="loading"></mat-spinner>
-    
+
     <app-dashboard-navbar
         [selectedItem]="selectedItem"
         (selectedItemEvent)="selectItem($event)"
     ></app-dashboard-navbar>
+
     <div class="content-container">
         <div class="content">
             <div class="fools-container">
@@ -26,17 +28,17 @@
             <hr class="separator" />
 
             <div class="app-container" [ngSwitch]="selectedItem.title">
-                <app-soundboard *ngSwitchCase="dashboardPage.Soundboard"
+                <app-soundboard *ngSwitchCase="dashboardPage.SOUNDBOARD"
                     [fools]="fools"
                     [target]="target"
                     [disabled]="!fools.length || target == null"
                 >
                 </app-soundboard>
 
-                <app-assets-gallery *ngSwitchCase="dashboardPage.Resources">
+                <app-assets-gallery *ngSwitchCase="dashboardPage.RESOURCES">
                 </app-assets-gallery>
 
-                <app-layout-editor *ngSwitchCase="dashboardPage.Layout"
+                <app-layout-editor *ngSwitchCase="dashboardPage.LAYOUT"
                     [fools]="fools"
                     [target]="target"
                     [disabled]="!fools.length || target == null"

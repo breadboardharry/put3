@@ -1,25 +1,29 @@
-import { DashboardPage } from '../enums/dashboard-pages';
+import { EnumDashboardPage } from '../enums/dashboard-pages';
 import { Menu } from '../types/menu';
 
 export const dashboardNavbarMenus: Menu[] = [
     [
         {
-            title: DashboardPage.Layout,
+            title: EnumDashboardPage.LAYOUT,
             icon: 'edit-image.png',
         },
         {
-            title: DashboardPage.Soundboard,
+            title: EnumDashboardPage.SOUNDBOARD,
             icon: 'speaker.png',
         },
         {
-            title: DashboardPage.Resources,
+            title: EnumDashboardPage.RESOURCES,
             icon: 'photo-gallery.png',
         },
     ],
     [
         {
-            title: DashboardPage.Settings,
+            title: EnumDashboardPage.SETTINGS,
             icon: 'gear.png',
+        },
+        {
+            title: 'Logout',
+            icon: 'logout.png',
         },
     ],
 ];

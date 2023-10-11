@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Fool } from 'src/app/classes/fool';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
-import { DashboardPage } from 'src/app/enums/dashboard-pages';
+import { EnumDashboardPage } from 'src/app/enums/dashboard-pages';
 import { EnumUserRole } from 'src/app/enums/role';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
@@ -23,11 +23,11 @@ export class MasterDashboardPageComponent implements OnInit {
     public loading = true;
 
     public selectedItem: MenuItem = {
-        title: DashboardPage.Layout
+        title: EnumDashboardPage.LAYOUT
     };
     public fools: Fool[] = [];
     public target?: Fool;
-    public dashboardPage = DashboardPage;
+    public dashboardPage = EnumDashboardPage;
 
     public contextMenu: ContextMenu = {
         show: false,

@@ -52,4 +52,10 @@ router.get('/codelen/:codeName', (req, res) => {
     }
 });
 
+router.get('/logout', (req, res) => {
+    console.log('logout');
+    res.clearCookie('token');
+    res.json({ success: true });
+});
+
 export default router;

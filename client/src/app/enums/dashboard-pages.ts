@@ -1,7 +1,7 @@
-export enum DashboardPage {
-    Layout = 'Layout',
-    Soundboard = 'Soundboard',
-    Resources = 'Resources',
-    Settings = 'Settings'
+export enum EnumDashboardPage {
+    LAYOUT = 'Layout',
+    SOUNDBOARD = 'Soundboard',
+    RESOURCES = 'Resources',
+    SETTINGS = 'Settings'
 }
 

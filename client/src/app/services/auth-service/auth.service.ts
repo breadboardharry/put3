@@ -36,12 +36,10 @@ export class AuthService {
      */
     public isLogged(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.http.get(this.backend.apiUrl + '/auth/islogged',
-                {
+            this.http.get(this.backend.apiUrl + '/auth/islogged', {
                     responseType: 'json',
                     withCredentials: true
-                },
-            )
+            })
             .subscribe({
                 next: (res: any) => { resolve(res.logged) },
                 error: (err) => { resolve(false) }
@@ -64,5 +62,12 @@ export class AuthService {
                 resolve(length);
             });
         });
+    }
+
+    public logout(): void {
+        this.http.get(
+            this.backend.apiUrl + '/auth/logout',
+            { responseType: 'json', withCredentials: true }
+        ).subscribe();
     }
 }
