@@ -80,6 +80,8 @@ export class EventService {
                 this.onResourcesUpdate.next(event.data.value as ResourceSet);
             }
             if (event.data.type == EnumUpdateType.FOOLS) {
+                console.log("Fools");
+                console.log(event.data.value);
                 this.onFoolsUpdate.next(event.data.value as any[]);
             }
         });

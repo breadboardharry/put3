@@ -1,7 +1,7 @@
 import { EnumUserRole } from "../enums/role";
 import { UserPreferences } from "../types/user-preferences";
 
-export class User {
+export default class User {
 
     private static NAME_INDEX = 1;
 

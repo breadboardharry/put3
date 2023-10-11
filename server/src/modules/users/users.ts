@@ -1,23 +1,15 @@
 import { EnumUserRole } from "../../enums/role";
 import UsersService from "../../services/users.service";
-import { Subject } from "rxjs";
 import { getData } from "../resources/resources";
 import { APIResponse } from "../../types/response";
 import { EnumUpdateType } from "../../enums/update-type";
 import { UserPreferences } from "../../types/user-preferences";
 import { EnumEventName } from "../../enums/event-name";
 import { SessionService } from "../../services/sessions.service";
-import { SessionModule } from "../session/sessions";
-import { EmitParams } from "../socket-server/socket-server";
+import SessionModule from "../session/sessions";
+import SocketService from "../../services/socket/socket";
 
-export class UserModule {
-
-    public static emitSubject: Subject<EmitParams> = new Subject<EmitParams>();
-
-    private static emit(key: string, data?: any, targetUuids?: string[]) {
-        const params: EmitParams = { key, targetIds: targetUuids, data: {data} };
-        this.emitSubject.next(params);
-    }
+export default class UserModule {
 
     public static connect(uuid: string): APIResponse {
         console.log("[-] New user connected: " + uuid);
@@ -75,36 +67,43 @@ export class UserModule {
             const user = UsersService.new(uuid, role as EnumUserRole, data.preferences);
             if (role == EnumUserRole.FOOL) {
                 const session = SessionService.new(user);
-                this.emit(EnumEventName.ROLE, {
+                SocketService.emit(EnumEventName.ROLE, {
                     uuid: user.uuid,
                     name: user.name,
                     role: user.role,
                     sessionCode: session.getCode(),
-                }, [uuid]);
+                }, { targets: [uuid]});
             }
             else if (role == EnumUserRole.MASTER) {
-                this.emit(EnumEventName.ROLE, {
+                SocketService.emit(EnumEventName.ROLE, {
                     uuid: user.uuid,
                     name: user.name,
                     role: user.role,
-                }, [uuid]);
+                }, { targets: [uuid]});
                 if (!data.isAdmin) SessionModule.connect(user, data.sessionCode!);
             }
         }
-        
+
         this.emitUpdate.fools();
         return { success: true, message: "Role changed" };
     }
 
-    public static sendAction(uuid: string, action: any): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
+    public static sendAction(sender: { uuid: string, isAdmin?: boolean }, targetUuid: string, action: any): APIResponse {
+        console.log("[-] Action from " + sender.uuid + " to " + targetUuid);
+        const checkUuid = this.checkUuid(targetUuid);
         if (!checkUuid.success) {
             console.error(checkUuid.message);
             return checkUuid;
         }
 
-        console.log("[-] Action sent to " + uuid);
-        this.emit(EnumEventName.ACTION, action, [uuid]);
+        // Check if the sender has the right to send an action to the target
+        if (!SessionModule.canMasterSendToFool(sender.uuid, sender.isAdmin!, targetUuid)) {
+            console.error("[-] User " + sender.uuid + " doesn't have the right to send an action to " + targetUuid);
+            return { success: false, message: "You don't have the right to send an action to this user" };
+        }
+
+        console.log("[-] Action sent to " + targetUuid);
+        SocketService.emit(EnumEventName.ACTION, action, { targets: [targetUuid]});
 
         return { success: true, message: "Action sent" };
     }
@@ -132,7 +131,7 @@ export class UserModule {
         }
 
         console.log("[-] Layout changed for " + uuid);
-        this.emit(EnumEventName.LAYOUT, layout, [uuid]);
+        SocketService.emit(EnumEventName.LAYOUT, layout, { targets: [uuid]});
         const user = UsersService.get(uuid)!;
         user.desktop = layout.desktop;
         this.emitUpdate.fools();
@@ -149,7 +148,7 @@ export class UserModule {
 
         console.log("[-] Rename " + uuid + " to " + newName);
         UsersService.get(uuid)!.name = newName;
-        this.emit(EnumEventName.RENAME, newName, [uuid]);
+        SocketService.emit(EnumEventName.RENAME, newName, { targets: [uuid]});
         this.emitUpdate.fools();
 
         return { success: true, message: "User renamed" };
@@ -175,10 +174,10 @@ export class UserModule {
 
     public static emitUpdate = {
         resources: () => {
-            this.emit(EnumEventName.UPDATE, { type: EnumUpdateType.RESOURCES, value: getData()});
+            SocketService.emit(EnumEventName.UPDATE, { type: EnumUpdateType.RESOURCES, value: getData()});
         },
         fools: () => {
-            this.emit(EnumEventName.UPDATE, { type: EnumUpdateType.FOOLS, value: UsersService.getFools()});
+            SocketService.emit(EnumEventName.UPDATE, { type: EnumUpdateType.FOOLS, value: UsersService.getFools()});
         },
     }
 

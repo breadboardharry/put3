@@ -1,7 +1,8 @@
-<div class="page">
+<mat-spinner class="page-loading-spinner" *ngIf="loading"></mat-spinner>
 
-    <mat-spinner *ngIf="loading"></mat-spinner>
-
+<div class="page" [ngClass]="{
+    'loading': loading
+}">
     <app-dashboard-navbar
         [selectedItem]="selectedItem"
         (selectedItemEvent)="selectItem($event)"

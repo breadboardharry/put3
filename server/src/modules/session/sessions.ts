@@ -1,18 +1,10 @@
-import { Subject } from "rxjs";
 import { EnumEventName } from "../../enums/event-name";
-import { User } from "../../models/user";
+import User from "../../models/user";
 import { Session, SessionService } from "../../services/sessions.service";
-import { EmitParams } from "../socket-server/socket-server";
 import { EnumUserRole } from "../../enums/role";
+import SocketService from "../../services/socket/socket";
 
-export class SessionModule {
-
-    public static emitSubject: Subject<EmitParams> = new Subject<EmitParams>();
-
-    private static emit(key: string, data?: any, targetUuids?: string[]) {
-        const params: EmitParams = { key, targetIds: targetUuids, data: {data} };
-        this.emitSubject.next(params);
-    }
+export default class SessionModule {
 
     public static connect(master: User, sessionCode: string): void {
         const session = SessionService.find(sessionCode);
@@ -39,11 +31,20 @@ export class SessionModule {
         }
     }
 
+    public static canMasterSendToFool(masterUuid: string, isAdmin: boolean, foolUuid: string): boolean {
+        if (isAdmin) return true;
+        const sessions = SessionService.getMasterAssociatedSessions(masterUuid)
+        for (const session of sessions) {
+            if (session.getFool().uuid == foolUuid) return true;
+        }
+        return false
+    }
+
     public static emitUpdate = {
         session: (session: Session) => {
             const users = session.getUsers();
             const uuids = users.map((user) => user.uuid);
-            this.emit(EnumEventName.SESSION, session, uuids);
+            SocketService.emit(EnumEventName.SESSION, session, {targets: uuids});
         }
     }
 

@@ -1,14 +1,10 @@
 import express from 'express';
-import { AuthModule } from '../../auth/auth';
-import { env } from '../../../config/env';
+import AdminModule from '../../../modules/admin/admin';
 const router = express.Router();
-
-/* --------------------------------- ROUTES --------------------------------- */
 
 router.post('/login', (req, res) => {
     const { code } = req.body;
-    const login = AuthModule.login(code);
-
+    const login = AdminModule.login(code);
     if (!login.success) return res.json({ success: false });
 
     return res.cookie('token', login.token, {
@@ -26,11 +22,8 @@ router.post('/login', (req, res) => {
  * @returns A JSON object with a success property
 */
 router.get('/islogged', (req, res) => {
-    const token = req.cookies.token;
-
-    AuthModule.isLogged(token).then((logged) => {
-        res.json({ logged });
-    });
+    const user = req['user'];
+    res.json({ isAdmin: !!user && user.isAdmin });
 });
 
 /**
@@ -43,7 +36,7 @@ router.get('/codelen/:codeName', (req, res) => {
 
     switch (codeName) {
         case 'master':
-            res.status(200).json(env.MASTER_CODE.length);
+            res.status(200).json(process.env.MASTER_CODE!.length);
             break;
 
         default:
@@ -53,7 +46,6 @@ router.get('/codelen/:codeName', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-    console.log('logout');
     res.clearCookie('token');
     res.json({ success: true });
 });

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MenuItem } from 'src/app/types/menu-item';
 import { dashboardNavbarMenus } from 'src/app/data/dashboard-navbar-menus';
-import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,7 +17,7 @@ export class DashboardNavbarComponent implements OnInit {
     public menus = dashboardNavbarMenus;
 
     constructor(
-        private authService: AuthService,
+        private adminService: AdminService,
         private router: Router
     ) {}
 
@@ -33,7 +33,7 @@ export class DashboardNavbarComponent implements OnInit {
     }
 
     private logout() {
-        this.authService.logout();
+        this.adminService.logout();
         this.router.navigate(['/home']);
     }
 }

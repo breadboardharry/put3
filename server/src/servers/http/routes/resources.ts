@@ -1,8 +1,9 @@
 import express from "express";
 import { upload } from "../../../services/multer";
 import { Response } from "../../../services/response.service";
-import { getData, rename, unlink } from "../../resources/resources";
-import { UserModule } from "../../users/users";
+import { getData, rename, unlink } from "../../../modules/resources/resources";
+import UserModule from "../../../modules/users/users";
+import IsAdminMiddleware from "../../../middlewares/admin";
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -27,7 +28,7 @@ router.get("/:dir", (req, res) => {
     }
 });
 
-router.delete("/", (req, res) => {
+router.delete("/", IsAdminMiddleware, (req, res) => {
     const filespath = req.body;
 
     try {
@@ -42,7 +43,7 @@ router.delete("/", (req, res) => {
     }
 });
 
-router.post("/rename", (req, res) => {
+router.post("/rename", IsAdminMiddleware, (req, res) => {
     const { currentName, newName, dirpath } = req.body;
 
     try {

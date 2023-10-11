@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { env } from '../../config/env';
 
-export class AuthModule {
+export default class AdminModule {
 
     private static loginDuration = {
         millis: 3600000,
@@ -9,14 +8,14 @@ export class AuthModule {
     };
 
     /**
-     * Login a user
+     * Login a user as admin
      * @param code The code to login with
      * @returns An object containing a success, a token, and a duration property
      * @example login('valid-code') => { success: true, token: '...', expiresIn: 3600000 }
      * @example login('wrong-code') => { success: false, token: '', expiresIn: 0 }
      */
     public static login(code: string): { success: boolean, token?: string, expiresIn?: number }  {
-        const isValidCode = code == env.MASTER_CODE;
+        const isValidCode = code == (process.env.MASTER_CODE || '0000');
         if (!isValidCode) return { success: false };
 
         const token = jwt.sign({ user: 'master' }, secretKey, { expiresIn: this.loginDuration.text });
@@ -27,11 +26,6 @@ export class AuthModule {
         };
     };
 
-    /**
-     * Check if a user is logged in via token
-     * @param token The user token to check
-     * @returns True if logged in, false otherwise
-     */
     public static isLogged(token: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
             try {

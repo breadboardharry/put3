@@ -4,7 +4,7 @@ import { Fool } from 'src/app/classes/fool';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { EnumDashboardPage } from 'src/app/enums/dashboard-pages';
 import { EnumUserRole } from 'src/app/enums/role';
-import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
@@ -20,7 +20,8 @@ import { MenuItem } from 'src/app/types/menu-item';
 export class MasterDashboardPageComponent implements OnInit {
 
     private sessionCode!: string;
-    public loading = true;
+    public loading: boolean = true;
+    public isAdmin: boolean = false;
 
     public selectedItem: MenuItem = {
         title: EnumDashboardPage.LAYOUT
@@ -44,7 +45,7 @@ export class MasterDashboardPageComponent implements OnInit {
     public renaming?: Fool;
 
     constructor(
-        private authService: AuthService,
+        private adminService: AdminService,
         private clientService: ClientService,
         public resourceService: ResourcesService,
         private eventService: EventService,
@@ -54,23 +55,20 @@ export class MasterDashboardPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.queryParams.subscribe(async params => {
-            const isLogged = await this.authService.isLogged();
-            console.log("isLogged", isLogged);
-
+            this.isAdmin = await this.adminService.isLogged();
             this.sessionCode = params['code'];
 
-            // Ask for role
             this.clientService.roleChanged.subscribe(() => {
                 this.init();
                 this.loading = false;
             });
+            // If the user is logged as admin, the code is not needed (undefined)
             this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
         });
     }
 
     private init() {
         this.eventService.onSession.subscribe((session) => {
-            // Do something
             console.log("Session message", session);
             this.snackbar.openInfo("Session message");
         });

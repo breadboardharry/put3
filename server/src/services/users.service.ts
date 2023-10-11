@@ -1,5 +1,5 @@
 import { EnumUserRole } from "../enums/role";
-import { User } from "../models/user";
+import User from "../models/user";
 import { UserPreferences } from "../types/user-preferences";
 
 export default class UsersService {
@@ -26,6 +26,8 @@ export default class UsersService {
     }
 
     public static getFools() {
+        console.log("[-] Get fools");
+        console.log([...this.users.filter((user) => user.role == EnumUserRole.FOOL)]);
         return [...this.users.filter((user) => user.role == EnumUserRole.FOOL)];
     }
 
@@ -36,7 +38,6 @@ export default class UsersService {
     /**
      * Check if a user exists
      * @param uuid User id
-     * @return User exists
      */
     public static exists(uuid: string) {
         return !!this.get(uuid);

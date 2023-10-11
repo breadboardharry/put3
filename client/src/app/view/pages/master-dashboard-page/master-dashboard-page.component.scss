@@ -1,5 +1,13 @@
 @import '~src/styles.scss';
 
+.page-loading-spinner {
+    position: absolute;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .page {
     width: 100vw;
     height: 100vh;
@@ -9,6 +17,12 @@
 
     overflow: hidden;
     background: $dark-gradient;
+
+    transition: filter 0.3s ease-in-out;
+
+    &.loading {
+        filter: blur(4px) brightness(0.5);
+    }
 }
 
 app-dashboard-navbar {

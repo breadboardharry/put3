@@ -6,7 +6,7 @@ import { BackendService } from '../backend/backend.service';
 @Injectable({
     providedIn: 'root',
 })
-export class AuthService {
+export class AdminService {
 
     constructor(private backend: BackendService, private http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class AuthService {
     public login(code: string): Promise<any> {
         return new Promise((resolve, reject) => {
             this.http.post(
-                    this.backend.apiUrl + '/auth/login',
+                    this.backend.apiUrl + '/admin/login',
                     { code },
                     {
                         responseType: 'json',
@@ -36,12 +36,12 @@ export class AuthService {
      */
     public isLogged(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.http.get(this.backend.apiUrl + '/auth/islogged', {
+            this.http.get(this.backend.apiUrl + '/admin/islogged', {
                     responseType: 'json',
                     withCredentials: true
             })
             .subscribe({
-                next: (res: any) => { resolve(res.logged) },
+                next: (res: any) => { resolve(res.isAdmin) },
                 error: (err) => { resolve(false) }
             });
         });
@@ -55,7 +55,7 @@ export class AuthService {
     public getCodeLength(codeName: CodeName): Promise<number> {
         return new Promise((resolve, reject) => {
             this.http.get<number>(
-                this.backend.apiUrl + '/auth/codelen/' + codeName,
+                this.backend.apiUrl + '/admin/codelen/' + codeName,
                 { responseType: 'json' }
             )
             .subscribe((length: number) => {
@@ -66,7 +66,7 @@ export class AuthService {
 
     public logout(): void {
         this.http.get(
-            this.backend.apiUrl + '/auth/logout',
+            this.backend.apiUrl + '/admin/logout',
             { responseType: 'json', withCredentials: true }
         ).subscribe();
     }
