@@ -50,10 +50,10 @@ export class MasterDashboardPageComponent implements OnInit {
         public resourceService: ResourcesService,
         private eventService: EventService,
         private route: ActivatedRoute,
-        private snackbar: SnackbarService
-    ) { }
+        private snackbar: SnackbarService,
+    ) {}
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.route.queryParams.subscribe(async params => {
             this.isAdmin = await this.adminService.isLogged();
             this.sessionCode = params['code'];

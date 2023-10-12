@@ -17,7 +17,7 @@ export default class UserModule {
     }
 
     public static disconnect(uuid: string): APIResponse {
-        console.log("[-] try disconnection: " + uuid);
+        console.log("[-] Try disconnection: " + uuid);
         const checkUuid = this.checkUuid(uuid, true);
         if (!checkUuid.success) {
             console.error(checkUuid.message);

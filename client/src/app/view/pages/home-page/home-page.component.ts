@@ -11,11 +11,14 @@ import { AssetsService } from 'src/app/services/assets-service/assets.service';
 })
 export class HomePageComponent implements OnInit {
 
-    hover: EnumUserRole.MASTER | EnumUserRole.FOOL | null = null;
-    scripts = Script;
-    EnumUserRole = EnumUserRole;
+    public hover: EnumUserRole.MASTER | EnumUserRole.FOOL | null = null;
+    public scripts = Script;
+    public EnumUserRole = EnumUserRole;
 
-    constructor(public assetsService: AssetsService, private router: Router) {}
+    constructor(
+        public assetsService: AssetsService,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {}
 

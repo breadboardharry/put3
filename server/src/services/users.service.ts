@@ -26,8 +26,6 @@ export default class UsersService {
     }
 
     public static getFools() {
-        console.log("[-] Get fools");
-        console.log([...this.users.filter((user) => user.role == EnumUserRole.FOOL)]);
         return [...this.users.filter((user) => user.role == EnumUserRole.FOOL)];
     }
 

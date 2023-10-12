@@ -13,7 +13,10 @@ export type SessionData = {
 })
 export class SessionService {
 
-    constructor(private backend: BackendService, private http: HttpClient) {}
+    constructor(
+        private backend: BackendService,
+        private http: HttpClient
+    ) {}
 
     /**
      * Check if a session code is valid

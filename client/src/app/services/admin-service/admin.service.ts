@@ -8,11 +8,14 @@ import { BackendService } from '../backend/backend.service';
 })
 export class AdminService {
 
-    constructor(private backend: BackendService, private http: HttpClient) {}
+    constructor(
+        private backend: BackendService,
+        private http: HttpClient
+    ) {}
 
     /**
      * Authenticate user with a code
-     * @param {string} code Code
+     * @param code Code
      */
     public login(code: string): Promise<any> {
         return new Promise((resolve, reject) => {
@@ -32,7 +35,7 @@ export class AdminService {
 
     /**
      * Check if the user is logged
-     * @returns {Promise<boolean>} True if the user is logged
+     * @returns True if the user is logged
      */
     public isLogged(): Promise<boolean> {
         return new Promise((resolve, reject) => {
@@ -49,8 +52,8 @@ export class AdminService {
 
     /**
      * Get the length of a code
-     * @param {string} codeName Name of the code
-     * @returns {Promise<number>} Code length
+     * @param codeName Name of the code
+     * @returns Code length
      */
     public getCodeLength(codeName: CodeName): Promise<number> {
         return new Promise((resolve, reject) => {
@@ -69,5 +72,6 @@ export class AdminService {
             this.backend.apiUrl + '/admin/logout',
             { responseType: 'json', withCredentials: true }
         ).subscribe();
+        window.location.replace('/');
     }
 }

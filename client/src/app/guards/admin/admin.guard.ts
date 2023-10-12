@@ -9,7 +9,10 @@ import { AdminService } from 'src/app/services/admin-service/admin.service';
 })
 export class AdminGuard implements CanActivate {
 
-    constructor(private adminService: AdminService, private router: Router) { }
+    constructor(
+        private adminService: AdminService,
+        private router: Router
+    ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         // Check if the user is logged

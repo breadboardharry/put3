@@ -1,5 +1,4 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { CursorService } from 'src/app/services/cursor-service/cursor.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { environment } from 'src/environments/environment';
 import { WindowService } from 'src/app/services/window-service/window.service';
@@ -45,7 +44,7 @@ export class FoolHomePageComponent implements OnInit {
         private snackbar: SnackbarService
     ) {}
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.clientService.roleChanged.subscribe(() => {
             this.init();
             this.loading = false;
