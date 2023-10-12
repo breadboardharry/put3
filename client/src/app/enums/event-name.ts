@@ -4,6 +4,6 @@ export enum EnumEventName {
     INFOS = "infos",
     LAYOUT = "layout",
     RENAME = "rename",
-    UPDATE = "update",
+    RESOURCES = "resources",
     SESSION = "session",
 };

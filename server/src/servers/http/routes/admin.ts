@@ -22,8 +22,8 @@ router.post('/login', (req, res) => {
  * @returns A JSON object with a success property
 */
 router.get('/islogged', (req, res) => {
-    const user = req['user'];
-    res.json({ isAdmin: !!user && user.isAdmin });
+    const auth = req['auth'];
+    res.json({ isAdmin: !!auth && auth.isAdmin });
 });
 
 /**

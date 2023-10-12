@@ -19,9 +19,7 @@ export class MasterValidSessionGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         // Check if the user is logged
         return new Promise<boolean>(async (resolve, reject) => {
-            console.log("MasterValidSessionGuard");
             const isAdmin = await this.adminService.isLogged();
-            console.log("isAdmin", isAdmin);
             if (isAdmin) return resolve(true);
 
             const code = route.queryParams['code'];

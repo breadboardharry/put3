@@ -54,7 +54,10 @@ export class FoolHomePageComponent implements OnInit {
 
     private init(): void {
         this.eventService.onSession.subscribe((session) => {
-            if (!this.running) this.run();
+            console.log('Session message', session);
+            if (!this.running) {
+                if (session.masters.length) this.run();
+            }
         });
 
         this.eventService.changeSelfInfos({

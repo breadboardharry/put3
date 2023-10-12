@@ -12,9 +12,8 @@ import { EventRoleDTO } from 'src/app/models/dtos/events/role.dto';
 import { FoolInfos } from 'src/app/types/fool-infos';
 import { EventInfosDTO } from 'src/app/models/dtos/events/infos.dto';
 import { Subject } from 'rxjs';
-import { EventUpdateDTO } from 'src/app/models/dtos/events/update.dto';
+import { EventResourcesDTO } from 'src/app/models/dtos/events/resources.dto';
 import { ResourceSet } from 'src/app/types/resources/data-set';
-import { EnumUpdateType } from 'src/app/enums/type-update';
 import { Action } from 'src/app/types/action';
 import { UserPreferences } from 'src/app/types/preferences/user-preferences';
 
@@ -42,7 +41,6 @@ export class EventService {
     public onLayout: Subject<Layout> = new Subject<Layout>();
     public onRename: Subject<string> = new Subject<string>();
     public onResourcesUpdate: Subject<ResourceSet> = new Subject<ResourceSet>();
-    public onFoolsUpdate: Subject<any[]> = new Subject<any[]>();
 
     constructor(
         private websocket: WebSocketService
@@ -75,15 +73,8 @@ export class EventService {
             this.onRename.next(event.data);
         });
 
-        this.websocket.socket.on(EnumEventName.UPDATE, (event: EventUpdateDTO) => {
-            if (event.data.type == EnumUpdateType.RESOURCES) {
-                this.onResourcesUpdate.next(event.data.value as ResourceSet);
-            }
-            if (event.data.type == EnumUpdateType.FOOLS) {
-                // console.log("Fools");
-                // console.log(event.data.value);
-                this.onFoolsUpdate.next(event.data.value as any[]);
-            }
+        this.websocket.socket.on(EnumEventName.RESOURCES, (event: EventResourcesDTO) => {
+            this.onResourcesUpdate.next(event.data);
         });
 
         this.websocket.socket.on(EnumEventName.SESSION, (event: any) => {

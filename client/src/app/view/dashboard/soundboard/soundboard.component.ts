@@ -4,6 +4,7 @@ import { ResourceType } from 'src/app/enums/resources/type';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { FileData } from 'src/app/types/resources/file-data';
+import { Session } from '../../pages/master-dashboard-page/master-dashboard-page.component';
 
 @Component({
   selector: 'app-soundboard',
@@ -12,8 +13,8 @@ import { FileData } from 'src/app/types/resources/file-data';
 })
 export class SoundboardComponent implements OnInit {
 
-  @Input() fools: Fool[] = [];
-  @Input() target!: Fool | undefined;
+  @Input() sessions: Session[] = [];
+  @Input() target?: Session;
   @Input() disabled: boolean = false;
   volume: number = 50;
 
@@ -30,9 +31,9 @@ export class SoundboardComponent implements OnInit {
         })
     }
 
-    stopAll() {
+    public stopAll() {
         if (!this.target) return;
-        this.eventService.sendAction(this.target, {
+        this.eventService.sendAction(this.target.fool, {
             type: 'audio',
             stop: true
         });

@@ -1,6 +1,6 @@
-import { EnumUserRole } from "../enums/role";
-import User from "../models/user";
-import { UserPreferences } from "../types/user-preferences";
+import { EnumUserRole } from "../../enums/role";
+import User from "../../models/user";
+import { UserPreferences } from "../../types/user-preferences";
 
 export default class UsersService {
 
@@ -8,13 +8,14 @@ export default class UsersService {
 
     constructor() {}
 
-    public static new(uuid: string, role: EnumUserRole, preferences?: UserPreferences): User {
-        const user = new User(uuid, role, preferences);
+    public static new(uuid: string, role: EnumUserRole, isAdmin: boolean, preferences?: UserPreferences): User {
+        const user = new User(uuid, role, isAdmin, preferences);
         this.users.push(user);
         return user;
     }
 
     public static get(uuid: string): User | undefined {
+        if (!uuid || typeof uuid != 'string') return;
         return this.users.find((user) => user.uuid == uuid);
     }
 
@@ -29,8 +30,24 @@ export default class UsersService {
         return [...this.users.filter((user) => user.role == EnumUserRole.FOOL)];
     }
 
+    public static getFoolUuids() {
+        return this.getFools().map((user) => user.uuid);
+    }
+
     public static getMasters() {
         return [...this.users.filter((user) => user.role == EnumUserRole.MASTER)];
+    }
+
+    public static getMasterUuids() {
+        return this.getMasters().map((user) => user.uuid);
+    }
+
+    public static getAdmins() {
+        return [...this.getMasters().filter((user) => user.isAdmin)];
+    }
+
+    public static getAdminUuids() {
+        return this.getAdmins().map((user) => user.uuid);
     }
 
     /**

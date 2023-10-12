@@ -6,6 +6,7 @@ import UserModule from "../../modules/users/users";
 import { EnumEventName } from "../../enums/event-name";
 import cookieParser from "cookie-parser";
 import UserMiddleware from "../../middlewares/user";
+import UsersService from "../../services/users/users.service";
 
 export class SocketServer {
 
@@ -25,6 +26,7 @@ export class SocketServer {
         this.io.engine.use(UserMiddleware);
 
         this.io.on("connection", (socket) => {
+
             this._clients.set(socket.id, socket);
             UserModule.connect(socket.id);
 
@@ -37,15 +39,12 @@ export class SocketServer {
                 UserModule.setRole(socket.id, message.data.role, {
                     sessionCode: message.data.sessionCode,
                     preferences: message.data.preferences,
-                    isAdmin: socket.request['user'].isAdmin,
+                    isAdmin: socket.request['auth'].isAdmin,
                 });
             });
 
             socket.on(EnumEventName.ACTION, (message) => {
-                UserModule.sendAction({
-                    uuid: socket.id,
-                    isAdmin: socket.request['user'].isAdmin,
-                }, message.target.uuid, message.data);
+                UserModule.sendAction(socket.id, message.target.uuid, message.data);
             });
 
             socket.on(EnumEventName.INFOS, (message) => {
@@ -53,11 +52,11 @@ export class SocketServer {
             });
 
             socket.on(EnumEventName.LAYOUT, (message) => {
-                UserModule.changeLayout(message.target.uuid, message.data);
+                UserModule.changeLayout(socket.id, message.target.uuid, message.data);
             });
 
             socket.on(EnumEventName.RENAME, (message) => {
-                UserModule.rename(message.target.uuid, message.data.newName);
+                UserModule.rename(socket.id, message.target.uuid, message.data.newName);
             });
         });
     }

@@ -34,6 +34,5 @@ export class DashboardNavbarComponent implements OnInit {
 
     private logout() {
         this.adminService.logout();
-        this.router.navigate(['/home']);
     }
 }

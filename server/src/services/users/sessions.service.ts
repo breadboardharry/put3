@@ -1,10 +1,17 @@
-import User from "../models/user";
+import User from "../../models/user";
+
+export enum EnumSessionStatus {
+    PENDING = "pending",
+    RUNNING = "running",
+    CLOSED = "closed"
+}
 
 export class Session {
 
     private code: string = this.generateCode();
     private fool: User;
     public masters: User[] = [];
+    public status: EnumSessionStatus = EnumSessionStatus.PENDING;
 
     constructor(fool: User) {
         this.fool = fool;
@@ -35,6 +42,10 @@ export class Session {
         if (index > -1) this.masters.splice(index, 1);
     }
 
+    public close(): void {
+        this.status = EnumSessionStatus.CLOSED;
+    }
+
     private generateCode(): string {
         const length = 5;
         let code = "";
@@ -56,12 +67,16 @@ export class SessionService {
         return session;
     }
 
-    public static getSessions(): Session[] {
+    public static getAll(): Session[] {
         return this.sessions;
     }
 
-    public static getMasterAssociatedSessions(uuid: string): Session[] {
-        return this.sessions.filter((session) => session.getMasters().find((master) => master.uuid == uuid));
+    public static getAssociatedSession(uuid: string): Session | undefined {
+        return this.sessions.find((session) => session.getUsers().find((user) => user.uuid == uuid));
+    }
+
+    public static getMasterAssociatedSession(uuid: string): Session | undefined {
+        return this.sessions.find((session) => session.getMasters().find((master) => master.uuid == uuid));
     }
 
     public static getFoolAssociatedSession(uuid: string): Session | undefined {
@@ -72,8 +87,15 @@ export class SessionService {
         return this.sessions.find((session) => session.getCode() == code);
     }
 
+    public static close(code: string): Session | undefined {
+        const session = this.find(code);
+        if (!session) return;
+        session.close();
+        return session;
+    }
+
     public static remove(code: string) {
-        const session = SessionService.find(code);
+        const session = this.find(code);
         if (!session) return;
         const index = this.sessions.indexOf(session);
         if (index > -1) this.sessions.splice(index, 1);

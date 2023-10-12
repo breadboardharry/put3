@@ -8,9 +8,17 @@ import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { SessionService } from 'src/app/services/session-service/session.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 import { MenuItem } from 'src/app/types/menu-item';
+
+export type Session = {
+    code: string;
+    masters: string[];
+    fool: Fool;
+    status: string;
+};
 
 @Component({
     selector: 'app-master-dashboard-page',
@@ -22,12 +30,13 @@ export class MasterDashboardPageComponent implements OnInit {
     private sessionCode!: string;
     public loading: boolean = true;
     public isAdmin: boolean = false;
+    public sessionClosed: boolean = false;
 
     public selectedItem: MenuItem = {
         title: EnumDashboardPage.LAYOUT
     };
-    public fools: Fool[] = [];
-    public target?: Fool;
+    public sessions: Session[] = [];
+    public target?: Session;
     public dashboardPage = EnumDashboardPage;
 
     public contextMenu: ContextMenu = {
@@ -41,8 +50,8 @@ export class MasterDashboardPageComponent implements OnInit {
         },
         items: []
     };
-    public contextFocus?: Fool;
-    public renaming?: Fool;
+    public contextFocus?: Session;
+    public renaming?: Session;
 
     constructor(
         private adminService: AdminService,
@@ -51,6 +60,7 @@ export class MasterDashboardPageComponent implements OnInit {
         private eventService: EventService,
         private route: ActivatedRoute,
         private snackbar: SnackbarService,
+        private sessionService: SessionService
     ) {}
 
     ngOnInit() {
@@ -68,51 +78,83 @@ export class MasterDashboardPageComponent implements OnInit {
     }
 
     private init() {
+        if (this.isAdmin) {
+            this.sessionService.getAll().then((sessions) => {
+                sessions.forEach((session) => {
+                    this.sessionRecieved(session);
+                });
+            });
+        }
         this.eventService.onSession.subscribe((session) => {
             console.log("Session message", session);
-            this.snackbar.openInfo("Session message");
-        });
-
-        this.eventService.onFoolsUpdate.subscribe((fools) => {
-            this.updateFools(fools);
+            this.sessionRecieved(session);
         });
     }
 
-    private updateFools(newList: any[]): void {
-        this.fools = newList.map((fool: any) => {
-            const foolObj = new Fool(fool);
-            // Find if a fool with the same id already exists
-            let existing = this.fools.find((f) => f.uuid === foolObj.uuid);
-            // If it exists, keep its hitboxes
-            if (existing) {
-                foolObj.layout.hitboxes = existing.layout.hitboxes;
-            }
-            return foolObj;
-        });
+    private sessionRecieved(session: any): void {
+        session.fool = new Fool(session.fool);
 
+        if (this.isAdmin) {
+            const existingSession = this.sessions.find((s) => s.code === session.code);
+            if (existingSession) {
+                if (session.status === "closed") {
+                    this.sessions.splice(this.sessions.indexOf(existingSession), 1);
+                    this.updateTarget();
+                    return;
+                }
+                existingSession.masters = session.masters;
+                session.fool.layout.hitboxes = existingSession.fool.layout.hitboxes;
+                existingSession.fool = session.fool;
+                this.updateTarget();
+            }
+            else {
+                this.sessions.push(session);
+            }
+            return;
+        }
+
+        // First time
+        if (!this.sessions.length) {
+            this.sessions = [session];
+            this.target = session;
+            return;
+        }
+        // When session updated
+        if (session.status === "closed") {
+            this.sessionClosed = true;
+            this.snackbar.openError("Session closed");
+            setTimeout(() => {
+                this.adminService.logout();
+            }, 3000);
+            return;
+        }
+        const existingSession = this.sessions[0];
+        session.fool.layout.hitboxes = existingSession.fool.layout.hitboxes;
+        existingSession.fool = session.fool;
+        existingSession.masters = session.masters;
         this.updateTarget();
     }
 
     private updateTarget() {
         // If a target is defined, check if it still exists
-        if (this.target && this.fools.length) {
-            this.target = this.fools.find((fool) => fool.uuid === this.target!.uuid);
+        if (this.target && this.sessions.length) {
+            this.target = this.sessions.find((session) => session.code === this.target!.code);
         }
         else this.target = undefined;
     }
 
-    public clickFool(fool: Fool) {
-        if (fool == this.renaming) return;
-        this.selectTarget(fool);
+    public clickSession(session: Session) {
+        if (session == this.renaming) return;
+        this.selectTarget(session);
         this.contextFocus = undefined;
         this.renaming = undefined;
     }
 
-    public rightClickFool(fool: Fool, event: MouseEvent) {
+    public rightClickSession(session: Session, event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
 
-        this.contextFocus = fool;
+        this.contextFocus = session;
         this.displayContextMenu(event);
     }
 
@@ -150,8 +192,8 @@ export class MasterDashboardPageComponent implements OnInit {
         this.eventService.renameFool(fool, name);
     }
 
-    private selectTarget(fool: Fool) {
-        this.target = this.target === fool ? undefined : fool;
+    private selectTarget(session: Session) {
+        this.target = (this.target === session) ? undefined : session;
     }
 
     public selectItem(item: MenuItem) {

@@ -10,10 +10,12 @@ export default class User {
     public role: EnumUserRole;
     public infos: { [key: string]: any } = {};
     public desktop: { [key: string]: any } = {};
+    public isAdmin: boolean = false;
 
-    constructor(uuid: string, role: EnumUserRole, preferences?: UserPreferences) {
+    constructor(uuid: string, role: EnumUserRole, isAdmin: boolean, preferences?: UserPreferences) {
         this.uuid = uuid;
         this.role = role;
+        this.isAdmin = isAdmin;
         this.name = preferences?.name ? preferences.name : this.newName();
         this.setPreferences(preferences);
     }
@@ -30,7 +32,7 @@ export default class User {
     }
 
     private newName(): string {
-       return this.role.toUpperCase() + "-" + User.NAME_INDEX++;
+       return (this.isAdmin ? "ADMIN" : this.role.toUpperCase()) + "-" + User.NAME_INDEX++;
     }
 
 };

@@ -3,15 +3,16 @@ import AdminModule from '../modules/admin/admin';
 
 export default function UserMiddleware(req: Request, res: Response, next: any) {
     const token = req.cookies?.token;
+
     if (!token) {
-        req['user'] = {
+        req['auth'] = {
             isAdmin: false
         };
         return next();
     }
 
     AdminModule.isLogged(token).then((logged: boolean) => {
-        req['user'] = {
+        req['auth'] = {
             isAdmin: logged
         };
         return next();

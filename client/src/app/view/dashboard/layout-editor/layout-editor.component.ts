@@ -9,6 +9,7 @@ import { Fool } from 'src/app/classes/fool';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
+import { Session } from '../../pages/master-dashboard-page/master-dashboard-page.component';
 
 @Component({
     selector: 'app-layout-editor',
@@ -19,8 +20,8 @@ export class LayoutEditorComponent implements OnInit {
 
     @ViewChild('content') content!: ElementRef;
     @ViewChild('editor') editor!: ElementRef;
-    @Input() fools: Fool[] = [];
-    @Input() target!: Fool | undefined;
+    @Input() sessions: Session[] = [];
+    @Input() target?: Session;
     @Input() disabled: boolean = false;
 
     defaultDesktopImage = environment.defaultDesktopImage;
@@ -47,7 +48,7 @@ export class LayoutEditorComponent implements OnInit {
     }
 
     addHitbox() {
-        this.target!.layout.hitboxes.push(new Hitbox());
+        this.target!.fool.layout.hitboxes.push(new Hitbox());
     }
 
     changeBackground() {
@@ -57,11 +58,11 @@ export class LayoutEditorComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(image => {
             if (!image) return;
-            this.target!.layout.desktop.image = image.href;
+            this.target!.fool.layout.desktop.image = image.href;
         });
     }
 
     public sendConfig() {
-        this.foolService.sendConfig(this.target!);
+        this.foolService.sendConfig(this.target!.fool);
     }
 }

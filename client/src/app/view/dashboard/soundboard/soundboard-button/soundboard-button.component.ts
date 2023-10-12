@@ -4,6 +4,7 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 import { FileService } from 'src/app/services/utils/file-service/file.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { EnumActionType } from 'src/app/enums/type-action';
+import { Session } from 'src/app/view/pages/master-dashboard-page/master-dashboard-page.component';
 
 @Component({
   selector: 'app-soundboard-button',
@@ -14,7 +15,7 @@ export class SoundboardButtonComponent implements OnInit {
 
     @Input() track!: FileData;
     @Input() volume!: number;
-    @Input() target!: any;
+    @Input() target!: Session;
     @Input() disabled: boolean = false;
 
     constructor(
@@ -27,7 +28,7 @@ export class SoundboardButtonComponent implements OnInit {
     }
 
     play(track: FileData) {
-        this.eventService.sendAction(this.target, {
+        this.eventService.sendAction(this.target.fool, {
             type: EnumActionType.AUDIO,
             track,
             volume: this.volume / 100

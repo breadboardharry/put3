@@ -1,6 +1,12 @@
 import express from 'express';
-import { SessionService } from '../../../services/sessions.service';
+import { SessionService } from '../../../services/users/sessions.service';
+import IsAdminMiddleware from '../../../middlewares/admin';
 const router = express.Router();
+
+router.get('/', IsAdminMiddleware, (req, res) => {
+    const sessions = SessionService.getAll();
+    return res.status(200).json({ success: true, sessions: sessions });
+});
 
 router.get('/exists', (req, res) => {
     const { code } = req.query;
