@@ -27,4 +27,26 @@ export class WindowService {
             ratio: this.getWindowRatio()
         }
     }
+
+    public static isFullscreen(): boolean {
+        return document.fullscreenElement ? true : false;
+    }
+
+    public static toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        }
+        else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+
+    public static openFullscreen(): void {
+        document.documentElement.requestFullscreen();
+    }
+
+    public static closeFullscreen(): void {
+        document.exitFullscreen();
+    }
+
 }

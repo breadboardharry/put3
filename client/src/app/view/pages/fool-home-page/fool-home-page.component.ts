@@ -30,6 +30,7 @@ export class FoolHomePageComponent implements OnInit {
         }
     };
     private defaultDesktopImage = environment.defaultDesktopImage;
+    public WindowService = WindowService;
 
     constructor(
         private clientService: ClientService,
@@ -98,7 +99,7 @@ export class FoolHomePageComponent implements OnInit {
         this.running = true;
     }
 
-    action(data: { [key: string]: any }) {
+    private action(data: { [key: string]: any }) {
         switch (data['type']) {
             case 'audio':
                 const volume = 'volume' in data ? data['volume'] : 1.0;
@@ -129,13 +130,13 @@ export class FoolHomePageComponent implements OnInit {
     }
 
     @HostListener('contextmenu', ['$event'])
-    onRightClick(event: any) {
+    private onRightClick(event: any) {
         event.preventDefault();
     }
 
     private timeout?: NodeJS.Timeout;
     @HostListener('window:resize', ['$event'])
-    onResize(event: any) {
+    private onResize(event: any) {
         // Send window size to server
         if (this.timeout) clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {

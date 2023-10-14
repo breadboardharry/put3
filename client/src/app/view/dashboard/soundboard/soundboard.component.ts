@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Fool } from 'src/app/classes/fool';
+import { Session } from 'src/app/classes/session';
 import { ResourceType } from 'src/app/enums/resources/type';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { FileData } from 'src/app/types/resources/file-data';
-import { Session } from '../../pages/master-dashboard-page/master-dashboard-page.component';
 
 @Component({
   selector: 'app-soundboard',

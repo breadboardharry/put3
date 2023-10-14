@@ -2,12 +2,22 @@
 
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
+$color-green-50: #eff6f0;
+$color-green-100: #cee4d2;
+$color-green-200: #add2b3;
+$color-green-300: #8cc095;
+$color-green-400: #6bae77;
+$color-green-500: #51945d;
+$color-green-600: #3f7348;
+$color-green-700: #2d5234;
+
 $dark-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
 $dark-gradient-2: linear-gradient(145deg, rgb(4, 7, 43), rgb(2, 2, 31));
 $dark-gradient-3: linear-gradient(145deg, rgb(6, 10, 54), rgb(4, 4, 42));
 $light-gradient: linear-gradient(145deg, rgb(49, 49, 89), rgb(30, 33, 83));
 
-$success-gradient: linear-gradient(145deg, rgb(49, 89, 56), rgb(27, 80, 40));
+$success-light-gradient: linear-gradient(145deg, $color-green-400, $color-green-500);
+$success-gradient: linear-gradient(145deg, $color-green-600, $color-green-700);
 $error-gradient: linear-gradient(145deg, rgb(134, 34, 34), rgb(109, 16, 16));
 $warning-gradient: linear-gradient(145deg, rgb(145, 96, 33),rgb(143, 96, 25));
 $info-gradient: $light-gradient;

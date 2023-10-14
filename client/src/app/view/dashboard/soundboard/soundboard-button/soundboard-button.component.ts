@@ -4,7 +4,7 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 import { FileService } from 'src/app/services/utils/file-service/file.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { EnumActionType } from 'src/app/enums/type-action';
-import { Session } from 'src/app/view/pages/master-dashboard-page/master-dashboard-page.component';
+import { Session } from 'src/app/classes/session';
 
 @Component({
   selector: 'app-soundboard-button',

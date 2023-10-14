@@ -1,13 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
-import { Session } from 'src/app/view/pages/master-dashboard-page/master-dashboard-page.component';
-
-export type SessionData = {
-    code: string
-    masters: {}[];
-    fool: {};
-};
+import { Session, SessionData } from 'src/app/classes/session';
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +20,9 @@ export class SessionService {
                 withCredentials: true
             })
             .subscribe({
-                next: (res: any) => { resolve(res.sessions) },
+                next: (res: any) => {
+                    resolve(res.sessions.map((data: SessionData) => new Session(data)))
+                },
                 error: (err) => { reject(err) }
             });
         });

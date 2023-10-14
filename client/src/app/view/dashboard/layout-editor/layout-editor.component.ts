@@ -5,11 +5,10 @@ import { DesktopService } from 'src/app/services/desktop-service/desktop.service
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
 import { environment } from 'src/environments/environment';
-import { Fool } from 'src/app/classes/fool';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
-import { Session } from '../../pages/master-dashboard-page/master-dashboard-page.component';
+import { Session } from 'src/app/classes/session';
 
 @Component({
     selector: 'app-layout-editor',
@@ -18,13 +17,22 @@ import { Session } from '../../pages/master-dashboard-page/master-dashboard-page
 })
 export class LayoutEditorComponent implements OnInit {
 
-    @ViewChild('content') content!: ElementRef;
-    @ViewChild('editor') editor!: ElementRef;
-    @Input() sessions: Session[] = [];
-    @Input() target?: Session;
-    @Input() disabled: boolean = false;
+    @ViewChild('content')
+    public content!: ElementRef;
 
-    defaultDesktopImage = environment.defaultDesktopImage;
+    @ViewChild('editor')
+    public editor!: ElementRef;
+
+    @Input()
+    public sessions: Session[] = [];
+
+    @Input()
+    public target?: Session;
+
+    @Input()
+    public disabled: boolean = false;
+
+    public defaultDesktopImage = environment.defaultDesktopImage;
 
     constructor(
         public backend: BackendService,
@@ -47,11 +55,11 @@ export class LayoutEditorComponent implements OnInit {
         });
     }
 
-    addHitbox() {
+    public addHitbox() {
         this.target!.fool.layout.hitboxes.push(new Hitbox());
     }
 
-    changeBackground() {
+    public changeBackground() {
         const dialogRef = this.dialog.open(ResourceBrowserModal, {
             data: { type: ResourceType.Image }
         });

@@ -22,19 +22,19 @@ export class HomePageComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    chooseMaster() {
+    public chooseMaster() {
         this.router.navigate(['/master']);
     }
 
-    chooseFool() {
+    public chooseFool() {
         this.router.navigate(['/fool']);
     }
 
-    mouseEnter(elem: EnumUserRole.MASTER | EnumUserRole.FOOL) {
+    public mouseEnter(elem: EnumUserRole.MASTER | EnumUserRole.FOOL) {
         this.hover = elem;
     }
 
-    mouseLeave() {
+    public mouseLeave() {
         this.hover = null;
     }
 }

@@ -53,8 +53,6 @@ export default class SessionModule {
             const usersUuids = session.getUsers().map((user) => user.uuid);
             const adminUuids = UsersService.getAdminUuids();
             const uuids = [...usersUuids, ...adminUuids];
-            // console.log("[-] Emitting session update to", uuids);
-            // console.log("[-] Session update:", session);
             SocketService.emit(EnumEventName.SESSION, session, {targets: uuids});
         }
     }

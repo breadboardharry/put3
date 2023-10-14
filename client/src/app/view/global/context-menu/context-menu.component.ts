@@ -7,14 +7,18 @@ import { ContextMenuItem } from 'src/app/types/context-menu-item';
     styleUrls: ['./context-menu.component.scss'],
 })
 export class ContextMenuComponent implements OnInit {
-    @Input() items: ContextMenuItem[] = [];
-    @Output() itemClick: EventEmitter<any> = new EventEmitter();
+
+    @Input()
+    items: ContextMenuItem[] = [];
+
+    @Output()
+    itemClick: EventEmitter<any> = new EventEmitter();
 
     constructor() {}
 
     ngOnInit(): void {}
 
-    onClick(event: any, item: ContextMenuItem) {
+    public onClick(event: any, item: ContextMenuItem) {
         this.itemClick.emit({event, item});
     }
 }

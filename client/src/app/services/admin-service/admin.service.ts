@@ -71,7 +71,8 @@ export class AdminService {
         this.http.get(
             this.backend.apiUrl + '/admin/logout',
             { responseType: 'json', withCredentials: true }
-        ).subscribe();
-        window.location.replace('/');
+        ).subscribe(() => {
+            window.location.replace('/');
+        });
     }
 }

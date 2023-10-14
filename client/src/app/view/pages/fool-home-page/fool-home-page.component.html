@@ -16,7 +16,22 @@
                 ></qrcode>
             </a>
 
-            <button (click)="run()">Run</button>
+            <div class="toolbar">
+                <div class="left-buttons">
+                    <button class="toolbar-button fullscreen-button" (click)="WindowService.toggleFullscreen()">
+                        <img class="icon" [src]="'assets/icons/fullscreen-' + (WindowService.isFullscreen() ? 'close' : 'enter') + '.svg'">
+                    </button>
+
+                    <button class="toolbar-button" disabled>
+                        <img class="icon" [src]="'assets/icons/bell.svg'">
+                    </button>
+                </div>
+
+                <button class="toolbar-button run-button" (click)="run()">
+                    <div class="icon"></div>
+                </button>
+            </div>
+
         </div>
     </div>
 

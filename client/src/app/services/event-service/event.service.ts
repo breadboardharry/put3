@@ -16,6 +16,7 @@ import { EventResourcesDTO } from 'src/app/models/dtos/events/resources.dto';
 import { ResourceSet } from 'src/app/types/resources/data-set';
 import { Action } from 'src/app/types/action';
 import { UserPreferences } from 'src/app/types/preferences/user-preferences';
+import { Session } from 'src/app/classes/session';
 
 export type RoleRequestData = {
     role: EnumUserRole;
@@ -78,7 +79,7 @@ export class EventService {
         });
 
         this.websocket.socket.on(EnumEventName.SESSION, (event: any) => {
-            this.onSession.next(event.data);
+            this.onSession.next(new Session(event.data));
         });
     }
 

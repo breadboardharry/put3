@@ -10,7 +10,7 @@
 
     <div class="content-container">
         <div class="content">
-            <div class="fool-list-container" *ngIf="isAdmin">
+            <div class="fool-list-container" *ngIf="displayFoolList">
                 <app-fool-card
                     *ngFor="let session of sessions"
                     [selected]="target && session.code == target.code"
@@ -26,7 +26,7 @@
                 </p>
             </div>
 
-            <hr class="separator" *ngIf="isAdmin"/>
+            <hr class="separator" *ngIf="displayFoolList"/>
 
             <div class="app-container" [ngSwitch]="selectedItem.title">
                 <app-soundboard *ngSwitchCase="dashboardPage.SOUNDBOARD"
@@ -36,7 +36,9 @@
                 >
                 </app-soundboard>
 
-                <app-assets-gallery *ngSwitchCase="dashboardPage.RESOURCES">
+                <app-assets-gallery *ngSwitchCase="dashboardPage.RESOURCES"
+                    [isAdmin]="isAdmin"
+                >
                 </app-assets-gallery>
 
                 <app-layout-editor *ngSwitchCase="dashboardPage.LAYOUT"
@@ -48,7 +50,9 @@
         </div>
     </div>
 </div>
-<app-context-menu *ngIf="contextMenu.show"
+
+<app-context-menu
+    *ngIf="contextMenu.show"
     [ngStyle]="contextMenu.style"
     [items]="contextMenu.items"
     (itemClick)="handleContextMenu($event)">

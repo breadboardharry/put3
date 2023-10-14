@@ -1,7 +1,6 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
@@ -16,8 +15,11 @@ import { FileData } from 'src/app/types/resources/file-data';
 })
 export class AssetsGalleryComponent implements OnInit {
 
+    @Input()
+    isAdmin: boolean = false;
+
     // Context menu
-    contextMenu: ContextMenu = {
+    public contextMenu: ContextMenu = {
         show: false,
         x: 0,
         y: 0,
@@ -30,7 +32,7 @@ export class AssetsGalleryComponent implements OnInit {
     };
 
     // Assets
-    editing: FileData | null = null;
+    public editing: FileData | null = null;
 
     // File upload
     fileArr: any[] = [];
@@ -46,7 +48,6 @@ export class AssetsGalleryComponent implements OnInit {
         public selectionService: SelectionService,
         public resourceService: ResourcesService,
         public fb: FormBuilder,
-        private sanitizer: DomSanitizer
     ) {
         this.form = this.fb.group({
             file: [null],
@@ -61,12 +62,12 @@ export class AssetsGalleryComponent implements OnInit {
         this.selectionService.handleSelect(event, file, rightClick);
 
         // On right click, display context menu
-        if (rightClick) {
+        if (rightClick && this.isAdmin) {
             this.displayContextMenu(event);
         }
     }
 
-    upload(event: any) {
+    public upload(event: any) {
         const fileListAsArray = Array.from(event);
         fileListAsArray.forEach((item, i) => {
             const file: any = event as HTMLInputElement;
@@ -115,11 +116,7 @@ export class AssetsGalleryComponent implements OnInit {
             });
     }
 
-    sanitize(url: string) {
-        return this.sanitizer.bypassSecurityTrustUrl(url);
-    }
-
-    displayContextMenu(event: any) {
+    private displayContextMenu(event: any) {
         this.contextMenu.show = true;
         const len = this.selectionService.getSelection().length
 
@@ -142,8 +139,9 @@ export class AssetsGalleryComponent implements OnInit {
         this.contextMenu.style.top = event.clientY + 'px';
     }
 
-    handleContextMenu(event: any) {
+    public handleContextMenu(event: any) {
         this.contextMenu.show = false;
+        if (!this.isAdmin) return;
 
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
@@ -157,7 +155,7 @@ export class AssetsGalleryComponent implements OnInit {
         };
     }
 
-    rename(newName: string, file: FileData) {
+    public rename(newName: string, file: FileData) {
         this.editing = null;
 
         // Stop here if the name hasn't changed

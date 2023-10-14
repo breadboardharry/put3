@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Fool } from 'src/app/classes/fool';
+import { EnumSessionStatus, Session } from 'src/app/classes/session';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { EnumDashboardPage } from 'src/app/enums/dashboard-pages';
 import { EnumUserRole } from 'src/app/enums/role';
@@ -12,13 +13,6 @@ import { SessionService } from 'src/app/services/session-service/session.service
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 import { MenuItem } from 'src/app/types/menu-item';
-
-export type Session = {
-    code: string;
-    masters: string[];
-    fool: Fool;
-    status: string;
-};
 
 @Component({
     selector: 'app-master-dashboard-page',
@@ -91,25 +85,19 @@ export class MasterDashboardPageComponent implements OnInit {
         });
     }
 
-    private sessionRecieved(session: any): void {
-        session.fool = new Fool(session.fool);
-
+    private sessionRecieved(session: Session): void {
         if (this.isAdmin) {
             const existingSession = this.sessions.find((s) => s.code === session.code);
             if (existingSession) {
-                if (session.status === "closed") {
+                if (session.status === EnumSessionStatus.CLOSED) {
                     this.sessions.splice(this.sessions.indexOf(existingSession), 1);
                     this.updateTarget();
                     return;
                 }
-                existingSession.masters = session.masters;
-                session.fool.layout.hitboxes = existingSession.fool.layout.hitboxes;
-                existingSession.fool = session.fool;
+                existingSession.update(session);
                 this.updateTarget();
             }
-            else {
-                this.sessions.push(session);
-            }
+            else this.sessions.push(session);
             return;
         }
 
@@ -120,18 +108,9 @@ export class MasterDashboardPageComponent implements OnInit {
             return;
         }
         // When session updated
-        if (session.status === "closed") {
-            this.sessionClosed = true;
-            this.snackbar.openError("Session closed");
-            setTimeout(() => {
-                this.adminService.logout();
-            }, 3000);
-            return;
-        }
+        if (session.status === EnumSessionStatus.CLOSED) this.exit();
         const existingSession = this.sessions[0];
-        session.fool.layout.hitboxes = existingSession.fool.layout.hitboxes;
-        existingSession.fool = session.fool;
-        existingSession.masters = session.masters;
+        existingSession.update(session);
         this.updateTarget();
     }
 
@@ -200,6 +179,10 @@ export class MasterDashboardPageComponent implements OnInit {
         this.selectedItem = item;
     }
 
+    public get displayFoolList(): boolean {
+        return this.isAdmin && this.selectedItem.title != EnumDashboardPage.RESOURCES;
+    }
+
     @HostListener('document:click')
     documentClick(): void {
         this.contextMenu.show = false;
@@ -209,5 +192,13 @@ export class MasterDashboardPageComponent implements OnInit {
     onRightClick(event: any) {
         this.contextMenu.show = false;
         event.preventDefault();
+    }
+
+    private exit() {
+        this.sessionClosed = true;
+        this.snackbar.openError("Session closed");
+        setTimeout(() => {
+            this.adminService.logout();
+        }, 3000);
     }
 }
