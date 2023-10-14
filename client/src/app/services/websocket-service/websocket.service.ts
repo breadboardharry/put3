@@ -13,14 +13,22 @@ export class WebSocketService {
     constructor(
         private backend: BackendService
     ) {
-        // Connect Socket with server URL
         this._socket = io(this.backend.serverUrl, {
-            path: environment.socketPath
+            path: environment.socketPath,
+            withCredentials: true
         });
     }
 
     get socket() {
         return this._socket;
+    }
+
+    public isConnected() {
+        return this._socket.connected;
+    }
+
+    public disconnect() {
+        this._socket.disconnect();
     }
 
 }

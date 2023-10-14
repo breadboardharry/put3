@@ -6,9 +6,8 @@ import { Window } from "src/app/types/window";
 export class EventInfosDTO {
 
     @Expose()
-    @IsDefined()
     @Type(() => EventTargetDTO)
-    target!: EventTargetDTO;
+    target?: EventTargetDTO;
 
     @Expose()
     @IsDefined()

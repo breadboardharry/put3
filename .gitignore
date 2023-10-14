@@ -12,6 +12,7 @@ server/dist
 
 # Express Server
 server/public/images/desktop.*
+.env.local
 
 server/public/resources/audio/*
 server/public/resources/images/*

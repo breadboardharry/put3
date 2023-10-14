@@ -7,7 +7,6 @@ import { ResourceType } from 'src/app/enums/resources/type';
 import { ResourceDirectory } from 'src/app/enums/resources/directory';
 import { ResourceSet } from 'src/app/types/resources/data-set';
 import { BackendService } from '../backend/backend.service';
-import { AuthService } from '../auth-service/auth.service';
 import { EventService } from '../event-service/event.service';
 
 @Injectable({
@@ -21,20 +20,17 @@ export class ResourcesService {
     constructor(
         private http: HttpClient,
         private backend: BackendService,
-        private authService: AuthService,
         private eventService: EventService
     ) {
         this.update();
-
         this.eventService.onResourcesUpdate.subscribe((resources) => {
             this.resources = resources;
         });
     }
 
     public async update() {
-        const logged = await this.authService.isLogged();
-
-        if (!logged) return;
+        // const logged = await this.authService.isLogged();
+        // if (!logged) return;
 
         this.getData().then((resources: ResourceSet) => {
             this.resources = resources;
@@ -43,23 +39,17 @@ export class ResourcesService {
 
     public typeToDir(type: ResourceType): ResourceDirectory {
         switch (type) {
-            case ResourceType.Image:
-                return ResourceDirectory.Images;
-            case ResourceType.Video:
-                return ResourceDirectory.Videos;
-            case ResourceType.Audio:
-                return ResourceDirectory.Audios;
+            case ResourceType.Image: return ResourceDirectory.Images;
+            case ResourceType.Video: return ResourceDirectory.Videos;
+            case ResourceType.Audio: return ResourceDirectory.Audios;
         }
     }
 
     public dirToType(dir: ResourceDirectory): ResourceType {
         switch (dir) {
-            case ResourceDirectory.Images:
-                return ResourceType.Image;
-            case ResourceDirectory.Videos:
-                return ResourceType.Video;
-            case ResourceDirectory.Audios:
-                return ResourceType.Audio;
+            case ResourceDirectory.Images: return ResourceType.Image;
+            case ResourceDirectory.Videos: return ResourceType.Video;
+            case ResourceDirectory.Audios: return ResourceType.Audio;
         }
     }
 
@@ -67,14 +57,14 @@ export class ResourcesService {
         let result: any[] = [];
 
         for (let key in obj) {
-        let newPath = path ? path + '/' + key : key;
+            let newPath = path ? path + '/' + key : key;
 
-        if (Array.isArray(obj[key])) {
-            result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
-        }
-        else if (typeof obj[key] === 'object') {
-            result = result.concat(this.flattenObject(obj[key], newPath));
-        }
+            if (Array.isArray(obj[key])) {
+                result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
+            }
+            else if (typeof obj[key] === 'object') {
+                result = result.concat(this.flattenObject(obj[key], newPath));
+            }
         }
         return result;
     }
@@ -112,11 +102,11 @@ export class ResourcesService {
         });
     }
 
-    public getResources(type: ResourceType | null = null): FileData[] {
+    public getResources(type?: ResourceType): FileData[] {
         // Return resources of a specific type
         if (type) {
             const dir = this.typeToDir(type);
-            return this.resources[dir]!;
+            return this.resources[dir] || [];
         }
 
         // Return all resources if no type is specified

@@ -16,6 +16,7 @@ import { ResizeHandle } from 'src/app/types/resize-handle';
 export class HitboxComponent implements OnInit {
 
     @Input() hitbox!: Hitbox;
+    @Input() disabled: boolean = false;
 
     triggers = triggers;
     actions = actions;

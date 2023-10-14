@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
 import { CodeName } from 'src/app/enums/code';
-import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { Route } from 'src/app/enums/routes';
 
 @Component({
@@ -15,7 +15,7 @@ export class CodelockPageComponent implements OnInit {
 
     public codeName: CodeName = CodeName.MASTER;
 
-    constructor(private authService: AuthService, private router: Router, private cookie: CookieService, private route: ActivatedRoute) { }
+    constructor(private adminService: AdminService, private router: Router, private cookie: CookieService, private route: ActivatedRoute) { }
 
     ngOnInit() {
         this.init();
@@ -32,7 +32,7 @@ export class CodelockPageComponent implements OnInit {
 
         // Check if a token is present and if it is valid
         if (!this.cookie.check('token')) return;
-        const logged = await this.authService.isLogged();
+        const logged = await this.adminService.isLogged();
         if (!logged) return;
 
         this.reRoute('/' + target);

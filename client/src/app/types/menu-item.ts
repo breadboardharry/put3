@@ -1,6 +1,6 @@
-import { DashboardPage } from "../enums/dashboard-pages";
+import { EnumDashboardPage } from "../enums/dashboard-pages";
 
 export type MenuItem = {
-  title: DashboardPage;
-  icon?: string;
+    title: EnumDashboardPage | string;
+    icon?: string;
 };

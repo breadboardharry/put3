@@ -1,169 +1,137 @@
 import { EnumUserRole } from "../../enums/role";
-import UsersService from "../../services/users.service";
-import { Subject } from "rxjs";
+import UsersService from "../../services/users/users.service";
 import { getData } from "../resources/resources";
 import { APIResponse } from "../../types/response";
-import { EnumUpdateType } from "../../enums/update-type";
+import { UserPreferences } from "../../types/user-preferences";
+import { EnumEventName } from "../../enums/event-name";
+import { SessionService } from "../../services/users/sessions.service";
+import SessionModule from "../session/sessions";
+import SocketService from "../../services/socket/socket.service";
 
-type EmitParams = {key: string, data: any};
-
-export enum EnumEventName {
-    UUID = "uuid",
-    ROLE = "role",
-    ACTION = "action",
-    INFOS = "infos",
-    LAYOUT = "layout",
-    RENAME = "rename",
-    UPDATE = "update",
-};
-
-export class UserModule {
-
-    public static emitSubject: Subject<EmitParams> = new Subject<EmitParams>();
-
-    private static emit(key: string, targetUuid?: string, data?: any) {
-        const params = { key, data: {
-            target: {uuid: targetUuid},
-            data
-        }};
-        this.emitSubject.next(params);
-    }
+export default class UserModule {
 
     public static connect(uuid: string): APIResponse {
-        const checkUuid = this.checkUuid(uuid, false);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
-        }
-
         console.log("[-] New user connected: " + uuid);
-        UsersService.new(uuid);
-        this.emit(EnumEventName.UUID, undefined, uuid);
-
-        return { success: true, message: "User created" };
+        return { success: true };
     }
 
     public static disconnect(uuid: string): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
-        }
+        const user = UsersService.get(uuid);
+        if (!user) return { success: false, message: "User doesn't exist" };
 
-        console.log("[-] User disconnected: " + uuid);
-        UsersService.remove(uuid);
-        this.emitUpdate.fools();
+        console.log("[-] User disconnected: " + user.uuid);
+        SessionModule.disconnect(user);
+        UsersService.remove(user.uuid);
 
         return { success: true, message: "User deleted" };
     }
 
-    public static changeRole(uuid: string, role: string, preferences: any): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
-        }
-
-        const checkRole = this.checkRole(role);
-        if (!checkRole.success) {
-            console.log(checkRole.message);
-            return checkRole;
+    public static setRole(uuid: string, role: EnumUserRole, data: { sessionCode?: string, preferences?: UserPreferences, isAdmin: boolean }): APIResponse {
+        const userExists = !!UsersService.get(uuid);
+        if (userExists) {
+            UsersService.remove(uuid);
         }
 
         console.log("[-] User " + uuid + " selected role " + role);
-        const user = UsersService.get(uuid)!;
-        const newName = user.setRole(role as EnumUserRole, preferences);
-        if (newName) this.emit(EnumEventName.RENAME, uuid, newName);
-        this.emitUpdate.fools();
+        if (role == EnumUserRole.MASTER && !data.isAdmin) {
+            if (!SessionService.find(data.sessionCode!)) {
+                return { success: false, message: "Session doesn't exist" };
+            }
+        }
+
+        const isAdmin = (role == EnumUserRole.MASTER) ? data.isAdmin : false;
+        const user = UsersService.new(uuid, role, isAdmin, data.preferences);
+        console.log("[-] User " + uuid + " created:", user);
+        if (role == EnumUserRole.FOOL) {
+            const session = SessionService.new(user);
+            SocketService.emit(EnumEventName.ROLE, {
+                uuid: user.uuid,
+                name: user.name,
+                role: EnumUserRole.FOOL,
+                sessionCode: session.getCode(),
+            }, { targets: [uuid]});
+        }
+        else if (role == EnumUserRole.MASTER) {
+            SocketService.emit(EnumEventName.ROLE, {
+                uuid: user.uuid,
+                name: user.name,
+                role: EnumUserRole.MASTER,
+            }, { targets: [uuid]});
+            if (!user.isAdmin) SessionModule.connect(user, data.sessionCode!);
+        }
+        else throw new Error("[-] Unknown role: " + role);
 
         return { success: true, message: "Role changed" };
     }
 
-    public static sendAction(uuid: string, action: any): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
+    public static sendAction(sourceUuid: string, targetUuid: string, action: any): APIResponse {
+        const sourceUser = UsersService.get(sourceUuid);
+        if (!sourceUser) throw new Error("[-] Undefined source user");
+        const targetUser = UsersService.get(targetUuid);
+        if (!targetUser) throw new Error("[-] Undefined target user");
+
+        // Check if the sender has the right to send an action to the target
+        if (!SessionModule.canMasterSendToFool(sourceUser.uuid, sourceUser.isAdmin, targetUuid)) {
+            console.error("[-] User " + sourceUser.uuid + " doesn't have the right to send an action to " + targetUuid);
+            return { success: false, message: "You don't have the right to send an action to this user" };
         }
 
-        console.log("[-] Action sent to " + uuid);
-        this.emit(EnumEventName.ACTION, uuid, action);
+        console.log("[-] Action from " + sourceUser.uuid + " to " + targetUuid);
+        SocketService.emit(EnumEventName.ACTION, action, { targets: [targetUuid]});
 
         return { success: true, message: "Action sent" };
     }
 
-    public static changeInfos(uuid: string, infos: any): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
-        }
+    public static changeInfos(userUuid: string, infos: any): APIResponse {
+        const user = UsersService.get(userUuid);
+        if (!user) throw new Error("[-] Undefined user");
 
-        console.log("[-] Infos changed for " + uuid);
-        UsersService.get(uuid)!.infos = {...UsersService.get(uuid)!.infos, ...infos};
-        this.emitUpdate.fools();
+        if (user.role != EnumUserRole.FOOL) {
+            return { success: false, message: "You can't change infos for this user" };
+        }
+        console.log("[-] Infos changed for " + user.uuid);
+        user.infos = {...user.infos, ...infos};
+        SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(user.uuid)!);
 
         return { success: true, message: "Infos changed" };
     }
 
-    public static changeLayout(uuid: string, layout: any): APIResponse {
-        console.log("[-] Layout changed for " + uuid);
-        console.log(layout);
+    public static changeLayout(sourceUuid: string, targetUuid: string, layout: any): APIResponse {
+        const sourceUser = UsersService.get(sourceUuid);
+        if (!sourceUser) throw new Error("[-] Undefined source user");
+        const targetUser = UsersService.get(targetUuid);
+        if (!targetUser) throw new Error("[-] Undefined target user");
 
-        const checkUuid = this.checkUuid(uuid);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
+        if (targetUser.role != EnumUserRole.FOOL) {
+            return { success: false, message: "You can't change infos for this user" };
         }
-
-        console.log("[-] Layout changed for " + uuid);
-        this.emit(EnumEventName.LAYOUT, uuid, layout);
-        const user = UsersService.get(uuid)!;
-        user.desktop = layout.desktop;
-        this.emitUpdate.fools();
+        console.log("[-] Layout changed for " + targetUuid);
+        targetUser.desktop = layout.desktop;
+        SocketService.emit(EnumEventName.LAYOUT, layout, { targets: [targetUuid]});
+        SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
         return { success: true, message: "Layout changed" };
     }
 
-    public static rename(uuid: string, newName: string): APIResponse {
-        const checkUuid = this.checkUuid(uuid);
-        if (!checkUuid.success) {
-            console.log(checkUuid.message);
-            return checkUuid;
-        }
+    public static rename(sourceUuid: string, targetUuid: string, newName: string): APIResponse {
+        const sourceUser = UsersService.get(sourceUuid);
+        if (!sourceUser) throw new Error("[-] Undefined source user");
+        const targetUser = UsersService.get(targetUuid);
+        if (!targetUser) throw new Error("[-] Undefined target user");
 
-        console.log("[-] Rename " + uuid + " to " + newName);
-        UsersService.get(uuid)!.name = newName;
-        this.emit(EnumEventName.RENAME, uuid, newName);
-        this.emitUpdate.fools();
+        if (targetUser.role != EnumUserRole.FOOL) {
+            return { success: false, message: "You can't change infos for this user" };
+        }
+        targetUser.name = newName;
+        SocketService.emit(EnumEventName.RENAME, newName, { targets: [targetUuid]});
+        SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
         return { success: true, message: "User renamed" };
     }
 
-    private static checkUuid(uuid: string, isAssociated?: boolean): APIResponse {
-        if (!uuid) return { success: false, message: "No uuid provided" };
-        if (typeof uuid !== "string") return { success: false, message: "Uuid must be a string" };
-        if (isAssociated && !UsersService.exists(uuid)) {
-            return { success: false, message: "User doesn't exist" };
-        };
-        return { success: true, message: "Uuid is valid" };
-    }
-
-    private static checkRole(role: string): APIResponse {
-        if (!role) return { success: false, message: "No role provided" };
-        if (typeof role !== "string") return { success: false, message: "Role must be a string" };
-        if (!Object.values(EnumUserRole).includes(role as EnumUserRole)) {
-            return { success: false, message: "Role must be a valid role" };
-        }
-        return { success: true, message: "Role is valid" };
-    }
-
     public static emitUpdate = {
         resources: () => {
-            this.emit(EnumEventName.UPDATE, undefined, { type: EnumUpdateType.RESOURCES, value: getData()});
-        },
-        fools: () => {
-            this.emit(EnumEventName.UPDATE, undefined, { type: EnumUpdateType.FOOLS, value: UsersService.getFools()});
+            SocketService.emit(EnumEventName.RESSOURCES, getData());
         },
     }
 

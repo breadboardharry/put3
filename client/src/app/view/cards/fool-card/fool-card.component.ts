@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Fool } from 'src/app/classes/fool';
 import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { BrowserService } from 'src/app/services/utils/browser-service/browser.s
 })
 export class FoolCardComponent implements OnInit {
 
-    @Input() fool!: any;
+    @Input() fool!: Fool;
     @Input() rename?: boolean = false;
     @Input() selected?: boolean = false;
     @Output() editedEvent: EventEmitter<string> = new EventEmitter<string>();

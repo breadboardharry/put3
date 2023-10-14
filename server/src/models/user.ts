@@ -1,32 +1,26 @@
 import { EnumUserRole } from "../enums/role";
-import { UserModule } from "../modules/users/users";
+import { UserPreferences } from "../types/user-preferences";
 
-export class User {
+export default class User {
 
     private static NAME_INDEX = 1;
 
     public uuid: string;
-    public name!: string;
-    public role: EnumUserRole = EnumUserRole.UNDEFINED;
+    public name: string;
+    public role: EnumUserRole;
     public infos: { [key: string]: any } = {};
     public desktop: { [key: string]: any } = {};
+    public isAdmin: boolean = false;
 
-    constructor(uuid: string) {
+    constructor(uuid: string, role: EnumUserRole, isAdmin: boolean, preferences?: UserPreferences) {
         this.uuid = uuid;
-    }
-
-    public setRole(role: EnumUserRole, preferences: { [key: string]: any } = {}): string | undefined {
-        let newName: string | undefined;
         this.role = role;
-        if (role == EnumUserRole.FOOL && !preferences.name) {
-            this.name = User.newName();
-            newName = this.name;
-        }
+        this.isAdmin = isAdmin;
+        this.name = preferences?.name ? preferences.name : this.newName();
         this.setPreferences(preferences);
-        return newName;
     }
 
-    public setPreferences(preferences: { [key: string]: any } = {}) {
+    public setPreferences(preferences: UserPreferences = {}) {
         if (preferences.name) this.name = preferences.name;
         if (preferences.desktop) this.desktop = preferences.desktop;
     }
@@ -37,8 +31,8 @@ export class User {
         role: ${this.role}`;
     }
 
-    private static newName(): string {
-        return "PC-" + this.NAME_INDEX++;
+    private newName(): string {
+       return (this.isAdmin ? "ADMIN" : this.role.toUpperCase()) + "-" + User.NAME_INDEX++;
     }
 
 };

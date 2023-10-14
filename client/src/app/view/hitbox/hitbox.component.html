@@ -1,6 +1,6 @@
 <div class="container" cdkDrag
     cdkDragBoundary=".draggable-zone"
-    [cdkDragDisabled]="hitbox.active"
+    [cdkDragDisabled]="disabled || hitbox.active"
     (mouseenter)="mouseEnter()"
     (mouseleave)="mouseLeave()"
     (cdkDragEnded)="dragEnd($event)"

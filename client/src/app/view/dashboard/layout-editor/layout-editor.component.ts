@@ -5,10 +5,10 @@ import { DesktopService } from 'src/app/services/desktop-service/desktop.service
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
 import { environment } from 'src/environments/environment';
-import { Fool } from 'src/app/classes/fool';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
+import { Session } from 'src/app/classes/session';
 
 @Component({
     selector: 'app-layout-editor',
@@ -17,13 +17,22 @@ import { BackendService } from 'src/app/services/backend/backend.service';
 })
 export class LayoutEditorComponent implements OnInit {
 
-    @ViewChild('content') content!: ElementRef;
-    @ViewChild('editor') editor!: ElementRef;
-    @Input() fools: Fool[] = [];
-    @Input() target!: Fool | undefined;
-    @Input() disabled: boolean = false;
+    @ViewChild('content')
+    public content!: ElementRef;
 
-    defaultDesktopImage = environment.defaultDesktopImage;
+    @ViewChild('editor')
+    public editor!: ElementRef;
+
+    @Input()
+    public sessions: Session[] = [];
+
+    @Input()
+    public target?: Session;
+
+    @Input()
+    public disabled: boolean = false;
+
+    public defaultDesktopImage = environment.defaultDesktopImage;
 
     constructor(
         public backend: BackendService,
@@ -46,22 +55,22 @@ export class LayoutEditorComponent implements OnInit {
         });
     }
 
-    addHitbox() {
-        this.target!.layout.hitboxes.push(new Hitbox());
+    public addHitbox() {
+        this.target!.fool.layout.hitboxes.push(new Hitbox());
     }
 
-    changeBackground() {
+    public changeBackground() {
         const dialogRef = this.dialog.open(ResourceBrowserModal, {
             data: { type: ResourceType.Image }
         });
 
         dialogRef.afterClosed().subscribe(image => {
             if (!image) return;
-            this.target!.layout.desktop.image = image.href;
+            this.target!.fool.layout.desktop.image = image.href;
         });
     }
 
-    sendConfig() {
-        this.foolService.sendConfig(this.target!);
+    public sendConfig() {
+        this.foolService.sendConfig(this.target!.fool);
     }
 }

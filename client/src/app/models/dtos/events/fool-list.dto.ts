@@ -5,9 +5,8 @@ import { EventTargetDTO } from "./target.dto";
 export class EventFoolListDTO {
 
     @Expose()
-    @IsDefined()
     @Type(() => EventTargetDTO)
-    target!: EventTargetDTO;
+    target?: EventTargetDTO;
 
     @Expose()
     @IsDefined()
