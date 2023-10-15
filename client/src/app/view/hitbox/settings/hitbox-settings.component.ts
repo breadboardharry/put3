@@ -4,7 +4,7 @@ import { Action } from 'src/app/interfaces/action';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { ResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType } from 'src/app/enums/resources/type';
 import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
@@ -25,7 +25,7 @@ export class HitboxSettingsComponent implements OnInit {
     constructor(public resourceService: ResourcesService) { }
 
     ngOnInit(): void {
-        this.resourceService.getDataByType(ResourceType.Audio).then((data) => {
+        this.resourceService.getDataByType(EnumResourceType.AUDIO).then((data) => {
             this.tracks = data;
         })
     }

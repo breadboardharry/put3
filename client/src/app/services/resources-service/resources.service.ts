@@ -3,7 +3,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { FileData } from 'src/app/types/resources/file-data';
-import { ResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType } from 'src/app/enums/resources/type';
 import { ResourceDirectory } from 'src/app/enums/resources/directory';
 import { ResourceSet } from 'src/app/types/resources/data-set';
 import { BackendService } from '../backend/backend.service';
@@ -37,19 +37,19 @@ export class ResourcesService {
         });
     }
 
-    public typeToDir(type: ResourceType): ResourceDirectory {
+    public typeToDir(type: EnumResourceType): ResourceDirectory {
         switch (type) {
-            case ResourceType.Image: return ResourceDirectory.Images;
-            case ResourceType.Video: return ResourceDirectory.Videos;
-            case ResourceType.Audio: return ResourceDirectory.Audios;
+            case EnumResourceType.IMAGE: return ResourceDirectory.Images;
+            case EnumResourceType.VIDEO: return ResourceDirectory.Videos;
+            case EnumResourceType.AUDIO: return ResourceDirectory.Audios;
         }
     }
 
-    public dirToType(dir: ResourceDirectory): ResourceType {
+    public dirToType(dir: ResourceDirectory): EnumResourceType {
         switch (dir) {
-            case ResourceDirectory.Images: return ResourceType.Image;
-            case ResourceDirectory.Videos: return ResourceType.Video;
-            case ResourceDirectory.Audios: return ResourceType.Audio;
+            case ResourceDirectory.Images: return EnumResourceType.IMAGE;
+            case ResourceDirectory.Videos: return EnumResourceType.VIDEO;
+            case ResourceDirectory.Audios: return EnumResourceType.AUDIO;
         }
     }
 
@@ -86,10 +86,10 @@ export class ResourcesService {
 
     /**
      * Get resources data by type
-     * @param {ResourceType} type Resource type
+     * @param {EnumResourceType} type Resource type
      * @returns {Promise<FileData[]>} Resources
      */
-    public getDataByType(type: ResourceType): Promise<FileData[]> {
+    public getDataByType(type: EnumResourceType): Promise<FileData[]> {
         const endpoint = this.routeUrl + '/' + this.typeToDir(type);
 
         return new Promise<FileData[]>((resolve, reject) => {
@@ -102,7 +102,7 @@ export class ResourcesService {
         });
     }
 
-    public getResources(type?: ResourceType): FileData[] {
+    public getResources(type?: EnumResourceType): FileData[] {
         // Return resources of a specific type
         if (type) {
             const dir = this.typeToDir(type);

@@ -1,5 +1,5 @@
-export enum ResourceType {
-    Image = 'image',
-    Video = 'video',
-    Audio = 'audio',
+export enum EnumResourceType {
+    IMAGE = 'image',
+    VIDEO = 'video',
+    AUDIO = 'audio',
 }

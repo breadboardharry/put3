@@ -1,7 +1,5 @@
 @import "~src/styles.scss";
 
-$width: 210px;
-$height: 90px;
 $border-radius: 14px;
 $border-width: 7px;
 $border-color: rgb(59, 46, 109);
@@ -9,8 +7,14 @@ $background: rgb(31, 31, 97);
 
 .card {
     position: relative;
-    width: $width;
-    height: $height;
+    width: 210px;
+    height: 90px;
+
+    @media (max-width: $mobile) {
+        width: 145px;
+        height: 65px;
+    }
+
     padding: $border-width;
 
     border-radius: $border-radius;
@@ -62,9 +66,12 @@ $background: rgb(31, 31, 97);
         font-size: 28px;
         font-weight: 600;
         letter-spacing: 0.15rem;
+        @media (max-width: $mobile) {
+            font-size: 20px;
+        }
 
         @extend %reset-style;
-
+        box-sizing: border-box;
         &.editing {
             border: 1px solid rgba(255, 255, 255, 0.4);
             cursor: default;
@@ -85,6 +92,9 @@ $background: rgb(31, 31, 97);
     z-index: 100;
     box-sizing: border-box;
     border: $border-width solid $border-color;
+    @media (max-width: $mobile) {
+        border-width: 5px;
+    }
     border-radius: $border-radius;
 }
 
@@ -109,6 +119,10 @@ $background: rgb(31, 31, 97);
     img {
         width: 100px;
         height: 100px;
+        @media (max-width: $mobile) {
+            width: 90px;
+            height: 90px;
+        }
     }
 }
 

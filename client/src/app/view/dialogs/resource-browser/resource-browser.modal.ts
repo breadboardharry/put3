@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType } from 'src/app/enums/resources/type';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { FileData } from 'src/app/types/resources/file-data';
@@ -12,7 +12,7 @@ import { FileData } from 'src/app/types/resources/file-data';
 })
 export class ResourceBrowserModal implements OnInit {
 
-    public type?: ResourceType;
+    public type?: EnumResourceType;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: any,

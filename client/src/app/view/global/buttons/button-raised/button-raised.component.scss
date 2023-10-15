@@ -31,6 +31,11 @@ $hover-background: lighten($background, 5%);
     overflow: hidden;
     transition: all 0.15s ease-in-out, transform 80ms ease-in-out;
 
+    @media (max-width: $mobile) {
+        padding: .8rem 1.5rem;
+        font-size: 15px;
+    }
+
     &:disabled {
         color: darken(white, 30%);
         background-color: darken($background, 10%);

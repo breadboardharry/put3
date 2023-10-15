@@ -5,45 +5,43 @@
 }">
     <app-dashboard-navbar></app-dashboard-navbar>
 
-    <div class="content-container">
-        <div class="content">
-            <div class="fool-list-container" *ngIf="displayFoolList">
-                <app-fool-card
-                    *ngFor="let session of sessions"
-                    [selected]="target && session.code == target.code"
-                    [fool]="session.fool"
-                    (click)="clickSession(session)"
-                    (contextmenu)="rightClickSession(session, $event)"
-                    [rename]="renaming == session"
-                    (editedEvent)="renameFool($event, session.fool)"
-                >
-                </app-fool-card>
-                <p class="no-fool" *ngIf="!sessions.length">
-                    No fool connected
-                </p>
-            </div>
+    <div class="content">
+        <div class="fool-list-container" *ngIf="displayFoolList">
+            <app-fool-card
+                *ngFor="let session of sessions"
+                [selected]="target && session.code == target.code"
+                [fool]="session.fool"
+                (click)="clickSession(session)"
+                (contextmenu)="rightClickSession(session, $event)"
+                [rename]="renaming == session"
+                (editedEvent)="renameFool($event, session.fool)"
+            >
+            </app-fool-card>
+            <p class="no-fool" *ngIf="!sessions.length">
+                No fool connected
+            </p>
+        </div>
 
-            <hr class="separator" *ngIf="displayFoolList"/>
+        <hr class="separator" *ngIf="displayFoolList"/>
 
-            <div class="app-container" [ngSwitch]="section">
-                <app-soundboard *ngSwitchCase="EnumPage.SOUNDBOARD"
-                    [sessions]="sessions"
-                    [target]="target"
-                    [disabled]="!sessions.length || sessionClosed || target == null"
-                >
-                </app-soundboard>
+        <div class="app-container" [ngSwitch]="section">
+            <app-soundboard *ngSwitchCase="EnumPage.SOUNDBOARD"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            >
+            </app-soundboard>
 
-                <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
-                    [isAdmin]="isAdmin"
-                >
-                </app-assets-gallery>
+            <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
+                [isAdmin]="isAdmin"
+            >
+            </app-assets-gallery>
 
-                <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"
-                    [sessions]="sessions"
-                    [target]="target"
-                    [disabled]="!sessions.length || sessionClosed || target == null"
-                ></app-layout-editor>
-            </div>
+            <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-layout-editor>
         </div>
     </div>
 </div>

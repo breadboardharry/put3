@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Session } from 'src/app/classes/session';
-import { ResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType } from 'src/app/enums/resources/type';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { FileData } from 'src/app/types/resources/file-data';
@@ -25,7 +25,7 @@ export class SoundboardComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.resourceService.getDataByType(ResourceType.Audio).then((data) => {
+        this.resourceService.getDataByType(EnumResourceType.AUDIO).then((data) => {
             this.tracks = data;
         })
     }
