@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Route } from 'src/app/enums/routes';
+import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
+import { EnumAppRoute } from 'src/app/enums/routes';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
+import { TypeService } from 'src/app/services/utils/type/type.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +21,16 @@ export class MasterValidSessionGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         // Check if the user is logged
         return new Promise<boolean>(async (resolve, reject) => {
+            // No session code required for admin
             const isAdmin = await this.adminService.isLogged();
             if (isAdmin) return resolve(true);
 
-            const code = route.queryParams['code'];
+            // Get the session code
+            const URLCode = route.queryParams['code'];
+            if (URLCode) {
+                this.sessionService.saveInCookies(URLCode);
+            }
+            const code = this.sessionService.getFromCookies();
             if (!code) return reject();
 
             this.sessionService.exists(code).then((exists: boolean) => {
@@ -31,7 +39,8 @@ export class MasterValidSessionGuard implements CanActivate {
             });
         })
         .catch(() => {
-            this.router.navigate(['/' + Route.MASTER + '/session']);
+            this.sessionService.removeFromCookies();
+            this.router.navigate(['/' + EnumAppRoute.MASTER + '/session']);
             return false;
         });
     }

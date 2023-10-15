@@ -1,7 +1,8 @@
-export enum EnumDashboardPage {
-    LAYOUT = 'Layout',
-    SOUNDBOARD = 'Soundboard',
-    RESOURCES = 'Resources',
-    SETTINGS = 'Settings'
+export enum EnumNavbarItemTitle {
+    LAYOUT = 'layout',
+    SOUNDBOARD = 'soundboard',
+    RESOURCES = 'resources',
+    SETTINGS = 'settings',
+    LOGOUT = 'logout',
 }
 

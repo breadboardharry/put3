@@ -3,10 +3,7 @@
 <div class="page" [ngClass]="{
     'loading': loading
 }">
-    <app-dashboard-navbar
-        [selectedItem]="selectedItem"
-        (selectedItemEvent)="selectItem($event)"
-    ></app-dashboard-navbar>
+    <app-dashboard-navbar></app-dashboard-navbar>
 
     <div class="content-container">
         <div class="content">
@@ -28,20 +25,20 @@
 
             <hr class="separator" *ngIf="displayFoolList"/>
 
-            <div class="app-container" [ngSwitch]="selectedItem.title">
-                <app-soundboard *ngSwitchCase="dashboardPage.SOUNDBOARD"
+            <div class="app-container" [ngSwitch]="section">
+                <app-soundboard *ngSwitchCase="EnumPage.SOUNDBOARD"
                     [sessions]="sessions"
                     [target]="target"
                     [disabled]="!sessions.length || sessionClosed || target == null"
                 >
                 </app-soundboard>
 
-                <app-assets-gallery *ngSwitchCase="dashboardPage.RESOURCES"
+                <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
                     [isAdmin]="isAdmin"
                 >
                 </app-assets-gallery>
 
-                <app-layout-editor *ngSwitchCase="dashboardPage.LAYOUT"
+                <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"
                     [sessions]="sessions"
                     [target]="target"
                     [disabled]="!sessions.length || sessionClosed || target == null"

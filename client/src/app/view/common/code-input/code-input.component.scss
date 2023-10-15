@@ -1,7 +1,22 @@
+@import '~src/styles.scss';
+
 code-input {
     --color: white;
-    --item-spacing: 24px;
     --item-height: 120px;
+    --item-spacing: 24px;
+    font-size: 72px;
+
+    @media (max-width: $tablet) {
+        --item-height: 80px;
+        font-size: 48px;
+    }
+
+    @media (max-width: $mobile) {
+        --item-height: 60px;
+        --item-spacing: 12px;
+        font-size: 36px;
+    }
+
     --item-border: 3px solid #a1a1a1;
     --item-border-bottom: 3px solid #a1a1a1;
     --item-border-has-value: 3px solid white;
@@ -22,7 +37,6 @@ code-input {
     }
 
     justify-content: center;
-    font-size: 72px;
 
     ::ng-deep {
         gap: var(--item-spacing);
@@ -33,6 +47,15 @@ code-input {
         input {
             transition: border 0.2s ease-in-out, color 0.2s ease-in-out;
             width: 120px !important;
+
+            @media (max-width: $tablet) {
+                width: 80px !important;
+            }
+
+            @media (max-width: $mobile) {
+                width: 60px !important;
+            }
+
             box-sizing: border-box;
         }
     }

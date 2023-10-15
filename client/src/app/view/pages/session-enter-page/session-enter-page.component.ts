@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Route } from 'src/app/enums/routes';
+import { EnumAppRoute } from 'src/app/enums/routes';
 import { SessionService } from 'src/app/services/session-service/session.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { CodeInputComponent } from '../../common/code-input/code-input.component';
@@ -42,7 +42,7 @@ export class SessionEnterPageComponent implements AfterViewInit {
                 this.snackbar.openError("No session found");
                 return;
             }
-            this.router.navigate([Route.MASTER], { queryParams: { code: this.code } });
+            this.router.navigate([EnumAppRoute.MASTER], { queryParams: { code: this.code } });
         });
     }
 
@@ -68,8 +68,7 @@ export class SessionEnterPageComponent implements AfterViewInit {
         this.adminAccess.activeTries++;
 
         if (this.adminAccess.activeTries >= this.adminAccess.neededTries) {
-            this.snackbar.openSuccess("Admin access :)");
-            this.router.navigate([Route.LOGIN], { queryParams: { route: Route.MASTER } });
+            this.router.navigate([EnumAppRoute.LOGIN], { queryParams: { route: EnumAppRoute.MASTER } });
             return;
         }
 

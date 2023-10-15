@@ -1,3 +1,3 @@
 export enum CodeName {
-  MASTER = 'master'
+    MASTER = 'master'
 }
