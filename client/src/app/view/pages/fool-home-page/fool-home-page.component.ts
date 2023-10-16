@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { environment } from 'src/environments/environment';
 import { WindowService } from 'src/app/services/window-service/window.service';
@@ -18,7 +18,7 @@ import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.serv
   templateUrl: './fool-home-page.component.html',
   styleUrls: ['./fool-home-page.component.scss']
 })
-export class FoolHomePageComponent implements OnInit {
+export class FoolHomePageComponent implements OnInit, OnDestroy {
 
     public loading = true;
     public running = false;
@@ -31,6 +31,8 @@ export class FoolHomePageComponent implements OnInit {
     };
     private defaultDesktopImage = environment.defaultDesktopImage;
     public WindowService = WindowService;
+
+    private subscriptions: { [key: string]: any } = {};
 
     constructor(
         private clientService: ClientService,
@@ -46,15 +48,24 @@ export class FoolHomePageComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.clientService.roleChanged.subscribe(() => {
+        if (ClientService.ROLE === EnumUserRole.MASTER) return window.location.reload();
+        if (ClientService.ROLE === EnumUserRole.FOOL) return this.init();
+
+        this.subscriptions['roleChanged'] = this.clientService.roleChanged.subscribe(() => {
             this.init();
-            this.loading = false;
         });
         this.clientService.askForRole(EnumUserRole.FOOL, {preferences: this.preferences.get()});
     }
 
+    ngOnDestroy(): void {
+        Object.keys(this.subscriptions).forEach((key) => {
+            this.subscriptions[key].unsubscribe();
+        });
+    }
+
     private init(): void {
-        this.eventService.onSession.subscribe((session) => {
+        this.loading = false;
+        this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
             console.log('Session message', session);
             if (!this.running) {
                 if (session.masters.length) this.run();
@@ -66,15 +77,15 @@ export class FoolHomePageComponent implements OnInit {
             window: this.windowService.getWindowSize(),
         });
 
-        this.eventService.onAction.subscribe((data) => {
+        this.subscriptions['onAction'] = this.eventService.onAction.subscribe((data) => {
             this.action(data);
         });
 
-        this.eventService.onLayout.subscribe((data) => {
+        this.subscriptions['onLayout'] = this.eventService.onLayout.subscribe((data) => {
             this.layout = this.layoutService.newFoolLayout(data);
         });
 
-        this.eventService.onRename.subscribe((newName) => {
+        this.subscriptions['onRename'] = this.eventService.onRename.subscribe((newName) => {
             this.preferences.setName(newName);
         });
 

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Fool } from 'src/app/classes/fool';
@@ -21,7 +21,7 @@ import { ContextMenu } from 'src/app/types/context-menu';
     templateUrl: './master-dashboard-page.component.html',
     styleUrls: ['./master-dashboard-page.component.scss']
 })
-export class MasterDashboardPageComponent implements OnInit {
+export class MasterDashboardPageComponent implements OnInit, OnDestroy {
 
     private sessionCode!: string;
     public loading: boolean = true;
@@ -58,9 +58,11 @@ export class MasterDashboardPageComponent implements OnInit {
         private router: Router
     ) {}
 
+    private subscriptions: { [key: string]: any } = {};
+
     async ngOnInit() {
         // Subscribe to fragment changes (anchor in the URL)
-        this.route.fragment.subscribe(fragment  => {
+        this.subscriptions['fragment'] = this.route.fragment.subscribe(fragment  => {
             if (!fragment) return;
             if (!TypeService.isPartOfEnum(fragment, EnumNavbarItemTitle)) {
                 this.router.navigate([EnumAppRoute.MASTER]);
@@ -80,14 +82,21 @@ export class MasterDashboardPageComponent implements OnInit {
         }
 
         // If a role is already defined
+        if (ClientService.ROLE === EnumUserRole.FOOL) return window.location.reload();
         if (ClientService.ROLE === EnumUserRole.MASTER) return this.init();
 
         // Otherwise, ask for a role and wait for the response
-        this.clientService.roleChanged.subscribe(() => {
+        this.subscriptions['roleChanged'] = this.clientService.roleChanged.subscribe(() => {
             return this.init();
         });
         // If the user is logged as admin, the code is not needed (undefined)
         this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
+    }
+
+    ngOnDestroy(): void {
+        Object.keys(this.subscriptions).forEach((key) => {
+            this.subscriptions[key].unsubscribe();
+        });
     }
 
     private init() {
@@ -99,7 +108,7 @@ export class MasterDashboardPageComponent implements OnInit {
                 });
             });
         }
-        this.eventService.onSession.subscribe((session) => {
+        this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
             console.log("Session message", session);
             this.sessionRecieved(session);
         });
