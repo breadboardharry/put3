@@ -10,13 +10,19 @@ import { BackendService } from './services/backend/backend.service';
     animations: [slideInAnimation],
 })
 export class AppComponent implements OnInit {
-    constructor(private backend: BackendService, private snackbar: SnackbarService) {}
+
+    constructor(
+        private backend: BackendService,
+        private snackbar: SnackbarService
+    ) {}
 
     ngOnInit(): void {
+
         setInterval(() => {
             this.backend.alive().then((alive) => {
                 if (!alive) this.snackbar.openError('Cannot access to server');
             })
         }, 10000);
     }
+
 }

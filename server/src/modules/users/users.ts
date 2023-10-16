@@ -4,7 +4,7 @@ import { APIResponse } from "../../types/response";
 import { SessionService } from "../../services/users/sessions.service";
 import SessionModule from "../session/sessions";
 import SocketService from "../../services/socket/socket.service";
-import { Action, EnumEvent, EnumUserRole, FoolInfos, UserPreferences } from "put3-models";
+import { Action, EnumEvent, EnumInfoStyle, EnumUserRole, FoolInfos, UserPreferences } from "put3-models";
 
 export default class UserModule {
 
@@ -33,6 +33,7 @@ export default class UserModule {
         console.log("[-] User " + uuid + " selected role " + role);
         if (role == EnumUserRole.MASTER && !data.isAdmin) {
             if (!SessionService.find(data.sessionCode!)) {
+                console.error("[-] Session " + data.sessionCode + " doesn't exist");
                 return { success: false, message: "Session doesn't exist" };
             }
         }
@@ -125,13 +126,17 @@ export default class UserModule {
         if (!targetUser) throw new Error("[-] Undefined target user");
 
         if (targetUser.role != EnumUserRole.FOOL) {
-            return { success: false, message: "You can't change infos for this user" };
+            return { success: false };
         }
         targetUser.name = newName;
         SocketService.emit(EnumEvent.RENAME, newName, { targets: [targetUuid]});
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
         return { success: true, message: "User renamed" };
+    }
+
+    public static sendMessage(uuid: string, message: string, type: EnumInfoStyle): void {
+        SocketService.emit(EnumEvent.MESSAGE, { type, text: message }, { targets: [uuid]});
     }
 
     public static emitUpdate = {

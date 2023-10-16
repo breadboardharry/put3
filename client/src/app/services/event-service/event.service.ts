@@ -3,7 +3,7 @@ import { WebSocketService } from '../websocket-service/websocket.service';
 import { Fool } from 'src/app/classes/fool';
 import { Subject } from 'rxjs';
 import { Session } from 'src/app/classes/session';
-import { Action, EnumEvent, EnumUserRole, Event, EventMessage, FoolInfos, LayoutData, ResourceSet, RoleResponseData, SessionAction, UserPreferences } from 'put3-models';
+import { Action, EventMessageData, EnumEvent, EnumUserRole, Event, EventMessage, FoolInfos, LayoutData, ResourceSet, RoleResponseData, SessionAction, UserPreferences } from 'put3-models';
 import { Layout } from 'src/app/types/layout';
 
 @Injectable({
@@ -17,6 +17,7 @@ export class EventService {
     public onLayout: Subject<LayoutData> = new Subject<LayoutData>();
     public onRename: Subject<string> = new Subject<string>();
     public onResourcesUpdate: Subject<ResourceSet> = new Subject<ResourceSet>();
+    public onMessage: Subject<EventMessageData> = new Subject<EventMessageData>();
 
     constructor(
         private websocket: WebSocketService
@@ -57,9 +58,14 @@ export class EventService {
             this.onResourcesUpdate.next(event.data);
         });
 
-        this.websocket.socket.on(EnumEvent.SESSION, (event: any) => {
+        this.websocket.socket.on(EnumEvent.SESSION, (event: EventMessage) => {
             console.log("[-] Session received", event.data);
             this.onSession.next(new Session(event.data));
+        });
+
+        this.websocket.socket.on(EnumEvent.MESSAGE, (event: EventMessage) => {
+            console.log("[-] Message received", event.data);
+            this.onMessage.next(event.data);
         });
     }
 

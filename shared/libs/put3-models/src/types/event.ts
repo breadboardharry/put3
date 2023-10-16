@@ -1,3 +1,4 @@
+import { EnumInfoStyle } from "../enums/info";
 import { ExclusiveOr } from "./utils";
 
 export type EventMessage = {
@@ -11,3 +12,8 @@ export type EventTargetData = ExclusiveOr<
     { user: string },
     { session: string }
 >;
+
+export type EventMessageData = {
+    type: EnumInfoStyle;
+    text: string;
+};

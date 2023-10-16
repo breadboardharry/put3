@@ -88,6 +88,10 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
             this.preferences.setName(newName);
         });
 
+        this.subscriptions['onMessage'] = this.eventService.onMessage.subscribe((message) => {
+            this.snackbar.open(message.type, message.text);
+        });
+
         this.setDesktopImage();
     }
 

@@ -3,6 +3,7 @@ export * from './classes/event';
 export * from './enums/action';
 export * from './enums/browser';
 export * from './enums/event';
+export * from './enums/info';
 export * from './enums/resources';
 export * from './enums/session';
 export * from './enums/user';

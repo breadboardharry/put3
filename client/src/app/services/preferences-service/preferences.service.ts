@@ -21,7 +21,7 @@ export class PreferencesService {
      * @param preferences Desktop preferences
      */
     public setDesktop(preferences: DesktopPreference): void {
-        this.cookie.set('desktop', JSON.stringify(preferences));
+        this.cookie.set('desktop', JSON.stringify(preferences), undefined, '/');
     }
 
     /**
@@ -38,7 +38,7 @@ export class PreferencesService {
      * @param name Name
      */
     public setName(name: string): void {
-        this.cookie.set('name', JSON.stringify(name || ''));
+        this.cookie.set('name', JSON.stringify(name || ''), undefined, '/');
     }
 
     /**

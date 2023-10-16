@@ -6,4 +6,5 @@ export enum EnumEvent {
     RENAME = "rename",
     RESOURCES = "resources",
     SESSION = "session",
+    MESSAGE = "message",
 };

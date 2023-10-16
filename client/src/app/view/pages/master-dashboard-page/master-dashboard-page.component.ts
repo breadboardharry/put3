@@ -107,9 +107,14 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
                 });
             });
         }
+
         this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
             console.log("[*] Session message", session);
             this.sessionRecieved(session);
+        });
+
+        this.subscriptions['onMessage'] = this.eventService.onMessage.subscribe((message) => {
+            this.snackbar.open(message.type, message.text);
         });
     }
 
