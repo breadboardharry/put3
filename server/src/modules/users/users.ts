@@ -56,6 +56,7 @@ export default class UserModule {
                 uuid: user.uuid,
                 name: user.name,
                 role: EnumUserRole.MASTER,
+                sessionCode: isAdmin ? undefined : data.sessionCode,
             }, { targets: [uuid]});
             if (!user.isAdmin) SessionModule.connect(user, data.sessionCode!);
         }
