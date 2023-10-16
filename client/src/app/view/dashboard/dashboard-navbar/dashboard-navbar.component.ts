@@ -3,6 +3,7 @@ import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
 import { Router } from '@angular/router';
 import { EnumAppRoute } from 'src/app/enums/routes';
+import { ClientService } from 'src/app/services/client-service/client.service';
 
 @Component({
     selector: 'app-dashboard-navbar',
@@ -11,15 +12,22 @@ import { EnumAppRoute } from 'src/app/enums/routes';
 })
 export class DashboardNavbarComponent implements OnInit {
 
+    public isAdmin: boolean = false;
+
     public EnumNavbarItemTitle = EnumNavbarItemTitle;
     public EnumAppRoute = EnumAppRoute;
+    public ClientService = ClientService;
 
     constructor(
         private adminService: AdminService,
         private router: Router
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.adminService.isLogged().then((isAdmin) => {
+            this.isAdmin = isAdmin;
+        });
+    }
 
     public navigate(path: string) {
         this.router.navigate([EnumAppRoute.MASTER, path.toLowerCase()]);

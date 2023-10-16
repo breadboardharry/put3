@@ -1,10 +1,5 @@
+import { EnumSessionStatus } from "put3-models";
 import { Fool } from "./fool";
-
-export enum EnumSessionStatus {
-    PENDING = "pending",
-    RUNNING = "running",
-    CLOSED = "closed"
-}
 
 export type SessionData = {
     code: string;

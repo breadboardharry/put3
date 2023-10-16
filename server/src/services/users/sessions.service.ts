@@ -1,61 +1,5 @@
+import { Session } from "../../models/session";
 import User from "../../models/user";
-
-export enum EnumSessionStatus {
-    PENDING = "pending",
-    RUNNING = "running",
-    CLOSED = "closed"
-}
-
-export class Session {
-
-    private code: string = this.generateCode();
-    private fool: User;
-    public masters: User[] = [];
-    public status: EnumSessionStatus = EnumSessionStatus.PENDING;
-
-    constructor(fool: User) {
-        this.fool = fool;
-    }
-
-    public getCode(): string {
-        return this.code;
-    }
-
-    public getFool(): User {
-        return this.fool;
-    }
-
-    public getMasters(): User[] {
-        return this.masters;
-    }
-
-    public addMaster(master: User) {
-        this.masters.push(master);
-    }
-
-    public getUsers(): User[] {
-        return [this.fool, ...this.masters];
-    }
-
-    public removeMaster(uuid: string) {
-        const index = this.masters.findIndex((master) => master.uuid == uuid);
-        if (index > -1) this.masters.splice(index, 1);
-    }
-
-    public close(): void {
-        this.status = EnumSessionStatus.CLOSED;
-    }
-
-    private generateCode(): string {
-        const length = 5;
-        let code = "";
-        for (let i = 0; i < length; i++) {
-            code += (String(Math.floor(Math.random() * 10)));
-        }
-        return code;
-    }
-
-}
 
 export class SessionService {
 
@@ -85,6 +29,12 @@ export class SessionService {
 
     public static find(code: string): Session | undefined {
         return this.sessions.find((session) => session.getCode() == code);
+    }
+
+    public static run(code: string): void {
+        const session = this.find(code);
+        if (!session) return;
+        session.run();
     }
 
     public static close(code: string): Session | undefined {

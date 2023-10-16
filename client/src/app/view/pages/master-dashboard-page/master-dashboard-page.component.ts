@@ -1,11 +1,9 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { Fool } from 'src/app/classes/fool';
-import { EnumSessionStatus, Session } from 'src/app/classes/session';
+import { Session } from 'src/app/classes/session';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
-import { EnumUserRole } from 'src/app/enums/role';
 import { EnumAppRoute } from 'src/app/enums/routes';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
@@ -15,6 +13,7 @@ import { SessionService } from 'src/app/services/session-service/session.service
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
+import { EnumSessionActionType, EnumSessionStatus, EnumUserRole } from 'put3-models';
 
 @Component({
     selector: 'app-master-dashboard-page',
@@ -108,9 +107,14 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
                 });
             });
         }
+
         this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
-            console.log("Session message", session);
+            console.log("[*] Session message", session);
             this.sessionRecieved(session);
+        });
+
+        this.subscriptions['onMessage'] = this.eventService.onMessage.subscribe((message) => {
+            this.snackbar.open(message.type, message.text);
         });
     }
 

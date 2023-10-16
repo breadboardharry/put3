@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { EnumUserRole } from 'put3-models';
 import { Script } from 'src/app/enums/assets/scrips';
-import { EnumUserRole } from 'src/app/enums/role';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Snackbar } from 'src/app/enums/snackbar';
+import { EnumInfoStyle } from 'put3-models';
 import { CustomSnackbarComponent } from 'src/app/view/global/custom-snackbar/custom-snackbar.component';
 
 @Injectable({
@@ -12,30 +12,30 @@ export class SnackbarService {
 
     constructor(private snackbar: MatSnackBar) {}
 
-    public open(type: Snackbar, message: string, duration: number = this.DEFAULT_DURATION) {
+    public open(type: EnumInfoStyle, message: string, duration: number = this.DEFAULT_DURATION) {
         return this.snackbar.openFromComponent(CustomSnackbarComponent, {
             data: {
                 message: message,
                 type: type
             },
             duration: duration,
-            panelClass: type
+            panelClass: 'snackbar-' + type
         });
     }
 
     public openSuccess(message: string, duration: number = this.DEFAULT_DURATION) {
-        return this.open(Snackbar.Success, message, duration);
+        return this.open(EnumInfoStyle.SUCCESS, message, duration);
     }
 
     public openError(message: string, duration: number = this.DEFAULT_DURATION) {
-        return this.open(Snackbar.Error, message, duration);
+        return this.open(EnumInfoStyle.ERROR, message, duration);
     }
 
     public openWarning(message: string, duration: number = this.DEFAULT_DURATION) {
-        return this.open(Snackbar.Warning, message, duration);
+        return this.open(EnumInfoStyle.WARNING, message, duration);
     }
 
     public openInfo(message: string, duration: number = this.DEFAULT_DURATION) {
-        return this.open(Snackbar.Info, message, duration);
+        return this.open(EnumInfoStyle.INFO, message, duration);
     }
 }

@@ -54,7 +54,7 @@ router.post("/rename", IsAdminMiddleware, (req, res) => {
         if (success) UserModule.emitUpdate.resources();
     }
     catch (err: any) {
-        console.log(err);
+        console.error(err);
         res.status(err.status || 500).json(err);
     }
 });

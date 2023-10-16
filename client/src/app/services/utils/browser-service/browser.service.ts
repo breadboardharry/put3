@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EnumBrowser } from 'src/app/enums/browser';
+import { EnumBrowser } from 'put3-models';
 
 @Injectable({
     providedIn: 'root',

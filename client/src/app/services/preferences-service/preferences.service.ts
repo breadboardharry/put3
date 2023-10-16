@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { DesktopPreference } from 'src/app/types/preferences/desktop';
-import { UserPreferences } from 'src/app/types/preferences/user-preferences';
+import { DesktopPreference, UserPreferences } from 'put3-models';
 
 @Injectable({
     providedIn: 'root',
@@ -21,15 +20,15 @@ export class PreferencesService {
      * Set the fool desktop preferences
      * @param preferences Desktop preferences
      */
-    public setDesktop (preferences: DesktopPreference): void {
-        this.cookie.set('desktop', JSON.stringify(preferences));
+    public setDesktop(preferences: DesktopPreference): void {
+        this.cookie.set('desktop', JSON.stringify(preferences), undefined, '/');
     }
 
     /**
      * Get the fool desktop preferences
      * @returns Desktop preferences or null
      */
-    public getDesktop (): DesktopPreference | undefined {
+    public getDesktop(): DesktopPreference | undefined {
         const desktop = this.cookie.get('desktop');
         return desktop ? JSON.parse(desktop) : undefined;
     }
@@ -38,15 +37,15 @@ export class PreferencesService {
      * Set name
      * @param name Name
      */
-    public setName (name: string): void {
-        this.cookie.set('name', JSON.stringify(name));
+    public setName(name: string): void {
+        this.cookie.set('name', JSON.stringify(name || ''), undefined, '/');
     }
 
     /**
      * Get name
      * @returns Name or null
      */
-    public getName (): string | undefined {
+    public getName(): string | undefined {
         const name = this.cookie.get('name');
         return name ? JSON.parse(name) : undefined;
     }

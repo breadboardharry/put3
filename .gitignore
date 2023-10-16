@@ -9,6 +9,7 @@ client/tmp
 client/out-tsc
 client/bazel-out
 server/dist
+shared/libs/**/lib
 
 # Express Server
 server/public/images/desktop.*

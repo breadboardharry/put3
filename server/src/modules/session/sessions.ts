@@ -1,9 +1,9 @@
-import { EnumEventName } from "../../enums/event-name";
 import User from "../../models/user";
-import { Session, SessionService } from "../../services/users/sessions.service";
-import { EnumUserRole } from "../../enums/role";
+import { SessionService } from "../../services/users/sessions.service";
 import SocketService from "../../services/socket/socket.service";
 import UsersService from "../../services/users/users.service";
+import { Session } from "../../models/session";
+import { EnumEvent, EnumUserRole } from "put3-models";
 
 export default class SessionModule {
 
@@ -12,6 +12,22 @@ export default class SessionModule {
         if (!session) return;
         session.addMaster(master);
         this.emitUpdate.session(session);
+    }
+
+    public static event(sourceUuid: string, targetCode: string, action: any): void {
+        const sourceUser = UsersService.find(sourceUuid);
+        if (!sourceUser) throw new Error("[-] Undefined source user");
+        const targetSession = SessionService.find(targetCode);
+        if (!targetSession) throw new Error("[-] Undefined target session");
+
+        console.log("[-] Event from " + sourceUuid + " to " + targetCode + ":", action);
+        switch (action.type) {
+            case "run":
+                console.log("[-] Running session " + targetCode);
+                SessionService.run(targetCode);
+                break;
+        }
+        this.emitUpdate.session(targetSession);
     }
 
     public static disconnect(user: User): void {
@@ -53,7 +69,7 @@ export default class SessionModule {
             const usersUuids = session.getUsers().map((user) => user.uuid);
             const adminUuids = UsersService.getAdminUuids();
             const uuids = [...usersUuids, ...adminUuids];
-            SocketService.emit(EnumEventName.SESSION, session, {targets: uuids});
+            SocketService.emit(EnumEvent.SESSION, session, {targets: uuids});
         }
     }
 

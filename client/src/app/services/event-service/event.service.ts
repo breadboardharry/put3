@@ -1,35 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EventRenameDTO } from 'src/app/models/dtos/events/rename.dto';
 import { WebSocketService } from '../websocket-service/websocket.service';
-import { EnumEventName } from 'src/app/enums/event-name';
-import { plainToClass } from 'class-transformer';
 import { Fool } from 'src/app/classes/fool';
-import { EventActionDTO } from 'src/app/models/dtos/events/action.dto';
-import { Layout } from 'src/app/types/layout';
-import { EventLayoutDTO } from 'src/app/models/dtos/events/layout.dto';
-import { EnumUserRole } from 'src/app/enums/role';
-import { EventRoleDTO } from 'src/app/models/dtos/events/role.dto';
-import { FoolInfos } from 'src/app/types/fool-infos';
-import { EventInfosDTO } from 'src/app/models/dtos/events/infos.dto';
 import { Subject } from 'rxjs';
-import { EventResourcesDTO } from 'src/app/models/dtos/events/resources.dto';
-import { ResourceSet } from 'src/app/types/resources/data-set';
-import { Action } from 'src/app/types/action';
-import { UserPreferences } from 'src/app/types/preferences/user-preferences';
 import { Session } from 'src/app/classes/session';
-
-export type RoleRequestData = {
-    role: EnumUserRole;
-    sessionCode?: string;
-    preferences?: UserPreferences;
-};
-
-export type RoleResponseData = {
-    uuid: string;
-    name: string;
-    role: EnumUserRole;
-    sessionCode?: string;
-};
+import { Action, EventMessageData, EnumEvent, EnumUserRole, Event, EventMessage, FoolInfos, LayoutData, ResourceSet, RoleResponseData, SessionAction, UserPreferences } from 'put3-models';
+import { Layout } from 'src/app/types/layout';
 
 @Injectable({
     providedIn: 'root',
@@ -39,9 +14,10 @@ export class EventService {
     public onSession: Subject<any> = new Subject<any>();
     public onRole: Subject<RoleResponseData> = new Subject<RoleResponseData>();
     public onAction: Subject<Action> = new Subject<Action>();
-    public onLayout: Subject<Layout> = new Subject<Layout>();
+    public onLayout: Subject<LayoutData> = new Subject<LayoutData>();
     public onRename: Subject<string> = new Subject<string>();
     public onResourcesUpdate: Subject<ResourceSet> = new Subject<ResourceSet>();
+    public onMessage: Subject<EventMessageData> = new Subject<EventMessageData>();
 
     constructor(
         private websocket: WebSocketService
@@ -50,7 +26,7 @@ export class EventService {
     }
 
     private initSubscriptions() {
-        this.websocket.socket.on(EnumEventName.ROLE, (event: EventRoleDTO) => {
+        this.websocket.socket.on(EnumEvent.ROLE, (event: EventMessage) => {
             // Get the UUID of this client only once
             const data = event.data as RoleResponseData;
             this.onRole.next({
@@ -59,57 +35,94 @@ export class EventService {
                 role: data.role,
                 sessionCode: data.sessionCode!,
             });
-            this.websocket.socket.off(EnumEventName.ROLE);
+            this.websocket.socket.off(EnumEvent.ROLE);
         });
 
-        this.websocket.socket.on(EnumEventName.ACTION, (event: EventActionDTO) => {
+        this.websocket.socket.on(EnumEvent.ACTION, (event: EventMessage) => {
+            console.log("[-] Action received", event.data);
             this.onAction.next(event.data);
         });
 
-        this.websocket.socket.on(EnumEventName.LAYOUT, (event: EventLayoutDTO) => {
+        this.websocket.socket.on(EnumEvent.LAYOUT, (event: EventMessage) => {
+            console.log("[-] Layout received", event.data);
             this.onLayout.next(event.data);
         });
 
-        this.websocket.socket.on(EnumEventName.RENAME, (event: EventRenameDTO) => {
+        this.websocket.socket.on(EnumEvent.RENAME, (event: EventMessage) => {
+            console.log("[-] Rename received", event.data);
             this.onRename.next(event.data);
         });
 
-        this.websocket.socket.on(EnumEventName.RESOURCES, (event: EventResourcesDTO) => {
+        this.websocket.socket.on(EnumEvent.RESOURCES, (event: EventMessage) => {
+            console.log("[-] Resources received", event.data);
             this.onResourcesUpdate.next(event.data);
         });
 
-        this.websocket.socket.on(EnumEventName.SESSION, (event: any) => {
+        this.websocket.socket.on(EnumEvent.SESSION, (event: EventMessage) => {
+            console.log("[-] Session received", event.data);
             this.onSession.next(new Session(event.data));
+        });
+
+        this.websocket.socket.on(EnumEvent.MESSAGE, (event: EventMessage) => {
+            console.log("[-] Message received", event.data);
+            this.onMessage.next(event.data);
         });
     }
 
+    public sendSessionEvent(code: string, action: SessionAction): void {
+        this.emitEvent(new Event(EnumEvent.SESSION, {
+            target: {
+                session: code
+            },
+            data: action
+        }));
+    }
+
     public sendAction(target: Fool, action: Action): void {
-        const dto = plainToClass(EventActionDTO, { target, data: action });
-        this.websocket.socket.emit(EnumEventName.ACTION, dto);
+        this.emitEvent(new Event(EnumEvent.ACTION, {
+            target: {
+                user: target.uuid
+            },
+            data: action
+        }));
     }
 
     public sendLayout(target: Fool, layout: Layout): void {
-        const dto = plainToClass(EventLayoutDTO, { target: target, data: layout });
-        this.websocket.socket.emit(EnumEventName.LAYOUT, dto);
+        this.emitEvent(new Event(EnumEvent.LAYOUT, {
+            target: {
+                user: target.uuid
+            },
+            data: layout
+        }));
     }
 
     public renameFool(target: Fool, newName: string): void {
-        const dto = plainToClass(EventRenameDTO, { target, data: { newName }});
-        this.websocket.socket.emit(EnumEventName.RENAME, dto);
+        this.emitEvent(new Event(EnumEvent.RENAME, {
+            target: {
+                user: target.uuid
+            },
+            data: newName
+        }));
     }
 
     public changeSelfRole(role: EnumUserRole, data: {sessionCode?: string, preferences?: UserPreferences}): void {
-        const dto = plainToClass(EventRoleDTO, { data: {
-            role,
-            preferences: data.preferences,
-            sessionCode: data.sessionCode
-        }});
-        this.websocket.socket.emit(EnumEventName.ROLE, dto);
+        this.emitEvent(new Event(EnumEvent.ROLE, {
+            data: {
+                role,
+                preferences: data.preferences,
+                sessionCode: data.sessionCode
+            }
+        }));
     }
 
     public changeSelfInfos(infos: Partial<FoolInfos>): void {
-        const dto = plainToClass(EventInfosDTO, { data: infos });
-        this.websocket.socket.emit(EnumEventName.INFOS, dto);
+        this.emitEvent(new Event(EnumEvent.INFOS, {
+            data: infos
+        }));
+    }
+
+    private emitEvent(event: Event) {
+        this.websocket.socket.emit(event.name, event.getMessage());
     }
 
 }
