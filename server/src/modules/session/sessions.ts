@@ -1,10 +1,9 @@
-import { EnumEventName } from "../../enums/event-name";
 import User from "../../models/user";
 import { SessionService } from "../../services/users/sessions.service";
-import { EnumUserRole } from "../../enums/role";
 import SocketService from "../../services/socket/socket.service";
 import UsersService from "../../services/users/users.service";
 import { Session } from "../../models/session";
+import { EnumEvent, EnumUserRole } from "put3-models";
 
 export default class SessionModule {
 
@@ -70,7 +69,7 @@ export default class SessionModule {
             const usersUuids = session.getUsers().map((user) => user.uuid);
             const adminUuids = UsersService.getAdminUuids();
             const uuids = [...usersUuids, ...adminUuids];
-            SocketService.emit(EnumEventName.SESSION, session, {targets: uuids});
+            SocketService.emit(EnumEvent.SESSION, session, {targets: uuids});
         }
     }
 

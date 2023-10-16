@@ -1,13 +1,5 @@
-import { Window } from "../types/window";
+import { EnumBrowser, FoolData, Window } from "put3-models";
 import { Layout } from "../types/layout";
-import { EnumBrowser } from "../enums/browser";
-
-export type FoolData = {
-    uuid: string;
-    name: string;
-    desktop: any;
-    infos: any;
-}
 
 export class Fool {
 

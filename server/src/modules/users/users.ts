@@ -1,12 +1,10 @@
-import { EnumUserRole } from "../../enums/role";
 import UsersService from "../../services/users/users.service";
 import { getData } from "../resources/resources";
 import { APIResponse } from "../../types/response";
-import { UserPreferences } from "../../types/user-preferences";
-import { EnumEventName } from "../../enums/event-name";
 import { SessionService } from "../../services/users/sessions.service";
 import SessionModule from "../session/sessions";
 import SocketService from "../../services/socket/socket.service";
+import { Action, EnumEvent, EnumUserRole, FoolInfos, UserPreferences } from "put3-models";
 
 export default class UserModule {
 
@@ -44,7 +42,7 @@ export default class UserModule {
         console.log("[-] User " + uuid + " created:", user);
         if (role == EnumUserRole.FOOL) {
             const session = SessionService.new(user);
-            SocketService.emit(EnumEventName.ROLE, {
+            SocketService.emit(EnumEvent.ROLE, {
                 uuid: user.uuid,
                 name: user.name,
                 role: EnumUserRole.FOOL,
@@ -52,7 +50,7 @@ export default class UserModule {
             }, { targets: [uuid]});
         }
         else if (role == EnumUserRole.MASTER) {
-            SocketService.emit(EnumEventName.ROLE, {
+            SocketService.emit(EnumEvent.ROLE, {
                 uuid: user.uuid,
                 name: user.name,
                 role: EnumUserRole.MASTER,
@@ -65,7 +63,7 @@ export default class UserModule {
         return { success: true, message: "Role changed" };
     }
 
-    public static sendAction(sourceUuid: string, targetUuid: string, action: any): APIResponse {
+    public static sendAction(sourceUuid: string, targetUuid: string, action: Action): APIResponse {
         const sourceUser = UsersService.find(sourceUuid);
         if (!sourceUser) throw new Error("[-] Undefined source user");
         const targetUser = UsersService.find(targetUuid);
@@ -78,12 +76,12 @@ export default class UserModule {
         }
 
         console.log("[-] Action from " + sourceUser.uuid + " to " + targetUuid);
-        SocketService.emit(EnumEventName.ACTION, action, { targets: [targetUuid]});
+        SocketService.emit(EnumEvent.ACTION, action, { targets: [targetUuid]});
 
         return { success: true, message: "Action sent" };
     }
 
-    public static changeInfos(userUuid: string, infos: any): APIResponse {
+    public static changeInfos(userUuid: string, infos: FoolInfos): APIResponse {
         const user = UsersService.find(userUuid);
         if (!user) throw new Error("[-] Undefined user");
 
@@ -114,7 +112,7 @@ export default class UserModule {
         }
         console.log("[-] Layout changed for " + targetUuid);
         targetUser.desktop = layout.desktop;
-        SocketService.emit(EnumEventName.LAYOUT, layout, { targets: [targetUuid]});
+        SocketService.emit(EnumEvent.LAYOUT, layout, { targets: [targetUuid]});
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
         return { success: true, message: "Layout changed" };
@@ -130,7 +128,7 @@ export default class UserModule {
             return { success: false, message: "You can't change infos for this user" };
         }
         targetUser.name = newName;
-        SocketService.emit(EnumEventName.RENAME, newName, { targets: [targetUuid]});
+        SocketService.emit(EnumEvent.RENAME, newName, { targets: [targetUuid]});
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
         return { success: true, message: "User renamed" };
@@ -138,7 +136,7 @@ export default class UserModule {
 
     public static emitUpdate = {
         resources: () => {
-            SocketService.emit(EnumEventName.RESSOURCES, getData());
+            SocketService.emit(EnumEvent.RESOURCES, getData());
         },
     }
 

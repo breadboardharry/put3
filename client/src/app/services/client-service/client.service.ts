@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { EventService, RoleResponseData } from '../event-service/event.service';
-import { EnumUserRole } from 'src/app/enums/role';
-import { UserPreferences } from 'src/app/types/preferences/user-preferences';
+import { EventService } from '../event-service/event.service';
 import { Subject } from 'rxjs';
+import { EnumUserRole, RoleResponseData, UserPreferences } from 'put3-models';
+import { PreferencesService } from '../preferences-service/preferences.service';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +15,8 @@ export class ClientService {
     public static SESSION_CODE?: string;
 
     constructor(
-        private eventService: EventService
+        private eventService: EventService,
+        private preferences: PreferencesService
     ) {
         this.initSubscriptions();
     }
@@ -28,6 +29,7 @@ export class ClientService {
             ClientService.NAME = data.name;
             ClientService.SESSION_CODE = data.sessionCode;
 
+            this.preferences.setName(data.name);
             this.roleChanged.next({ uuid: data.uuid, role: data.role, name: data.name, sessionCode: data.sessionCode });
         });
     }

@@ -3,11 +3,10 @@ import { corsOptions } from "../../config/cors";
 import http from 'http';
 import https from 'https';
 import UserModule from "../../modules/users/users";
-import { EnumEventName } from "../../enums/event-name";
 import cookieParser from "cookie-parser";
 import UserMiddleware from "../../middlewares/user";
-import UsersService from "../../services/users/users.service";
 import SessionModule from "../../modules/session/sessions";
+import { EnumEvent, EventMessage } from "put3-models";
 
 export class SocketServer {
 
@@ -36,7 +35,7 @@ export class SocketServer {
                 this._clients.delete(socket.id);
             });
 
-            socket.on(EnumEventName.ROLE, (message) => {
+            socket.on(EnumEvent.ROLE, (message: EventMessage) => {
                 UserModule.setRole(socket.id, message.data.role, {
                     sessionCode: message.data.sessionCode,
                     preferences: message.data.preferences,
@@ -44,24 +43,24 @@ export class SocketServer {
                 });
             });
 
-            socket.on(EnumEventName.ACTION, (message) => {
-                UserModule.sendAction(socket.id, message.target.uuid, message.data);
+            socket.on(EnumEvent.ACTION, (message: EventMessage) => {
+                UserModule.sendAction(socket.id, message.target!.user!, message.data);
             });
 
-            socket.on(EnumEventName.INFOS, (message) => {
+            socket.on(EnumEvent.INFOS, (message: EventMessage) => {
                 UserModule.changeInfos(socket.id, message.data);
             });
 
-            socket.on(EnumEventName.LAYOUT, (message) => {
-                UserModule.changeLayout(socket.id, message.target.uuid, message.data);
+            socket.on(EnumEvent.LAYOUT, (message: EventMessage) => {
+                UserModule.changeLayout(socket.id, message.target!.user!, message.data);
             });
 
-            socket.on(EnumEventName.RENAME, (message) => {
-                UserModule.rename(socket.id, message.target.uuid, message.data.newName);
+            socket.on(EnumEvent.RENAME, (message: EventMessage) => {
+                UserModule.rename(socket.id, message.target!.user!, message.data);
             });
 
-            socket.on(EnumEventName.SESSION, (message) => {
-                SessionModule.event(socket.id, message.target.code, message.data);
+            socket.on(EnumEvent.SESSION, (message: EventMessage) => {
+                SessionModule.event(socket.id, message.target!.session!, message.data);
             });
         });
     }

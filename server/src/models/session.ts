@@ -1,4 +1,4 @@
-import { EnumSessionStatus } from "../enums/session";
+import { EnumSessionStatus } from "put3-models";
 import User from "./user";
 
 export class Session {

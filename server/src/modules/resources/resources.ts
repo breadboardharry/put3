@@ -6,7 +6,8 @@ import { Paths } from "../../enums/paths";
 import { getFileExtension, removeSpaces } from "../../services/file.service";
 import { deleteFiles, getDirectories, getFilesData, renameFile } from "../../services/resource.service";
 import { isArrayOf } from "../../services/type.service";
-import { EnumResourceDirectory } from "../../enums/resources";
+import { EnumResourceDirectory } from "put3-models";
+
 
 export function getData(dirname?: string) {
 

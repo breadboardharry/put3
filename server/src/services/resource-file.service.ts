@@ -5,7 +5,7 @@ import sizeOf from "image-size";
 import { getDirPath, getFileExtension, getLastPathElement, getPathElem } from "./file.service";
 import { fileExists, renameFile } from "./resource.service";
 import { Paths } from "../enums/paths";
-import { EnumFileType, EnumResourceDirectory } from "../enums/resources";
+import { EnumResourceDirectory, EnumResourceType } from "put3-models";
 
 const Extensions = {
     "images": ["jpg", "jpeg", "png", "gif"],
@@ -72,11 +72,11 @@ export function isValidDir(dirname: string): boolean {
  * @returns Resource type
  * @throws If the directory name is not associated to a valid resource type
  */
-export function dirToType(dirname: EnumResourceDirectory): EnumFileType {
+export function dirToType(dirname: EnumResourceDirectory): EnumResourceType {
     switch (dirname) {
-        case EnumResourceDirectory.IMAGES: return EnumFileType.IMAGE;
-        case EnumResourceDirectory.VIDEOS: return EnumFileType.VIDEO;
-        case EnumResourceDirectory.AUDIOS: return EnumFileType.AUDIO;
+        case EnumResourceDirectory.IMAGES: return EnumResourceType.IMAGE;
+        case EnumResourceDirectory.VIDEOS: return EnumResourceType.VIDEO;
+        case EnumResourceDirectory.AUDIOS: return EnumResourceType.AUDIO;
         default: throw new Error("Invalid directory name");
     }
 };
@@ -87,11 +87,11 @@ export function dirToType(dirname: EnumResourceDirectory): EnumFileType {
  * @returns Directory name
  * @throws If the resource type is not valid
  */
-export function typeToDir(type: EnumFileType): EnumResourceDirectory {
+export function typeToDir(type: EnumResourceType): EnumResourceDirectory {
     switch (type) {
-        case EnumFileType.IMAGE: return EnumResourceDirectory.IMAGES;
-        case EnumFileType.VIDEO: return EnumResourceDirectory.VIDEOS;
-        case EnumFileType.AUDIO: return EnumResourceDirectory.AUDIOS;
+        case EnumResourceType.IMAGE: return EnumResourceDirectory.IMAGES;
+        case EnumResourceType.VIDEO: return EnumResourceDirectory.VIDEOS;
+        case EnumResourceType.AUDIO: return EnumResourceDirectory.AUDIOS;
         default: throw new Error("Invalid resource type");
     }
 };
@@ -102,7 +102,7 @@ export function typeToDir(type: EnumFileType): EnumResourceDirectory {
  * @returns Resource type*
  * @throws If the extension is not valid
  */
-export function extToType(ext: string): EnumFileType {
+export function extToType(ext: string): EnumResourceType {
     // Check if the extension is valid
     if (!isValidExt(ext)) throw new Error("Invalid extension");
 
@@ -144,7 +144,7 @@ export function rename (currentName: string, newName: string, dirpath: string) {
  * @returns True if the resource type is valid
  */
 export function isValidType(type) {
-    return Object.values(EnumFileType).includes(type);
+    return Object.values(EnumResourceType).includes(type);
 };
 
 /**
@@ -156,13 +156,13 @@ export function isValidExt(ext: string): boolean {
     return Object.values(Extensions).flat().includes(ext);
 };
 
-export function getData(filepath: string, filetype?: EnumFileType) {
+export function getData(filepath: string, filetype?: EnumResourceType) {
     const type = filetype ? filetype : getPathElem(filepath, 0);
 
     switch (type) {
-        case EnumFileType.IMAGE: return getImageData(filepath);
-        case EnumFileType.VIDEO: return getVideoData(filepath);
-        case EnumFileType.AUDIO: return getAudioData(filepath);
+        case EnumResourceType.IMAGE: return getImageData(filepath);
+        case EnumResourceType.VIDEO: return getVideoData(filepath);
+        case EnumResourceType.AUDIO: return getAudioData(filepath);
         default: throw new Error("Invalid resource type");
     }
 };
@@ -201,7 +201,6 @@ export function getImageData(filepath: string) {
             width: dimensions.width,
             height: dimensions.height,
             ratio: dimensions.width! / dimensions.height!,
-            orientation: dimensions.width! > dimensions.height! ? "landscape" : "portrait",
         },
     };
 };
