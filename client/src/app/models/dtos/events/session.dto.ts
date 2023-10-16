@@ -1,11 +1,16 @@
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import { IsDefined } from "class-validator";
-import { SessionData } from "src/app/services/session-service/session.service";
+import { EventTargetDTO } from "./target.dto";
+import { Action } from "src/app/types/action";
 
-export class EventActionDTO {
+export class EventSessionDTO {
+
+    @Expose()
+    @Type(() => EventTargetDTO)
+    target?: EventTargetDTO;
 
     @Expose()
     @IsDefined()
-    data!: SessionData;
+    data!: Action;
 
 }

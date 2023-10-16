@@ -66,9 +66,8 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
     private init(): void {
         this.loading = false;
         this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
-            console.log('Session message', session);
-            if (!this.running) {
-                if (session.masters.length) this.run();
+            if (!this.running && session.status == "running") {
+                this.run();
             }
         });
 

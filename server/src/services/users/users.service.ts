@@ -14,13 +14,13 @@ export default class UsersService {
         return user;
     }
 
-    public static get(uuid: string): User | undefined {
+    public static find(uuid: string): User | undefined {
         if (!uuid || typeof uuid != 'string') return;
         return this.users.find((user) => user.uuid == uuid);
     }
 
     public static remove(uuid: string) {
-        const user = this.get(uuid);
+        const user = this.find(uuid);
         if (!user) return;
         const index = this.users.indexOf(user);
         if (index > -1) this.users.splice(index, 1);
@@ -55,6 +55,6 @@ export default class UsersService {
      * @param uuid User id
      */
     public static exists(uuid: string) {
-        return !!this.get(uuid);
+        return !!this.find(uuid);
     }
 }

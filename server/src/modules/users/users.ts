@@ -16,7 +16,7 @@ export default class UserModule {
     }
 
     public static disconnect(uuid: string): APIResponse {
-        const user = UsersService.get(uuid);
+        const user = UsersService.find(uuid);
         if (!user) return { success: false, message: "User doesn't exist" };
 
         console.log("[-] User disconnected: " + user.uuid);
@@ -27,7 +27,7 @@ export default class UserModule {
     }
 
     public static setRole(uuid: string, role: EnumUserRole, data: { sessionCode?: string, preferences?: UserPreferences, isAdmin: boolean }): APIResponse {
-        const userExists = !!UsersService.get(uuid);
+        const userExists = !!UsersService.find(uuid);
         if (userExists) {
             UsersService.remove(uuid);
         }
@@ -66,9 +66,9 @@ export default class UserModule {
     }
 
     public static sendAction(sourceUuid: string, targetUuid: string, action: any): APIResponse {
-        const sourceUser = UsersService.get(sourceUuid);
+        const sourceUser = UsersService.find(sourceUuid);
         if (!sourceUser) throw new Error("[-] Undefined source user");
-        const targetUser = UsersService.get(targetUuid);
+        const targetUser = UsersService.find(targetUuid);
         if (!targetUser) throw new Error("[-] Undefined target user");
 
         // Check if the sender has the right to send an action to the target
@@ -84,7 +84,7 @@ export default class UserModule {
     }
 
     public static changeInfos(userUuid: string, infos: any): APIResponse {
-        const user = UsersService.get(userUuid);
+        const user = UsersService.find(userUuid);
         if (!user) throw new Error("[-] Undefined user");
 
         if (user.role != EnumUserRole.FOOL) {
@@ -98,10 +98,16 @@ export default class UserModule {
     }
 
     public static changeLayout(sourceUuid: string, targetUuid: string, layout: any): APIResponse {
-        const sourceUser = UsersService.get(sourceUuid);
+        const sourceUser = UsersService.find(sourceUuid);
         if (!sourceUser) throw new Error("[-] Undefined source user");
-        const targetUser = UsersService.get(targetUuid);
+        const targetUser = UsersService.find(targetUuid);
         if (!targetUser) throw new Error("[-] Undefined target user");
+
+        // Check if the sender has the right to send an action to the target
+        if (!SessionModule.canMasterSendToFool(sourceUser.uuid, sourceUser.isAdmin, targetUuid)) {
+            console.error("[-] User " + sourceUser.uuid + " doesn't have the right to change the layout of " + targetUuid);
+            return { success: false, message: "You don't have the right to change the layout of this user" };
+        }
 
         if (targetUser.role != EnumUserRole.FOOL) {
             return { success: false, message: "You can't change infos for this user" };
@@ -115,9 +121,9 @@ export default class UserModule {
     }
 
     public static rename(sourceUuid: string, targetUuid: string, newName: string): APIResponse {
-        const sourceUser = UsersService.get(sourceUuid);
+        const sourceUser = UsersService.find(sourceUuid);
         if (!sourceUser) throw new Error("[-] Undefined source user");
-        const targetUser = UsersService.get(targetUuid);
+        const targetUser = UsersService.find(targetUuid);
         if (!targetUser) throw new Error("[-] Undefined target user");
 
         if (targetUser.role != EnumUserRole.FOOL) {

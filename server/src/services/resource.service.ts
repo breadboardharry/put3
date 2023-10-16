@@ -16,7 +16,7 @@ export function renameFile(currentName: string, newName: string, dirpath: string
         return true;
     }
     catch (err) {
-        console.log("[!] Error renaming file: " + currentPath + "\n" + err + "\n");
+        console.error("[!] Error renaming file: " + currentPath + "\n" + err + "\n");
         return false;
     }
 }
@@ -31,7 +31,7 @@ export function deleteFile(filepath: string): boolean {
         return true;
     }
     catch (err) {
-        console.log("[!] Error deleting file: " + filepath + "\n" + err + "\n")
+        console.error("[!] Error deleting file: " + filepath + "\n" + err + "\n")
         return false
     }
 };

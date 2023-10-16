@@ -7,6 +7,7 @@ import { EnumEventName } from "../../enums/event-name";
 import cookieParser from "cookie-parser";
 import UserMiddleware from "../../middlewares/user";
 import UsersService from "../../services/users/users.service";
+import SessionModule from "../../modules/session/sessions";
 
 export class SocketServer {
 
@@ -57,6 +58,10 @@ export class SocketServer {
 
             socket.on(EnumEventName.RENAME, (message) => {
                 UserModule.rename(socket.id, message.target.uuid, message.data.newName);
+            });
+
+            socket.on(EnumEventName.SESSION, (message) => {
+                SessionModule.event(socket.id, message.target.code, message.data);
             });
         });
     }

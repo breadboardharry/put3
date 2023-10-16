@@ -1,12 +1,18 @@
 import { Expose } from "class-transformer";
-import { IsDefined, IsString, MinLength } from "class-validator";
+import { IsDefined, IsOptional, IsString, MinLength } from "class-validator";
 
 export class EventTargetDTO {
 
     @Expose()
-    @IsDefined()
+    @IsOptional()
     @IsString()
     @MinLength(1)
-    public uuid!: string;
+    public uuid?: string;
+
+    @Expose()
+    @IsOptional()
+    @IsString()
+    @MinLength(1)
+    public code?: string;
 
 }

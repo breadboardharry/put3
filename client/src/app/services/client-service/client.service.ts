@@ -22,7 +22,7 @@ export class ClientService {
 
     private initSubscriptions() {
         this.eventService.onRole.subscribe((data: RoleResponseData) => {
-            console.log("Role accepted", data);
+            console.log("[-] Role accepted", data);
             ClientService.UUID = data.uuid;
             ClientService.ROLE = data.role;
             ClientService.NAME = data.name;

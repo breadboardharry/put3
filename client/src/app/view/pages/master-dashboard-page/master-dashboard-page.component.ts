@@ -91,6 +91,11 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
         });
         // If the user is logged as admin, the code is not needed (undefined)
         this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
+
+        setInterval(() => {
+            if (!this.target) return;
+            this.eventService.sendSessionEvent(this.target!, { type: "run" });
+        }, 2000);
     }
 
     ngOnDestroy(): void {
@@ -109,7 +114,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
             });
         }
         this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
-            console.log("Session message", session);
+            console.log("[*] Session message", session);
             this.sessionRecieved(session);
         });
     }

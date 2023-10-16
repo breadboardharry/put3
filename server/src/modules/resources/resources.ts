@@ -35,7 +35,7 @@ export function getData(dirname?: string) {
 
     // Normal process error
     catch (err) {
-        console.log("[!] Error getting ressources data: " + err + "\n");
+        console.error("[!] Error getting ressources data: " + err + "\n");
         throw Response.ERROR.INTERNAL_SERVER;
     };
 };
@@ -67,7 +67,7 @@ export function unlink(filespath) {
 
     // Normal process error
     catch (err) {
-        console.log("[!] Error getting ressources data: " + err + "\n");
+        console.error("[!] Error getting ressources data: " + err + "\n");
         throw Response.ERROR.INTERNAL_SERVER;
     };
 };
@@ -83,7 +83,7 @@ export function rename(currentName: string, newName: string, dirpath: string): b
         newName = removeSpaces(newName);
     }
     catch (err) {
-        console.log("[!] Error renaming file: " + err + "\n");
+        console.error("[!] Error renaming file: " + err + "\n");
         throw Response.ERROR.INTERNAL_SERVER;
     };
 
@@ -109,7 +109,7 @@ export function rename(currentName: string, newName: string, dirpath: string): b
         return success;
     }
     catch (err) {
-        console.log("[!] Error renaming file: " + err + "\n");
+        console.error("[!] Error renaming file: " + err + "\n");
         throw Response.ERROR.INTERNAL_SERVER;
     };
 };
