@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MenuItem } from 'src/app/types/menu-item';
-import { dashboardNavbarMenus } from 'src/app/data/dashboard-navbar-menus';
+import { Component, OnInit } from '@angular/core';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
+import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
 import { Router } from '@angular/router';
+import { EnumAppRoute } from 'src/app/enums/routes';
 
 @Component({
     selector: 'app-dashboard-navbar',
@@ -11,10 +11,8 @@ import { Router } from '@angular/router';
 })
 export class DashboardNavbarComponent implements OnInit {
 
-    @Input() selectedItem!: MenuItem;
-    @Output() selectedItemEvent: EventEmitter<MenuItem> = new EventEmitter<MenuItem>();
-
-    public menus = dashboardNavbarMenus;
+    public EnumNavbarItemTitle = EnumNavbarItemTitle;
+    public EnumAppRoute = EnumAppRoute;
 
     constructor(
         private adminService: AdminService,
@@ -23,16 +21,11 @@ export class DashboardNavbarComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    selectItem(item: MenuItem) {
-        if (item.title.toLowerCase() === 'logout') {
-            this.logout();
-            return;
-        }
-        this.selectedItem = item;
-        this.selectedItemEvent.emit(item);
+    public navigate(path: string) {
+        this.router.navigate([EnumAppRoute.MASTER, path.toLowerCase()]);
     }
 
-    private logout() {
+    public logout() {
         this.adminService.logout();
     }
 }

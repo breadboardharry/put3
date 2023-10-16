@@ -1,12 +1,41 @@
-<div class="container">
-    <div class="header">
-
-    </div>
+<div class="navbar">
     <div class="items">
-        <div class="menu-items" *ngFor="let menu of menus">
-            <button class="menu-item" *ngFor="let item of menu" (click)="selectItem(item)">
-                <img class="menu-icon" [src]="'assets/icons/' + item.icon">
-                <span class="menu-title">{{item.title}}</span>
+        <div class="items center">
+            <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.LAYOUT">
+                <img class="item-icon" [src]="'assets/icons/edit-image.png'">
+                <span class="item-title">
+                    {{EnumNavbarItemTitle.LAYOUT}}
+                </span>
+            </button>
+
+            <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.SOUNDBOARD">
+                <img class="item-icon" [src]="'assets/icons/speaker.png'">
+                <span class="item-title">
+                    {{EnumNavbarItemTitle.SOUNDBOARD}}
+                </span>
+            </button>
+
+            <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.RESOURCES">
+                <img class="item-icon" [src]="'assets/icons/photo-gallery.png'">
+                <span class="item-title">
+                    {{EnumNavbarItemTitle.RESOURCES}}
+                </span>
+            </button>
+        </div>
+
+        <div class="items bottom">
+            <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.SETTINGS">
+                <img class="item-icon" [src]="'assets/icons/gear.png'">
+                <span class="item-title">
+                    {{EnumNavbarItemTitle.SETTINGS}}
+                </span>
+            </button>
+
+            <button class="item-button" (click)="logout()">
+                <img class="item-icon" [src]="'assets/icons/logout.png'">
+                <span class="item-title">
+                    {{EnumNavbarItemTitle.LOGOUT}}
+                </span>
             </button>
         </div>
     </div>

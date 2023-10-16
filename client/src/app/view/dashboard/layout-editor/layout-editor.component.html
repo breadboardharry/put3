@@ -1,10 +1,11 @@
 <div class="layout-editor">
     <div class="content" #content>
         <div #editor class="editor" *ngIf="target" [ngStyle]="{
-            'aspectRatio': target.fool.window.ratio
-        }" [ngClass]="{
-            'disabled': disabled
-        }">
+                'aspectRatio': target.fool.window.ratio
+            }" [ngClass]="{
+                'disabled': disabled
+            }"
+        >
             <!-- Hitboxes -->
             <div class="draggable-zone">
                 <app-hitbox *ngFor="let hitbox of target.fool.layout.hitboxes"

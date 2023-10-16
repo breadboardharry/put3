@@ -1,88 +1,70 @@
 @import '~src/styles.scss';
 
-$border-radius: 14px;
-$border-width: 3px;
 $border-gradient: $light-gradient;
 $background: #070817;
 
 .soundboard {
-  @extend %dashboard-page;
+    @extend %dashboard-page;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    transition: all .15s, color 50ms;
 
-  padding: $border-width;
-
-  border: 0;
-  border-radius: $border-radius;
-  box-sizing: border-box;
-
-  flex-direction: column;
-
-  background: $border-gradient;
-
-  transition: all .15s, color 50ms;
-}
-
-.soundboard .content {
-  flex: 1 1 auto;
-  width: 100%;
-
-  background: $background;
-  border-radius: $border-radius - $border-width;
-
-  display: flex;
-  flex-direction: row;
-
-  padding: 1.8rem 0;
-
-  overflow: hidden;
-  transition: .2s;
+    @media (max-width: $mobile) {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
 }
 
 .sidebar {
-  flex: 1 1 auto;
-  width: 27%;
-  min-width: 260px;
+    flex: 1 1 auto;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 
-  .title {
-    height: auto;
+    .title {
+        height: auto;
 
-    @extend %font-base;
-    font-size: 30px;
-    font-weight: 600;
-    letter-spacing: 0.14rem;
-    line-height: 2.6rem;
+        @extend %font-base;
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 0.14rem;
+        line-height: 2.6rem;
 
-    margin: 0;
-    padding: 0;
+        margin: 0;
+        padding: 0;
 
-    transition: all .12s ease-in-out;
-    &.disabled {
-      color: darken(white, 30%);
+        transition: all .12s ease-in-out;
+        &.disabled {
+            color: darken(white, 30%);
+        }
+
+        @media (max-width: $mobile) {
+            font-size: 24px;
+        }
     }
-  }
 }
 
 .buttons {
-  width: 73%;
-  flex: 1 1 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 0 4px 4px 0;
+    box-sizing: border-box;
 
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 2rem;
+    overflow-x: hidden;
+    overflow-y: scroll;
 
-  margin-right: 2rem;
-  padding: 0 4px 4px 0;
-
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  @extend %hidden-scrollbar;
+    @extend %hidden-scrollbar;
+    @media (max-width: $mobile) {
+        gap: 1.25rem;
+    }
 }
 
 .no-content-container {
@@ -102,65 +84,67 @@ $background: #070817;
     }
 }
 
-
 .options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: .5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    @media (max-width: $mobile) {
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
 }
 
 .volume {
-  width: 100%;
-
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: .5rem;
-
-  transition: all .12s ease-in-out;
-
-  .speaker-icon {
-    width: 1.75rem;
-    height: 1.75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
 
     transition: all .12s ease-in-out;
 
-    &.disabled {
-      opacity: .6;
+    .speaker-icon {
+        width: 1.75rem;
+        height: 1.75rem;
+
+        transition: all .12s ease-in-out;
+
+        &.disabled {
+            opacity: .6;
+        }
     }
-  }
 }
 
 .stop {
-  padding: .25rem .55rem;
+    padding: .25rem .55rem;
 
-  color: white;
-  font-family: Roboto;
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: 16px;
-  letter-spacing: 0.1rem;
-  line-height: 1.75rem;
+    color: white;
+    font-family: Roboto;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.1rem;
+    line-height: 1.75rem;
 
-  border: 2px solid white;
-  border-radius: .5rem;
+    border: 2px solid white;
+    border-radius: .5rem;
 
-  background-color: transparent;
+    background-color: transparent;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  transition: all .12s ease-in-out;
+    transition: all .12s ease-in-out;
 
-  &:disabled {
-    cursor: not-allowed;
-    border: 2px solid rgb(146, 146, 146);
-    color: rgb(146, 146, 146);
-  }
+    &:disabled {
+        cursor: not-allowed;
+        border: 2px solid rgb(146, 146, 146);
+        color: rgb(146, 146, 146);
+    }
 }
 
 app-soundboard-button {
-   flex: 1 1;
- }
+    flex: 1 1;
+}

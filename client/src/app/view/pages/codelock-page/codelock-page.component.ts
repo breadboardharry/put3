@@ -4,7 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
 import { CodeName } from 'src/app/enums/code';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
-import { Route } from 'src/app/enums/routes';
+import { EnumAppRoute } from 'src/app/enums/routes';
 
 @Component({
     selector: 'app-codelock-page',
@@ -28,7 +28,7 @@ export class CodelockPageComponent implements OnInit {
     private async init() {
         // Go to home if no target route is present
         const target = await this.getTargetRoute();
-        if (!target) this.reRoute('/' + Route.HOME);
+        if (!target) this.reRoute('/' + EnumAppRoute.HOME);
 
         // Check if a token is present and if it is valid
         if (!this.cookie.check('token')) return;
@@ -45,7 +45,7 @@ export class CodelockPageComponent implements OnInit {
     public onValidate(): void {
         // Re-route to the target route
         this.getTargetRoute().then(target => {
-            this.reRoute('/' + (target || Route.HOME));
+            this.reRoute('/' + (target || EnumAppRoute.HOME));
         });
     }
 

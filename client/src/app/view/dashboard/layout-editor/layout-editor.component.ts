@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType } from 'src/app/enums/resources/type';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
@@ -61,7 +61,7 @@ export class LayoutEditorComponent implements OnInit {
 
     public changeBackground() {
         const dialogRef = this.dialog.open(ResourceBrowserModal, {
-            data: { type: ResourceType.Image }
+            data: { type: EnumResourceType.IMAGE }
         });
 
         dialogRef.afterClosed().subscribe(image => {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CursorStyle } from 'src/app/enums/cursor-style';
+import { EnumCursorStyle } from 'src/app/enums/cursor-style';
 import { CursorService } from 'src/app/services/cursor-service/cursor.service';
 import { InteractionTemplateComponent } from '../template/interaction-template.component';
 
@@ -44,7 +44,7 @@ export class DesktopIconComponent extends InteractionTemplateComponent {
   onDoubleClick() {
     this.loading = true;
     this.focus = false;
-    this.cursorService.setStyle(CursorStyle.Progress, 2000).then(() => {
+    this.cursorService.setStyle(EnumCursorStyle.Progress, 2000).then(() => {
       this.loading = false;
     });
   }

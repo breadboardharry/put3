@@ -1,4 +1,4 @@
 export enum ComponentLocation {
-  Core,
-  Desktop
+    Core,
+    Desktop
 }

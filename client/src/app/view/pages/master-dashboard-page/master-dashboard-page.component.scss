@@ -23,10 +23,10 @@
     &.loading {
         filter: blur(4px) brightness(0.5);
     }
-}
 
-app-dashboard-navbar {
-    flex: 0 0 auto;
+    @media (max-width: $mobile) {
+        flex-direction: column-reverse;
+    }
 }
 
 .content-container {
@@ -36,9 +36,10 @@ app-dashboard-navbar {
 }
 
 .content {
-    margin: 3rem;
-    width: calc(100% - 6rem);
-    height: calc(100% - 6rem);
+    padding: 3rem;
+    width: calc(100%);
+    height: calc(100%);
+    box-sizing: border-box;
 
     overflow: hidden;
 
@@ -46,6 +47,11 @@ app-dashboard-navbar {
     flex-direction: column;
     align-items: flex-start;
     gap: 2rem;
+
+    @media (max-width: $mobile) {
+        padding: 2rem;
+        gap: 1.75rem;
+    }
 }
 
 .fool-list-container {
@@ -62,6 +68,10 @@ app-dashboard-navbar {
     overflow-x: scroll;
     overflow-y: hidden;
     @extend %hidden-scrollbar;
+
+    @media (max-width: $mobile) {
+        gap: 1rem;
+    }
 }
 
 .separator {

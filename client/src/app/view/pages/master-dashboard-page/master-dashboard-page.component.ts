@@ -1,18 +1,20 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { Fool } from 'src/app/classes/fool';
 import { EnumSessionStatus, Session } from 'src/app/classes/session';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
-import { EnumDashboardPage } from 'src/app/enums/dashboard-pages';
+import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
 import { EnumUserRole } from 'src/app/enums/role';
+import { EnumAppRoute } from 'src/app/enums/routes';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
+import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
-import { MenuItem } from 'src/app/types/menu-item';
 
 @Component({
     selector: 'app-master-dashboard-page',
@@ -26,12 +28,10 @@ export class MasterDashboardPageComponent implements OnInit {
     public isAdmin: boolean = false;
     public sessionClosed: boolean = false;
 
-    public selectedItem: MenuItem = {
-        title: EnumDashboardPage.LAYOUT
-    };
     public sessions: Session[] = [];
     public target?: Session;
-    public dashboardPage = EnumDashboardPage;
+    public EnumPage = EnumNavbarItemTitle;
+    public section: EnumNavbarItemTitle = EnumNavbarItemTitle.LAYOUT;
 
     public contextMenu: ContextMenu = {
         show: false,
@@ -54,24 +54,44 @@ export class MasterDashboardPageComponent implements OnInit {
         private eventService: EventService,
         private route: ActivatedRoute,
         private snackbar: SnackbarService,
-        private sessionService: SessionService
+        private sessionService: SessionService,
+        private router: Router
     ) {}
 
-    ngOnInit() {
-        this.route.queryParams.subscribe(async params => {
-            this.isAdmin = await this.adminService.isLogged();
-            this.sessionCode = params['code'];
-
-            this.clientService.roleChanged.subscribe(() => {
-                this.init();
-                this.loading = false;
-            });
-            // If the user is logged as admin, the code is not needed (undefined)
-            this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
+    async ngOnInit() {
+        // Subscribe to fragment changes (anchor in the URL)
+        this.route.fragment.subscribe(fragment  => {
+            if (!fragment) return;
+            if (!TypeService.isPartOfEnum(fragment, EnumNavbarItemTitle)) {
+                this.router.navigate([EnumAppRoute.MASTER]);
+                return;
+            }
+            this.section = fragment;
         });
+
+        this.isAdmin = await this.adminService.isLogged();
+        // No code required for admin
+        if (!this.isAdmin) {
+            this.sessionCode = this.sessionService.getFromCookies();
+            if (!this.sessionCode) {
+                this.router.navigate([EnumAppRoute.MASTER]);
+                return;
+            }
+        }
+
+        // If a role is already defined
+        if (ClientService.ROLE === EnumUserRole.MASTER) return this.init();
+
+        // Otherwise, ask for a role and wait for the response
+        this.clientService.roleChanged.subscribe(() => {
+            return this.init();
+        });
+        // If the user is logged as admin, the code is not needed (undefined)
+        this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
     }
 
     private init() {
+        this.loading = false;
         if (this.isAdmin) {
             this.sessionService.getAll().then((sessions) => {
                 sessions.forEach((session) => {
@@ -175,12 +195,8 @@ export class MasterDashboardPageComponent implements OnInit {
         this.target = (this.target === session) ? undefined : session;
     }
 
-    public selectItem(item: MenuItem) {
-        this.selectedItem = item;
-    }
-
     public get displayFoolList(): boolean {
-        return this.isAdmin && this.selectedItem.title != EnumDashboardPage.RESOURCES;
+        return this.isAdmin && this.section != EnumNavbarItemTitle.RESOURCES;
     }
 
     @HostListener('document:click')

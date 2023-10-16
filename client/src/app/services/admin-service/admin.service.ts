@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CodeName } from 'src/app/enums/code';
 import { BackendService } from '../backend/backend.service';
+import { SessionService } from '../session-service/session.service';
 
 @Injectable({
     providedIn: 'root',
@@ -10,7 +11,8 @@ export class AdminService {
 
     constructor(
         private backend: BackendService,
-        private http: HttpClient
+        private http: HttpClient,
+        private sessionService: SessionService
     ) {}
 
     /**
@@ -68,6 +70,7 @@ export class AdminService {
     }
 
     public logout(): void {
+        this.sessionService.removeFromCookies();
         this.http.get(
             this.backend.apiUrl + '/admin/logout',
             { responseType: 'json', withCredentials: true }
