@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActionData, EnumActionType, EnumSessionStatus, EnumUserRole } from 'put3-models';
+import { ActionData, EnumActionType, EnumSessionActionType, EnumSessionStatus, EnumUserRole } from 'put3-models';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { environment } from 'src/environments/environment';
 import { WindowService } from 'src/app/services/window-service/window.service';
@@ -111,6 +111,7 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
 
     public run(): void {
         this.running = true;
+        this.eventService.sendSessionEvent(ClientService.SESSION_CODE!, { type: EnumSessionActionType.RUN });
     }
 
     private action(type: EnumActionType, data: ActionData) {

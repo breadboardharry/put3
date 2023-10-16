@@ -69,10 +69,10 @@ export class EventService {
         });
     }
 
-    public sendSessionEvent(target: Session, action: SessionAction): void {
+    public sendSessionEvent(code: string, action: SessionAction): void {
         this.emitEvent(new Event(EnumEvent.SESSION, {
             target: {
-                session: target.code
+                session: code
             },
             data: action
         }));
@@ -122,9 +122,6 @@ export class EventService {
     }
 
     private emitEvent(event: Event) {
-        console.log("[-] Emitting event", event);
-        console.log("[-] Emitting event", event.name);
-        console.log("[-] Emitting event", event.getMessage());
         this.websocket.socket.emit(event.name, event.getMessage());
     }
 
