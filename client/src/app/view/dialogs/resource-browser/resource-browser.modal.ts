@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EnumResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType, FileData } from 'put3-models';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
-import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
     selector: 'app-resource-browser',

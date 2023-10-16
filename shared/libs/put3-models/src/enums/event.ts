@@ -1,4 +1,4 @@
-export enum EnumEventName {
+export enum EnumEvent {
     ROLE = "role",
     ACTION = "action",
     INFOS = "infos",

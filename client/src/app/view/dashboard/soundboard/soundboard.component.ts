@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { EnumActionType, EnumResourceType, FileData } from 'put3-models';
 import { Session } from 'src/app/classes/session';
-import { EnumResourceType } from 'src/app/enums/resources/type';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
   selector: 'app-soundboard',
@@ -33,8 +32,10 @@ export class SoundboardComponent implements OnInit {
     public stopAll() {
         if (!this.target) return;
         this.eventService.sendAction(this.target.fool, {
-            type: 'audio',
-            stop: true
+            type: EnumActionType.AUDIO,
+            data: {
+                stop: true
+            }
         });
     }
 }

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EnumResourceType } from 'src/app/enums/resources/type';
+import { EnumResourceType, FileData } from 'put3-models';
 import { BackendService } from 'src/app/services/backend/backend.service';
-import { FileData } from 'src/app/types/resources/file-data';
 
 @Component({
     selector: 'app-file-card',

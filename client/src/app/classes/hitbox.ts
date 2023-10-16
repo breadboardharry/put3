@@ -1,6 +1,5 @@
+import { Position, Size } from "put3-models";
 import { Action } from "../interfaces/action";
-import { Position } from "../types/position";
-import { Size } from "../types/size";
 
 export class Hitbox {
 

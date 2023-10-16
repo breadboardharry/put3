@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EnumResourceType } from 'src/app/enums/resources/type';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
@@ -9,6 +8,7 @@ import { Hitbox } from 'src/app/classes/hitbox';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { Session } from 'src/app/classes/session';
+import { EnumResourceType } from 'put3-models';
 
 @Component({
     selector: 'app-layout-editor',

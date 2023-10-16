@@ -1,17 +1,17 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ActionData, EnumActionType, EnumSessionStatus, EnumUserRole } from 'put3-models';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { environment } from 'src/environments/environment';
 import { WindowService } from 'src/app/services/window-service/window.service';
 import { PreferencesService } from 'src/app/services/preferences-service/preferences.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { Layout } from 'src/app/types/layout';
 import { LayoutService } from 'src/app/services/layout-service/layout.service';
 import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
-import { EnumUserRole } from 'src/app/enums/role';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
+import { Layout } from 'src/app/types/layout';
 
 @Component({
   selector: 'app-fool-home-page',
@@ -66,7 +66,7 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
     private init(): void {
         this.loading = false;
         this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
-            if (!this.running && session.status == "running") {
+            if (!this.running && session.status == EnumSessionStatus.RUNNING) {
                 this.run();
             }
         });
@@ -76,12 +76,12 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
             window: this.windowService.getWindowSize(),
         });
 
-        this.subscriptions['onAction'] = this.eventService.onAction.subscribe((data) => {
-            this.action(data);
+        this.subscriptions['onAction'] = this.eventService.onAction.subscribe((action) => {
+            this.action(action.type, action.data!);
         });
 
-        this.subscriptions['onLayout'] = this.eventService.onLayout.subscribe((data) => {
-            this.layout = this.layoutService.newFoolLayout(data);
+        this.subscriptions['onLayout'] = this.eventService.onLayout.subscribe((layout) => {
+            this.layout = this.layoutService.newFoolLayout(layout);
         });
 
         this.subscriptions['onRename'] = this.eventService.onRename.subscribe((newName) => {
@@ -109,12 +109,12 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
         this.running = true;
     }
 
-    private action(data: { [key: string]: any }) {
-        switch (data['type']) {
+    private action(type: EnumActionType, data: ActionData) {
+        switch (type) {
             case 'audio':
-                const volume = 'volume' in data ? data['volume'] : 1.0;
-                if ('stop' in data && data['stop']) this.audio.stopAll();
-                else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data['track'].href, volume);
+                const volume = 'volume' in data ? data.volume : 1.0;
+                if ('stop' in data && data.stop) this.audio.stopAll();
+                else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data.track!.href, volume);
                 break;
 
             default:

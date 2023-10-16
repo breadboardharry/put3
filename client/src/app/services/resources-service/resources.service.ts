@@ -2,12 +2,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { FileData } from 'src/app/types/resources/file-data';
-import { EnumResourceType } from 'src/app/enums/resources/type';
-import { ResourceDirectory } from 'src/app/enums/resources/directory';
-import { ResourceSet } from 'src/app/types/resources/data-set';
 import { BackendService } from '../backend/backend.service';
 import { EventService } from '../event-service/event.service';
+import { EnumResourceDirectory, EnumResourceType, FileData, ResourceSet } from 'put3-models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +12,9 @@ import { EventService } from '../event-service/event.service';
 export class ResourcesService {
 
     private routeUrl = this.backend.apiUrl + '/resources';
-    private resources: ResourceSet = {};
+    private resources: Partial<ResourceSet> = {
+
+    };
 
     constructor(
         private http: HttpClient,
@@ -37,19 +36,19 @@ export class ResourcesService {
         });
     }
 
-    public typeToDir(type: EnumResourceType): ResourceDirectory {
+    public typeToDir(type: EnumResourceType): EnumResourceDirectory {
         switch (type) {
-            case EnumResourceType.IMAGE: return ResourceDirectory.Images;
-            case EnumResourceType.VIDEO: return ResourceDirectory.Videos;
-            case EnumResourceType.AUDIO: return ResourceDirectory.Audios;
+            case EnumResourceType.IMAGE: return EnumResourceDirectory.IMAGES;
+            case EnumResourceType.VIDEO: return EnumResourceDirectory.VIDEOS;
+            case EnumResourceType.AUDIO: return EnumResourceDirectory.AUDIOS;
         }
     }
 
-    public dirToType(dir: ResourceDirectory): EnumResourceType {
+    public dirToType(dir: EnumResourceDirectory): EnumResourceType {
         switch (dir) {
-            case ResourceDirectory.Images: return EnumResourceType.IMAGE;
-            case ResourceDirectory.Videos: return EnumResourceType.VIDEO;
-            case ResourceDirectory.Audios: return EnumResourceType.AUDIO;
+            case EnumResourceDirectory.IMAGES: return EnumResourceType.IMAGE;
+            case EnumResourceDirectory.VIDEOS: return EnumResourceType.VIDEO;
+            case EnumResourceDirectory.AUDIOS: return EnumResourceType.AUDIO;
         }
     }
 
@@ -113,7 +112,7 @@ export class ResourcesService {
         return this.flatten();
     }
 
-    public flatten(set: ResourceSet = this.resources) {
+    public flatten(set: Partial<ResourceSet> = this.resources) {
         let result: any[] = [];
 
         for (let files of Object.values(set)) {

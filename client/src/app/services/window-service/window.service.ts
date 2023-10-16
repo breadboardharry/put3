@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Window } from 'src/app/types/window';
+import { Window } from 'put3-models';
 
 @Injectable({
     providedIn: 'root',
@@ -24,7 +24,7 @@ export class WindowService {
         return {
             width: this.getWindowWidth(),
             height: this.getWindowHeight(),
-            ratio: this.getWindowRatio()
+            ratio: this.getWindowRatio(),
         }
     }
 

@@ -1,4 +1,5 @@
 import { ElementRef, Injectable } from '@angular/core';
+import { HitboxData } from 'put3-models';
 import { Hitbox } from 'src/app/classes/hitbox';
 
 @Injectable({
@@ -39,7 +40,7 @@ export class HitboxService {
      * @param run Run hitboxes (default: false)
      * @returns Hitboxes
      */
-    public instaciate(hitboxes: any, run: boolean = false): Hitbox[] {
+    public instaciate(hitboxes: HitboxData[], run: boolean = false): Hitbox[] {
         const active = run ? {active: true} : {};
         return hitboxes.map((hitbox: any) => new Hitbox({...hitbox, active}));
     }

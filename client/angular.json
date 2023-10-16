@@ -87,8 +87,8 @@
           "options": {
             "browserTarget": "app:build",
             "ssl": true,
-            "sslKey": "../ssl/server.key",
-            "sslCert": "../ssl/server.crt"
+            "sslKey": "../shared/ssl/server.key",
+            "sslCert": "../shared/ssl/server.crt"
           },
           "defaultConfiguration": "development"
         },
