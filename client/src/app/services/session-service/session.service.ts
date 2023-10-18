@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
 import { Session, SessionData } from 'src/app/classes/session';
 import { CookieService } from 'ngx-cookie-service';
+import { EventService } from '../event-service/event.service';
+import { EnumSessionActionType } from 'put3-models';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +14,8 @@ export class SessionService {
     constructor(
         private backend: BackendService,
         private http: HttpClient,
-        private cookie: CookieService
+        private cookie: CookieService,
+        private eventService: EventService
     ) {}
 
     public saveInCookies(sessionCode: string): void {
@@ -25,6 +28,12 @@ export class SessionService {
 
     public removeFromCookies(): void {
         this.cookie.delete('session', '/');
+    }
+
+    public run(sessionCode: string): void {
+        this.eventService.sendSessionEvent(sessionCode, {
+            type: EnumSessionActionType.RUN
+        });
     }
 
     public getAll(): Promise<Session[]> {

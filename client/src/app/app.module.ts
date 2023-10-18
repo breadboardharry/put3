@@ -24,28 +24,30 @@ import { MasterDashboardPageComponent } from './view/pages/master-dashboard-page
 import { FoolHomePageComponent } from './view/pages/fool-home-page/fool-home-page.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
-import { DashboardNavbarComponent } from './view/dashboard/dashboard-navbar/dashboard-navbar.component';
+import { DashboardNavbarComponent } from './view/master/navbar/dashboard-navbar.component';
 import { FoolCardComponent } from './view/cards/fool-card/fool-card.component';
-import { SoundboardComponent } from './view/dashboard/soundboard/soundboard.component';
-import { SoundboardButtonComponent } from './view/dashboard/soundboard/soundboard-button/soundboard-button.component';
+import { SoundboardComponent } from './view/master/soundboard/soundboard.component';
+import { SoundboardButtonComponent } from './view/master/soundboard/soundboard-button/soundboard-button.component';
 import { CodelockComponent } from './view/codelock/codelock.component';
 import { CodelockPageComponent } from './view/pages/codelock-page/codelock-page.component';
-import { AssetsGalleryComponent } from './view/dashboard/assets-gallery/assets-gallery.component';
+import { AssetsGalleryComponent } from './view/master/assets-gallery/assets-gallery.component';
 import { FileCardComponent } from './view/cards/file-card/file-card.component';
 import { DragDropFileUploadDirective } from './directives/drag-drop-file-upload.directive';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ContextMenuComponent } from './view/global/context-menu/context-menu.component';
-import { CustomSnackbarComponent } from './view/global/custom-snackbar/custom-snackbar.component';
-import { LayoutEditorComponent } from './view/dashboard/layout-editor/layout-editor.component';
-import { ButtonRaisedComponent } from './view/global/buttons/button-raised/button-raised.component';
+import { ContextMenuComponent } from './view/common/context-menu/context-menu.component';
+import { CustomSnackbarComponent } from './view/common/custom-snackbar/custom-snackbar.component';
+import { LayoutEditorComponent } from './view/master/layout-editor/layout-editor.component';
+import { ButtonRaisedComponent } from './view/common/buttons/button-raised/button-raised.component';
 import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-browser.modal';
-import { GradientLoaderComponent } from './view/global/loaders/gradient-loader/gradient-loader.component';
+import { GradientLoaderComponent } from './view/common/loaders/gradient-loader/gradient-loader.component';
 import { SessionEnterPageComponent } from './view/pages/session-enter-page/session-enter-page.component';
 import { SessionCodeDirective } from './directives/session-code.directive';
 import { QRCodeModule } from 'angularx-qrcode';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CodeInputModule } from 'angular-code-input';
 import { CodeInputComponent } from './view/common/code-input/code-input.component';
+import { SessionPanelComponent } from './view/master/session-panel/session-panel.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -81,6 +83,7 @@ import { CodeInputComponent } from './view/common/code-input/code-input.componen
         SessionEnterPageComponent,
         SessionCodeDirective,
         CodeInputComponent,
+        SessionPanelComponent,
     ],
     imports: [
         CodeInputModule,
@@ -98,6 +101,7 @@ import { CodeInputComponent } from './view/common/code-input/code-input.componen
         ReactiveFormsModule,
         QRCodeModule,
         ClipboardModule,
+        MatTooltipModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

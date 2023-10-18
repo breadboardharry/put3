@@ -34,6 +34,10 @@ export class BrowserService {
         }
     }
 
+    public redirect(url: string): void {
+        window.location.href = url;
+    }
+
     /**
      * Returns the browser icon
      * @returns {string} Browser icon

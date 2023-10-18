@@ -3,7 +3,7 @@ import { SessionService } from "../../services/users/sessions.service";
 import SocketService from "../../services/socket/socket.service";
 import UsersService from "../../services/users/users.service";
 import { Session } from "../../models/session";
-import { EnumEvent, EnumUserRole } from "put3-models";
+import { EnumEvent, EnumSessionActionType, EnumUserRole } from "put3-models";
 
 export default class SessionModule {
 
@@ -22,8 +22,7 @@ export default class SessionModule {
 
         console.log("[-] Event from " + sourceUuid + " to " + targetCode + ":", action);
         switch (action.type) {
-            case "run":
-                console.log("[-] Running session " + targetCode);
+            case EnumSessionActionType.RUN:
                 SessionService.run(targetCode);
                 break;
         }

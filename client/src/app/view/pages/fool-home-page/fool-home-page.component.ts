@@ -14,14 +14,17 @@ import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.serv
 import { Layout } from 'src/app/types/layout';
 
 @Component({
-  selector: 'app-fool-home-page',
-  templateUrl: './fool-home-page.component.html',
-  styleUrls: ['./fool-home-page.component.scss']
+    selector: 'app-fool-home-page',
+    templateUrl: './fool-home-page.component.html',
+    styleUrls: ['./fool-home-page.component.scss']
 })
 export class FoolHomePageComponent implements OnInit, OnDestroy {
 
-    public loading = true;
-    public running = false;
+    public loading: boolean = true;
+    public running: boolean = false;
+
+    public audioEnabled: boolean = false;
+    public testedAudio: boolean = false;
 
     public layout: Layout = {
         hitboxes: [],
@@ -71,10 +74,7 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.eventService.changeSelfInfos({
-            browser: this.browser.get(),
-            window: this.windowService.getWindowSize(),
-        });
+        this.updateFoolInfos();
 
         this.subscriptions['onAction'] = this.eventService.onAction.subscribe((action) => {
             this.action(action.type, action.data!);
@@ -93,6 +93,27 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
         });
 
         this.setDesktopImage();
+        this.trySound().then(() => {
+            this.testedAudio = true;
+            this.audioEnabled = true;
+            this.updateFoolInfos();
+        });
+    }
+
+    private trySound(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            const interval = setInterval(() => {
+                this.audio.play('assets/audios/blank.mp3').then(() => {
+                    clearInterval(interval);
+                    resolve();
+                }).catch(() => {});
+            }, 500);
+        });
+    }
+
+    public activateAudio(): void {
+        if (!this.testedAudio) return;
+        this.audioEnabled = !this.audioEnabled;
     }
 
     async setDesktopImage() {
@@ -114,12 +135,27 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
         this.eventService.sendSessionEvent(ClientService.SESSION_CODE!, { type: EnumSessionActionType.RUN });
     }
 
+    private updateFoolInfos() {
+        this.eventService.changeSelfInfos({
+            browser: this.browser.get(),
+            window: this.windowService.getWindowSize(),
+            permissions: {
+                audio: this.testedAudio
+            }
+        });
+    }
+
     private action(type: EnumActionType, data: ActionData) {
         switch (type) {
-            case 'audio':
+            case EnumActionType.AUDIO:
+                if (!this.audioEnabled) return;
                 const volume = 'volume' in data ? data.volume : 1.0;
                 if ('stop' in data && data.stop) this.audio.stopAll();
                 else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data.track!.href, volume);
+                break;
+
+            case EnumActionType.SHUTDOWN:
+                this.browser.redirect('https://google.com');
                 break;
 
             default:
@@ -140,7 +176,7 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
         return this.backend.serverUrl + '/' + (this.layout.desktop.image ? this.layout.desktop.image : this.defaultDesktopImage);
     }
 
-    public copiedToClipboard(): void {
+    public copiedCodeToClipboard(): void {
         this.snackbar.openSuccess("Code copied to clipboard");
     }
 

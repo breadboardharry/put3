@@ -4,4 +4,5 @@ export enum EnumSessionActionType {
 
 export enum EnumActionType {
     AUDIO = "audio",
+    SHUTDOWN = "shutdown",
 };

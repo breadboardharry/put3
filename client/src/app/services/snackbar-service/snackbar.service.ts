@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EnumInfoStyle } from 'put3-models';
-import { CustomSnackbarComponent } from 'src/app/view/global/custom-snackbar/custom-snackbar.component';
+import { CustomSnackbarComponent } from 'src/app/view/common/custom-snackbar/custom-snackbar.component';
 
 @Injectable({
     providedIn: 'root',

@@ -3,7 +3,7 @@
         <mat-spinner *ngIf="loading"></mat-spinner>
 
         <div class="landing-page-content" *ngIf="!loading">
-            <button class="session-code-button" [cdkCopyToClipboard]="sessionCode" (click)="copiedToClipboard()">
+            <button class="session-code-button" [cdkCopyToClipboard]="sessionCode" (click)="copiedCodeToClipboard()">
                 <h1 class="session-code">{{ sessionCode }}</h1>
             </button>
 
@@ -19,15 +19,19 @@
             <div class="toolbar">
                 <div class="left-buttons">
                     <button class="toolbar-button fullscreen-button" (click)="WindowService.toggleFullscreen()">
-                        <img class="icon" [src]="'assets/icons/fullscreen-' + (WindowService.isFullscreen() ? 'close' : 'enter') + '.svg'">
+                        <img [src]="'assets/icons/fullscreen' + (WindowService.isFullscreen() ? '-exit' : '') + '-400.svg'">
                     </button>
 
                     <button class="toolbar-button" disabled>
-                        <img class="icon" [src]="'assets/icons/bell.svg'">
+                        <img [src]="'assets/icons/bell-400.svg'">
+                    </button>
+
+                    <button class="toolbar-button audio {{ testedAudio ? '' : 'alert'}}" (click)="activateAudio()">
+                        <img [src]="'assets/icons/volume' + (audioEnabled ? '' : '-off') +'-400.svg'">
                     </button>
                 </div>
 
-                <button class="toolbar-button run-button" (click)="run()">
+                <button class="toolbar-button run" (click)="run()">
                     <div class="icon"></div>
                 </button>
             </div>

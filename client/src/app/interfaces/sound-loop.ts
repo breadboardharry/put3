@@ -1,4 +1,4 @@
 export interface SoundLoop {
-  enable: boolean;
-  reps?: number;
+    enable: boolean;
+    reps?: number;
 }

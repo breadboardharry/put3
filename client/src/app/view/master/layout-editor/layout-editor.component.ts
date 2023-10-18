@@ -9,13 +9,14 @@ import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { Session } from 'src/app/classes/session';
 import { EnumResourceType } from 'put3-models';
+import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 
 @Component({
     selector: 'app-layout-editor',
     templateUrl: './layout-editor.component.html',
     styleUrls: ['./layout-editor.component.scss'],
 })
-export class LayoutEditorComponent implements OnInit {
+export class LayoutEditorComponent implements OnInit, DashboardSection {
 
     @ViewChild('content')
     public content!: ElementRef;
