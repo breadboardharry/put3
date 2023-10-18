@@ -1,9 +1,9 @@
 <div class="layout-editor">
-    <div class="content" #content>
+    <div class="content" #content [ngClass]="{
+        'disabled': disabled
+    }">
         <div #editor class="editor" *ngIf="target" [ngStyle]="{
                 'aspectRatio': target.fool.window.ratio
-            }" [ngClass]="{
-                'disabled': disabled
             }"
         >
             <!-- Hitboxes -->

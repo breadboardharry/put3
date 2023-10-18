@@ -1,16 +1,120 @@
 import { Injectable } from '@angular/core';
-import { Fool } from 'src/app/classes/fool';
 import { EventService } from '../event-service/event.service';
+import { BrowserService } from '../utils/browser-service/browser.service';
+import { WindowService } from '../window-service/window.service';
+import { ActionData, EnumActionType, EnumSessionActionType, EnumSessionStatus } from 'put3-models';
+import { ClientService } from '../client-service/client.service';
+import { LayoutService } from '../layout-service/layout.service';
+import { AudioService } from '../audio-service/audio.service';
+import { PreferencesService } from '../preferences-service/preferences.service';
+import { Layout } from 'src/app/types/layout';
+import { SnackbarService } from '../snackbar-service/snackbar.service';
+import { BackendService } from '../backend/backend.service';
+import { MicrophoneService } from '../microphone/microphone.service';
+import { CameraService } from '../camera/camera.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FoolService {
 
-    constructor(private eventService: EventService) {}
+    public running: boolean = false;
 
-    public sendConfig(fool: Fool) {
-        this.eventService.sendLayout(fool, fool.layout);
+    public audioEnabled: boolean = false;
+    public notificationsEnabled: boolean = false;
+    public microphoneEnabled: boolean = false;
+    public cameraEnabled: boolean = false;
+
+    public layout: Layout = {
+        hitboxes: [],
+        desktop: {
+            image: undefined
+        }
+    };
+
+    constructor(
+        private eventService: EventService,
+        private backend: BackendService,
+        private browser: BrowserService,
+        private windowService: WindowService,
+        private layoutService: LayoutService,
+        private preferences: PreferencesService,
+        private snackbar: SnackbarService,
+        private audio: AudioService,
+        private microphone: MicrophoneService,
+        private camera: CameraService,
+    ) {
+        this.init();
     }
-    
+
+    private init() {
+        this.eventService.onSession.subscribe((session) => {
+            if (session.status != EnumSessionStatus.RUNNING) return;
+            this.run();
+        });
+
+        this.eventService.onAction.subscribe((action) => {
+            this.action(action.type, action.data!);
+        });
+
+        this.eventService.onLayout.subscribe((layout) => {
+            this.layout = this.layoutService.newFoolLayout(layout);
+        });
+
+        this.eventService.onRename.subscribe((newName) => {
+            this.preferences.setName(newName);
+        });
+
+        this.eventService.onMessage.subscribe((message) => {
+            this.snackbar.open(message.type, message.text);
+        });
+    }
+
+    public run() {
+        if (this.running) return;
+        this.running = true;
+        console.log("[-] Run fool");
+        console.log("code:", ClientService.SESSION_CODE!);
+        this.eventService.sendSessionEvent(ClientService.SESSION_CODE!, { type: EnumSessionActionType.RUN });
+    }
+
+    private action(type: EnumActionType, data: ActionData) {
+        switch (type) {
+            case EnumActionType.AUDIO:
+                const volume = 'volume' in data ? data.volume : 1.0;
+                if ('stop' in data && data.stop) this.audio.stopAll();
+                else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data.track!.href, volume);
+                break;
+
+            case EnumActionType.SHUTDOWN:
+                this.browser.redirect('https://google.com');
+                break;
+
+            default:
+                console.error('Unknown action type', data);
+                break;
+        }
+    }
+
+    public sendInfos() {
+        this.eventService.changeSelfInfos({
+            browser: {
+                name: this.browser.get(),
+                permissions: {
+                    notifications: false,
+                    audio: this.audio.canPlay,
+                    microphone: this.microphone.hasPermission,
+                    camera: this.camera.hasPermission,
+                }
+            },
+            window: this.windowService.getWindowSize(),
+            settings: {
+                notifications: this.notificationsEnabled,
+                audio: this.audioEnabled,
+                microphone: this.microphoneEnabled,
+                camera: this.cameraEnabled,
+            }
+        });
+    }
+
 }

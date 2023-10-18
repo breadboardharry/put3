@@ -1,9 +1,9 @@
 <div class="page">
-    <div class="landing-page {{ running ? 'closed' : ''}}">
+    <div class="landing-page {{ fool.running ? 'closed' : ''}}">
         <mat-spinner *ngIf="loading"></mat-spinner>
 
         <div class="landing-page-content" *ngIf="!loading">
-            <button class="session-code-button" [cdkCopyToClipboard]="sessionCode" (click)="copiedToClipboard()">
+            <button class="session-code-button" [cdkCopyToClipboard]="sessionCode" (click)="copiedCodeToClipboard()">
                 <h1 class="session-code">{{ sessionCode }}</h1>
             </button>
 
@@ -16,28 +16,14 @@
                 ></qrcode>
             </a>
 
-            <div class="toolbar">
-                <div class="left-buttons">
-                    <button class="toolbar-button fullscreen-button" (click)="WindowService.toggleFullscreen()">
-                        <img class="icon" [src]="'assets/icons/fullscreen-' + (WindowService.isFullscreen() ? 'close' : 'enter') + '.svg'">
-                    </button>
-
-                    <button class="toolbar-button" disabled>
-                        <img class="icon" [src]="'assets/icons/bell.svg'">
-                    </button>
-                </div>
-
-                <button class="toolbar-button run-button" (click)="run()">
-                    <div class="icon"></div>
-                </button>
-            </div>
+            <app-fool-landing-page-toolbar></app-fool-landing-page-toolbar>
 
         </div>
     </div>
 
-    <div class="fool-app-page" *ngIf="running">
-        <div class="hitboxes overwrite-cursor" *ngIf="layout">
-            <app-hitbox *ngFor="let hitbox of layout.hitboxes" [hitbox]="hitbox"></app-hitbox>
+    <div class="fool-app-page" *ngIf="fool.running">
+        <div class="hitboxes overwrite-cursor" *ngIf="fool.layout">
+            <app-hitbox *ngFor="let hitbox of fool.layout.hitboxes" [hitbox]="hitbox"></app-hitbox>
         </div>
         <app-desktop [backgroundImage]="backgroundImage"></app-desktop>
     </div>

@@ -1,0 +1,46 @@
+$color-green-50: #eff6f0;
+$color-green-100: #cee4d2;
+$color-green-200: #add2b3;
+$color-green-300: #8cc095;
+$color-green-400: #6bae77;
+$color-green-500: #51945d;
+$color-green-600: #3f7348;
+$color-green-700: #2d5234;
+
+$color-red-50: #f3e1e1;
+$color-red-100: #edd3d3;
+$color-red-200: #e1b5b5;
+$color-red-300: #d49797;
+$color-red-400: #c26b6b;
+$color-red-500: #9b5656;
+$color-red-600: #744040;
+$color-red-700: #4e2b2b;
+
+$color-yellow-50: #fbfae1;
+$color-yellow-100: #f8f5c3;
+$color-yellow-200: #f4f0a4;
+$color-yellow-300: #f1eb86;
+$color-yellow-400: #ede668;
+$color-yellow-500: #beb853;
+$color-yellow-600: #8e8a3e;
+$color-yellow-700: #5f5c2a;
+
+$color-orange-50: #fdeade;
+$color-orange-100: #fad5bd;
+$color-orange-200: #f8bf9d;
+$color-orange-300: #f5aa7c;
+$color-orange-400: #f3955b;
+$color-orange-500: #c27749;
+$color-orange-600: #925937;
+$color-orange-700: #613c24;
+
+$dark-gradient: linear-gradient(145deg, rgb(1, 2, 24), rgb(0, 0, 17));
+$dark-gradient-2: linear-gradient(145deg, rgb(4, 7, 43), rgb(2, 2, 31));
+$dark-gradient-3: linear-gradient(145deg, rgb(6, 10, 54), rgb(4, 4, 42));
+$light-gradient: linear-gradient(145deg, #313159, rgb(30, 33, 83));
+
+$success-light-gradient: linear-gradient(145deg, $color-green-400, $color-green-500);
+$success-gradient: linear-gradient(145deg, $color-green-600, $color-green-700);
+$error-gradient: linear-gradient(145deg, rgb(134, 34, 34), rgb(109, 16, 16));
+$warning-gradient: linear-gradient(145deg, rgb(145, 96, 33),rgb(143, 96, 25));
+$info-gradient: $light-gradient;

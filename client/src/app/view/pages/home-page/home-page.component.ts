@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EnumUserRole } from 'put3-models';
-import { Script } from 'src/app/enums/assets/scrips';
+import { EnumFoolScript, EnumUserRole } from 'put3-models';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
 
 @Component({
@@ -12,7 +11,7 @@ import { AssetsService } from 'src/app/services/assets-service/assets.service';
 export class HomePageComponent implements OnInit {
 
     public hover: EnumUserRole.MASTER | EnumUserRole.FOOL | null = null;
-    public scripts = Script;
+    public EnumScript = EnumFoolScript;
     public EnumUserRole = EnumUserRole;
 
     constructor(

@@ -2,7 +2,6 @@
 
 .layout-editor {
     @extend %dashboard-page;
-    box-sizing: border-box;
 }
 
 .content {
@@ -17,6 +16,11 @@
         flex-direction: column;
         gap: 1.5rem;
     }
+
+    &.disabled {
+        filter: brightness(0.5);
+    }
+    transition: all .15s ease-in-out;
 }
 
 .editor {
@@ -26,10 +30,6 @@
     overflow: hidden;
     height: fit-content;
     max-height: 100%;
-    
-    &.disabled {
-        filter: brightness(0.4);
-    }
 
     .draggable-zone {
         position: absolute;

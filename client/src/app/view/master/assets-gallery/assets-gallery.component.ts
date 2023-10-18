@@ -3,6 +3,7 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FileData } from 'put3-models';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
+import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';

@@ -34,6 +34,10 @@ export class BrowserService {
         }
     }
 
+    public redirect(url: string): void {
+        window.location.href = url;
+    }
+
     /**
      * Returns the browser icon
      * @returns {string} Browser icon
@@ -45,13 +49,12 @@ export class BrowserService {
 
     /**
      * Returns the icon of a browser passed in parameter
-     * @param {Browser} browser Browser
-     * @returns {string} Browser icon
+     * @param browserName Browser
+     * @returns Browser icon path
      */
-    public toIcon(browser: EnumBrowser): string {
+    public toIcon(browserName: EnumBrowser): string {
+        if (!browserName || browserName === EnumBrowser.OTHER || browserName === EnumBrowser.IE) return '';
         const dir = "assets/icons/browsers/";
-
-        if (!browser || browser === EnumBrowser.OTHER || browser === EnumBrowser.IE) return '';
-        return dir + browser + '.png';
+        return dir + browserName + '.png';
     }
 }

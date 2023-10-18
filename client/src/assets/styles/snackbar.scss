@@ -1,0 +1,25 @@
+@import '~src/assets/styles/theme.scss';
+
+%snackbar {
+    color: white;
+}
+
+.snackbar-success {
+    @extend %snackbar;
+    background: $success-gradient;
+}
+
+.snackbar-error {
+    @extend %snackbar;
+    background: $error-gradient;
+}
+
+.snackbar-warning {
+    @extend %snackbar;
+    background: $warning-gradient;
+}
+
+.snackbar-info {
+    @extend %snackbar;
+    background: $info-gradient;
+}

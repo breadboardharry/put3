@@ -3,12 +3,20 @@
         <div class="session-infos" *ngIf="!isAdmin">
             Connected to
             <span>
-                {{ ClientService.SESSION_CODE || 14485 }}
+                {{ ClientService.SESSION_CODE || '...' }}
             </span>
         </div>
     </div>
     <div class="items">
         <div class="items center">
+
+            <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.SESSION">
+                <img [src]="'assets/icons/devices.png'">
+                <span>
+                    {{EnumNavbarItemTitle.SESSION}}
+                </span>
+            </button>
+
             <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.LAYOUT">
                 <img [src]="'assets/icons/edit-image.png'">
                 <span>

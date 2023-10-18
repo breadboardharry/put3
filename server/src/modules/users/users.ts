@@ -89,7 +89,6 @@ export default class UserModule {
         if (user.role != EnumUserRole.FOOL) {
             return { success: false, message: "You can't change infos for this user" };
         }
-        console.log("[-] Infos changed for " + user.uuid);
         user.infos = {...user.infos, ...infos};
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(user.uuid)!);
 

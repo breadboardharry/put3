@@ -3,7 +3,7 @@ import { SessionService } from "../../services/users/sessions.service";
 import SocketService from "../../services/socket/socket.service";
 import UsersService from "../../services/users/users.service";
 import { Session } from "../../models/session";
-import { EnumEvent, EnumUserRole } from "put3-models";
+import { EnumEvent, EnumSessionActionType, EnumUserRole } from "put3-models";
 
 export default class SessionModule {
 
@@ -15,6 +15,7 @@ export default class SessionModule {
     }
 
     public static event(sourceUuid: string, targetCode: string, action: any): void {
+        console.log("[-] Event from " + sourceUuid + " to " + targetCode + ":", action);
         const sourceUser = UsersService.find(sourceUuid);
         if (!sourceUser) throw new Error("[-] Undefined source user");
         const targetSession = SessionService.find(targetCode);
@@ -22,8 +23,7 @@ export default class SessionModule {
 
         console.log("[-] Event from " + sourceUuid + " to " + targetCode + ":", action);
         switch (action.type) {
-            case "run":
-                console.log("[-] Running session " + targetCode);
+            case EnumSessionActionType.RUN:
                 SessionService.run(targetCode);
                 break;
         }

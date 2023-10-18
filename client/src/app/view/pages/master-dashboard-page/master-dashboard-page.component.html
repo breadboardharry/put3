@@ -25,17 +25,21 @@
         <hr class="separator" *ngIf="displayFoolList"/>
 
         <div class="app-container" [ngSwitch]="section">
+            <app-session-panel *ngSwitchCase="EnumPage.SESSION"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-session-panel>
+
             <app-soundboard *ngSwitchCase="EnumPage.SOUNDBOARD"
                 [sessions]="sessions"
                 [target]="target"
                 [disabled]="!sessions.length || sessionClosed || target == null"
-            >
-            </app-soundboard>
+            ></app-soundboard>
 
             <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
                 [isAdmin]="isAdmin"
-            >
-            </app-assets-gallery>
+            ></app-assets-gallery>
 
             <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"
                 [sessions]="sessions"
