@@ -14,7 +14,7 @@ export class FoolCardComponent implements OnInit {
     @Input() selected?: boolean = false;
     @Output() editedEvent: EventEmitter<string> = new EventEmitter<string>();
 
-    name = '';
+    public name = '';
 
     constructor(public browser: BrowserService) {}
 
@@ -22,7 +22,12 @@ export class FoolCardComponent implements OnInit {
         this.name = this.fool.name;
     }
 
-    editDone() {
+    public editDone() {
         this.editedEvent.emit(this.name);
     }
+
+    public get foolBrowser() {
+        return this.fool.browser || undefined;
+    }
+
 }

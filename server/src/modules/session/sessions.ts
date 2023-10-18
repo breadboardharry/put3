@@ -15,6 +15,7 @@ export default class SessionModule {
     }
 
     public static event(sourceUuid: string, targetCode: string, action: any): void {
+        console.log("[-] Event from " + sourceUuid + " to " + targetCode + ":", action);
         const sourceUser = UsersService.find(sourceUuid);
         if (!sourceUser) throw new Error("[-] Undefined source user");
         const targetSession = SessionService.find(targetCode);

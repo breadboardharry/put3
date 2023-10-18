@@ -52,6 +52,7 @@ export class SocketServer {
             });
 
             socket.on(EnumEvent.LAYOUT, (message: EventMessage) => {
+                console.log("[-] Layout event", message);
                 UserModule.changeLayout(socket.id, message.target!.user!, message.data);
             });
 
@@ -60,6 +61,7 @@ export class SocketServer {
             });
 
             socket.on(EnumEvent.SESSION, (message: EventMessage) => {
+                console.log("[-] Session event", message);
                 SessionModule.event(socket.id, message.target!.session!, message.data);
             });
         });

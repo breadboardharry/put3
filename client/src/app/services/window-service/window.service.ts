@@ -28,11 +28,11 @@ export class WindowService {
         }
     }
 
-    public static isFullscreen(): boolean {
+    public isFullscreen(): boolean {
         return document.fullscreenElement ? true : false;
     }
 
-    public static toggleFullscreen() {
+    public toggleFullscreen() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
         }
@@ -41,11 +41,11 @@ export class WindowService {
         }
     }
 
-    public static openFullscreen(): void {
+    public openFullscreen(): void {
         document.documentElement.requestFullscreen();
     }
 
-    public static closeFullscreen(): void {
+    public closeFullscreen(): void {
         document.exitFullscreen();
     }
 

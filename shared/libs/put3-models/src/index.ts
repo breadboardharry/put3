@@ -5,6 +5,7 @@ export * from './enums/browser';
 export * from './enums/event';
 export * from './enums/info';
 export * from './enums/resources';
+export * from './enums/scripts';
 export * from './enums/session';
 export * from './enums/user';
 

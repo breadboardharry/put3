@@ -31,6 +31,7 @@ export class SessionService {
     }
 
     public run(sessionCode: string): void {
+        console.log("[-] Running session", sessionCode);
         this.eventService.sendSessionEvent(sessionCode, {
             type: EnumSessionActionType.RUN
         });

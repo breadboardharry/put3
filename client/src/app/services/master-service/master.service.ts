@@ -22,4 +22,7 @@ export class MasterService {
         })
     }
 
+    public sendConfig(fool: Fool) {
+        this.eventService.sendLayout(fool, fool.layout);
+    }
 }

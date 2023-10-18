@@ -6,7 +6,8 @@ import { SoundLoop } from 'src/app/interfaces/sound-loop';
 })
 export class AudioService {
 
-    private _audios: HTMLAudioElement[] = [];
+    private audios: HTMLAudioElement[] = [];
+    public canPlay: boolean = false;
 
     constructor() { }
 
@@ -30,7 +31,7 @@ export class AudioService {
 
     private playAudio(src: string, volume: number = 1.0): Promise<void> {
         const audio = new Audio(src);
-        this._audios.push(audio);
+        this.audios.push(audio);
 
         return new Promise<void>((resolve, reject) => {
             audio.load();
@@ -44,9 +45,29 @@ export class AudioService {
         })
     }
 
+    /**
+     * Stop all the audios played by the audio service
+     */
     public stopAll(): void {
-        for(let audio of this._audios) {
+        for(let audio of this.audios) {
             audio.pause();
         }
+    }
+
+    /**
+     * Wait for the audio service to be ready to play sounds
+     * - Audio can't be played before the user interact with the page
+     */
+    public waitForInit(): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            if (this.canPlay) return resolve();
+            const interval = setInterval(() => {
+                this.play('assets/audios/blank.mp3').then(() => {
+                    clearInterval(interval);
+                    this.canPlay = true;
+                    resolve();
+                }).catch(() => {});
+            }, 500);
+        });
     }
 }

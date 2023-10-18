@@ -235,7 +235,12 @@ section {
         }
 
         li {
-            filter: invert(1);
+            img {
+                filter: invert(1);
+                &.disabled {
+                    filter: invert(0.6);
+                }
+            }
         }
     }
 

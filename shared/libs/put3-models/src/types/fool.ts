@@ -10,12 +10,26 @@ export type FoolData = {
 };
 
 export type FoolInfos = {
-    browser: EnumBrowser;
+    browser: FoolBrowserInfos;
     window: Window;
-    permissions: FoolPermissions;
+    settings: FoolSettings;
 };
 
-export type FoolPermissions = {
+export type FoolBrowserInfos = {
+    name: EnumBrowser,
+    permissions: BrowserPermissions;
+};
+
+export type BrowserPermissions = {
     audio?: boolean;
+    microphone?: boolean;
+    camera?: boolean;
+    notifications?: boolean;
+};
+
+export type FoolSettings = {
+    audio?: boolean;
+    microphone?: boolean;
+    camera?: boolean;
     notifications?: boolean;
 };

@@ -5,11 +5,11 @@ import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
 import { environment } from 'src/environments/environment';
 import { Hitbox } from 'src/app/classes/hitbox';
-import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { Session } from 'src/app/classes/session';
 import { EnumResourceType } from 'put3-models';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
+import { MasterService } from 'src/app/services/master-service/master.service';
 
 @Component({
     selector: 'app-layout-editor',
@@ -37,7 +37,7 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
 
     constructor(
         public backend: BackendService,
-        private foolService: FoolService,
+        private masterService: MasterService,
         private dialog: MatDialog,
         private desktopService: DesktopService,
         public hitboxService: HitboxService
@@ -72,6 +72,6 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
     }
 
     public sendConfig() {
-        this.foolService.sendConfig(this.target!.fool);
+        this.masterService.sendConfig(this.target!.fool);
     }
 }

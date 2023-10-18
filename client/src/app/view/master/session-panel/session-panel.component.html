@@ -51,27 +51,39 @@
 
     <div class="browser-infos">
         <h2 class="browser-name">
-            Browser: <span>{{ foolBrowser || '-' }}</span>
+            Browser: <span>{{ foolBrowser?.name || '-' }}</span>
         </h2>
 
         <ul class="permissions-list">
             <li>
-                <img [src]="foolPermissions?.notifications ?
+                <img [ngClass]="{
+                        'disabled': isAdmin && !foolBrowser?.permissions?.notifications
+                    }"
+                    [src]="foolSettings?.notifications ?
                     'assets/icons/bell-400.svg' : 'assets/icons/bell-off-400.svg'"
                 />
             </li>
             <li>
-                <img [src]="foolPermissions?.audio ?
+                <img [ngClass]="{
+                        'disabled': isAdmin && !foolBrowser?.permissions?.audio
+                    }"
+                    [src]="foolSettings?.audio ?
                     'assets/icons/volume-400.svg' : 'assets/icons/volume-off-400.svg'"
                 />
             </li>
             <li>
-                <img [src]="foolPermissions?.camera ?
+                <img [ngClass]="{
+                        'disabled': isAdmin && !foolBrowser?.permissions?.camera
+                    }"
+                    [src]="foolSettings?.camera ?
                     'assets/icons/webcam-400.svg' : 'assets/icons/webcam-off-400.svg'"
                 />
             </li>
             <li>
-                <img [src]="foolPermissions?.microphone ?
+                <img [ngClass]="{
+                        'disabled': isAdmin && !foolBrowser?.permissions?.microphone
+                    }"
+                    [src]="foolSettings?.microphone ?
                     'assets/icons/microphone-400.svg' : 'assets/icons/microphone-off-400.svg'"
                 />
             </li>
