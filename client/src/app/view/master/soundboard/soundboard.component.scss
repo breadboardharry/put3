@@ -107,7 +107,7 @@ $background: #070817;
     .speaker-icon {
         width: 1.75rem;
         height: 1.75rem;
-
+        filter: invert(1);
         transition: all .12s ease-in-out;
 
         &.disabled {

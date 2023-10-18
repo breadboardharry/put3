@@ -37,6 +37,12 @@
                 [disabled]="!sessions.length || sessionClosed || target == null"
             ></app-soundboard>
 
+            <app-notification-board *ngSwitchCase="EnumPage.NOTIFICATIONS"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-notification-board>
+
             <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
                 [isAdmin]="isAdmin"
             ></app-assets-gallery>

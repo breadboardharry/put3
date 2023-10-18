@@ -49,6 +49,7 @@ import { CodeInputComponent } from './view/common/code-input/code-input.componen
 import { SessionPanelComponent } from './view/master/session-panel/session-panel.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LandingPageToolbarComponent } from './view/fool/landing-page-toolbar/landing-page-toolbar.component';
+import { NotificationBoardComponent } from './view/master/notification-board/notification-board.component';
 
 @NgModule({
     declarations: [
@@ -86,6 +87,7 @@ import { LandingPageToolbarComponent } from './view/fool/landing-page-toolbar/la
         CodeInputComponent,
         SessionPanelComponent,
         LandingPageToolbarComponent,
+        NotificationBoardComponent,
     ],
     imports: [
         CodeInputModule,

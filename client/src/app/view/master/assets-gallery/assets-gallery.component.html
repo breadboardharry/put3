@@ -4,7 +4,7 @@
             <mat-spinner *ngIf="uploading" [diameter]="50" color="primary"></mat-spinner>
 
             <div class="label-container" *ngIf="!uploading">
-                <img src="assets/icons/download.png">
+                <img src="assets/icons/download-200.svg">
                 <span class="ddinfo">Drag files here</span>
                 <input class="file-input" type="file" name="files" #fileField (change)="upload($any($event).target.files)" hidden multiple/>
             </div>

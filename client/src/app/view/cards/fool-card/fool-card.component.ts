@@ -16,7 +16,7 @@ export class FoolCardComponent implements OnInit {
 
     public name = '';
 
-    constructor(public browser: BrowserService) {}
+    constructor(public browserService: BrowserService) {}
 
     ngOnInit(): void {
         this.name = this.fool.name;
@@ -26,8 +26,9 @@ export class FoolCardComponent implements OnInit {
         this.editedEvent.emit(this.name);
     }
 
-    public get foolBrowser() {
-        return this.fool.browser || undefined;
+    public get browserIcon(): string {
+        const browser = this.fool.browser || {};
+        return this.browserService.toIcon(browser.name || '')
     }
 
 }
