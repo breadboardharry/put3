@@ -1,1 +1,53 @@
-<p>notification-board works!</p>
+<div class="template" [ngClass]="{
+    'disabled': !target || disabled
+}">
+    <div class="icon-container" [ngStyle]="{
+        'background': notif.icon ? 'transparent' : '#efefef'
+    }">
+        <div class="icon-menu">
+            <button class="import" (click)="importIcon()">
+                <img src="assets/icons/download-400.svg"/>
+                <span>Import</span>
+            </button>
+            <button class="gallery" (click)="browseGallery()">
+                <img src="assets/icons/medias-400.svg"/>
+                <span>Gallery</span>
+            </button>
+        </div>
+        <img class="placeholder" *ngIf="!notif.icon" src="assets/icons/image-300.svg"/>
+        <img class="icon" *ngIf="notif.icon" [src]="notif.icon"/>
+    </div>
+    <div class="texts">
+        <div class="title">
+            <input
+                class="title-input"
+                type="text"
+                [(ngModel)]="notif.title"
+                maxlength="26"
+                placeholder="Titre"
+                [disabled]="!target || disabled"
+            />
+        </div>
+        <div class="message">
+            <textarea
+                class="message-input"
+                [(ngModel)]="notif.message"
+                maxlength="140"
+                placeholder="Message"
+                [disabled]="!target || disabled"
+            ></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="buttons">
+    <app-button-raised (click)="reset()" [disabled]="!target || disabled">
+        Reset
+    </app-button-raised>
+    <app-button-small (click)="test()" [disabled]="!target || disabled">
+        Preview
+    </app-button-small>
+    <app-button-small (click)="send()" [disabled]="!target || disabled">
+        Send
+    </app-button-small>
+</div>

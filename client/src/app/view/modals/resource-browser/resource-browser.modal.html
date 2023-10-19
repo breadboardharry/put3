@@ -5,8 +5,7 @@
             (click)="select(file, $event)"
             [file]="file"
             [selected]="selectionService.getSelection().includes(file)"
-        >
-        </app-file-card>
+        ></app-file-card>
     </div>
     <div class="buttons">
         <button (click)="close()">Cancel</button>

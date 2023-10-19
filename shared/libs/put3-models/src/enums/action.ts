@@ -3,6 +3,7 @@ export enum EnumSessionActionType {
 };
 
 export enum EnumActionType {
+    NOTIFICATION = "notification",
     AUDIO = "audio",
     SHUTDOWN = "shutdown",
 };

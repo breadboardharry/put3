@@ -5,6 +5,8 @@ import { Injectable } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
 import { EventService } from '../event-service/event.service';
 import { EnumResourceDirectory, EnumResourceType, FileData, ResourceSet } from 'put3-models';
+import { MatDialog } from '@angular/material/dialog';
+import { ResourceBrowserModal } from 'src/app/view/modals/resource-browser/resource-browser.modal';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,8 @@ export class ResourcesService {
     constructor(
         private http: HttpClient,
         private backend: BackendService,
-        private eventService: EventService
+        private eventService: EventService,
+        private dialog: MatDialog,
     ) {
         this.update();
         this.eventService.onResourcesUpdate.subscribe((resources) => {
@@ -152,10 +155,10 @@ export class ResourcesService {
 
     /**
      * Rename a resource file
-     * @param {string} currentName Current file name
-     * @param {string} newName New file name
-     * @param {string} dirpath Directory path
-     * @returns {Promise<any>} Server result
+     * @param currentName Current file name
+     * @param newName New file name
+     * @param dirpath Directory path
+     * @returns Server result
      */
     public rename(currentName: string, newName: string, dirpath: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
@@ -201,5 +204,17 @@ export class ResourcesService {
         else errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
 
         return throwError(errorMessage);
+    }
+
+    public browse(type?: EnumResourceType) {
+        return new Promise((resolve, reject) => {
+            const dialogRef = this.dialog.open(ResourceBrowserModal, {
+                data: { type }
+            });
+
+            dialogRef.afterClosed().subscribe((data: FileData | FileData[] | undefined) => {
+                resolve(data);
+            });
+        });
     }
 }

@@ -12,6 +12,8 @@ import { SnackbarService } from '../snackbar-service/snackbar.service';
 import { BackendService } from '../backend/backend.service';
 import { MicrophoneService } from '../microphone/microphone.service';
 import { CameraService } from '../camera/camera.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationData } from 'src/app/types/notification';
 
 @Injectable({
     providedIn: 'root',
@@ -43,6 +45,7 @@ export class FoolService {
         private audio: AudioService,
         private microphone: MicrophoneService,
         private camera: CameraService,
+        private notifications: NotificationsService,
     ) {
         this.init();
     }
@@ -73,8 +76,6 @@ export class FoolService {
     public run() {
         if (this.running) return;
         this.running = true;
-        console.log("[-] Run fool");
-        console.log("code:", ClientService.SESSION_CODE!);
         this.eventService.sendSessionEvent(ClientService.SESSION_CODE!, { type: EnumSessionActionType.RUN });
     }
 
@@ -84,6 +85,10 @@ export class FoolService {
                 const volume = 'volume' in data ? data.volume : 1.0;
                 if ('stop' in data && data.stop) this.audio.stopAll();
                 else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data.track!.href, volume);
+                break;
+
+            case EnumActionType.NOTIFICATION:
+                this.notifications.create(data as NotificationData);
                 break;
 
             case EnumActionType.SHUTDOWN:
