@@ -37,7 +37,8 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
             title: '',
             message: '',
             icon: '',
-            image: ''
+            image: '',
+            duration: 5,
         }
     }
 
@@ -45,7 +46,7 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
         console.log('importIcon');
     }
 
-    public browseGallery() {
+    public browseIcon() {
         this.resourcesService.browse(EnumResourceType.IMAGE).then((image: any) => {
             if (!image) return;
             this.notif.icon = this.backend.serverUrl + '/' + image.href;
@@ -62,6 +63,11 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
                 data: this.notif
             }
         );
+    }
+
+    public formatDurationSliderLabel(value: number): string {
+        if (value > 10) return '∞';
+        return `${value}s`;
     }
 
 }

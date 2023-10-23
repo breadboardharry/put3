@@ -3,4 +3,5 @@ export type NotificationData = {
     message?: string;
     icon?: string;
     image?: string;
+    duration?: number;
 };

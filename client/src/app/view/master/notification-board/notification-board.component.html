@@ -1,15 +1,18 @@
 <div class="template" [ngClass]="{
     'disabled': !target || disabled
 }">
-    <div class="icon-container" [ngStyle]="{
-        'background': notif.icon ? 'transparent' : '#efefef'
-    }">
+    <div class="icon-container" [ngClass]="{
+            'disabled': disabled
+        }" [ngStyle]="{
+            'background': notif.icon ? 'transparent' : '#efefef'
+        }"
+    >
         <div class="icon-menu">
             <button class="import" (click)="importIcon()">
                 <img src="assets/icons/download-400.svg"/>
                 <span>Import</span>
             </button>
-            <button class="gallery" (click)="browseGallery()">
+            <button class="gallery" (click)="browseIcon()">
                 <img src="assets/icons/medias-400.svg"/>
                 <span>Gallery</span>
             </button>
@@ -17,6 +20,7 @@
         <img class="placeholder" *ngIf="!notif.icon" src="assets/icons/image-300.svg"/>
         <img class="icon" *ngIf="notif.icon" [src]="notif.icon"/>
     </div>
+
     <div class="texts">
         <div class="title">
             <input
@@ -40,14 +44,45 @@
     </div>
 </div>
 
-<div class="buttons">
-    <app-button-raised (click)="reset()" [disabled]="!target || disabled">
-        Reset
-    </app-button-raised>
-    <app-button-small (click)="test()" [disabled]="!target || disabled">
-        Preview
-    </app-button-small>
-    <app-button-small (click)="send()" [disabled]="!target || disabled">
-        Send
-    </app-button-small>
+<div class="control" [ngClass]="{
+    'disabled': !target || disabled
+}">
+    <section class="settings">
+        <h3>Settings</h3>
+        <div class="duration">
+            <img src="assets/icons/timer-400.svg">
+            <mat-slider min="1" max="11" color="primary" thumbLabel
+                [displayWith]="formatDurationSliderLabel"
+                [(ngModel)]="notif.duration"
+                [disabled]="disabled"
+            ></mat-slider>
+        </div>
+    </section>
+
+    <section class="buttons">
+        <app-button-small (click)="reset()"
+            [disabled]="!target || disabled"
+            [icon]="'assets/icons/restart-400.svg'"
+            [invertIcon]="true"
+            [iconPosition]="'left'"
+            [hideIconOnMobile]="true"
+        >
+            Reset
+        </app-button-small>
+
+        <app-button-small (click)="test()"
+            [disabled]="!target || disabled"
+        >
+            Preview
+        </app-button-small>
+        <app-button-small (click)="send()"
+            [disabled]="!target || disabled"
+            [icon]="'assets/icons/send-400.svg'"
+            [invertIcon]="true"
+            [iconPosition]="'right'"
+            [hideIconOnMobile]="true"
+        >
+            Send
+        </app-button-small>
+    </section>
 </div>

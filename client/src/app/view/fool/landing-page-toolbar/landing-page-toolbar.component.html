@@ -3,27 +3,27 @@
         <img [src]="'assets/icons/fullscreen' + (windowService.isFullscreen() ? '-exit' : '') + '-400.svg'">
     </button>
 
-    <button class="toolbar-button notifications" (click)="toggleNotifications()" disabled>
-        <img [src]="foolService.notificationsEnabled ?
-            'assets/icons/bell-400.svg' : 'assets/icons/bell-off-400.svg'"
-        >
-    </button>
-
     <button class="toolbar-button audio {{ audio.canPlay ? '' : 'alert'}}" (click)="toggleAudio()">
         <img [src]="foolService.audioEnabled ?
             'assets/icons/volume-400.svg' : 'assets/icons/volume-off-400.svg'"
         >
     </button>
 
-    <button class="toolbar-button microphone" (click)="toggleMicrophone()">
-        <img [src]="foolService.microphoneEnabled ?
-            'assets/icons/microphone-400.svg' : 'assets/icons/microphone-off-400.svg'"
+    <button class="toolbar-button notifications" (click)="toggleNotifications()">
+        <img [src]="foolService.notificationsEnabled ?
+            'assets/icons/bell-400.svg' : 'assets/icons/bell-off-400.svg'"
         >
     </button>
 
     <button class="toolbar-button camera" (click)="toggleCamera()">
         <img [src]="foolService.cameraEnabled ?
             'assets/icons/webcam-400.svg' : 'assets/icons/webcam-off-400.svg'"
+        >
+    </button>
+
+    <button class="toolbar-button microphone" (click)="toggleMicrophone()">
+        <img [src]="foolService.microphoneEnabled ?
+            'assets/icons/microphone-400.svg' : 'assets/icons/microphone-off-400.svg'"
         >
     </button>
 </div>

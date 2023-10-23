@@ -13,6 +13,27 @@ button {
     background-color: transparent;
     cursor: pointer;
     transition: all 0.12s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: 100%;
+
+    img {
+        width: 16px;
+        height: 16px;
+
+        @media (max-width: $mobile) {
+            width: 14px;
+            height: 14px;
+        }
+
+        &.hide-on-mobile {
+            @media (max-width: $mobile) {
+                display: none;
+            }
+        }
+    }
 
     span {
         color: white;
@@ -23,24 +44,22 @@ button {
         letter-spacing: 1px;
         margin-left: 1px;
         line-height: 1.75rem;
+
+        @media (max-width: $mobile) {
+            font-size: 14px;
+        }
     }
 
     &:hover {
-        $color: rgb(201, 201, 201);
-        border: 2px solid $color;
-        color: $color;
+        filter: brightness(0.85);
     }
 
     &:active {
-        $color: rgb(169, 169, 169);
-        border: 2px solid $color;
-        color: $color;
+        filter: brightness(0.7);
     }
 
     &:disabled {
-        $color: rgb(146, 146, 146);
+        filter: brightness(0.5);
         cursor: not-allowed;
-        border: 2px solid $color;
-        color: $color;
     }
 }

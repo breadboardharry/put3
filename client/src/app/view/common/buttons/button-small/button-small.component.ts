@@ -7,6 +7,10 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ButtonSmallComponent implements OnInit {
 
+    @Input() icon?: string;
+    @Input() invertIcon?: boolean;
+    @Input() iconPosition: 'left' | 'right' = 'left';
+    @Input() hideIconOnMobile: boolean = false;
     @Input() disabled: boolean = false;
 
     constructor() {}

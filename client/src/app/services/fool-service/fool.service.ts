@@ -106,7 +106,7 @@ export class FoolService {
             browser: {
                 name: this.browser.get(),
                 permissions: {
-                    notifications: false,
+                    notifications: this.notifications.hasPermission,
                     audio: this.audio.canPlay,
                     microphone: this.microphone.hasPermission,
                     camera: this.camera.hasPermission,
