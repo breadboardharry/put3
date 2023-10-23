@@ -6,6 +6,7 @@ $border-gradient: $light-gradient;
 $background: #070817;
 
 :host {
+    position: relative;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -14,6 +15,23 @@ $background: #070817;
     @media (max-width: $tablet) {
         height: 100%;
     }
+}
+
+.alert {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+    background: $light-gradient;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 200px;
+    padding: 12px;
+    border: 2px solid $color-red-500;
+    border-radius: 6px;
+    text-align: center;
 }
 
 .template {
@@ -86,6 +104,10 @@ $background: #070817;
                 border: none;
                 outline: none;
                 background-color: transparent;
+
+                &:disabled {
+                    cursor: not-allowed;
+                }
 
                 &:hover {
                     background-color: rgba(0, 0, 0, 0.85);

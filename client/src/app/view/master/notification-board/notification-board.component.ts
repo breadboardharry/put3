@@ -7,6 +7,7 @@ import { NotificationsService } from 'src/app/services/notifications/notificatio
 import { NotificationData } from 'src/app/types/notification';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { AdminService } from 'src/app/services/admin-service/admin.service';
 
 @Component({
     selector: 'app-notification-board',
@@ -20,15 +21,20 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
     @Input() disabled: boolean = false;
 
     public notif!: NotificationData;
+    public isAdmin: boolean = false;
 
     constructor(
         private notification: NotificationsService,
         private eventService: EventService,
         private backend: BackendService,
         private resourcesService: ResourcesService,
+        private adminService: AdminService,
     ) { }
 
     ngOnInit(): void {
+        this.adminService.isLogged().then((isAdmin: boolean) => {
+            this.isAdmin = isAdmin;
+        });
         this.reset();
     }
 
@@ -68,6 +74,26 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
     public formatDurationSliderLabel(value: number): string {
         if (value > 10) return '∞';
         return `${value}s`;
+    }
+
+    private get hasTargetNotificationsTurnedOn(): boolean {
+        return !!this.target && !!this.target.fool.settings.notifications;
+    }
+
+    private get hasTargetBrowserPermission(): boolean {
+        return !!this.target && !!this.target.fool.browser.permissions.notifications;
+    }
+
+    public get isDisabled(): boolean {
+        return this.disabled || !this.target || !this.hasTargetBrowserPermission || (
+            !this.isAdmin && !this.hasTargetNotificationsTurnedOn
+        );
+    }
+
+    public get displayAlert(): boolean {
+        return !!this.target && (!this.hasTargetBrowserPermission ||
+            (!this.isAdmin && !this.hasTargetNotificationsTurnedOn)
+        );
     }
 
 }

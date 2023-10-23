@@ -1,18 +1,22 @@
+<div class="alert" *ngIf="displayAlert">
+    The browser of the fool doesn't have the permission to receive notifications.
+</div>
+
 <div class="template" [ngClass]="{
-    'disabled': !target || disabled
+    'disabled': isDisabled
 }">
     <div class="icon-container" [ngClass]="{
-            'disabled': disabled
+            'disabled': isDisabled
         }" [ngStyle]="{
             'background': notif.icon ? 'transparent' : '#efefef'
         }"
     >
         <div class="icon-menu">
-            <button class="import" (click)="importIcon()">
+            <button class="import" (click)="importIcon()" [disabled]="isDisabled">
                 <img src="assets/icons/download-400.svg"/>
                 <span>Import</span>
             </button>
-            <button class="gallery" (click)="browseIcon()">
+            <button class="gallery" (click)="browseIcon()" [disabled]="isDisabled">
                 <img src="assets/icons/medias-400.svg"/>
                 <span>Gallery</span>
             </button>
@@ -29,7 +33,7 @@
                 [(ngModel)]="notif.title"
                 maxlength="26"
                 placeholder="Titre"
-                [disabled]="!target || disabled"
+                [disabled]="isDisabled"
             />
         </div>
         <div class="message">
@@ -38,14 +42,14 @@
                 [(ngModel)]="notif.message"
                 maxlength="140"
                 placeholder="Message"
-                [disabled]="!target || disabled"
+                [disabled]="isDisabled"
             ></textarea>
         </div>
     </div>
 </div>
 
 <div class="control" [ngClass]="{
-    'disabled': !target || disabled
+    'disabled': isDisabled
 }">
     <section class="settings">
         <h3>Settings</h3>
@@ -54,14 +58,14 @@
             <mat-slider min="1" max="11" color="primary" thumbLabel
                 [displayWith]="formatDurationSliderLabel"
                 [(ngModel)]="notif.duration"
-                [disabled]="disabled"
+                [disabled]="isDisabled"
             ></mat-slider>
         </div>
     </section>
 
     <section class="buttons">
         <app-button-small (click)="reset()"
-            [disabled]="!target || disabled"
+            [disabled]="isDisabled"
             [icon]="'assets/icons/restart-400.svg'"
             [invertIcon]="true"
             [iconPosition]="'left'"
@@ -71,12 +75,12 @@
         </app-button-small>
 
         <app-button-small (click)="test()"
-            [disabled]="!target || disabled"
+            [disabled]="isDisabled"
         >
             Preview
         </app-button-small>
         <app-button-small (click)="send()"
-            [disabled]="!target || disabled"
+            [disabled]="isDisabled"
             [icon]="'assets/icons/send-400.svg'"
             [invertIcon]="true"
             [iconPosition]="'right'"
