@@ -16,10 +16,7 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
     styleUrls: ['./layout-editor.component.scss'],
 })
 export class LayoutEditorComponent implements OnInit, DashboardSection {
-
-    @ViewChild('content')
-    public content!: ElementRef;
-
+    
     @ViewChild('editor')
     public editor!: ElementRef;
 

@@ -5,6 +5,9 @@ $hover-background: lighten($background, 5%);
 
 :host {
     flex: 1 1;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    box-sizing: border-box;
 }
 
 button {
@@ -26,21 +29,28 @@ button {
 
     overflow: hidden;
     transition: all 0.15s ease-in-out, transform 80ms ease-in-out;
+    font-size: 18px;
+
+    @media (max-width: $tablet) {
+        padding: .9rem 1.4rem;
+        font-size: 15px;
+        min-width: 140px;
+    }
+
+    @media (max-width: $mobile) {
+        padding: .6rem 1.3rem;
+        font-size: 12px;
+        min-width: 120px;
+    }
 
     span {
         text-transform: uppercase;
         font-weight: bold;
-        font-size: 18px;
         letter-spacing: 1px;
         margin-left: 1px;
         line-height: 1.75rem;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    @media (max-width: $mobile) {
-        padding: .8rem 1.5rem;
-        font-size: 15px;
     }
 
     &:disabled {

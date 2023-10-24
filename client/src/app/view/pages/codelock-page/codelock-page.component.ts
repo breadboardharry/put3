@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
 import { CodeName } from 'src/app/enums/code';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { EnumAppRoute } from 'src/app/enums/routes';
-import { WindowService } from 'src/app/services/window-service/window.service';
 
 @Component({
     selector: 'app-codelock-page',
@@ -16,7 +14,11 @@ export class CodelockPageComponent implements OnInit {
 
     public codeName: CodeName = CodeName.MASTER;
 
-    constructor(private adminService: AdminService, private router: Router, private cookie: CookieService, private route: ActivatedRoute) { }
+    constructor(
+        private adminService: AdminService,
+        private cookie: CookieService,
+        private route: ActivatedRoute
+    ) { }
 
     ngOnInit() {
         this.init();
@@ -52,7 +54,7 @@ export class CodelockPageComponent implements OnInit {
 
     /**
      * Get the target route from the query params
-     * @returns {Promise<string>} The target route
+     * @returns The target route
      */
     private getTargetRoute(): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -64,7 +66,7 @@ export class CodelockPageComponent implements OnInit {
 
     /**
      * Re-route to the given route
-     * @param {string} route The route to re-route to
+     * @param route The route to re-route to
      */
     private reRoute(route: string): void {
         window.location.href = window.location.origin + '/' + route;
