@@ -1,0 +1,10 @@
+<button [disabled]="disabled" [ngStyle]="{
+    'flex-direction': iconPosition == 'right' ? 'row-reverse' : 'row'
+}">
+    <img *ngIf="icon" [src]="icon" [ngStyle]="{
+        'filter': invertIcon ? 'invert(1)' : 'none'
+    }" class="{{hideIconOnMobile ? 'hide-on-mobile' : ''}}"/>
+    <span>
+        <ng-content></ng-content>
+    </span>
+</button>

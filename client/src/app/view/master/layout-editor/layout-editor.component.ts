@@ -1,8 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
-import { ResourceBrowserModal } from '../../dialogs/resource-browser/resource-browser.modal';
 import { environment } from 'src/environments/environment';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { BackendService } from 'src/app/services/backend/backend.service';
@@ -10,6 +8,7 @@ import { Session } from 'src/app/classes/session';
 import { EnumResourceType } from 'put3-models';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { MasterService } from 'src/app/services/master-service/master.service';
+import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 
 @Component({
     selector: 'app-layout-editor',
@@ -38,9 +37,9 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
     constructor(
         public backend: BackendService,
         private masterService: MasterService,
-        private dialog: MatDialog,
         private desktopService: DesktopService,
-        public hitboxService: HitboxService
+        public hitboxService: HitboxService,
+        private resourcesService: ResourcesService,
     ) {}
 
     ngOnInit(): void {
@@ -61,11 +60,7 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
     }
 
     public changeBackground() {
-        const dialogRef = this.dialog.open(ResourceBrowserModal, {
-            data: { type: EnumResourceType.IMAGE }
-        });
-
-        dialogRef.afterClosed().subscribe(image => {
+        this.resourcesService.browse(EnumResourceType.IMAGE).then((image: any) => {
             if (!image) return;
             this.target!.fool.layout.desktop.image = image.href;
         });

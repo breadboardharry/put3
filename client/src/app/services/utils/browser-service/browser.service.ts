@@ -52,7 +52,7 @@ export class BrowserService {
      * @param browserName Browser
      * @returns Browser icon path
      */
-    public toIcon(browserName: EnumBrowser): string {
+    public toIcon(browserName: EnumBrowser | string): string {
         if (!browserName || browserName === EnumBrowser.OTHER || browserName === EnumBrowser.IE) return '';
         const dir = "assets/icons/browsers/";
         return dir + browserName + '.png';

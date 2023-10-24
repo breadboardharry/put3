@@ -11,28 +11,35 @@
         <div class="items center">
 
             <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.SESSION">
-                <img [src]="'assets/icons/devices.png'">
+                <img [src]="'assets/icons/devices-400.svg'">
                 <span>
                     {{EnumNavbarItemTitle.SESSION}}
                 </span>
             </button>
 
             <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.LAYOUT">
-                <img [src]="'assets/icons/edit-image.png'">
+                <img [src]="'assets/icons/design-400.svg'">
                 <span>
                     {{EnumNavbarItemTitle.LAYOUT}}
                 </span>
             </button>
 
             <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.SOUNDBOARD">
-                <img [src]="'assets/icons/speaker.png'">
+                <img [src]="'assets/icons/volume-400.svg'">
                 <span>
                     {{EnumNavbarItemTitle.SOUNDBOARD}}
                 </span>
             </button>
 
+            <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.NOTIFICATIONS">
+                <img [src]="'assets/icons/bell-400.svg'">
+                <span>
+                    {{EnumNavbarItemTitle.NOTIFICATIONS}}
+                </span>
+            </button>
+
             <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.RESOURCES">
-                <img [src]="'assets/icons/photo-gallery.png'">
+                <img [src]="'assets/icons/medias-400.svg'">
                 <span>
                     {{EnumNavbarItemTitle.RESOURCES}}
                 </span>
@@ -41,14 +48,14 @@
 
         <div class="items bottom">
             <button class="item-button" [routerLink]="'/' + EnumAppRoute.MASTER" [fragment]="EnumNavbarItemTitle.SETTINGS">
-                <img [src]="'assets/icons/gear.png'">
+                <img [src]="'assets/icons/tune-400.svg'">
                 <span>
                     {{EnumNavbarItemTitle.SETTINGS}}
                 </span>
             </button>
 
             <button class="item-button" (click)="logout()">
-                <img [src]="'assets/icons/logout.png'">
+                <img [src]="'assets/icons/logout-400.svg'">
                 <span>
                     {{EnumNavbarItemTitle.LOGOUT}}
                 </span>

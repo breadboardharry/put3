@@ -6,7 +6,7 @@
         <div class="options">
             <div class="volume">
                 <img class="speaker-icon" [ngClass]="{'disabled': disabled}"
-                    src="assets/icons/speaker.png"
+                    src="assets/icons/volume-400.svg"
                 >
                 <mat-slider min="1" max="100" color="primary" thumbLabel
                     [(ngModel)]="volume"
@@ -14,7 +14,9 @@
                 </mat-slider>
             </div>
 
-            <button class="stop" (click)="stopAll()" [disabled]="disabled">STOP</button>
+            <app-button-small (click)="stopAll()" [disabled]="disabled">
+                STOP
+            </app-button-small>
         </div>
     </div>
     <div class="buttons">

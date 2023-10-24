@@ -38,7 +38,7 @@ import { ContextMenuComponent } from './view/common/context-menu/context-menu.co
 import { CustomSnackbarComponent } from './view/common/custom-snackbar/custom-snackbar.component';
 import { LayoutEditorComponent } from './view/master/layout-editor/layout-editor.component';
 import { ButtonRaisedComponent } from './view/common/buttons/button-raised/button-raised.component';
-import { ResourceBrowserModal } from './view/dialogs/resource-browser/resource-browser.modal';
+import { ResourceBrowserModal } from './view/modals/resource-browser/resource-browser.modal';
 import { GradientLoaderComponent } from './view/common/loaders/gradient-loader/gradient-loader.component';
 import { SessionEnterPageComponent } from './view/pages/session-enter-page/session-enter-page.component';
 import { SessionCodeDirective } from './directives/session-code.directive';
@@ -49,6 +49,8 @@ import { CodeInputComponent } from './view/common/code-input/code-input.componen
 import { SessionPanelComponent } from './view/master/session-panel/session-panel.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LandingPageToolbarComponent } from './view/fool/landing-page-toolbar/landing-page-toolbar.component';
+import { NotificationBoardComponent } from './view/master/notification-board/notification-board.component';
+import { ButtonSmallComponent } from './view/common/buttons/button-small/button-small.component';
 
 @NgModule({
     declarations: [
@@ -86,6 +88,8 @@ import { LandingPageToolbarComponent } from './view/fool/landing-page-toolbar/la
         CodeInputComponent,
         SessionPanelComponent,
         LandingPageToolbarComponent,
+        NotificationBoardComponent,
+        ButtonSmallComponent,
     ],
     imports: [
         CodeInputModule,

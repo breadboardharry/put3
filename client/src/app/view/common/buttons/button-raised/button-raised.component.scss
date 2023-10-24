@@ -3,20 +3,16 @@
 $background: #2e2e53;
 $hover-background: lighten($background, 5%);
 
-.button {
+:host {
+    flex: 1 1;
+}
+
+button {
     @extend %font-base;
     height: 100%;
     max-height: 90px;
     width: 100%;
     min-width: 180px;
-
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 18px;
-    letter-spacing: 0.1rem;
-    line-height: 1.75rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
     background-color: $background;
     padding: 1rem 2rem;
@@ -30,6 +26,17 @@ $hover-background: lighten($background, 5%);
 
     overflow: hidden;
     transition: all 0.15s ease-in-out, transform 80ms ease-in-out;
+
+    span {
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 18px;
+        letter-spacing: 1px;
+        margin-left: 1px;
+        line-height: 1.75rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 
     @media (max-width: $mobile) {
         padding: .8rem 1.5rem;
