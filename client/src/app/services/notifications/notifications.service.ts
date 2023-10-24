@@ -16,14 +16,15 @@ export class NotificationsService {
         return this.hasPermission;
     }
 
-    public async create(data: NotificationData, duration?: number): Promise<Notification | undefined> {
+    public async create(data: NotificationData): Promise<Notification | undefined> {
         if (!this.hasPermission) await this.askPermission();
         const notification = new Notification(data.title, {
             body: data.message,
             icon: data.icon,
             image: data.image,
+            requireInteraction: !!data.duration && data.duration > 10000,
         });
-        if (duration) setTimeout(() => notification.close(), duration);
+        if (data.duration) setTimeout(() => {console.log('.'); notification.close()}, data.duration);
         return notification;
     }
 

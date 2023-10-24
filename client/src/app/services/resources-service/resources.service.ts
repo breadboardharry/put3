@@ -206,10 +206,10 @@ export class ResourcesService {
         return throwError(errorMessage);
     }
 
-    public browse(type?: EnumResourceType) {
+    public browse(type?: EnumResourceType, canImport: boolean = false) {
         return new Promise((resolve, reject) => {
             const dialogRef = this.dialog.open(ResourceBrowserModal, {
-                data: { type }
+                data: { type, canImport }
             });
 
             dialogRef.afterClosed().subscribe((data: FileData | FileData[] | undefined) => {

@@ -9,5 +9,6 @@ export type FileData = {
     type: EnumResourceType;
     extension: string;
     size: number;
-    dimensions?: Window
+    dimensions?: Window;
+    isBase64?: boolean;
 };

@@ -44,22 +44,19 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
             message: '',
             icon: '',
             image: '',
-            duration: 5,
+            duration: 5000,
         }
     }
 
-    public importIcon() {
-        console.log('importIcon');
-    }
-
     public browseIcon() {
-        this.resourcesService.browse(EnumResourceType.IMAGE).then((image: any) => {
+        this.resourcesService.browse(EnumResourceType.IMAGE, true).then((image: any) => {
             if (!image) return;
-            this.notif.icon = this.backend.serverUrl + '/' + image.href;
+            if (image.isBase64) this.notif.icon = image.href;
+            else this.notif.icon = this.backend.serverUrl + '/' + image.href;
         });
     }
 
-    public test() {
+    public preview() {
         this.notification.create(this.notif);
     }
 
@@ -72,8 +69,8 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
     }
 
     public formatDurationSliderLabel(value: number): string {
-        if (value > 10) return '∞';
-        return `${value}s`;
+        if (value > 10000) return '∞';
+        return `${value / 1000}s`;
     }
 
     private get hasTargetNotificationsTurnedOn(): boolean {

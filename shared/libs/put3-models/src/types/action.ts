@@ -14,4 +14,9 @@ export type ActionData = {
     track?: FileData;
     volume?: number;
     stop?: boolean;
+    title?: string;
+    message?: string;
+    icon?: string;
+    image?: string;
+    duration?: number;
 };

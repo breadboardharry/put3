@@ -11,16 +11,10 @@
             'background': notif.icon ? 'transparent' : '#efefef'
         }"
     >
-        <div class="icon-menu">
-            <button class="import" (click)="importIcon()" [disabled]="isDisabled">
-                <img src="assets/icons/download-400.svg"/>
-                <span>Import</span>
-            </button>
-            <button class="gallery" (click)="browseIcon()" [disabled]="isDisabled">
-                <img src="assets/icons/medias-400.svg"/>
-                <span>Gallery</span>
-            </button>
-        </div>
+        <button class="browse-icon" (click)="browseIcon()" [disabled]="isDisabled">
+            <img src="assets/icons/medias-400.svg"/>
+            <span>{{notif.icon ? 'Change' : 'Select'}}</span>
+        </button>
         <img class="placeholder" *ngIf="!notif.icon" src="assets/icons/image-300.svg"/>
         <img class="icon" *ngIf="notif.icon" [src]="notif.icon"/>
     </div>
@@ -55,7 +49,7 @@
         <h3>Settings</h3>
         <div class="duration">
             <img src="assets/icons/timer-400.svg">
-            <mat-slider min="1" max="11" color="primary" thumbLabel
+            <mat-slider min="1000" max="11000" step="1000" color="primary" thumbLabel
                 [displayWith]="formatDurationSliderLabel"
                 [(ngModel)]="notif.duration"
                 [disabled]="isDisabled"
@@ -74,7 +68,7 @@
             Reset
         </app-button-small>
 
-        <app-button-small (click)="test()"
+        <app-button-small (click)="preview()"
             [disabled]="isDisabled"
         >
             Preview
