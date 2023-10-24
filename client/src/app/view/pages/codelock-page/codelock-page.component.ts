@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CodeName } from 'src/app/enums/code';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { EnumAppRoute } from 'src/app/enums/routes';
+import { WindowService } from 'src/app/services/window-service/window.service';
 
 @Component({
     selector: 'app-codelock-page',
@@ -66,6 +67,6 @@ export class CodelockPageComponent implements OnInit {
      * @param {string} route The route to re-route to
      */
     private reRoute(route: string): void {
-        this.router.navigate([route]);
+        window.location.href = window.location.origin + '/' + route;
     }
 }
