@@ -13,7 +13,7 @@ import { SessionService } from 'src/app/services/session-service/session.service
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
-import { EnumSessionActionType, EnumSessionStatus, EnumUserRole } from 'put3-models';
+import { EnumSessionStatus, EnumUserRole } from 'put3-models';
 
 @Component({
     selector: 'app-master-dashboard-page',
@@ -24,7 +24,6 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
 
     private sessionCode!: string;
     public loading: boolean = true;
-    public isAdmin: boolean = false;
     public sessionClosed: boolean = false;
 
     public sessions: Session[] = [];
@@ -45,6 +44,8 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
     };
     public contextFocus?: Session;
     public renaming?: Session;
+
+    public ClientService = ClientService;
 
     constructor(
         private adminService: AdminService,
@@ -70,9 +71,9 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
             this.section = fragment;
         });
 
-        this.isAdmin = await this.adminService.isLogged();
         // No code required for admin
-        if (!this.isAdmin) {
+        console.log("[*] IS_ADMIN", ClientService.IS_ADMIN);
+        if (!ClientService.IS_ADMIN) {
             this.sessionCode = this.sessionService.getFromCookies();
             if (!this.sessionCode) {
                 this.router.navigate([EnumAppRoute.MASTER]);
@@ -100,7 +101,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
 
     private init() {
         this.loading = false;
-        if (this.isAdmin) {
+        if (ClientService.IS_ADMIN) {
             this.sessionService.getAll().then((sessions) => {
                 sessions.forEach((session) => {
                     this.sessionRecieved(session);
@@ -119,7 +120,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
     }
 
     private sessionRecieved(session: Session): void {
-        if (this.isAdmin) {
+        if (ClientService.IS_ADMIN) {
             const existingSession = this.sessions.find((s) => s.code === session.code);
             if (existingSession) {
                 if (session.status === EnumSessionStatus.CLOSED) {
@@ -209,7 +210,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
     }
 
     public get displayFoolList(): boolean {
-        return this.isAdmin && this.section != EnumNavbarItemTitle.RESOURCES;
+        return ClientService.IS_ADMIN && this.section != EnumNavbarItemTitle.RESOURCES;
     }
 
     @HostListener('document:click')

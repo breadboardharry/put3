@@ -3,6 +3,7 @@ import { EnumSessionStatus } from 'put3-models';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
+import { ClientService } from 'src/app/services/client-service/client.service';
 import { MasterService } from 'src/app/services/master-service/master.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
@@ -18,21 +19,16 @@ export class SessionPanelComponent implements OnInit, DashboardSection {
     @Input() target?: Session;
     @Input() disabled: boolean = false;
 
-    public isAdmin: boolean = false;
-
     public EnumSessionStatus = EnumSessionStatus;
+    public ClientService = ClientService;
 
     constructor(
-        private adminService: AdminService,
         private snackbar: SnackbarService,
         private masterService: MasterService,
         private sessionService: SessionService
     ) { }
 
     ngOnInit(): void {
-        this.adminService.isLogged().then((isAdmin) => {
-            this.isAdmin = isAdmin;
-        });
     }
 
     public get isSessionRunning(): boolean {

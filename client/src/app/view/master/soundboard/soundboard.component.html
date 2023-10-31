@@ -1,3 +1,7 @@
+<div class="alert" *ngIf="displayAlert">
+    The browser of the fool doesn't have the permission to play sound.
+</div>
+
 <div class="soundboard">
     <div class="sidebar">
         <div class="title" [ngClass]="{'disabled': disabled}">

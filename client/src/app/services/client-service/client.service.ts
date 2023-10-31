@@ -3,6 +3,7 @@ import { EventService } from '../event-service/event.service';
 import { Subject } from 'rxjs';
 import { EnumUserRole, RoleResponseData, UserPreferences } from 'put3-models';
 import { PreferencesService } from '../preferences-service/preferences.service';
+import { AdminService } from '../admin-service/admin.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,12 +14,18 @@ export class ClientService {
     public static ROLE: EnumUserRole;
     public static NAME: string;
     public static SESSION_CODE?: string;
+    public static IS_ADMIN: boolean = false;
 
     constructor(
         private eventService: EventService,
-        private preferences: PreferencesService
-    ) {
+        private preferences: PreferencesService,
+        private adminService: AdminService,
+    ) { }
+
+    public async init() {
         this.initSubscriptions();
+        const isAdmin = await this.adminService.isLogged();
+        ClientService.IS_ADMIN = isAdmin;
     }
 
     private initSubscriptions() {

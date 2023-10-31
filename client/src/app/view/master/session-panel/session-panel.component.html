@@ -57,7 +57,7 @@
         <ul class="permissions-list">
             <li>
                 <img [ngClass]="{
-                        'disabled': isAdmin && !foolBrowser?.permissions?.notifications
+                        'disabled': ClientService.IS_ADMIN && !foolBrowser?.permissions?.notifications
                     }"
                     [src]="foolSettings?.notifications ?
                     'assets/icons/bell-400.svg' : 'assets/icons/bell-off-400.svg'"
@@ -65,7 +65,7 @@
             </li>
             <li>
                 <img [ngClass]="{
-                        'disabled': isAdmin && !foolBrowser?.permissions?.audio
+                        'disabled': ClientService.IS_ADMIN && !foolBrowser?.permissions?.audio
                     }"
                     [src]="foolSettings?.audio ?
                     'assets/icons/volume-400.svg' : 'assets/icons/volume-off-400.svg'"
@@ -73,7 +73,7 @@
             </li>
             <li>
                 <img [ngClass]="{
-                        'disabled': isAdmin && !foolBrowser?.permissions?.camera
+                        'disabled': ClientService.IS_ADMIN && !foolBrowser?.permissions?.camera
                     }"
                     [src]="foolSettings?.camera ?
                     'assets/icons/webcam-400.svg' : 'assets/icons/webcam-off-400.svg'"
@@ -81,7 +81,7 @@
             </li>
             <li>
                 <img [ngClass]="{
-                        'disabled': isAdmin && !foolBrowser?.permissions?.microphone
+                        'disabled': ClientService.IS_ADMIN && !foolBrowser?.permissions?.microphone
                     }"
                     [src]="foolSettings?.microphone ?
                     'assets/icons/microphone-400.svg' : 'assets/icons/microphone-off-400.svg'"

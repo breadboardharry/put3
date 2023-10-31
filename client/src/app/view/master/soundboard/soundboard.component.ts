@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { EnumActionType, EnumResourceType, FileData } from 'put3-models';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
+import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 
@@ -24,13 +25,13 @@ export class SoundboardComponent implements OnInit, DashboardSection {
 
     constructor(
         private eventService: EventService,
-        public resourceService: ResourcesService
+        public resourceService: ResourcesService,
     ) { }
 
     ngOnInit(): void {
         this.resourceService.getDataByType(EnumResourceType.AUDIO).then((data) => {
             this.tracks = data;
-        })
+        });
     }
 
     public stopAll() {
@@ -41,5 +42,19 @@ export class SoundboardComponent implements OnInit, DashboardSection {
                 stop: true
             }
         });
+    }
+
+    public get displayAlert(): boolean {
+        return !!this.target && (!this.hasTargetBrowserPermission ||
+            (!ClientService.IS_ADMIN && !this.hasTargetSoundTurnedOn)
+        );
+    }
+
+    private get hasTargetSoundTurnedOn(): boolean {
+        return !!this.target && !!this.target.fool.settings.audio;
+    }
+
+    private get hasTargetBrowserPermission(): boolean {
+        return !!this.target && !!this.target.fool.browser.permissions.audio;
     }
 }

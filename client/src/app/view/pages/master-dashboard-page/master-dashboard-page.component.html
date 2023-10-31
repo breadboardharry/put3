@@ -44,7 +44,7 @@
             ></app-notification-board>
 
             <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
-                [isAdmin]="isAdmin"
+                [isAdmin]="ClientService.IS_ADMIN"
             ></app-assets-gallery>
 
             <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"

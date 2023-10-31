@@ -24,7 +24,9 @@ export class NotificationsService {
             image: data.image,
             requireInteraction: !!data.duration && data.duration > 10000,
         });
-        if (data.duration) setTimeout(() => {console.log('.'); notification.close()}, data.duration);
+        if (data.duration) setTimeout(() => {
+            notification.close()
+        }, data.duration);
         return notification;
     }
 

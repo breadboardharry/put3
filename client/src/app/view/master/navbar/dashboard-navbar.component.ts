@@ -12,8 +12,6 @@ import { ClientService } from 'src/app/services/client-service/client.service';
 })
 export class DashboardNavbarComponent implements OnInit {
 
-    public isAdmin: boolean = false;
-
     public EnumNavbarItemTitle = EnumNavbarItemTitle;
     public EnumAppRoute = EnumAppRoute;
     public ClientService = ClientService;
@@ -24,9 +22,6 @@ export class DashboardNavbarComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.adminService.isLogged().then((isAdmin) => {
-            this.isAdmin = isAdmin;
-        });
     }
 
     public navigate(path: string) {

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -51,6 +51,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LandingPageToolbarComponent } from './view/fool/landing-page-toolbar/landing-page-toolbar.component';
 import { NotificationBoardComponent } from './view/master/notification-board/notification-board.component';
 import { ButtonSmallComponent } from './view/common/buttons/button-small/button-small.component';
+import { ClientService } from './services/client-service/client.service';
 
 @NgModule({
     declarations: [
@@ -109,7 +110,18 @@ import { ButtonSmallComponent } from './view/common/buttons/button-small/button-
         ClipboardModule,
         MatTooltipModule,
     ],
-    providers: [],
+    providers: [
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initApp,
+            deps: [ClientService],
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+function initApp(clientService: ClientService): () => Promise<any> {
+    return () => clientService.init();
+}

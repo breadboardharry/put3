@@ -1,6 +1,6 @@
 <div class="navbar">
     <div class="header">
-        <div class="session-infos" *ngIf="!isAdmin">
+        <div class="session-infos" *ngIf="!ClientService.IS_ADMIN">
             Connected to
             <span>
                 {{ ClientService.SESSION_CODE || '...' }}
