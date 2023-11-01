@@ -19,7 +19,7 @@ server/public/resources/audio/*
 server/public/resources/images/*
 server/public/resources/videos/*
 !server/public/resources/**/.default/
-!server/public/resources/**/.desktop/default-desktop.*
+!server/public/resources/images/.desktop/
 
 # Dependencies
 node_modules/
