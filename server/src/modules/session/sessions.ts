@@ -3,7 +3,9 @@ import { SessionService } from "../../services/users/sessions.service";
 import SocketService from "../../services/socket/socket.service";
 import UsersService from "../../services/users/users.service";
 import { Session } from "../../models/session";
-import { EnumEvent, EnumSessionActionType, EnumUserRole } from "put3-models";
+import { EnumSessionActionType } from "../../app-models/enums/action";
+import { EnumUserRole } from "../../app-models/enums/user";
+import { EnumEvent } from "../../app-models/enums/event";
 
 export default class SessionModule {
 

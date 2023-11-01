@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EventService } from '../event-service/event.service';
 import { Fool } from 'src/app/classes/fool';
-import { EnumActionType } from 'put3-models';
+import { EnumActionType } from 'src/app/app-models/enums/action';
 
 @Injectable({
     providedIn: 'root'

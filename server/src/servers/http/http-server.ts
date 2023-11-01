@@ -51,7 +51,8 @@ export class HTTPServer {
         this.server.listen(process.env.PORT, () => {
             console.log(
                 `[*] Server started on port ${process.env.PORT}
-                ENV: ${process.env.NODE_ENV}`
+                ENV: ${process.env.NODE_ENV}
+                ORIGIN: ${process.env.CLIENT_ORIGIN}`
             );
         });
     }

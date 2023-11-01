@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HitboxService } from '../hitbox-service/hitbox.service';
 import { PreferencesService } from '../preferences-service/preferences.service';
-import { LayoutData } from 'put3-models';
 import { Layout } from 'src/app/types/layout';
+import { LayoutData } from 'src/app/app-models/types/layout';
 
 @Injectable({
     providedIn: 'root',

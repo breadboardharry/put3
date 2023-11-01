@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { DesktopPreference, UserPreferences } from 'put3-models';
+import { DesktopPreference, UserPreferences } from 'src/app/app-models/types/preferences';
 
 @Injectable({
     providedIn: 'root',

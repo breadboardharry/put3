@@ -5,7 +5,7 @@ import sizeOf from "image-size";
 import { getDirPath, getFileExtension, getLastPathElement, getPathElem } from "./file.service";
 import { fileExists, renameFile } from "./resource.service";
 import { Paths } from "../enums/paths";
-import { EnumResourceDirectory, EnumResourceType } from "put3-models";
+import { EnumResourceDirectory, EnumResourceType } from "../app-models/enums/resources";
 
 const Extensions = {
     "images": ["jpg", "jpeg", "png", "gif"],

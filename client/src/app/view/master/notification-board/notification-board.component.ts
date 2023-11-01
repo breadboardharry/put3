@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Session } from 'src/app/classes/session';
-import { EnumActionType, EnumResourceType } from 'put3-models';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
@@ -8,6 +7,8 @@ import { NotificationData } from 'src/app/types/notification';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
+import { EnumResourceType } from 'src/app/app-models/enums/resources';
+import { EnumActionType } from 'src/app/app-models/enums/action';
 
 @Component({
     selector: 'app-notification-board',

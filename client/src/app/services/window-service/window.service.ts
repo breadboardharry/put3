@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Window } from 'put3-models';
+import { Window } from 'src/app/app-models/types/window';
 
 @Injectable({
     providedIn: 'root',

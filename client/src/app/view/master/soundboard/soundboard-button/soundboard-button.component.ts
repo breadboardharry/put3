@@ -3,7 +3,8 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 import { FileService } from 'src/app/services/utils/file-service/file.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { Session } from 'src/app/classes/session';
-import { EnumActionType, FileData } from 'put3-models';
+import { FileData } from 'src/app/app-models/types/file';
+import { EnumActionType } from 'src/app/app-models/enums/action';
 
 @Component({
   selector: 'app-soundboard-button',

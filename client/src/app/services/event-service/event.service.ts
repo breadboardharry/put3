@@ -3,8 +3,17 @@ import { WebSocketService } from '../websocket-service/websocket.service';
 import { Fool } from 'src/app/classes/fool';
 import { Subject } from 'rxjs';
 import { Session } from 'src/app/classes/session';
-import { Action, EventMessageData, EnumEvent, EnumUserRole, Event, EventMessage, FoolInfos, LayoutData, ResourceSet, RoleResponseData, SessionAction, UserPreferences } from 'put3-models';
 import { Layout } from 'src/app/types/layout';
+import { Action, SessionAction } from 'src/app/app-models/types/action';
+import { EventMessage, EventMessageData } from 'src/app/app-models/types/event';
+import { EnumEvent } from 'src/app/app-models/enums/event';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
+import { FoolInfos } from 'src/app/app-models/types/fool';
+import { ResourceSet } from 'src/app/app-models/types/resources';
+import { LayoutData } from 'src/app/app-models/types/layout';
+import { RoleResponseData } from 'src/app/app-models/types/role';
+import { UserPreferences } from 'src/app/app-models/types/preferences';
+import { Event } from 'src/app/app-models/classes/event';
 
 @Injectable({
     providedIn: 'root',
@@ -26,6 +35,9 @@ export class EventService {
     }
 
     private initSubscriptions() {
+        console.log("[-] EventService initSubscriptions");
+        console.log("[-] EnumEvent", EnumEvent);
+        console.log("[-] EnumUserRole", EnumUserRole);
         this.websocket.socket.on(EnumEvent.ROLE, (event: EventMessage) => {
             // Get the UUID of this client only once
             const data = event.data as RoleResponseData;

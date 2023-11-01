@@ -1,5 +1,4 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { EnumUserRole } from 'put3-models';
 import { environment } from 'src/environments/environment';
 import { PreferencesService } from 'src/app/services/preferences-service/preferences.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
@@ -7,6 +6,7 @@ import { BackendService } from 'src/app/services/backend/backend.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
 
 @Component({
     selector: 'app-fool-home-page',
@@ -28,6 +28,9 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
+        console.log("[-] FoolHomePageComponent init");
+        console.log("[-] ClientService.ROLE", ClientService.ROLE);
+        console.log("[-] ClientService", ClientService);
         if (ClientService.ROLE === EnumUserRole.MASTER) return window.location.reload();
         if (ClientService.ROLE === EnumUserRole.FOOL) return this.init();
 

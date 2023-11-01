@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EnumSessionStatus } from 'put3-models';
+import { EnumSessionStatus } from 'src/app/app-models/enums/session';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
-import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { MasterService } from 'src/app/services/master-service/master.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
