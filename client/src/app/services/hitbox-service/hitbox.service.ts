@@ -1,5 +1,5 @@
 import { ElementRef, Injectable } from '@angular/core';
-import { HitboxData } from 'put3-models';
+import { HitboxData } from 'src/app/app-models/types/layout';
 import { Hitbox } from 'src/app/classes/hitbox';
 
 @Injectable({

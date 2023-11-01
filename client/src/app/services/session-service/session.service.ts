@@ -4,7 +4,7 @@ import { BackendService } from '../backend/backend.service';
 import { Session, SessionData } from 'src/app/classes/session';
 import { CookieService } from 'ngx-cookie-service';
 import { EventService } from '../event-service/event.service';
-import { EnumSessionActionType } from 'put3-models';
+import { EnumSessionActionType } from 'src/app/app-models/enums/action';
 
 @Injectable({
     providedIn: 'root',

@@ -4,9 +4,11 @@ import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
 import { EventService } from '../event-service/event.service';
-import { EnumResourceDirectory, EnumResourceType, FileData, ResourceSet } from 'put3-models';
 import { MatDialog } from '@angular/material/dialog';
 import { ResourceBrowserModal } from 'src/app/view/modals/resource-browser/resource-browser.modal';
+import { ResourceSet } from 'src/app/app-models/types/resources';
+import { EnumResourceDirectory, EnumResourceType } from 'src/app/app-models/enums/resources';
+import { FileData } from 'src/app/app-models/types/file';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FileService } from '../utils/file-service/file.service';
 import { BackendService } from '../backend/backend.service';
-import { EnumFoolScript } from 'put3-models';
+import { EnumFoolScript } from 'src/app/app-models/enums/scripts';
 
 @Injectable({
     providedIn: 'root',

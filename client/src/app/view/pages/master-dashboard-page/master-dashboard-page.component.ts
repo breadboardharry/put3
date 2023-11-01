@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnumSessionStatus } from 'src/app/app-models/enums/session';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
 import { Fool } from 'src/app/classes/fool';
 import { Session } from 'src/app/classes/session';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
@@ -13,7 +15,6 @@ import { SessionService } from 'src/app/services/session-service/session.service
 import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
-import { EnumSessionStatus, EnumUserRole } from 'put3-models';
 
 @Component({
     selector: 'app-master-dashboard-page',
@@ -82,6 +83,8 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
         }
 
         // If a role is already defined
+        console.log("[-] ClientService.ROLE", ClientService.ROLE);
+        console.log("[-] ClientService", ClientService);
         if (ClientService.ROLE === EnumUserRole.FOOL) return window.location.reload();
         if (ClientService.ROLE === EnumUserRole.MASTER) return this.init();
 

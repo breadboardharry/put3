@@ -5,10 +5,10 @@ import { environment } from 'src/environments/environment';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { Session } from 'src/app/classes/session';
-import { EnumResourceType } from 'put3-models';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { MasterService } from 'src/app/services/master-service/master.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { EnumResourceType } from 'src/app/app-models/enums/resources';
 
 @Component({
     selector: 'app-layout-editor',
@@ -16,7 +16,7 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
     styleUrls: ['./layout-editor.component.scss'],
 })
 export class LayoutEditorComponent implements OnInit, DashboardSection {
-    
+
     @ViewChild('editor')
     public editor!: ElementRef;
 

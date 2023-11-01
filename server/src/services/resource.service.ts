@@ -2,7 +2,7 @@ import { Paths } from "../enums/paths";
 import path from "path";
 import fs from "fs";
 import { dirToType, getData, isValidType, typeToDir } from "./resource-file.service";
-import { EnumResourceDirectory } from "put3-models";
+import { EnumResourceDirectory } from "../app-models/enums/resources";
 
 export function renameFile(currentName: string, newName: string, dirpath: string): boolean {
     const currentPath = path.join(Paths.RESOURCES, dirpath, currentName);

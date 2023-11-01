@@ -4,7 +4,8 @@ import { Action } from 'src/app/interfaces/action';
 import { Hitbox } from 'src/app/classes/hitbox';
 import { Trigger } from 'src/app/interfaces/trigger';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { EnumResourceType, FileData } from 'put3-models';
+import { FileData } from 'src/app/app-models/types/file';
+import { EnumResourceType } from 'src/app/app-models/enums/resources';
 
 @Component({
   selector: 'app-hitbox-settings',

@@ -1,4 +1,5 @@
-import { FoolBrowserInfos, FoolData, FoolSettings, Window } from "put3-models";
+import { FoolBrowserInfos, FoolData, FoolSettings } from "../app-models/types/fool";
+import { Window } from "../app-models/types/window";
 import { Layout } from "../types/layout";
 
 export class Fool {

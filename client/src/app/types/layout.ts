@@ -1,4 +1,4 @@
-import { Desktop } from "put3-models";
+import { Desktop } from "../app-models/types/layout";
 import { Hitbox } from "../classes/hitbox";
 
 export type Layout = {

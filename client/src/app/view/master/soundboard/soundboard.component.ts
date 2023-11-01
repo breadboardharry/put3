@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EnumActionType, EnumResourceType, FileData } from 'put3-models';
+import { EnumActionType } from 'src/app/app-models/enums/action';
+import { EnumResourceType } from 'src/app/app-models/enums/resources';
+import { FileData } from 'src/app/app-models/types/file';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { ClientService } from 'src/app/services/client-service/client.service';

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EnumFoolScript } from 'put3-models';
+import { EnumFoolScript } from 'src/app/app-models/enums/scripts';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
 import { CameraService } from 'src/app/services/camera/camera.service';

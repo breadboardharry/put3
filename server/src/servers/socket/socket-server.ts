@@ -6,7 +6,8 @@ import UserModule from "../../modules/users/users";
 import cookieParser from "cookie-parser";
 import UserMiddleware from "../../middlewares/user";
 import SessionModule from "../../modules/session/sessions";
-import { EnumEvent, EventMessage } from "put3-models";
+import { EnumEvent } from "../../app-models/enums/event";
+import { EventMessage } from "../../app-models/types/event";
 
 export class SocketServer {
 

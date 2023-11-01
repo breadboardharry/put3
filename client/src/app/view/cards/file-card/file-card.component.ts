@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { EnumResourceType, FileData } from 'put3-models';
+import { EnumResourceType } from 'src/app/app-models/enums/resources';
+import { FileData } from 'src/app/app-models/types/file';
 import { BackendService } from 'src/app/services/backend/backend.service';
 
 @Component({

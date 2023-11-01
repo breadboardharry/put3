@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { EventService } from '../event-service/event.service';
 import { Subject } from 'rxjs';
-import { EnumUserRole, RoleResponseData, UserPreferences } from 'put3-models';
 import { PreferencesService } from '../preferences-service/preferences.service';
 import { AdminService } from '../admin-service/admin.service';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
+import { RoleResponseData } from 'src/app/app-models/types/role';
+import { UserPreferences } from 'src/app/app-models/types/preferences';
 
 @Injectable({
     providedIn: 'root',

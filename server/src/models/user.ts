@@ -1,4 +1,5 @@
-import { EnumUserRole, UserPreferences } from "put3-models";
+import { EnumUserRole } from "../app-models/enums/user";
+import { UserPreferences } from "../app-models/types/preferences";
 
 export default class User {
 

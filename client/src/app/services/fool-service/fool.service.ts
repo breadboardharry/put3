@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { EventService } from '../event-service/event.service';
 import { BrowserService } from '../utils/browser-service/browser.service';
 import { WindowService } from '../window-service/window.service';
-import { ActionData, EnumActionType, EnumSessionActionType, EnumSessionStatus } from 'put3-models';
 import { ClientService } from '../client-service/client.service';
 import { LayoutService } from '../layout-service/layout.service';
 import { AudioService } from '../audio-service/audio.service';
@@ -14,6 +13,9 @@ import { MicrophoneService } from '../microphone/microphone.service';
 import { CameraService } from '../camera/camera.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationData } from 'src/app/types/notification';
+import { EnumSessionStatus } from 'src/app/app-models/enums/session';
+import { EnumActionType, EnumSessionActionType } from 'src/app/app-models/enums/action';
+import { ActionData } from 'src/app/app-models/types/action';
 
 @Injectable({
     providedIn: 'root',

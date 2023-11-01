@@ -4,7 +4,12 @@ import { APIResponse } from "../../types/response";
 import { SessionService } from "../../services/users/sessions.service";
 import SessionModule from "../session/sessions";
 import SocketService from "../../services/socket/socket.service";
-import { Action, EnumEvent, EnumInfoStyle, EnumUserRole, FoolInfos, UserPreferences } from "put3-models";
+import { EnumUserRole } from "../../app-models/enums/user";
+import { UserPreferences } from "../../app-models/types/preferences";
+import { EnumEvent } from "../../app-models/enums/event";
+import { Action } from "../../app-models/types/action";
+import { FoolInfos } from "../../app-models/types/fool";
+import { EnumInfoStyle } from "../../app-models/enums/info";
 
 export default class UserModule {
 
