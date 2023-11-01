@@ -1,24 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Layout } from 'src/app/types/layout';
 import { HitboxService } from '../hitbox-service/hitbox.service';
 import { PreferencesService } from '../preferences-service/preferences.service';
+import { Layout } from 'src/app/types/layout';
+import { LayoutData } from 'src/app/app-models/types/layout';
 
 @Injectable({
     providedIn: 'root',
 })
 export class LayoutService {
 
-    constructor(private hitboxService: HitboxService, private preferences: PreferencesService) {}
+    constructor(
+        private hitboxService: HitboxService,
+        private preferences: PreferencesService
+    ) {}
 
-    public newFoolLayout(layout: Layout) {
+    public newFoolLayout(layout: LayoutData) {
+        const instaciatedLayout: Layout = {...layout as any};
         // Instanciate hitboxes
-        layout.hitboxes = this.hitboxService.instaciate(layout.hitboxes, true);
-
+        instaciatedLayout.hitboxes = this.hitboxService.instaciate(layout.hitboxes, true);
         // If an image is set, save it in cookies
-        if ('image' in layout.desktop) this.preferences.setDesktop({
-            image: layout.desktop.image!
+        if ('image' in instaciatedLayout.desktop) this.preferences.setDesktop({
+            image: instaciatedLayout.desktop.image!
         });
 
-        return layout;
+        return instaciatedLayout;
     }
 }

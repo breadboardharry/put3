@@ -1,12 +1,12 @@
 import { Component, HostListener, Input, OnInit  } from '@angular/core';
-import { Size } from 'src/app/types/size';
 import { Hitbox } from 'src/app/classes/hitbox';
-import { Position } from 'src/app/types/position';
 import { CdkDragEnd } from "@angular/cdk/drag-drop";
 import { triggers } from 'src/app/data/triggers'
 import { actions } from 'src/app/data/actions'
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { ResizeHandle } from 'src/app/types/resize-handle';
+import { Size } from 'src/app/app-models/types/size';
+import { Position } from 'src/app/app-models/types/position';
 
 @Component({
     selector: 'app-hitbox',
@@ -16,6 +16,7 @@ import { ResizeHandle } from 'src/app/types/resize-handle';
 export class HitboxComponent implements OnInit {
 
     @Input() hitbox!: Hitbox;
+    @Input() disabled: boolean = false;
 
     triggers = triggers;
     actions = actions;

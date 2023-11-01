@@ -1,6 +1,6 @@
+import { Position } from "../app-models/types/position";
+import { Size } from "../app-models/types/size";
 import { Action } from "../interfaces/action";
-import { Position } from "../types/position";
-import { Size } from "../types/size";
 
 export class Hitbox {
 

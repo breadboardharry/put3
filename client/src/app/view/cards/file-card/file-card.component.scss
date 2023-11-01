@@ -14,6 +14,11 @@
 
     width: 150px;
     padding: 0.75rem;
+    box-sizing: border-box;
+
+    @media (max-width: $mobile) {
+        width: 90px;
+    }
 
     &:hover {
         background-color: rgb(26, 26, 52);
@@ -22,10 +27,12 @@
     &.selected {
         background-color: rgb(50, 50, 82);
     }
+
+    transition: background-color 0.1s ease-in-out;
 }
 
 .filename {
-    width: 130px;
+    width: 100%;
     overflow-y: scroll;
     @extend %hidden-scrollbar;
 
@@ -53,22 +60,8 @@
     }
 }
 
-.image-container {
-    height: 82px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    pointer-events: none;
-
-    img {
-        &.fit-height {
-            height: 100%;
-        }
-
-        &.fit-width {
-            width: 100%;
-        }
-    }
+img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: contain;
 }

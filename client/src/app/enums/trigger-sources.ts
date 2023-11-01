@@ -1,5 +1,5 @@
 export enum TriggerSource {
-  Unknown,
-  Keyboard,
-  Button
+    Unknown,
+    Keyboard,
+    Button
 }

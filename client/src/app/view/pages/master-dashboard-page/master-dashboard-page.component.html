@@ -1,49 +1,63 @@
-<div class="page">
-    <app-dashboard-navbar
-        [selectedItem]="selectedItem"
-        (selectedItemEvent)="selectItem($event)"
-    ></app-dashboard-navbar>
-    <div class="content-container">
-        <div class="content">
-            <div class="fools-container">
-                <app-fool-card
-                    *ngFor="let fool of fools"
-                    [selected]="target && fool.id == target.id"
-                    [fool]="fool"
-                    (click)="clickFool(fool)"
-                    (contextmenu)="rightClickFool(fool, $event)"
-                    [rename]="renaming == fool"
-                    (editedEvent)="renameFool($event, fool)"
-                >
-                </app-fool-card>
-                <p class="no-fool" *ngIf="!fools.length">
-                    No fool connected
-                </p>
-            </div>
+<mat-spinner class="page-loading-spinner" *ngIf="loading"></mat-spinner>
 
-            <hr class="separator" />
+<div class="page" [ngClass]="{
+    'loading': loading
+}">
+    <app-dashboard-navbar></app-dashboard-navbar>
 
-            <div class="app-container" [ngSwitch]="selectedItem.title">
-                <app-soundboard *ngSwitchCase="dashboardPage.Soundboard"
-                    [fools]="fools"
-                    [target]="target"
-                    [disabled]="!fools.length || target == null"
-                >
-                </app-soundboard>
+    <div class="content">
+        <div class="fool-list-container" *ngIf="displayFoolList">
+            <app-fool-card
+                *ngFor="let session of sessions"
+                [selected]="target && session.code == target.code"
+                [fool]="session.fool"
+                (click)="clickSession(session)"
+                (contextmenu)="rightClickSession(session, $event)"
+                [rename]="renaming == session"
+                (editedEvent)="renameFool($event, session.fool)"
+            >
+            </app-fool-card>
+            <p class="no-fool" *ngIf="!sessions.length">
+                No fool connected
+            </p>
+        </div>
 
-                <app-assets-gallery *ngSwitchCase="dashboardPage.Resources">
-                </app-assets-gallery>
+        <hr class="separator" *ngIf="displayFoolList"/>
 
-                <app-layout-editor *ngSwitchCase="dashboardPage.Layout"
-                    [fools]="fools"
-                    [target]="target"
-                    [disabled]="!fools.length || target == null"
-                ></app-layout-editor>
-            </div>
+        <div class="app-container" [ngSwitch]="section">
+            <app-session-panel *ngSwitchCase="EnumPage.SESSION"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-session-panel>
+
+            <app-soundboard *ngSwitchCase="EnumPage.SOUNDBOARD"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-soundboard>
+
+            <app-notification-board *ngSwitchCase="EnumPage.NOTIFICATIONS"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-notification-board>
+
+            <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
+                [isAdmin]="ClientService.IS_ADMIN"
+            ></app-assets-gallery>
+
+            <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"
+                [sessions]="sessions"
+                [target]="target"
+                [disabled]="!sessions.length || sessionClosed || target == null"
+            ></app-layout-editor>
         </div>
     </div>
 </div>
-<app-context-menu *ngIf="contextMenu.show"
+
+<app-context-menu
+    *ngIf="contextMenu.show"
     [ngStyle]="contextMenu.style"
     [items]="contextMenu.items"
     (itemClick)="handleContextMenu($event)">

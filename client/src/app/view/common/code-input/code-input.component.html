@@ -1,0 +1,12 @@
+<code-input #codeInput
+    [inputType]="inputType"
+    [codeLength]="codeLength"
+    (codeChanged)="onCodeChanged($event)"
+    (codeCompleted)="onCodeCompleted($event)"
+    [disabled]="disabled"
+    
+    [ngClass]="{
+        'disabled': disabled
+    }"
+>
+</code-input>

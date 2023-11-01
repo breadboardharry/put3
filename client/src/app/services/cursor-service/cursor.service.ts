@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { CursorStyle } from 'src/app/enums/cursor-style';
+import { EnumCursorStyle } from 'src/app/enums/cursor-style';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CursorService {
 
-  private cursorStyle: CursorStyle = CursorStyle.Default
+  private cursorStyle: EnumCursorStyle = EnumCursorStyle.Default
   private timeout: any;
 
   constructor() { }
 
-  setStyle(style: CursorStyle, timeout: number = 0, nextStyle: CursorStyle = CursorStyle.Default) {
+  setStyle(style: EnumCursorStyle, timeout: number = 0, nextStyle: EnumCursorStyle = EnumCursorStyle.Default) {
     return new Promise<void>((resolve, reject) => {
       this.cursorStyle = style;
       this.setCSSValue(style);
@@ -30,12 +30,12 @@ export class CursorService {
     });
   }
 
-  get style(): CursorStyle {
+  get style(): EnumCursorStyle {
     return this.cursorStyle;
   }
 
   // Set the CSS variable used to control the cursor style of page
-  setCSSValue(style: CursorStyle) {
+  setCSSValue(style: EnumCursorStyle) {
     const element = document.querySelector('body') as HTMLElement;
     element.style.setProperty('--cursor-style', style);
   }

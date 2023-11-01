@@ -2,13 +2,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { FileData } from 'src/app/types/resources/file-data';
-import { ResourceType } from 'src/app/enums/resources/type';
-import { ResourceDirectory } from 'src/app/enums/resources/directory';
-import { ResourceSet } from 'src/app/types/resources/data-set';
-import { WebSocketService } from '../websocket-service/websocket.service';
 import { BackendService } from '../backend/backend.service';
-import { AuthService } from '../auth-service/auth.service';
+import { EventService } from '../event-service/event.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ResourceBrowserModal } from 'src/app/view/modals/resource-browser/resource-browser.modal';
+import { ResourceSet } from 'src/app/app-models/types/resources';
+import { EnumResourceDirectory, EnumResourceType } from 'src/app/app-models/enums/resources';
+import { FileData } from 'src/app/app-models/types/file';
 
 @Injectable({
   providedIn: 'root'
@@ -16,51 +16,44 @@ import { AuthService } from '../auth-service/auth.service';
 export class ResourcesService {
 
     private routeUrl = this.backend.apiUrl + '/resources';
-    private resources: ResourceSet = {};
+    private resources: Partial<ResourceSet> = {
+
+    };
 
     constructor(
         private http: HttpClient,
-        private websocket: WebSocketService,
         private backend: BackendService,
-        private authService: AuthService
+        private eventService: EventService,
+        private dialog: MatDialog,
     ) {
         this.update();
-
-        this.websocket.socket.on('event', (data: any) => {
-            if (data.type != 'resources') return;
-            this.resources = data.resources;
+        this.eventService.onResourcesUpdate.subscribe((resources) => {
+            this.resources = resources;
         });
     }
 
     public async update() {
-        const logged = await this.authService.isLogged();
-
-        if (!logged) return;
+        // const logged = await this.authService.isLogged();
+        // if (!logged) return;
 
         this.getData().then((resources: ResourceSet) => {
             this.resources = resources;
         });
     }
 
-    public typeToDir(type: ResourceType): ResourceDirectory {
+    public typeToDir(type: EnumResourceType): EnumResourceDirectory {
         switch (type) {
-            case ResourceType.Image:
-                return ResourceDirectory.Images;
-            case ResourceType.Video:
-                return ResourceDirectory.Videos;
-            case ResourceType.Audio:
-                return ResourceDirectory.Audio;
+            case EnumResourceType.IMAGE: return EnumResourceDirectory.IMAGES;
+            case EnumResourceType.VIDEO: return EnumResourceDirectory.VIDEOS;
+            case EnumResourceType.AUDIO: return EnumResourceDirectory.AUDIOS;
         }
     }
 
-    public dirToType(dir: ResourceDirectory): ResourceType {
+    public dirToType(dir: EnumResourceDirectory): EnumResourceType {
         switch (dir) {
-            case ResourceDirectory.Images:
-                return ResourceType.Image;
-            case ResourceDirectory.Videos:
-                return ResourceType.Video;
-            case ResourceDirectory.Audio:
-                return ResourceType.Audio;
+            case EnumResourceDirectory.IMAGES: return EnumResourceType.IMAGE;
+            case EnumResourceDirectory.VIDEOS: return EnumResourceType.VIDEO;
+            case EnumResourceDirectory.AUDIOS: return EnumResourceType.AUDIO;
         }
     }
 
@@ -68,14 +61,14 @@ export class ResourcesService {
         let result: any[] = [];
 
         for (let key in obj) {
-        let newPath = path ? path + '/' + key : key;
+            let newPath = path ? path + '/' + key : key;
 
-        if (Array.isArray(obj[key])) {
-            result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
-        }
-        else if (typeof obj[key] === 'object') {
-            result = result.concat(this.flattenObject(obj[key], newPath));
-        }
+            if (Array.isArray(obj[key])) {
+                result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
+            }
+            else if (typeof obj[key] === 'object') {
+                result = result.concat(this.flattenObject(obj[key], newPath));
+            }
         }
         return result;
     }
@@ -97,10 +90,10 @@ export class ResourcesService {
 
     /**
      * Get resources data by type
-     * @param {ResourceType} type Resource type
+     * @param {EnumResourceType} type Resource type
      * @returns {Promise<FileData[]>} Resources
      */
-    public getDataByType(type: ResourceType): Promise<FileData[]> {
+    public getDataByType(type: EnumResourceType): Promise<FileData[]> {
         const endpoint = this.routeUrl + '/' + this.typeToDir(type);
 
         return new Promise<FileData[]>((resolve, reject) => {
@@ -113,18 +106,18 @@ export class ResourcesService {
         });
     }
 
-    public getResources(type: ResourceType | null = null): FileData[] {
+    public getResources(type?: EnumResourceType): FileData[] {
         // Return resources of a specific type
         if (type) {
             const dir = this.typeToDir(type);
-            return this.resources[dir]!;
+            return this.resources[dir] || [];
         }
 
         // Return all resources if no type is specified
         return this.flatten();
     }
 
-    public flatten(set: ResourceSet = this.resources) {
+    public flatten(set: Partial<ResourceSet> = this.resources) {
         let result: any[] = [];
 
         for (let files of Object.values(set)) {
@@ -164,10 +157,10 @@ export class ResourcesService {
 
     /**
      * Rename a resource file
-     * @param {string} currentName Current file name
-     * @param {string} newName New file name
-     * @param {string} dirpath Directory path
-     * @returns {Promise<any>} Server result
+     * @param currentName Current file name
+     * @param newName New file name
+     * @param dirpath Directory path
+     * @returns Server result
      */
     public rename(currentName: string, newName: string, dirpath: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
@@ -213,5 +206,17 @@ export class ResourcesService {
         else errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
 
         return throwError(errorMessage);
+    }
+
+    public browse(type?: EnumResourceType, canImport: boolean = false) {
+        return new Promise((resolve, reject) => {
+            const dialogRef = this.dialog.open(ResourceBrowserModal, {
+                data: { type, canImport }
+            });
+
+            dialogRef.afterClosed().subscribe((data: FileData | FileData[] | undefined) => {
+                resolve(data);
+            });
+        });
     }
 }

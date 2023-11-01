@@ -1,14 +1,14 @@
 version: '3'
 services:
   frontend:
-    image: put3/frontend:latest
+    image: put3/frontend:2.0
     ports:
       - "80:80"
     networks:
       - put3
 
   backend:
-    image: put3/backend:latest
+    image: put3/backend:2.0
     networks:
       - put3
 

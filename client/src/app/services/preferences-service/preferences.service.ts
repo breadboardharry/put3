@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { DesktopPreference } from 'src/app/types/preferences/desktop';
+import { DesktopPreference, UserPreferences } from 'src/app/app-models/types/preferences';
 
 @Injectable({
     providedIn: 'root',
@@ -9,14 +9,10 @@ export class PreferencesService {
 
     constructor(private cookie: CookieService) {}
 
-    public get() {
-        console.log({
-            desktop: this.getDesktop(),
-            name: this.getName()
-        });
+    public get(): UserPreferences {
         return {
-            desktop: this.getDesktop(),
-            name: this.getName()
+            name: this.getName(),
+            desktop: this.getDesktop()
         };
     }
 
@@ -24,33 +20,34 @@ export class PreferencesService {
      * Set the fool desktop preferences
      * @param preferences Desktop preferences
      */
-    public setDesktop (preferences: DesktopPreference): void {
-        this.cookie.set('desktop', JSON.stringify(preferences));
+    public setDesktop(preferences: DesktopPreference): void {
+        this.cookie.set('desktop', JSON.stringify(preferences), undefined, '/');
     }
 
     /**
      * Get the fool desktop preferences
      * @returns Desktop preferences or null
      */
-    public getDesktop (): DesktopPreference | null {
+    public getDesktop(): DesktopPreference | undefined {
         const desktop = this.cookie.get('desktop');
-        return desktop ? JSON.parse(desktop) : null;
+        return desktop ? JSON.parse(desktop) : undefined;
     }
 
     /**
      * Set name
      * @param name Name
      */
-    public setName (name: string): void {
-        this.cookie.set('name', JSON.stringify(name));
+    public setName(name: string): void {
+        this.cookie.set('name', JSON.stringify(name || ''), undefined, '/');
     }
 
     /**
      * Get name
      * @returns Name or null
      */
-    public getName (): string | null {
+    public getName(): string | undefined {
         const name = this.cookie.get('name');
-        return name ? JSON.parse(name) : null;
+        return name ? JSON.parse(name) : undefined;
     }
+
 }

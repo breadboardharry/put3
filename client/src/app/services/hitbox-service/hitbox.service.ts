@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
+import { HitboxData } from 'src/app/app-models/types/layout';
 import { Hitbox } from 'src/app/classes/hitbox';
-import { WebSocketService } from '../websocket-service/websocket.service';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +40,7 @@ export class HitboxService {
      * @param run Run hitboxes (default: false)
      * @returns Hitboxes
      */
-    public instaciate(hitboxes: any, run: boolean = false): Hitbox[] {
+    public instaciate(hitboxes: HitboxData[], run: boolean = false): Hitbox[] {
         const active = run ? {active: true} : {};
         return hitboxes.map((hitbox: any) => new Hitbox({...hitbox, active}));
     }

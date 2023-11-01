@@ -5,11 +5,11 @@
 const backendUrl = `https://${window.location.hostname}:3000`;
 
 export const environment = {
-  production: false,
-  serverUrl: backendUrl,
-  apiPath: '/api',
-  socketPath: '/socket',
-  defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg'
+    production: false,
+    serverUrl: backendUrl,
+    apiPath: '/api',
+    socketPath: '/socket',
+    defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg'
 };
 
 /*

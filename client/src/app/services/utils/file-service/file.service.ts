@@ -31,4 +31,8 @@ export class FileService {
     public removeExtension(filename: string) {
         return filename.split('.').slice(0, -1).join('.');
     }
+
+    public getExtension(filename: string) {
+        return filename.split('.').pop();
+    }
 }

@@ -3,20 +3,20 @@ import {WindowsMenuService} from "../../../services/windows-service/windows-menu
 import {TriggerSource} from "../../../enums/trigger-sources";
 
 @Component({
-  selector: 'app-windows-button',
-  templateUrl: './windows-button.component.html',
-  styleUrls: ['./windows-button.component.scss']
+    selector: 'app-windows-button',
+    templateUrl: './windows-button.component.html',
+    styleUrls: ['./windows-button.component.scss']
 })
 export class WindowsButtonComponent implements OnInit {
 
-  menuOpened: boolean = false;
+    menuOpened: boolean = false;
 
-  constructor(private windowsMenu: WindowsMenuService) { }
+    constructor(private windowsMenu: WindowsMenuService) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {
+    }
 
-  openWindowsMenu() {
-    this.windowsMenu.toggle(TriggerSource.Button);
-  }
+    openWindowsMenu() {
+        this.windowsMenu.toggle(TriggerSource.Button);
+    }
 }

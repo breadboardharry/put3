@@ -1,123 +1,94 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { CursorService } from 'src/app/services/cursor-service/cursor.service';
-import { AudioService } from 'src/app/services/audio-service/audio.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
-import { DesktopService } from 'src/app/services/desktop-service/desktop.service';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { WindowService } from 'src/app/services/window-service/window.service';
 import { PreferencesService } from 'src/app/services/preferences-service/preferences.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { Layout } from 'src/app/types/layout';
-import { LayoutService } from 'src/app/services/layout-service/layout.service';
-import { BrowserService } from 'src/app/services/utils/browser-service/browser.service';
-import { Role } from 'src/app/enums/role';
 import { BackendService } from 'src/app/services/backend/backend.service';
+import { ClientService } from 'src/app/services/client-service/client.service';
+import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
+import { FoolService } from 'src/app/services/fool-service/fool.service';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
 
 @Component({
-  selector: 'app-fool-home-page',
-  templateUrl: './fool-home-page.component.html',
-  styleUrls: ['./fool-home-page.component.scss']
+    selector: 'app-fool-home-page',
+    templateUrl: './fool-home-page.component.html',
+    styleUrls: ['./fool-home-page.component.scss']
 })
-export class FoolHomePageComponent implements OnInit {
+export class FoolHomePageComponent implements OnInit, OnDestroy {
 
-    layout: Layout = {
-        hitboxes: [],
-        desktop: {
-            image: undefined
-        }
-    };
-    defaultDesktopImage = environment.defaultDesktopImage;
+    public loading: boolean = true;
+    private defaultDesktopImage = environment.defaultDesktopImage;
 
     constructor(
-        public backend: BackendService,
-        private browser: BrowserService,
-        private layoutService: LayoutService,
+        private clientService: ClientService,
+        private backend: BackendService,
         private resourceService: ResourcesService,
         private preferences: PreferencesService,
-        private windowService: WindowService,
-        public cursorService: CursorService,
-        private websocket: WebSocketService,
-        private audio: AudioService ) {}
+        private snackbar: SnackbarService,
+        public fool: FoolService
+    ) {}
 
-    ngOnInit(): void {
-        // Update role if needed
-        this.websocket.declare(Role.Fool, this.preferences.get());
+    ngOnInit() {
+        console.log("[-] FoolHomePageComponent init");
+        console.log("[-] ClientService.ROLE", ClientService.ROLE);
+        console.log("[-] ClientService", ClientService);
+        if (ClientService.ROLE === EnumUserRole.MASTER) return window.location.reload();
+        if (ClientService.ROLE === EnumUserRole.FOOL) return this.init();
 
-        // Send window size and browser infos
-        this.websocket.socket.emit('infos', {
-            browser: this.browser.get(),
-            window: this.windowService.getWindowSize(),
+        this.clientService.roleChanged.subscribe(() => {
+            this.init();
         });
+        this.clientService.askForRole(EnumUserRole.FOOL, {preferences: this.preferences.get()});
+    }
 
-        this.websocket.socket.on('action', (data: any) => {
-            this.action(data);
-        });
+    ngOnDestroy(): void {}
 
-        this.websocket.socket.on('layout', (data: any) => {
-            if (data.target.id !== this.websocket.id) return;
-            this.layout = this.layoutService.newFoolLayout(data.layout);
-        });
-
-        this.websocket.socket.on('name', (data: any) => {
-            if (data.target.id !== this.websocket.id) return;
-
-            this.preferences.setName(data.name);
-        });
-
-        // if (this.preferences.getName()) {
-        //     this.websocket.socket.emit('rename', this.preferences.getName());
-        // }
-
+    private init(): void {
+        this.loading = false;
+        this.fool.sendInfos();
         this.setDesktopImage();
     }
 
     async setDesktopImage() {
         // Check in cookies if there a previous desktop image is set
         const prevDesktop: any = this.preferences.getDesktop();
+        if (!prevDesktop) return;
 
-        if (prevDesktop) {
-            // Check if the image still exists
-            const exists = await this.resourceService.exists(prevDesktop.image)
-            if (exists) {
-                this.layout.desktop.image = prevDesktop.image;
-                this.websocket.socket.emit('desktop', this.layout.desktop);
-                return;
-            }
-        }
+        // Check if the image still exists
+        const exists = await this.resourceService.exists(prevDesktop.image);
+        if (!exists) return;
+
+        this.fool.layout.desktop.image = prevDesktop.image;
+        return;
     }
 
-    action(data: any) {
-        // Check if this user is the target
-        if (data.target.id !== this.websocket.id) return;
+    public get sessionCode(): string {
+        return ClientService.SESSION_CODE || "";
+    }
 
-        switch (data.action.type) {
-            case 'audio':
-                const volume = 'volume' in data.action ? data.action.volume : 1.0;
-                if ('stop' in data.action && data.action.stop) this.audio.stopAll();
-                else if ('track' in data.action) this.audio.play(this.backend.serverUrl + '/' + data.action.track.href, volume);
-                break;
+    public get masterUrl(): string {
+        return window.location.origin + '/master?code=' + this.sessionCode;
+    }
 
-            default:
-                console.log({data});
-                break;
-        }
+    public get backgroundImage(): string {
+        return this.backend.serverUrl + '/' + (this.fool.layout.desktop.image ? this.fool.layout.desktop.image : this.defaultDesktopImage);
+    }
+
+    public copiedCodeToClipboard(): void {
+        this.snackbar.openSuccess("Code copied to clipboard");
     }
 
     @HostListener('contextmenu', ['$event'])
-    onRightClick(event: any) {
+    private onRightClick(event: any) {
         event.preventDefault();
     }
 
-    private timeout: NodeJS.Timeout | undefined;
+    private timeout?: NodeJS.Timeout;
     @HostListener('window:resize', ['$event'])
-    onResize(event: any) {
+    private onResize(event: any) {
         // Send window size to server
         if (this.timeout) clearTimeout(this.timeout);
-
         this.timeout = setTimeout(() => {
-            this.websocket.socket.emit('infos', {
-                window: this.windowService.getWindowSize()
-            });
+            this.fool.sendInfos();
         }, 500);
     }
 }

@@ -1,29 +1,38 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EnumSessionStatus } from 'src/app/app-models/enums/session';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
 import { Fool } from 'src/app/classes/fool';
+import { Session } from 'src/app/classes/session';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
-import { DashboardPage } from 'src/app/enums/dashboard-pages';
-import { Role } from 'src/app/enums/role';
+import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
+import { EnumAppRoute } from 'src/app/enums/routes';
+import { AdminService } from 'src/app/services/admin-service/admin.service';
+import { ClientService } from 'src/app/services/client-service/client.service';
+import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
+import { SessionService } from 'src/app/services/session-service/session.service';
+import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
+import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
-import { MenuItem } from 'src/app/types/menu-item';
 
 @Component({
     selector: 'app-master-dashboard-page',
     templateUrl: './master-dashboard-page.component.html',
     styleUrls: ['./master-dashboard-page.component.scss']
 })
-export class MasterDashboardPageComponent implements OnInit {
+export class MasterDashboardPageComponent implements OnInit, OnDestroy {
 
-    selectedItem: MenuItem = {
-        title: DashboardPage.Layout
-    };
-    fools: Fool[] = [];
-    target: Fool | undefined = undefined;
-    dashboardPage = DashboardPage;
+    private sessionCode!: string;
+    public loading: boolean = true;
+    public sessionClosed: boolean = false;
 
-    // Context menu
-    contextMenu: ContextMenu = {
+    public sessions: Session[] = [];
+    public target?: Session;
+    public EnumPage = EnumNavbarItemTitle;
+    public section: EnumNavbarItemTitle = EnumNavbarItemTitle.LAYOUT;
+
+    public contextMenu: ContextMenu = {
         show: false,
         x: 0,
         y: 0,
@@ -34,56 +43,134 @@ export class MasterDashboardPageComponent implements OnInit {
         },
         items: []
     };
-    contextFocus: Fool | undefined = undefined;
-    renaming: Fool | undefined = undefined;
+    public contextFocus?: Session;
+    public renaming?: Session;
 
-    constructor(private websocket: WebSocketService, public resourceService: ResourcesService) { }
+    public ClientService = ClientService;
 
-    ngOnInit(): void {
-        // Update role if needed
-        this.websocket.declare(Role.Master);
+    constructor(
+        private adminService: AdminService,
+        private clientService: ClientService,
+        public resourceService: ResourcesService,
+        private eventService: EventService,
+        private route: ActivatedRoute,
+        private snackbar: SnackbarService,
+        private sessionService: SessionService,
+        private router: Router
+    ) {}
 
-        this.websocket.socket.on('foolList', (list: any) => {
-            this.updateFools(list);
+    private subscriptions: { [key: string]: any } = {};
+
+    async ngOnInit() {
+        // Subscribe to fragment changes (anchor in the URL)
+        this.subscriptions['fragment'] = this.route.fragment.subscribe(fragment  => {
+            if (!fragment) return;
+            if (!TypeService.isPartOfEnum(fragment, EnumNavbarItemTitle)) {
+                this.router.navigate([EnumAppRoute.MASTER]);
+                return;
+            }
+            this.section = fragment;
+        });
+
+        // No code required for admin
+        console.log("[*] IS_ADMIN", ClientService.IS_ADMIN);
+        if (!ClientService.IS_ADMIN) {
+            this.sessionCode = this.sessionService.getFromCookies();
+            if (!this.sessionCode) {
+                this.router.navigate([EnumAppRoute.MASTER]);
+                return;
+            }
+        }
+
+        // If a role is already defined
+        console.log("[-] ClientService.ROLE", ClientService.ROLE);
+        console.log("[-] ClientService", ClientService);
+        if (ClientService.ROLE === EnumUserRole.FOOL) return window.location.reload();
+        if (ClientService.ROLE === EnumUserRole.MASTER) return this.init();
+
+        // Otherwise, ask for a role and wait for the response
+        this.subscriptions['roleChanged'] = this.clientService.roleChanged.subscribe(() => {
+            return this.init();
+        });
+        // If the user is logged as admin, the code is not needed (undefined)
+        this.clientService.askForRole(EnumUserRole.MASTER, { sessionCode: this.sessionCode });
+    }
+
+    ngOnDestroy(): void {
+        Object.keys(this.subscriptions).forEach((key) => {
+            this.subscriptions[key].unsubscribe();
         });
     }
 
-    private updateFools(newList: any[]): void {
-        this.fools = newList.map((fool: any) => {
-            // Create a new fool object
-            const foolObj = new Fool(fool);
-            // Find if a fool with the same id already exists
-            let existing = this.fools.find((f) => f.id === foolObj.id);
-            // If it exists, keep its hitboxes
-            if (existing) {
-                foolObj.layout.hitboxes = existing.layout.hitboxes;
-            }
-            return foolObj;
+    private init() {
+        this.loading = false;
+        if (ClientService.IS_ADMIN) {
+            this.sessionService.getAll().then((sessions) => {
+                sessions.forEach((session) => {
+                    this.sessionRecieved(session);
+                });
+            });
+        }
+
+        this.subscriptions['onSession'] = this.eventService.onSession.subscribe((session) => {
+            console.log("[*] Session message", session);
+            this.sessionRecieved(session);
         });
 
+        this.subscriptions['onMessage'] = this.eventService.onMessage.subscribe((message) => {
+            this.snackbar.open(message.type, message.text);
+        });
+    }
+
+    private sessionRecieved(session: Session): void {
+        if (ClientService.IS_ADMIN) {
+            const existingSession = this.sessions.find((s) => s.code === session.code);
+            if (existingSession) {
+                if (session.status === EnumSessionStatus.CLOSED) {
+                    this.sessions.splice(this.sessions.indexOf(existingSession), 1);
+                    this.updateTarget();
+                    return;
+                }
+                existingSession.update(session);
+                this.updateTarget();
+            }
+            else this.sessions.push(session);
+            return;
+        }
+
+        // First time
+        if (!this.sessions.length) {
+            this.sessions = [session];
+            this.target = session;
+            return;
+        }
+        // When session updated
+        if (session.status === EnumSessionStatus.CLOSED) this.exit();
+        const existingSession = this.sessions[0];
+        existingSession.update(session);
         this.updateTarget();
     }
 
     private updateTarget() {
         // If a target is defined, check if it still exists
-        if (this.target && this.fools.length) {
-            this.target = this.fools.find((fool) => fool.id === this.target!.id);
+        if (this.target && this.sessions.length) {
+            this.target = this.sessions.find((session) => session.code === this.target!.code);
         }
         else this.target = undefined;
     }
 
-    public clickFool(fool: Fool) {
-        if (fool == this.renaming) return;
-        this.selectTarget(fool);
+    public clickSession(session: Session) {
+        if (session == this.renaming) return;
+        this.selectTarget(session);
         this.contextFocus = undefined;
         this.renaming = undefined;
     }
 
-    public rightClickFool(fool: Fool, event: MouseEvent) {
+    public rightClickSession(session: Session, event: MouseEvent) {
         event.preventDefault();
         event.stopPropagation();
 
-        this.contextFocus = fool;
+        this.contextFocus = session;
         this.displayContextMenu(event);
     }
 
@@ -118,16 +205,15 @@ export class MasterDashboardPageComponent implements OnInit {
     public renameFool(name: string, fool: Fool) {
         this.contextFocus = undefined;
         this.renaming = undefined;
-
-        this.websocket.socket.emit('rename', { target: fool, name });
+        this.eventService.renameFool(fool, name);
     }
 
-    private selectTarget(fool: Fool) {
-        this.target = this.target === fool ? undefined : fool;
+    private selectTarget(session: Session) {
+        this.target = (this.target === session) ? undefined : session;
     }
 
-    public selectItem(item: MenuItem) {
-        this.selectedItem = item;
+    public get displayFoolList(): boolean {
+        return ClientService.IS_ADMIN && this.section != EnumNavbarItemTitle.RESOURCES;
     }
 
     @HostListener('document:click')
@@ -139,5 +225,13 @@ export class MasterDashboardPageComponent implements OnInit {
     onRightClick(event: any) {
         this.contextMenu.show = false;
         event.preventDefault();
+    }
+
+    private exit() {
+        this.sessionClosed = true;
+        this.snackbar.openError("Session closed");
+        setTimeout(() => {
+            this.adminService.logout();
+        }, 3000);
     }
 }

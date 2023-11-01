@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Script } from 'src/app/enums/assets/scrips';
-import { Role } from 'src/app/enums/role';
+import { EnumFoolScript } from 'src/app/app-models/enums/scripts';
+import { EnumUserRole } from 'src/app/app-models/enums/user';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
-import { WebSocketService } from 'src/app/services/websocket-service/websocket.service';
 
 @Component({
     selector: 'app-home-page',
@@ -12,27 +11,30 @@ import { WebSocketService } from 'src/app/services/websocket-service/websocket.s
 })
 export class HomePageComponent implements OnInit {
 
-    hover: Role.Master | Role.Fool | null = null;
-    scripts = Script;
-    role = Role;
+    public hover: EnumUserRole.MASTER | EnumUserRole.FOOL | null = null;
+    public EnumScript = EnumFoolScript;
+    public EnumUserRole = EnumUserRole;
 
-    constructor(public assetsService: AssetsService, private router: Router) {}
+    constructor(
+        public assetsService: AssetsService,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {}
 
-    chooseMaster() {
+    public chooseMaster() {
         this.router.navigate(['/master']);
     }
 
-    chooseFool() {
+    public chooseFool() {
         this.router.navigate(['/fool']);
     }
 
-    mouseEnter(elem: Role.Master | Role.Fool) {
+    public mouseEnter(elem: EnumUserRole.MASTER | EnumUserRole.FOOL) {
         this.hover = elem;
     }
 
-    mouseLeave() {
+    public mouseLeave() {
         this.hover = null;
     }
 }
