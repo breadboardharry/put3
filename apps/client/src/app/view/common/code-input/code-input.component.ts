@@ -1,17 +1,25 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnInit,
+    Output,
+    ViewChild,
+} from '@angular/core';
+import { CodeInputComponent as AngularCodeInputComponent } from 'angular-code-input';
 
 @Component({
-  selector: 'app-code-input',
-  templateUrl: './code-input.component.html',
-  styleUrls: ['./code-input.component.scss']
+    selector: 'app-code-input',
+    templateUrl: './code-input.component.html',
+    styleUrls: ['./code-input.component.scss'],
 })
 export class CodeInputComponent implements OnInit {
-
     @ViewChild('codeInput')
-    public codeInput !: CodeInputComponent;
+    public codeInputRef!: AngularCodeInputComponent;
 
     @Input()
-    public inputType: string = "number";
+    public inputType: string = 'number';
 
     @Input()
     public codeLength: number = 4;
@@ -28,10 +36,9 @@ export class CodeInputComponent implements OnInit {
     @Output()
     public enterPressed: EventEmitter<void> = new EventEmitter<void>();
 
-    constructor() { }
+    constructor() {}
 
-    ngOnInit(): void {
-    }
+    ngOnInit(): void {}
 
     public onCodeChanged(code: string) {
         this.codeChanged.emit(code);
@@ -42,12 +49,11 @@ export class CodeInputComponent implements OnInit {
     }
 
     public focusOnField(index: number) {
-        this.codeInput.focusOnField(index);
+        this.codeInputRef.focusOnField(index);
     }
 
     @HostListener('document:keydown.enter', ['$event'])
     public onEnter(event: KeyboardEvent) {
         this.enterPressed.emit();
     }
-
 }
