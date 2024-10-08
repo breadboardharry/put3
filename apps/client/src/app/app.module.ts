@@ -14,7 +14,10 @@ import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { HitboxCoreComponent } from './view/hitbox/core/hitbox-core.component';
 import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+    provideHttpClient,
+    withInterceptorsFromDi,
+} from '@angular/common/http';
 import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
 import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
@@ -52,8 +55,11 @@ import { LandingPageToolbarComponent } from './view/fool/landing-page-toolbar/la
 import { NotificationBoardComponent } from './view/master/notification-board/notification-board.component';
 import { ButtonSmallComponent } from './view/common/buttons/button-small/button-small.component';
 import { ClientService } from './services/client-service/client.service';
+import { HlmButtonDirective } from './view/ui/hlm-button.directive';
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
+        HlmButtonDirective,
         AppComponent,
         DesktopComponent,
         WindowsButtonComponent,
@@ -91,7 +97,9 @@ import { ClientService } from './services/client-service/client.service';
         NotificationBoardComponent,
         ButtonSmallComponent,
     ],
-    bootstrap: [AppComponent], imports: [CodeInputModule,
+    bootstrap: [AppComponent],
+    imports: [
+        CodeInputModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -105,16 +113,19 @@ import { ClientService } from './services/client-service/client.service';
         ReactiveFormsModule,
         QRCodeModule,
         ClipboardModule,
-        MatTooltipModule], providers: [
+        MatTooltipModule,
+    ],
+    providers: [
         {
             provide: APP_INITIALIZER,
             useFactory: initApp,
             deps: [ClientService],
-            multi: true
+            multi: true,
         },
-        provideHttpClient(withInterceptorsFromDi())
-    ] })
-export class AppModule { }
+        provideHttpClient(withInterceptorsFromDi()),
+    ],
+})
+export class AppModule {}
 
 function initApp(clientService: ClientService): () => Promise<any> {
     return () => clientService.init();
