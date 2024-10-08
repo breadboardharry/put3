@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { EnumNavbarItemTitle } from 'src/app/enums/dashboard-pages';
 import { EnumAppRoute } from 'src/app/enums/routes';
@@ -10,7 +10,7 @@ import { TypeService } from 'src/app/services/utils/type/type.service';
 @Injectable({
   providedIn: 'root'
 })
-export class MasterValidSessionGuard implements CanActivate {
+export class MasterValidSessionGuard  {
 
     constructor(
         private router: Router,
