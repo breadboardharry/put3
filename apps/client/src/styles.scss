@@ -1,6 +1,7 @@
-// What is the difference between unix socket and websocket
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'src/assets/styles/material-override.scss';
 @import 'src/assets/styles/breakpoints.scss';
 @import 'src/assets/styles/snackbar.scss';
