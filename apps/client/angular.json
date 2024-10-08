@@ -78,24 +78,24 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "put3:build:production"
+              "buildTarget": "put3:build:production"
             },
             "development": {
-              "browserTarget": "put3:build:development"
+              "buildTarget": "put3:build:development"
             }
           },
           "options": {
-            "browserTarget": "app:build",
             "ssl": true,
             "sslKey": "../../shared/ssl/server.key",
-            "sslCert": "../../shared/ssl/server.crt"
+            "sslCert": "../../shared/ssl/server.crt",
+            "buildTarget": "app:build"
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "put3:build"
+            "buildTarget": "put3:build"
           }
         },
         "test": {
