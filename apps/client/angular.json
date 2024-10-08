@@ -120,5 +120,7 @@
       }
     }
   },
-  "defaultProject": "put3"
+  "cli": {
+    "analytics": false
+  }
 }

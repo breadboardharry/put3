@@ -1,6 +1,6 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FileData } from 'src/app/app-models/types/file';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
@@ -38,7 +38,7 @@ export class AssetsGalleryComponent implements OnInit {
     fileArr: any[] = [];
     imgArr: any[] = [];
     fileObj: any[] = [];
-    form: FormGroup;
+    form: UntypedFormGroup;
     msg: string = '';
     progress: number = 0;
     uploading: boolean = false;
@@ -47,7 +47,7 @@ export class AssetsGalleryComponent implements OnInit {
         private snackbar: SnackbarService,
         public selectionService: SelectionService,
         public resourceService: ResourcesService,
-        public formBuilder: FormBuilder,
+        public formBuilder: UntypedFormBuilder,
     ) {
         this.form = this.formBuilder.group({
             file: [null],
