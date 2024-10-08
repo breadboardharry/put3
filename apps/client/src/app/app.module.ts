@@ -14,7 +14,7 @@ import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { HitboxCoreComponent } from './view/hitbox/core/hitbox-core.component';
 import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
 import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
@@ -53,8 +53,7 @@ import { NotificationBoardComponent } from './view/master/notification-board/not
 import { ButtonSmallComponent } from './view/common/buttons/button-small/button-small.component';
 import { ClientService } from './services/client-service/client.service';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         DesktopComponent,
         WindowsButtonComponent,
@@ -92,8 +91,7 @@ import { ClientService } from './services/client-service/client.service';
         NotificationBoardComponent,
         ButtonSmallComponent,
     ],
-    imports: [
-        CodeInputModule,
+    bootstrap: [AppComponent], imports: [CodeInputModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -102,24 +100,20 @@ import { ClientService } from './services/client-service/client.service';
         MatDialogModule,
         DragDropModule,
         MatMenuModule,
-        HttpClientModule,
         MatSliderModule,
         FormsModule,
         ReactiveFormsModule,
         QRCodeModule,
         ClipboardModule,
-        MatTooltipModule,
-    ],
-    providers: [
+        MatTooltipModule], providers: [
         {
             provide: APP_INITIALIZER,
             useFactory: initApp,
             deps: [ClientService],
             multi: true
-        }
-    ],
-    bootstrap: [AppComponent]
-})
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
 
 function initApp(clientService: ClientService): () => Promise<any> {

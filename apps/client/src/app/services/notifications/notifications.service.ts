@@ -21,7 +21,6 @@ export class NotificationsService {
         const notification = new Notification(data.title, {
             body: data.message,
             icon: data.icon,
-            image: data.image,
             requireInteraction: !!data.duration && data.duration > 10000,
         });
         if (data.duration) setTimeout(() => {
