@@ -1,57 +1,64 @@
-<div class="header" *ngIf="canImport">
-    <button [ngClass]="{'selected': selectedMenu == 'resources'}"
-        (click)="menu('resources')"
-    >
-        <img src="assets/icons/medias-400.svg"/>
-        <span>Resources</span>
-    </button>
+<hlm-dialog-header>
+    <h3 hlmDialogTitle>Import media</h3>
+</hlm-dialog-header>
 
-    <hr>
+<hlm-tabs
+    [tab]="selectedMenu"
+    (tabActivated)="tabChanged($event)"
+    class="w-full flex-1 flex flex-col min-h-0"
+>
+    @if (canImport) {
+    <hlm-tabs-list class="w-full grid grid-cols-2">
+        <button [hlmTabsTrigger]="EnumTabs.RESOURCES">Ressouces</button>
+        <button [hlmTabsTrigger]="EnumTabs.IMPORT">Importer</button>
+    </hlm-tabs-list>
+    }
 
-    <button [ngClass]="{'selected': selectedMenu == 'import'}"
-        (click)="menu('import')"
-    >
-        <img src="assets/icons/download-400.svg"/>
-        <span>Import</span>
-    </button>
-</div>
+    <section [hlmTabsContent]="EnumTabs.RESOURCES" class="h-full min-h-0">
+        <div class="h-full flex flex-wrap justify-between gap-2 overflow-y-auto">
+            @if (!medias.length) {
+            <div class="no-content-label">No resources</div>
+            } @for (file of medias; track file.href) {
+            <app-file-card
+                (click)="select(file, $event)"
+                (dblclick)="validate(file, $event)"
+                [file]="file"
+                [selected]="selectionService.getSelection().includes(file)"
+            ></app-file-card>
+            }
+        </div>
+    </section>
+    <section [hlmTabsContent]="EnumTabs.IMPORT" class="h-full min-h-0">
+        @if (importedFile == undefined) {
+        <div
+            class="relative h-full flex flex-col gap-1 items-center justify-center rounded-lg bg-slate-900/25"
+        >
+            <hlm-icon size="xl" class="mb-2" name="lucideArrowDownToLine" />
+            <span>Drag files here</span>
+            <input
+                class="absolute top-0 left-0 w-full h-full opacity-0 z-50"
+                type="file"
+                name="files"
+                #fileInput
+                (change)="fileChanged($event)"
+                [accept]="allowedExtensions"
+            />
+        </div>
+        } @else {
+        <div class="h-full flex flex-col gap-6 items-center justify-center">
+            <img class="w-1/2 h-1/2 object-contain" [src]="importedFile.href" />
+            <button hlmBtn size="sm" (click)="resetImport()">
+                <hlm-icon size="sm" class="mr-2" name="lucideRotateCcw" />
+                Choose another file
+            </button>
+        </div>
+        }
+    </section>
+</hlm-tabs>
 
-<hr class="separator" *ngIf="canImport">
-
-<div class="gallery" *ngIf="selectedMenu == 'resources'">
-    <div class="no-content-label" *ngIf="!resourceService.getResources(type)!.length">No resources</div>
-    <app-file-card *ngFor="let file of resourceService.getResources(type)"
-        (click)="select(file, $event)"
-        (dblclick)="validate(file, $event)"
-        [file]="file"
-        [selected]="selectionService.getSelection().includes(file)"
-    ></app-file-card>
-</div>
-
-<div class="import" *ngIf="selectedMenu == 'import'">
-    <div class="drop" *ngIf="!importedFile">
-        <img src="assets/icons/download-200.svg">
-        <span>Drag files here</span>
-        <input class="file-input" type="file" name="files" #fileInput
-            (change)="fileChanged($event)"
-            [accept]="allowedExtensions"
-        />
-    </div>
-
-    <div class="replace" *ngIf="importedFile">
-        <img class="preview" [src]="importedFile.href">
-        <button (click)="resetImport()">
-            <img src="assets/icons/restart-400.svg">
-            <span>Choose another file</span>
-        </button>
-    </div>
-</div>
-
-<div class="buttons">
-    <app-button-small (click)="close()">
-        Cancel
-    </app-button-small>
-    <app-button-small (click)="validate()" [disabled]="!canValidate">
+<hlm-dialog-footer>
+    <button hlmBtn size="sm" (click)="close()">Cancel</button>
+    <button hlmBtn size="sm" (click)="validate()" [disabled]="!canValidate">
         Select
-    </app-button-small>
-</div>
+    </button>
+</hlm-dialog-footer>

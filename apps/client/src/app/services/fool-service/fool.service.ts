@@ -7,21 +7,23 @@ import { LayoutService } from '../layout-service/layout.service';
 import { AudioService } from '../audio-service/audio.service';
 import { PreferencesService } from '../preferences-service/preferences.service';
 import { Layout } from 'src/app/types/layout';
-import { SnackbarService } from '../snackbar-service/snackbar.service';
 import { BackendService } from '../backend/backend.service';
 import { MicrophoneService } from '../microphone/microphone.service';
 import { CameraService } from '../camera/camera.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationData } from 'src/app/types/notification';
 import { EnumSessionStatus } from 'src/app/app-models/enums/session';
-import { EnumActionType, EnumSessionActionType } from 'src/app/app-models/enums/action';
+import {
+    EnumActionType,
+    EnumSessionActionType,
+} from 'src/app/app-models/enums/action';
 import { ActionData } from 'src/app/app-models/types/action';
+import { toast } from 'ngx-sonner';
 
 @Injectable({
     providedIn: 'root',
 })
 export class FoolService {
-
     public running: boolean = false;
 
     public audioEnabled: boolean = false;
@@ -32,8 +34,8 @@ export class FoolService {
     public layout: Layout = {
         hitboxes: [],
         desktop: {
-            image: undefined
-        }
+            image: undefined,
+        },
     };
 
     constructor(
@@ -43,11 +45,10 @@ export class FoolService {
         private windowService: WindowService,
         private layoutService: LayoutService,
         private preferences: PreferencesService,
-        private snackbar: SnackbarService,
         private audio: AudioService,
         private microphone: MicrophoneService,
         private camera: CameraService,
-        private notifications: NotificationsService,
+        private notifications: NotificationsService
     ) {
         this.init();
     }
@@ -71,14 +72,16 @@ export class FoolService {
         });
 
         this.eventService.onMessage.subscribe((message) => {
-            this.snackbar.open(message.type, message.text);
+            toast[message.type](message.text);
         });
     }
 
     public run() {
         if (this.running) return;
         this.running = true;
-        this.eventService.sendSessionEvent(ClientService.SESSION_CODE!, { type: EnumSessionActionType.RUN });
+        this.eventService.sendSessionEvent(ClientService.SESSION_CODE!, {
+            type: EnumSessionActionType.RUN,
+        });
     }
 
     private action(type: EnumActionType, data: ActionData) {
@@ -86,7 +89,11 @@ export class FoolService {
             case EnumActionType.AUDIO:
                 const volume = 'volume' in data ? data.volume : 1.0;
                 if ('stop' in data && data.stop) this.audio.stopAll();
-                else if ('track' in data) this.audio.play(this.backend.serverUrl + '/' + data.track!.href, volume);
+                else if ('track' in data)
+                    this.audio.play(
+                        this.backend.serverUrl + '/' + data.track!.href,
+                        volume
+                    );
                 break;
 
             case EnumActionType.NOTIFICATION:
@@ -112,7 +119,7 @@ export class FoolService {
                     audio: this.audio.canPlay,
                     microphone: this.microphone.hasPermission,
                     camera: this.camera.hasPermission,
-                }
+                },
             },
             window: this.windowService.getWindowSize(),
             settings: {
@@ -120,8 +127,7 @@ export class FoolService {
                 audio: this.audioEnabled,
                 microphone: this.microphoneEnabled,
                 camera: this.cameraEnabled,
-            }
+            },
         });
     }
-
 }

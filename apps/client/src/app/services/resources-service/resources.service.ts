@@ -4,27 +4,27 @@ import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BackendService } from '../backend/backend.service';
 import { EventService } from '../event-service/event.service';
-import { MatDialog } from '@angular/material/dialog';
 import { ResourceBrowserModal } from 'src/app/view/modals/resource-browser/resource-browser.modal';
 import { ResourceSet } from 'src/app/app-models/types/resources';
-import { EnumResourceDirectory, EnumResourceType } from 'src/app/app-models/enums/resources';
+import {
+    EnumResourceDirectory,
+    EnumResourceType,
+} from 'src/app/app-models/enums/resources';
 import { FileData } from 'src/app/app-models/types/file';
+import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class ResourcesService {
-
     private routeUrl = this.backend.apiUrl + '/resources';
-    private resources: Partial<ResourceSet> = {
-
-    };
+    private resources: Partial<ResourceSet> = {};
 
     constructor(
         private http: HttpClient,
         private backend: BackendService,
         private eventService: EventService,
-        private dialog: MatDialog,
+        private hlmDialogService: HlmDialogService
     ) {
         this.update();
         this.eventService.onResourcesUpdate.subscribe((resources) => {
@@ -43,17 +43,23 @@ export class ResourcesService {
 
     public typeToDir(type: EnumResourceType): EnumResourceDirectory {
         switch (type) {
-            case EnumResourceType.IMAGE: return EnumResourceDirectory.IMAGES;
-            case EnumResourceType.VIDEO: return EnumResourceDirectory.VIDEOS;
-            case EnumResourceType.AUDIO: return EnumResourceDirectory.AUDIOS;
+            case EnumResourceType.IMAGE:
+                return EnumResourceDirectory.IMAGES;
+            case EnumResourceType.VIDEO:
+                return EnumResourceDirectory.VIDEOS;
+            case EnumResourceType.AUDIO:
+                return EnumResourceDirectory.AUDIOS;
         }
     }
 
     public dirToType(dir: EnumResourceDirectory): EnumResourceType {
         switch (dir) {
-            case EnumResourceDirectory.IMAGES: return EnumResourceType.IMAGE;
-            case EnumResourceDirectory.VIDEOS: return EnumResourceType.VIDEO;
-            case EnumResourceDirectory.AUDIOS: return EnumResourceType.AUDIO;
+            case EnumResourceDirectory.IMAGES:
+                return EnumResourceType.IMAGE;
+            case EnumResourceDirectory.VIDEOS:
+                return EnumResourceType.VIDEO;
+            case EnumResourceDirectory.AUDIOS:
+                return EnumResourceType.AUDIO;
         }
     }
 
@@ -64,9 +70,10 @@ export class ResourcesService {
             let newPath = path ? path + '/' + key : key;
 
             if (Array.isArray(obj[key])) {
-                result = result.concat(obj[key].map((item: any) => newPath + '/' + item));
-            }
-            else if (typeof obj[key] === 'object') {
+                result = result.concat(
+                    obj[key].map((item: any) => newPath + '/' + item)
+                );
+            } else if (typeof obj[key] === 'object') {
                 result = result.concat(this.flattenObject(obj[key], newPath));
             }
         }
@@ -79,12 +86,14 @@ export class ResourcesService {
      */
     public getData(): Promise<ResourceSet> {
         return new Promise<ResourceSet>((resolve, reject) => {
-            this.http.get<ResourceSet>(this.routeUrl, {
-                responseType: 'json',
-                withCredentials: true
-            }).subscribe((data: ResourceSet) => {
-                resolve(data);
-            });
+            this.http
+                .get<ResourceSet>(this.routeUrl, {
+                    responseType: 'json',
+                    withCredentials: true,
+                })
+                .subscribe((data: ResourceSet) => {
+                    resolve(data);
+                });
         });
     }
 
@@ -97,12 +106,14 @@ export class ResourcesService {
         const endpoint = this.routeUrl + '/' + this.typeToDir(type);
 
         return new Promise<FileData[]>((resolve, reject) => {
-            this.http.get<FileData[]>(endpoint, {
-                responseType: 'json',
-                withCredentials: true
-            }).subscribe((data: FileData[]) => {
-                resolve(data);
-            });
+            this.http
+                .get<FileData[]>(endpoint, {
+                    responseType: 'json',
+                    withCredentials: true,
+                })
+                .subscribe((data: FileData[]) => {
+                    resolve(data);
+                });
         });
     }
 
@@ -134,24 +145,27 @@ export class ResourcesService {
      */
     public delete(filespath: string[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.http.delete(this.routeUrl, {
-                responseType: 'json',
-                body: filespath,
-                withCredentials: true
-            })
-            .subscribe((data: any) => resolve(data));
+            this.http
+                .delete(this.routeUrl, {
+                    responseType: 'json',
+                    body: filespath,
+                    withCredentials: true,
+                })
+                .subscribe((data: any) => resolve(data));
         });
     }
 
     public exists(file: FileData | string): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             let path = typeof file === 'string' ? file : file.href;
-            this.http.get(this.backend.serverUrl + '/' + path, {
-                responseType: 'blob'
-            }).subscribe({
-                next: () => resolve(true),
-                error: () =>  resolve(false)
-            });
+            this.http
+                .get(this.backend.serverUrl + '/' + path, {
+                    responseType: 'blob',
+                })
+                .subscribe({
+                    next: () => resolve(true),
+                    error: () => resolve(false),
+                });
         });
     }
 
@@ -162,60 +176,79 @@ export class ResourcesService {
      * @param dirpath Directory path
      * @returns Server result
      */
-    public rename(currentName: string, newName: string, dirpath: string): Promise<any> {
+    public rename(
+        currentName: string,
+        newName: string,
+        dirpath: string
+    ): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.http.post(this.routeUrl + '/rename', {
-                currentName,
-                newName,
-                dirpath,
-            },
-            {
-                responseType: 'json',
-                withCredentials: true
-            })
-            .subscribe({
-                next: (data: any) => resolve(data),
-                error: (error: any) => reject(error)
-            });
+            this.http
+                .post(
+                    this.routeUrl + '/rename',
+                    {
+                        currentName,
+                        newName,
+                        dirpath,
+                    },
+                    {
+                        responseType: 'json',
+                        withCredentials: true,
+                    }
+                )
+                .subscribe({
+                    next: (data: any) => resolve(data),
+                    error: (error: any) => reject(error),
+                });
         });
     }
 
-    addFiles(file: File) {
+    public addFiles(file: File) {
         let arr: any[] = [];
         let formData = new FormData();
 
         arr.push(file);
-        arr[0].forEach((item: any, i: any) => {
-            formData.append('file', arr[0][i]);
-        })
+        if (Array.isArray(arr[0])) {
+            arr[0].forEach((item: any, i: any) => {
+                formData.append('file', arr[0][i]);
+            });
+        }
+        else {
+            formData.append('file', arr[0]);
+        }
 
-        return this.http.post(this.routeUrl + '/upload', formData, {
-            reportProgress: true,
-            observe: 'events',
-            withCredentials: true
-        }).pipe(
-            catchError(this.errorMgmt)
-        )
+        return this.http
+            .post(this.routeUrl + '/upload', formData, {
+                reportProgress: true,
+                observe: 'events',
+                withCredentials: true,
+            })
+            .pipe(catchError(this.errorMgmt));
     }
 
     errorMgmt(error: HttpErrorResponse) {
         let errorMessage = '';
         // Get client-side error
-        if (error.error instanceof ErrorEvent) errorMessage = error.error.message;
+        if (error.error instanceof ErrorEvent)
+            errorMessage = error.error.message;
         // Get server-side error
-        else errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        else
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
 
         return throwError(errorMessage);
     }
 
-    public browse(type?: EnumResourceType, canImport: boolean = false) {
-        return new Promise((resolve, reject) => {
-            const dialogRef = this.dialog.open(ResourceBrowserModal, {
-                data: { type, canImport }
+    public browse(
+        type?: EnumResourceType,
+        canImport: boolean = false
+    ): Promise<FileData[]> {
+        return new Promise((resolve) => {
+            const dialogRef = this.hlmDialogService.open(ResourceBrowserModal, {
+                context: { type, canImport },
             });
 
-            dialogRef.afterClosed().subscribe((data: FileData | FileData[] | undefined) => {
-                resolve(data);
+            dialogRef.closed$.subscribe((selection: FileData[]) => {
+                console.log('selection', selection);
+                resolve(selection);
             });
         });
     }

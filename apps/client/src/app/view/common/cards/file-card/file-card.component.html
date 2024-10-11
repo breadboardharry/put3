@@ -1,0 +1,20 @@
+<div class="card" [ngClass]="{ selected: selected() }">
+    @switch (file().type) { @case (EnumResourceType.IMAGE) {
+    <img [src]="backend.serverUrl + '/' + file().href" draggable="false" />
+    } @case (EnumResourceType.VIDEO) {
+    <img src="assets/icons/video-file.png" draggable="false" />
+    } @case (EnumResourceType.AUDIO) {
+    <img src="assets/icons/audio-file.png" draggable="false" />
+    } }
+
+    <textarea
+        class="filename"
+        rows="2"
+        [ngClass]="{ editing: editing() }"
+        [(ngModel)]="name"
+        [readOnly]="!editing()"
+        (focusout)="editDone()"
+        (keydown.enter)="editDone()"
+    >
+    </textarea>
+</div>

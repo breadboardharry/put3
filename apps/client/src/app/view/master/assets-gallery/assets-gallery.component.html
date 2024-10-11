@@ -1,8 +1,7 @@
 <div class="container" [ngClass]="{'uploading': uploading}" appDragDropFileUpload (fileDropped)="upload($event)">
     <form [formGroup]="form">
         <div class="file-upload-container">
-            <mat-spinner *ngIf="uploading" [diameter]="50" color="primary"></mat-spinner>
-
+            <hlm-spinner *ngIf="uploading" />
             <div class="label-container" *ngIf="!uploading">
                 <img src="assets/icons/download-200.svg">
                 <span class="ddinfo">Drag files here</span>
@@ -32,7 +31,7 @@
         </div> -->
 
         <div class="no-content-label" *ngIf="!resourceService.flatten().length">No resources</div>
-        <app-file-card *ngFor="let file of resourceService.flatten()"
+        <!-- <app-file-card *ngFor="let file of resourceService.flatten()"
             (click)="select(file, $event)"
             (contextmenu)="select(file, $event, true)"
             [file]="file"
@@ -40,7 +39,7 @@
             [editing]="file === editing"
             (editedEvent)="rename($event, file)"
         >
-        </app-file-card>
+        </app-file-card> -->
 
         <app-context-menu *ngIf="contextMenu.show"
             [ngStyle]="contextMenu.style"

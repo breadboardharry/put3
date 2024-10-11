@@ -1,48 +1,72 @@
-import iconv from "iconv-lite";
-import fs from "fs";
-import path from "path";
-import sizeOf from "image-size";
-import { getDirPath, getFileExtension, getLastPathElement, getPathElem } from "./file.service";
-import { fileExists, renameFile } from "./resource.service";
-import { Paths } from "../enums/paths";
-import { EnumResourceDirectory, EnumResourceType } from "../app-models/enums/resources";
+import iconv from 'iconv-lite';
+import fs from 'fs';
+import path from 'path';
+import sizeOf from 'image-size';
+import {
+    getDirPath,
+    getFileExtension,
+    getLastPathElement,
+    getPathElem,
+} from './file.service';
+import { fileExists, renameFile } from './resource.service';
+import { Paths } from '../enums/paths';
+import {
+    EnumResourceDirectory,
+    EnumResourceType,
+} from '../app-models/enums/resources';
+import { v4 as uuidv4 } from 'uuid';
 
 const Extensions = {
-    "images": ["jpg", "jpeg", "png", "gif"],
-    "videos": ["mp4", "mov", "avi", "mkv"],
-    "audios": ["mp3", "wav"]
+    images: ['jpg', 'jpeg', 'png', 'gif'],
+    videos: ['mp4', 'mov', 'avi', 'mkv'],
+    audios: ['mp3', 'wav'],
 };
 
 // Generate a custom filename
-export function generateFilename(filename: string, config = "none"): string {
-
+export function generateFilename(
+    filename: string,
+    config:
+        | 'timestamp'
+        | 'uuid'
+        | 'desktop'
+        | 'clean'
+        | 'original'
+        | 'none' = 'none'
+): string {
+    const ext = path.extname(filename);
     switch (config) {
-        case "timestamp":
-            filename = Date.now() + path.extname(filename).toLowerCase();
+        case 'timestamp':
+            filename = Date.now() + ext.toLowerCase();
             break;
 
-        case "desktop":
-            filename = "desktop" + path.extname(filename).toLowerCase();
+        case 'uuid':
+            filename = uuidv4() + ext.toLowerCase();
             break;
 
-        case "clean":
+        case 'desktop':
+            filename = 'desktop' + ext.toLowerCase();
+            break;
+
+        case 'clean':
             // Convert accented characters to their unaccented version
-            filename = filename.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            filename = filename
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
             // Remove non-ASCII characters
             filename = filename.replace(/[^\x00-\x7F]/g, '');
             // Encode in utf8
             filename = iconv.decode(iconv.encode(filename, 'latin1'), 'utf8');
             break;
 
-        case "original":
-        case "none":
+        case 'original':
+        case 'none':
         default:
             filename = filename;
             break;
     }
 
     return filename;
-};
+}
 
 /**
  * Get resource directory name from a file extension
@@ -53,7 +77,7 @@ export function generateFilename(filename: string, config = "none"): string {
 export function extToDir(ext: string): string {
     const type = extToType(ext);
     return typeToDir(type);
-};
+}
 
 /**
  * Check if a directory name is valid
@@ -62,9 +86,10 @@ export function extToDir(ext: string): string {
  */
 export function isValidDir(dirname: string): boolean {
     return (
-        typeof dirname == "string" && fs.existsSync(path.join(Paths.RESOURCES, dirname))
+        typeof dirname == 'string' &&
+        fs.existsSync(path.join(Paths.RESOURCES, dirname))
     );
-};
+}
 
 /**
  * Converts a directory name to a resource type
@@ -74,12 +99,16 @@ export function isValidDir(dirname: string): boolean {
  */
 export function dirToType(dirname: EnumResourceDirectory): EnumResourceType {
     switch (dirname) {
-        case EnumResourceDirectory.IMAGES: return EnumResourceType.IMAGE;
-        case EnumResourceDirectory.VIDEOS: return EnumResourceType.VIDEO;
-        case EnumResourceDirectory.AUDIOS: return EnumResourceType.AUDIO;
-        default: throw new Error("Invalid directory name");
+        case EnumResourceDirectory.IMAGES:
+            return EnumResourceType.IMAGE;
+        case EnumResourceDirectory.VIDEOS:
+            return EnumResourceType.VIDEO;
+        case EnumResourceDirectory.AUDIOS:
+            return EnumResourceType.AUDIO;
+        default:
+            throw new Error('Invalid directory name');
     }
-};
+}
 
 /**
  * Converts a resource type to a directory name
@@ -89,12 +118,16 @@ export function dirToType(dirname: EnumResourceDirectory): EnumResourceType {
  */
 export function typeToDir(type: EnumResourceType): EnumResourceDirectory {
     switch (type) {
-        case EnumResourceType.IMAGE: return EnumResourceDirectory.IMAGES;
-        case EnumResourceType.VIDEO: return EnumResourceDirectory.VIDEOS;
-        case EnumResourceType.AUDIO: return EnumResourceDirectory.AUDIOS;
-        default: throw new Error("Invalid resource type");
+        case EnumResourceType.IMAGE:
+            return EnumResourceDirectory.IMAGES;
+        case EnumResourceType.VIDEO:
+            return EnumResourceDirectory.VIDEOS;
+        case EnumResourceType.AUDIO:
+            return EnumResourceDirectory.AUDIOS;
+        default:
+            throw new Error('Invalid resource type');
     }
-};
+}
 
 /**
  * Get resource file type from its extension
@@ -104,7 +137,7 @@ export function typeToDir(type: EnumResourceType): EnumResourceDirectory {
  */
 export function extToType(ext: string): EnumResourceType {
     // Check if the extension is valid
-    if (!isValidExt(ext)) throw new Error("Invalid extension");
+    if (!isValidExt(ext)) throw new Error('Invalid extension');
 
     // Get the resource type
     for (const [type, exts] of Object.entries(Extensions)) {
@@ -112,8 +145,8 @@ export function extToType(ext: string): EnumResourceType {
             return dirToType(type as EnumResourceDirectory);
         }
     }
-    throw new Error("Invalid extension");
-};
+    throw new Error('Invalid extension');
+}
 
 /**
  * Check if a file exists
@@ -124,7 +157,7 @@ export function doFileExists(filename: string): boolean {
     const ext = getFileExtension(filename);
     const filepath = path.join(Paths.RESOURCES, extToDir(ext), filename);
     return fileExists(filepath);
-};
+}
 
 /**
  * Rename a resource file
@@ -132,7 +165,7 @@ export function doFileExists(filename: string): boolean {
  * @param newName New file name
  * @returns True if the file has been renamed
  */
-export function rename (currentName: string, newName: string, dirpath: string) {
+export function rename(currentName: string, newName: string, dirpath: string) {
     dirpath = path.join(Paths.RESOURCES, dirpath);
 
     return renameFile(currentName, newName, dirpath);
@@ -145,7 +178,7 @@ export function rename (currentName: string, newName: string, dirpath: string) {
  */
 export function isValidType(type) {
     return Object.values(EnumResourceType).includes(type);
-};
+}
 
 /**
  * Check if a file extension is valid
@@ -154,44 +187,48 @@ export function isValidType(type) {
  */
 export function isValidExt(ext: string): boolean {
     return Object.values(Extensions).flat().includes(ext);
-};
+}
 
 export function getData(filepath: string, filetype?: EnumResourceType) {
     const type = filetype ? filetype : getPathElem(filepath, 0);
 
     switch (type) {
-        case EnumResourceType.IMAGE: return getImageData(filepath);
-        case EnumResourceType.VIDEO: return getVideoData(filepath);
-        case EnumResourceType.AUDIO: return getAudioData(filepath);
-        default: throw new Error("Invalid resource type");
+        case EnumResourceType.IMAGE:
+            return getImageData(filepath);
+        case EnumResourceType.VIDEO:
+            return getVideoData(filepath);
+        case EnumResourceType.AUDIO:
+            return getAudioData(filepath);
+        default:
+            throw new Error('Invalid resource type');
     }
-};
+}
 
 /**
  * Get general data from a resource file
  * @param filepath File path (relative to the resources directory) e.g. "images/../image.jpg"
  */
 export function getGeneralData(filepath: string) {
-    const publicPath = path.join("resources", filepath);
-    const absolutePath = path.join("public", publicPath);
+    const publicPath = path.join('resources', filepath);
+    const absolutePath = path.join('public', publicPath);
 
     return {
         name: getLastPathElement(filepath),
         href: publicPath,
         path: filepath,
         dirpath: getDirPath(filepath),
-        size: fs.statSync(absolutePath).size
+        size: fs.statSync(absolutePath).size,
     };
-};
+}
 
 /**
-* Get resource data from an image file
-* @param filepath File path (relative to the resources directory) e.g. "images/../image.jpg"
-*/
+ * Get resource data from an image file
+ * @param filepath File path (relative to the resources directory) e.g. "images/../image.jpg"
+ */
 export function getImageData(filepath: string) {
     const generalData = getGeneralData(filepath);
-    const dimensions = sizeOf(path.join("public", generalData.href));
-    if (!dimensions) throw new Error("Invalid image file");
+    const dimensions = sizeOf(path.join('public', generalData.href));
+    if (!dimensions) throw new Error('Invalid image file');
 
     return {
         ...generalData,
@@ -203,7 +240,7 @@ export function getImageData(filepath: string) {
             ratio: dimensions.width! / dimensions.height!,
         },
     };
-};
+}
 
 /**
  * Get resource data from a video file
@@ -212,9 +249,9 @@ export function getImageData(filepath: string) {
 export function getVideoData(filepath: string) {
     return {
         ...getGeneralData(filepath),
-        type: 'video'
+        type: 'video',
     };
-};
+}
 
 /**
  * Get resource data from an audio file
@@ -223,6 +260,6 @@ export function getVideoData(filepath: string) {
 export function getAudioData(filepath: string) {
     return {
         ...getGeneralData(filepath),
-        type: 'audio'
+        type: 'audio',
     };
 }

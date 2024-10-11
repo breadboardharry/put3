@@ -2,28 +2,26 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { EnumAppRoute } from 'src/app/enums/routes';
 import { SessionService } from 'src/app/services/session-service/session.service';
-import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { CodeInputComponent } from '../../common/code-input/code-input.component';
+import { toast } from 'ngx-sonner';
 
 @Component({
     selector: 'app-session-enter-page',
     templateUrl: './session-enter-page.component.html',
-    styleUrls: ['./session-enter-page.component.scss']
+    styleUrls: ['./session-enter-page.component.scss'],
 })
 export class SessionEnterPageComponent implements AfterViewInit {
-
     @ViewChild('codeInput')
     public codeInput!: CodeInputComponent;
 
     public codeLength: number = 5;
-    public code: string = "";
+    public code: string = '';
     public loading: boolean = false;
 
     constructor(
         private router: Router,
-        private sessionService: SessionService,
-        private snackbar: SnackbarService
-    ) { }
+        private sessionService: SessionService
+    ) {}
 
     ngAfterViewInit(): void {
         this.codeInput.focusOnField(0);
@@ -39,10 +37,12 @@ export class SessionEnterPageComponent implements AfterViewInit {
                 setTimeout(() => {
                     this.codeInput.focusOnField(this.code.length - 1);
                 }, 100);
-                this.snackbar.openError("No session found");
+                toast.error('No session found');
                 return;
             }
-            this.router.navigate([EnumAppRoute.MASTER], { queryParams: { code: this.code } });
+            this.router.navigate([EnumAppRoute.MASTER], {
+                queryParams: { code: this.code },
+            });
         });
     }
 
@@ -58,17 +58,24 @@ export class SessionEnterPageComponent implements AfterViewInit {
         this.validate();
     }
 
-    private adminAccess: { timeoutDuration: number, neededTries: number, timeout?: NodeJS.Timeout, activeTries: number } = {
+    private adminAccess: {
+        timeoutDuration: number;
+        neededTries: number;
+        timeout?: NodeJS.Timeout;
+        activeTries: number;
+    } = {
         timeoutDuration: 500,
         neededTries: 5,
         timeout: undefined,
         activeTries: 0,
-    }
+    };
     public tryAdminAccess(): void {
         this.adminAccess.activeTries++;
 
         if (this.adminAccess.activeTries >= this.adminAccess.neededTries) {
-            this.router.navigate([EnumAppRoute.LOGIN], { queryParams: { route: EnumAppRoute.MASTER } });
+            this.router.navigate([EnumAppRoute.LOGIN], {
+                queryParams: { route: EnumAppRoute.MASTER },
+            });
             return;
         }
 
@@ -77,5 +84,4 @@ export class SessionEnterPageComponent implements AfterViewInit {
             this.adminAccess.activeTries = 0;
         }, this.adminAccess.timeoutDuration);
     }
-
 }

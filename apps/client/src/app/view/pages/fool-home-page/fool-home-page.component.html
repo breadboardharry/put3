@@ -1,6 +1,6 @@
 <div class="page">
     <div class="landing-page {{ fool.running ? 'closed' : ''}}">
-        <mat-spinner *ngIf="loading"></mat-spinner>
+        <hlm-spinner *ngIf="loading" size="xl"></hlm-spinner>
 
         <div class="landing-page-content" *ngIf="!loading">
             <button class="session-code-button" [cdkCopyToClipboard]="sessionCode" (click)="copiedCodeToClipboard()">

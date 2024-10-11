@@ -1,21 +1,24 @@
-import { Express } from "express";
-import express from "express";
+import { Express } from 'express';
+import express from 'express';
 import Routes from './routes/routes';
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
-import { corsOptions } from "../../config/cors";
+import { corsOptions } from '../../config/cors';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import UserMiddleware from "../../middlewares/user";
+import UserMiddleware from '../../middlewares/user';
+import { ReqContext } from '../../providers/req-context';
 
 export class HTTPServer {
-
-    private static servOptions = process.env.NODE_ENV == 'development' ? {
-        key: fs.readFileSync(process.env.SSL_KEY!),
-        cert: fs.readFileSync(process.env.SSL_CERT!),
-    } : {};
+    private static servOptions =
+        process.env.NODE_ENV == 'development'
+            ? {
+                  key: fs.readFileSync(process.env.SSL_KEY!),
+                  cert: fs.readFileSync(process.env.SSL_CERT!),
+              }
+            : {};
 
     private static app: Express;
     private static server: http.Server | https.Server;
@@ -28,8 +31,14 @@ export class HTTPServer {
         app.use(cookieParser());
         app.use(UserMiddleware);
         app.use(express.static('public'));
-        if (process.env.NODE_ENV === 'development') this.server = https.createServer(this.servOptions, app);
-        else this.server = http.createServer(app);
+
+        this.server = https.createServer(this.servOptions, app);
+
+        // Add a "conext" object to the request that will be used to store data between middlewares
+        this.app.use((req, _, next) => {
+            req.context = new ReqContext();
+            next();
+        });
 
         this.app.use('/api/', Routes);
 

@@ -4,9 +4,9 @@ import { PreferencesService } from 'src/app/services/preferences-service/prefere
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
-import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { EnumUserRole } from 'src/app/app-models/enums/user';
+import { toast } from 'ngx-sonner';
 
 @Component({
     selector: 'app-fool-home-page',
@@ -23,7 +23,6 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
         private backend: BackendService,
         private resourceService: ResourcesService,
         private preferences: PreferencesService,
-        private snackbar: SnackbarService,
         public fool: FoolService
     ) {}
 
@@ -74,7 +73,7 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
     }
 
     public copiedCodeToClipboard(): void {
-        this.snackbar.openSuccess("Code copied to clipboard");
+        toast.success("Code copied to clipboard");
     }
 
     @HostListener('contextmenu', ['$event'])

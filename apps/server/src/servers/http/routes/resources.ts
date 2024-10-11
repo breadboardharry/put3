@@ -1,67 +1,70 @@
-import express, { Router } from "express";
-import { upload } from "../../../services/multer";
-import { Response } from "../../../services/response.service";
-import { getData, rename, unlink } from "../../../modules/resources/resources";
-import UserModule from "../../../modules/users/users";
-import IsAdminMiddleware from "../../../middlewares/admin";
+import express, { Router } from 'express';
+import { upload } from '../../../services/multer';
+import { Response } from '../../../services/response.service';
+import * as Resources from '../../../modules/resources/resources';
+import UserModule from '../../../modules/users/users';
+import IsAdminMiddleware from '../../../middlewares/admin';
 const router: Router = express.Router();
 
-router.get("/", (_r, res) => {
+router.get('/', (_r, res) => {
     try {
         // Return the data from all directories
-        const data = getData();
+        const data = Resources.getData();
         res.json(data);
-    }
-    catch (err: any) {
+    } catch (err: any) {
         res.status(err.status || 500).json(err);
     }
 });
 
-router.get("/:dir", (req, res) => {
+router.get('/:dir', (req, res) => {
     try {
         // Return the data from the specified directory
-        const data = getData(req.params.dir);
+        const data = Resources.getData(req.params.dir);
         res.json(data);
-    }
-    catch (err: any) {
+    } catch (err: any) {
         res.status(err.status || 500).json(err);
     }
 });
 
-router.delete("/", IsAdminMiddleware, (req, res) => {
+router.delete('/', IsAdminMiddleware, (req, res) => {
     const filespath = req.body;
 
     try {
-        const data = unlink(filespath);
+        const data = Resources.unlink(filespath);
         res.json(data);
 
         // Alert clients that the resources have been updated
         if (data.success) UserModule.emitUpdate.resources();
-    }
-    catch (err: any) {
+    } catch (err: any) {
         res.status(err.status || 500).json(err);
     }
 });
 
-router.post("/rename", IsAdminMiddleware, (req, res) => {
+router.post('/rename', IsAdminMiddleware, (req, res) => {
     const { currentName, newName, dirpath } = req.body;
 
     try {
-        const success = rename(currentName, newName, dirpath);
+        const success = Resources.rename(currentName, newName, dirpath);
         res.json(success);
 
         // Alert clients that the resources have been updated
         if (success) UserModule.emitUpdate.resources();
-    }
-    catch (err: any) {
+    } catch (err: any) {
         console.error(err);
         res.status(err.status || 500).json(err);
     }
 });
 
 // Upload file
-router.post("/upload", upload.file.array('file'), (_r, res) => {
-    res.json(Response.SUCCESS.UPLOAD);
+router.post('/upload', upload.file.array('file'), (req, res) => {
+    const fileRefs = req.context.storage || [];
+    req.context.storage = [];
+
+    const data = fileRefs.map((ref) =>
+        Resources.getFileData(ref.type, ref.filename)
+    );
+
+    res.json({ ...Response.SUCCESS.UPLOAD, data });
 
     UserModule.emitUpdate.resources();
 });
