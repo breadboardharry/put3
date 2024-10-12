@@ -1,10 +1,10 @@
-<div class="card" [ngClass]="{ selected: selected() }">
+<div class="card w-full p-3 flex flex-col justify-center items-center gap-4 overflow-hidden bg-transparent" [ngClass]="{ selected: selected() }">
     @switch (file().type) { @case (EnumResourceType.IMAGE) {
-    <img [src]="backend.serverUrl + '/' + file().href" draggable="false" />
+    <img class="h-24 aspect-square object-contain" [src]="backend.serverUrl + '/' + file().href" draggable="false" />
     } @case (EnumResourceType.VIDEO) {
-    <img src="assets/icons/video-file.png" draggable="false" />
+    <img class="h-24 aspect-square object-contain" src="assets/icons/video-file.png" draggable="false" />
     } @case (EnumResourceType.AUDIO) {
-    <img src="assets/icons/audio-file.png" draggable="false" />
+    <img class="h-24 aspect-square object-contain" src="assets/icons/audio-file.png" draggable="false" />
     } }
 
     <textarea

@@ -1,7 +1,9 @@
 import { NgClass } from '@angular/common';
 import {
+    ChangeDetectionStrategy,
     Component,
     EventEmitter,
+    HostBinding,
     OnInit,
     Output,
     inject,
@@ -18,6 +20,8 @@ import { BackendService } from 'src/app/services/backend/backend.service';
     imports: [NgClass, FormsModule],
     templateUrl: './file-card.component.html',
     styleUrls: ['./file-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: { class: 'w-full h-full select-none' },
 })
 export class FileCardComponent implements OnInit {
     public file = input.required<FileData>();
@@ -28,7 +32,7 @@ export class FileCardComponent implements OnInit {
     public name: string = '';
 
     public readonly EnumResourceType = EnumResourceType;
-    
+
     public readonly backend = inject<BackendService>(BackendService);
 
     ngOnInit(): void {

@@ -58,9 +58,9 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
     }
 
     public changeBackground() {
-        this.resourcesService.browse(EnumResourceType.IMAGE, true).then((images: FileData[]) => {
-            if (!images.length) return;
-            const image = images[0];
+        this.resourcesService.browse(EnumResourceType.IMAGE, true).then((selection) => {
+            if (!selection?.length) return;
+            const image = selection[0];
             this.target!.fool.layout.desktop.image = image.href;
         });
     }

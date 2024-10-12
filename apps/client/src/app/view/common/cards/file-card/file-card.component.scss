@@ -1,25 +1,6 @@
 @import "src/styles.scss";
 
 .card {
-    flex: 1 1;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-
-    background-color: transparent;
-    overflow: hidden;
-
-    width: 150px;
-    padding: 0.75rem;
-    box-sizing: border-box;
-
-    @media (max-width: $mobile) {
-        width: 90px;
-    }
-
     &:hover {
         background-color: rgb(26, 26, 52);
     }
@@ -59,10 +40,4 @@
     &:not(.editing) {
         pointer-events: none;
     }
-}
-
-img {
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: contain;
 }

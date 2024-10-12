@@ -32,13 +32,13 @@ export class ResourcesService {
         });
     }
 
-    public async update() {
+    public async update(): Promise<ResourceSet> {
         // const logged = await this.authService.isLogged();
         // if (!logged) return;
 
-        this.getData().then((resources: ResourceSet) => {
-            this.resources = resources;
-        });
+        const resources = await this.getData();
+        this.resources = resources;
+        return resources;
     }
 
     public typeToDir(type: EnumResourceType): EnumResourceDirectory {
@@ -140,11 +140,12 @@ export class ResourcesService {
 
     /**
      * Delete multiple resource files
-     * @param {string[]} filespath Path of the files to delete
-     * @returns {Promise<any>} Server result
+     * @param medias Medias to delete
+     * @returns Server result
      */
-    public delete(filespath: string[]): Promise<any> {
+    public delete(medias: FileData[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
+            const filespath = medias.map((media) => media.path);
             this.http
                 .delete(this.routeUrl, {
                     responseType: 'json',
@@ -211,8 +212,7 @@ export class ResourcesService {
             arr[0].forEach((item: any, i: any) => {
                 formData.append('file', arr[0][i]);
             });
-        }
-        else {
+        } else {
             formData.append('file', arr[0]);
         }
 
@@ -240,14 +240,13 @@ export class ResourcesService {
     public browse(
         type?: EnumResourceType,
         canImport: boolean = false
-    ): Promise<FileData[]> {
+    ): Promise<FileData[] | undefined> {
         return new Promise((resolve) => {
             const dialogRef = this.hlmDialogService.open(ResourceBrowserModal, {
                 context: { type, canImport },
             });
 
-            dialogRef.closed$.subscribe((selection: FileData[]) => {
-                console.log('selection', selection);
+            dialogRef.closed$.subscribe((selection: FileData[] | undefined) => {
                 resolve(selection);
             });
         });

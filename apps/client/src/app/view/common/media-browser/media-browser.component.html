@@ -1,0 +1,8 @@
+@for (media of mediaService.getResources(); track media.href) {
+<app-file-card
+    (click)="onCardClick(media, $event)"
+    (dblclick)="onCardDoubleClick(media, $event)"
+    [file]="media"
+    [selected]="selection.getItems().includes(media)"
+></app-file-card>
+}

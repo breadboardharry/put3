@@ -42,7 +42,7 @@ type InputData = {
     multiple?: boolean;
 };
 
-type OutputData = FileData[];
+type OutputData = FileData[] | undefined;
 
 enum EnumTabs {
     RESOURCES = 'resources',
@@ -70,11 +70,9 @@ enum EnumTabs {
     providers: [provideIcons({ lucideArrowDownToLine, lucideRotateCcw })],
     templateUrl: './resource-browser.modal.html',
     styleUrls: ['./resource-browser.modal.scss'],
+    host: { class: 'w-192 h-120 flex flex-col gap-4' },
 })
 export class ResourceBrowserModal implements OnInit {
-    @HostBinding('class') private readonly class: string =
-        'w-192 h-120 flex flex-col gap-4';
-
     private readonly dialogRef = inject<BrnDialogRef<OutputData>>(BrnDialogRef);
     private readonly dialogContext = injectBrnDialogContext<InputData>();
 
@@ -130,6 +128,10 @@ export class ResourceBrowserModal implements OnInit {
         this.close();
     }
 
+    public cancel() {
+        this.dialogRef.close(undefined);
+    }
+
     public async close(): Promise<void> {
         if (this.selectedMenu == EnumTabs.RESOURCES) {
             const file = this.selectionService.getSelection()[0];
@@ -139,7 +141,6 @@ export class ResourceBrowserModal implements OnInit {
         if (!this.importedFile) return;
         const file = this.importedFile;
         const result = await this.upload(file.originalFile);
-        console.log(result);
         this.dialogRef.close(result);
     }
 
@@ -212,6 +213,7 @@ export class ResourceBrowserModal implements OnInit {
                     switch (event.type) {
                         case HttpEventType.Response:
                             console.log('[-] File uploaded successfully!');
+                            console.log(event.body.data);
                             resolve(event.body.data);
                     }
                 });

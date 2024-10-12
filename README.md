@@ -1,3 +1,17 @@
+# PUT3
+
+## 🚧 Development
+### Requirements
+- Node.js (v18.0.0 or higher)
+- pnpm (v9.12.0 or higher)
+  
+### Installation
+1. Clone the repository
+2. Run `pnpm install` in the root directory
+3. Go to the `server` directory and copy the `.env.example` file to `.env`
+4. Fill in the `.env` file with the required values
+5. Run `pnpm run dev` in the root directory
+
 ### PowerShell to exe (requires admin rights)
 Install-Module -Name ps2exe -RequiredVersion 1.0.11
 

@@ -1,50 +1,6 @@
-<div class="container" [ngClass]="{'uploading': uploading}" appDragDropFileUpload (fileDropped)="upload($event)">
-    <form [formGroup]="form">
-        <div class="file-upload-container">
-            <hlm-spinner *ngIf="uploading" />
-            <div class="label-container" *ngIf="!uploading">
-                <img src="assets/icons/download-200.svg">
-                <span class="ddinfo">Drag files here</span>
-                <input class="file-input" type="file" name="files" #fileField (change)="upload($any($event).target.files)" hidden multiple/>
-            </div>
-        </div>
-
-        <!-- -------------------------------- PROGRESS BAR --------------------------------- -->
-        <!-- <div class="" *ngIf="progress">
-            <div class="progress form-group">
-                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width.%]="progress"></div>
-            </div>
-        </div> -->
-
-        <!-- -------------------------------- DRAG & DROP --------------------------------- -->
-
-
-        <!-- -------------------------------- LIST --------------------------------- -->
-        <!-- <div class="">
-            <div class="image-list" *ngFor="let file of fileArr; let i = index">
-                <div class="profile">
-                    <img [src]="sanitize(file['url'])" alt="" />
-                </div>
-                <p>{{ file.item.name }}</p>
-            </div>
-            <p class="message">{{msg}}</p>
-        </div> -->
-
-        <div class="no-content-label" *ngIf="!resourceService.flatten().length">No resources</div>
-        <!-- <app-file-card *ngFor="let file of resourceService.flatten()"
-            (click)="select(file, $event)"
-            (contextmenu)="select(file, $event, true)"
-            [file]="file"
-            [selected]="selectionService.getSelection().includes(file)"
-            [editing]="file === editing"
-            (editedEvent)="rename($event, file)"
-        >
-        </app-file-card> -->
-
-        <app-context-menu *ngIf="contextMenu.show"
-            [ngStyle]="contextMenu.style"
-            [items]="contextMenu.items"
-            (itemClick)="handleContextMenu($event)">
-        </app-context-menu>
-    </form>
-</div>
+<app-media-browser class="p-8 pb-24" #mediaBrowser></app-media-browser>
+<app-media-infobox
+    class="sticky bottom-0 px-8"
+    [selection]="mediaBrowser.selection"
+    [@openClose]="mediaBrowser.selection.getItems().length ? 'open' : 'close'"
+></app-media-infobox>

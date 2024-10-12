@@ -60,6 +60,8 @@ import { BrnTooltipContentDirective } from '@spartan-ng/ui-tooltip-brain';
 import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/ui-dialog-brain';
 import { NgIconsModule } from '@ng-icons/core';
 import { lucideArrowDownToLine } from '@ng-icons/lucide';
+import { MediaBrowserComponent } from './view/common/media-browser/media-browser.component';
+import { MediaInfoboxComponent } from './view/common/media-infobox/media-infobox.component';
 
 @NgModule({
     declarations: [
@@ -99,6 +101,8 @@ import { lucideArrowDownToLine } from '@ng-icons/lucide';
     ],
     bootstrap: [AppComponent],
     imports: [
+        MediaBrowserComponent,
+        MediaInfoboxComponent,
         HlmButtonModule,
         HlmIconModule,
         HlmMenuModule,
