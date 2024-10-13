@@ -41,7 +41,7 @@
                 name="files"
                 #fileInput
                 (change)="fileChanged($event)"
-                [accept]="allowedExtensions"
+                [accept]="formatExtensions()"
             />
         </div>
         } @else {

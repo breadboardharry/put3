@@ -12,6 +12,7 @@ import {
 } from 'src/app/app-models/enums/resources';
 import { FileData } from 'src/app/app-models/types/file';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
+import { FileService } from '../utils/file-service/file.service';
 
 @Injectable({
     providedIn: 'root',
@@ -20,11 +21,21 @@ export class ResourcesService {
     private routeUrl = this.backend.apiUrl + '/resources';
     private resources: Partial<ResourceSet> = {};
 
+    public static ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif'];
+    public static ALLOWED_VIDEO_EXTENSIONS = ['mp4', 'webm'];
+    public static ALLOWED_AUDIO_EXTENSIONS = ['mp3', 'wav'];
+    public static ALLOWED_EXTENSIONS = [
+        ...ResourcesService.ALLOWED_IMAGE_EXTENSIONS,
+        ...ResourcesService.ALLOWED_VIDEO_EXTENSIONS,
+        ...ResourcesService.ALLOWED_AUDIO_EXTENSIONS,
+    ];
+
     constructor(
         private http: HttpClient,
         private backend: BackendService,
         private eventService: EventService,
-        private hlmDialogService: HlmDialogService
+        private hlmDialogService: HlmDialogService,
+        private fileService: FileService
     ) {
         this.update();
         this.eventService.onResourcesUpdate.subscribe((resources) => {
@@ -63,6 +74,16 @@ export class ResourcesService {
         }
     }
 
+    public extensionToType(extension: string): EnumResourceType {
+        if (ResourcesService.ALLOWED_IMAGE_EXTENSIONS.includes(extension))
+            return EnumResourceType.IMAGE;
+        if (ResourcesService.ALLOWED_VIDEO_EXTENSIONS.includes(extension))
+            return EnumResourceType.VIDEO;
+        if (ResourcesService.ALLOWED_AUDIO_EXTENSIONS.includes(extension))
+            return EnumResourceType.AUDIO;
+        throw new Error('Invalid extension');
+    }
+
     public flattenObject(obj: any, path: string = '') {
         let result: any[] = [];
 
@@ -78,6 +99,18 @@ export class ResourcesService {
             }
         }
         return result;
+    }
+
+    public getAllowedExtensions(type?: EnumResourceType): string[] {
+        if (!type) return ResourcesService.ALLOWED_EXTENSIONS;
+        switch (type) {
+            case EnumResourceType.IMAGE:
+                return ResourcesService.ALLOWED_IMAGE_EXTENSIONS;
+            case EnumResourceType.VIDEO:
+                return ResourcesService.ALLOWED_VIDEO_EXTENSIONS;
+            case EnumResourceType.AUDIO:
+                return ResourcesService.ALLOWED_AUDIO_EXTENSIONS;
+        }
     }
 
     /**
@@ -203,7 +236,7 @@ export class ResourcesService {
         });
     }
 
-    public addFiles(file: File) {
+    public addFiles(file: File[]) {
         let arr: any[] = [];
         let formData = new FormData();
 
@@ -249,6 +282,41 @@ export class ResourcesService {
             dialogRef.closed$.subscribe((selection: FileData[] | undefined) => {
                 resolve(selection);
             });
+        });
+    }
+
+    /**
+     * Create a media object from a file
+     * @param file File to create media object from
+     * @returns Media object
+     */
+    public createMediaObject(file: File): Promise<FileData> {
+        return new Promise((resolve, reject) => {
+            const extension = this.fileService.getExtension(file.name);
+            if (
+                !extension ||
+                !ResourcesService.ALLOWED_EXTENSIONS.includes(extension)
+            ) {
+                return reject('File type not allowed: ' + extension);
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                resolve({
+                    href: reader.result as string,
+                    type: this.extensionToType(extension),
+                    dirpath: '',
+                    extension: extension,
+                    name: this.fileService.removeExtension(file.name),
+                    path: '',
+                    size: file.size,
+                    isBase64: true,
+                });
+            };
+            reader.onerror = () => {
+                return reject('Error please try again.');
+            };
+            reader.readAsDataURL(file);
         });
     }
 }

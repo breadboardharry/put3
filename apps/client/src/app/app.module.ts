@@ -55,6 +55,7 @@ import { HlmSpinnerModule } from '@spartan-ng/ui-spinner-helm';
 import { HlmDialogModule } from '@spartan-ng/ui-dialog-helm';
 import { HlmTooltipModule } from '@spartan-ng/ui-tooltip-helm';
 import { HlmTabsModule } from '@spartan-ng/ui-tabs-helm';
+import { HlmSkeletonModule } from '@spartan-ng/ui-skeleton-helm';
 import { BrnContextMenuModule } from '@spartan-ng/ui-menu-brain';
 import { BrnTooltipContentDirective } from '@spartan-ng/ui-tooltip-brain';
 import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/ui-dialog-brain';
@@ -111,6 +112,7 @@ import { MediaInfoboxComponent } from './view/common/media-infobox/media-infobox
         HlmDialogModule,
         HlmTooltipModule,
         HlmTabsModule,
+        HlmSkeletonModule,
         BrnTooltipContentDirective,
         BrnContextMenuModule,
         BrnDialogContentDirective,

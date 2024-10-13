@@ -155,8 +155,9 @@ export class ResourceBrowserModal implements OnInit {
         const extension = this.fileService.getExtension(file.name);
         if (
             !extension ||
-            !this.allowedExtensions.includes(`.${extension}`) ||
-            !file.type.startsWith('image/')
+            !this.resourceService
+                .getAllowedExtensions(this.type)
+                .includes(`.${extension}`)
         ) {
             toast.error(`File type not allowed.`);
             return;
@@ -183,22 +184,12 @@ export class ResourceBrowserModal implements OnInit {
         reader.readAsDataURL(file);
     }
 
-    public get acceptedExtensions(): string {
-        const extensions = this.allowedExtensions;
-        if (!extensions.length) return '';
+    /**
+     * Get the allowed extensions string for file input
+     */
+    public formatExtensions(): string {
+        const extensions = this.resourceService.getAllowedExtensions(this.type);
         return extensions.join(', ');
-    }
-
-    public get allowedExtensions(): string[] {
-        if (!this.type) return [];
-        switch (this.type) {
-            case EnumResourceType.IMAGE:
-                return ['.png', '.jpg', '.jpeg', '.gif'];
-            case EnumResourceType.VIDEO:
-                return ['.mp4', '.webm'];
-            case EnumResourceType.AUDIO:
-                return ['.mp3', '.wav'];
-        }
     }
 
     public resetImport() {
@@ -208,7 +199,7 @@ export class ResourceBrowserModal implements OnInit {
     private upload(file: File): Promise<FileData[]> {
         return new Promise((resolve) => {
             this.resourceService
-                .addFiles(file)
+                .addFiles([file])
                 .subscribe((event: HttpEvent<any>) => {
                     switch (event.type) {
                         case HttpEventType.Response:

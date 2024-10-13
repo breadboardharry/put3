@@ -15,7 +15,8 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "es2022",
+    "useDefineForClassFields": false,
     "module": "es2020",
     "lib": [
       "es2020",
@@ -45,6 +46,9 @@
       ],
       "@spartan-ng/ui-tabs-helm": [
         ".\\ui/ui-tabs-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-skeleton-helm": [
+        ".\\ui/ui-skeleton-helm/src/index.ts"
       ]
     }
   },
