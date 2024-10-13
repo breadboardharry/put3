@@ -1,0 +1,9 @@
+.card {
+    &:hover:not(.disabled):not(.selected) {
+        background-color: rgb(26, 26, 52);
+    }
+
+    &.selected {
+        background-color: rgb(50, 50, 82);
+    }
+}

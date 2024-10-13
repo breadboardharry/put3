@@ -1,20 +1,42 @@
+import {
+    animate,
+    state,
+    style,
+    transition,
+    trigger,
+} from '@angular/animations';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { toast } from 'ngx-sonner';
 import { FileData } from 'src/app/app-models/types/file';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
-import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 
 @Component({
     selector: 'app-assets-gallery',
     templateUrl: './assets-gallery.component.html',
-    styleUrls: ['./assets-gallery.component.scss'],
+    animations: [
+        trigger('openClose', [
+            state(
+                'open',
+                style({
+                    transform: 'translateY(0)',
+                })
+            ),
+            state(
+                'close',
+                style({
+                    transform: 'translateY(100%)',
+                })
+            ),
+            transition('open <=> close', [animate('0.2s ease-in-out')]),
+        ]),
+    ],
 })
 export class AssetsGalleryComponent implements OnInit {
-
     @Input()
     isAdmin: boolean = false;
 
@@ -26,9 +48,9 @@ export class AssetsGalleryComponent implements OnInit {
         style: {
             position: 'fixed',
             top: '0px',
-            left: '0px'
+            left: '0px',
         },
-        items: []
+        items: [],
     };
 
     // Assets
@@ -44,10 +66,9 @@ export class AssetsGalleryComponent implements OnInit {
     uploading: boolean = false;
 
     constructor(
-        private snackbar: SnackbarService,
         public selectionService: SelectionService,
         public resourceService: ResourcesService,
-        public formBuilder: UntypedFormBuilder,
+        public formBuilder: UntypedFormBuilder
     ) {
         this.form = this.formBuilder.group({
             file: [null],
@@ -85,7 +106,8 @@ export class AssetsGalleryComponent implements OnInit {
         this.form.get('file')!.updateValueAndValidity();
         // Upload to server
         this.uploading = true;
-        this.resourceService.addFiles(this.form.value.file)
+        this.resourceService
+            .addFiles(this.form.value.file)
             .subscribe((event: HttpEvent<any>) => {
                 switch (event.type) {
                     case HttpEventType.Sent:
@@ -105,7 +127,10 @@ export class AssetsGalleryComponent implements OnInit {
 
                     case HttpEventType.Response:
                         this.uploading = false;
-                        console.log('[-] File uploaded successfully!', event.body);
+                        console.log(
+                            '[-] File uploaded successfully!',
+                            event.body
+                        );
                         setTimeout(() => {
                             this.progress = 0;
                             this.fileArr = [];
@@ -118,19 +143,19 @@ export class AssetsGalleryComponent implements OnInit {
 
     private displayContextMenu(event: any) {
         this.contextMenu.show = true;
-        const len = this.selectionService.getSelection().length
+        const len = this.selectionService.getSelection().length;
 
         this.contextMenu.items = [
             {
-                title: "Delete" + (len > 1 ? ` (${len})` : ''),
+                title: 'Delete' + (len > 1 ? ` (${len})` : ''),
                 action: ContextMenuAction.DELETE,
-                disabled: len == 0
+                disabled: len == 0,
             },
             {
-                title: "Rename",
+                title: 'Rename',
                 action: ContextMenuAction.RENAME,
-                disabled: len != 1
-            }
+                disabled: len != 1,
+            },
         ];
 
         this.contextMenu.x = event.clientX;
@@ -145,14 +170,14 @@ export class AssetsGalleryComponent implements OnInit {
 
         switch (event.item.action) {
             case ContextMenuAction.DELETE:
-                const filespath = this.selectionService.getSelection().map((item: FileData) => item.path);
-                this.resourceService.delete(filespath);
+                this.resourceService.delete(this.selectionService
+                    .getSelection());
                 break;
 
             case ContextMenuAction.RENAME:
                 this.editing = this.selectionService.getSelection()[0];
                 break;
-        };
+        }
     }
 
     public rename(newName: string, file: FileData) {
@@ -161,29 +186,29 @@ export class AssetsGalleryComponent implements OnInit {
         // Stop here if the name hasn't changed
         if (newName == file.name) return;
 
-        this.resourceService.rename( file.name, newName, file.dirpath )
-            .then((res) => {
-                    this.snackbar.openSuccess(file.name + " renamed to " + newName);
-                },
-                (err) => {
-                    if (!err.error.message) return;
+        this.resourceService.rename(file.name, newName, file.dirpath).then(
+            (res) => {
+                toast.success(file.name + ' renamed to ' + newName);
+            },
+            (err) => {
+                if (!err.error.message) return;
 
-                    switch (err.error.message.toLowerCase()) {
-                        case "file already exists":
-                            this.snackbar.openError(newName + " already exists");
-                            break;
+                switch (err.error.message.toLowerCase()) {
+                    case 'file already exists':
+                        toast.error(newName + ' already exists');
+                        break;
 
-                        case "invalid file extension":
-                            this.snackbar.openError(err.error.message);
-                            break;
+                    case 'invalid file extension':
+                        toast.error(err.error.message);
+                        break;
 
-                        case "invalid parameters":
-                            this.snackbar.openError("Invalid filename");
-                            break;
-                    }
-
-                    this.editing = file;
+                    case 'invalid parameters':
+                        toast.error('Invalid filename');
+                        break;
                 }
+
+                this.editing = file;
+            }
         );
     }
 

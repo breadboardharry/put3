@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { toast } from 'ngx-sonner';
 import { EnumSessionStatus } from 'src/app/app-models/enums/session';
 import { EnumUserRole } from 'src/app/app-models/enums/user';
 import { Fool } from 'src/app/classes/fool';
@@ -12,7 +13,6 @@ import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
-import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 
@@ -54,7 +54,6 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
         public resourceService: ResourcesService,
         private eventService: EventService,
         private route: ActivatedRoute,
-        private snackbar: SnackbarService,
         private sessionService: SessionService,
         private router: Router
     ) {}
@@ -118,7 +117,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptions['onMessage'] = this.eventService.onMessage.subscribe((message) => {
-            this.snackbar.open(message.type, message.text);
+            toast[message.type](message.text);
         });
     }
 
@@ -229,7 +228,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
 
     private exit() {
         this.sessionClosed = true;
-        this.snackbar.openError("Session closed");
+        toast.error("Session closed");
         setTimeout(() => {
             this.adminService.logout();
         }, 3000);

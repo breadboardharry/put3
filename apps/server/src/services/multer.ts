@@ -1,9 +1,15 @@
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-import { Paths } from "../enums/paths";
-import { getFileExtension } from "./file.service";
-import { extToDir, generateFilename, isValidExt } from "./resource-file.service";
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+import { Paths } from '../enums/paths';
+import { getFileExtension } from './file.service';
+import {
+    extToDir,
+    extToType,
+    generateFilename,
+    isValidExt,
+} from './resource-file.service';
+import { FileRef } from '../providers/file-reference';
 
 // Configure storage
 const storage = multer.diskStorage({
@@ -15,9 +21,11 @@ const storage = multer.diskStorage({
         let uploadPath;
         try {
             uploadPath = path.join(Paths.RESOURCES, extToDir(fileExt));
-        }
-        catch (err) {
-            return cb(new Error(`Undefined upload folder for .${fileExt} file`), '');
+        } catch (err) {
+            return cb(
+                new Error(`Undefined upload folder for .${fileExt} file`),
+                ''
+            );
         }
 
         // Create directory if it doesn't exist
@@ -25,8 +33,31 @@ const storage = multer.diskStorage({
             cb(err, uploadPath);
         });
     },
-    filename: (_r, file, cb) => {
-        cb(null, generateFilename(file.originalname, "clean"));
+    filename: (req, file, cb) => {
+        // Get file extension
+        const fileExt = getFileExtension(file.originalname);
+
+        // Get the corresponding upload folder
+        let uploadPath;
+        try {
+            uploadPath = path.join(Paths.RESOURCES, extToDir(fileExt));
+        } catch (err) {
+            return cb(
+                new Error(`Undefined upload folder for .${fileExt} file`),
+                ''
+            );
+        }
+
+        const newFilename = generateFilename(file.originalname, 'uuid');
+
+
+        const absolutePath = path.join(process.cwd(), uploadPath, newFilename);
+
+        // Add file reference to the request context
+        if (!Array.isArray(req.context.storage)) req.context.storage = [];
+        req.context.storage.push(new FileRef(absolutePath, extToType(fileExt)));
+
+        cb(null, newFilename);
     },
 });
 
@@ -34,10 +65,10 @@ const storage = multer.diskStorage({
 const desktopImageStorage = multer.diskStorage({
     destination: (_r, _f, cb) => {
         // Upload the image in assets folder
-        cb(null, "public/images/");
+        cb(null, 'public/images/');
     },
     filename: (_r, file, cb) => {
-        cb(null, generateFilename(file.originalname, "desktop"));
+        cb(null, generateFilename(file.originalname, 'desktop'));
     },
 });
 
@@ -51,7 +82,7 @@ const fileFilter = (_r, file, cb) => {
     // const mimetype = filetypes.test(file.mimetype);
 
     if (validExt) return cb(null, true);
-    return cb(new Error("File extension not allowed."));
+    return cb(new Error('File extension not allowed.'));
 };
 
 // Create multer object

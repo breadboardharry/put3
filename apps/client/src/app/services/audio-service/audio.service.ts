@@ -49,7 +49,7 @@ export class AudioService {
      * Stop all the audios played by the audio service
      */
     public stopAll(): void {
-        for(let audio of this.audios) {
+        for(const audio of this.audios) {
             audio.pause();
         }
     }

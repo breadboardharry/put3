@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { EnumFoolScript } from 'src/app/app-models/enums/scripts';
 import { AssetsService } from 'src/app/services/assets-service/assets.service';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
@@ -6,7 +7,6 @@ import { CameraService } from 'src/app/services/camera/camera.service';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { MicrophoneService } from 'src/app/services/microphone/microphone.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
-import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 import { WindowService } from 'src/app/services/window-service/window.service';
 
 @Component({
@@ -25,7 +25,6 @@ export class LandingPageToolbarComponent implements OnInit {
         private microphone: MicrophoneService,
         private camera: CameraService,
         private notifications: NotificationsService,
-        private snackbar: SnackbarService,
         public assetsService: AssetsService,
     ) { }
 
@@ -43,7 +42,7 @@ export class LandingPageToolbarComponent implements OnInit {
     public async toggleNotifications() {
         const hasPermission = await this.notifications.askPermission();
         if (!hasPermission) {
-            this.snackbar.openError('Notifications permission denied');
+            toast.error('Notifications permission denied');
             this.foolService.notificationsEnabled = false;
             return;
         }
@@ -60,7 +59,7 @@ export class LandingPageToolbarComponent implements OnInit {
     public async toggleMicrophone() {
         const hasPermission = await this.microphone.askPermission();
         if (!hasPermission) {
-            this.snackbar.openError('Microphone permission denied');
+            toast.error('Microphone permission denied');
             this.foolService.microphoneEnabled = false;
             return;
         }
@@ -71,7 +70,7 @@ export class LandingPageToolbarComponent implements OnInit {
     public async toggleCamera() {
         const hasPermission = await this.camera.askPermission();
         if (!hasPermission) {
-            this.snackbar.openError('Camera permission denied');
+            toast.error('Camera permission denied');
             this.foolService.cameraEnabled = false;
             return;
         }

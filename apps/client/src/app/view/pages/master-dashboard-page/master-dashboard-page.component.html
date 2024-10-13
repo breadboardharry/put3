@@ -1,8 +1,13 @@
-<mat-spinner class="page-loading-spinner" *ngIf="loading"></mat-spinner>
+<div class="loading-overlay">
+    <hlm-spinner *ngIf="loading" size="xl"></hlm-spinner>
+</div>
 
-<div class="page" [ngClass]="{
-    'loading': loading
-}">
+<div
+    class="page"
+    [ngClass]="{
+        loading: loading
+    }"
+>
     <app-dashboard-navbar></app-dashboard-navbar>
 
     <div class="content">
@@ -17,37 +22,40 @@
                 (editedEvent)="renameFool($event, session.fool)"
             >
             </app-fool-card>
-            <p class="no-fool" *ngIf="!sessions.length">
-                No fool connected
-            </p>
+            <p class="no-fool" *ngIf="!sessions.length">No fool connected</p>
         </div>
 
-        <hr class="separator" *ngIf="displayFoolList"/>
+        <hr class="separator" *ngIf="displayFoolList" />
 
         <div class="app-container" [ngSwitch]="section">
-            <app-session-panel *ngSwitchCase="EnumPage.SESSION"
+            <app-session-panel
+                *ngSwitchCase="EnumPage.SESSION"
                 [sessions]="sessions"
                 [target]="target"
                 [disabled]="!sessions.length || sessionClosed || target == null"
             ></app-session-panel>
 
-            <app-soundboard *ngSwitchCase="EnumPage.SOUNDBOARD"
+            <app-soundboard
+                *ngSwitchCase="EnumPage.SOUNDBOARD"
                 [sessions]="sessions"
                 [target]="target"
                 [disabled]="!sessions.length || sessionClosed || target == null"
             ></app-soundboard>
 
-            <app-notification-board *ngSwitchCase="EnumPage.NOTIFICATIONS"
+            <app-notification-board
+                *ngSwitchCase="EnumPage.NOTIFICATIONS"
                 [sessions]="sessions"
                 [target]="target"
                 [disabled]="!sessions.length || sessionClosed || target == null"
             ></app-notification-board>
 
-            <app-assets-gallery *ngSwitchCase="EnumPage.RESOURCES"
+            <app-assets-gallery
+                *ngSwitchCase="EnumPage.RESOURCES"
                 [isAdmin]="ClientService.IS_ADMIN"
             ></app-assets-gallery>
 
-            <app-layout-editor *ngSwitchCase="EnumPage.LAYOUT"
+            <app-layout-editor
+                *ngSwitchCase="EnumPage.LAYOUT"
                 [sessions]="sessions"
                 [target]="target"
                 [disabled]="!sessions.length || sessionClosed || target == null"
@@ -60,5 +68,6 @@
     *ngIf="contextMenu.show"
     [ngStyle]="contextMenu.style"
     [items]="contextMenu.items"
-    (itemClick)="handleContextMenu($event)">
+    (itemClick)="handleContextMenu($event)"
+>
 </app-context-menu>

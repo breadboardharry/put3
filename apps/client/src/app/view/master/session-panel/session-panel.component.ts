@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { toast } from 'ngx-sonner';
 import { EnumSessionStatus } from 'src/app/app-models/enums/session';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { MasterService } from 'src/app/services/master-service/master.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
-import { SnackbarService } from 'src/app/services/snackbar-service/snackbar.service';
 
 @Component({
     selector: 'app-session-panel',
@@ -22,7 +22,6 @@ export class SessionPanelComponent implements OnInit, DashboardSection {
     public ClientService = ClientService;
 
     constructor(
-        private snackbar: SnackbarService,
         private masterService: MasterService,
         private sessionService: SessionService
     ) { }
@@ -36,7 +35,7 @@ export class SessionPanelComponent implements OnInit, DashboardSection {
 
     public run(): void {
         if (this.isSessionRunning) return;
-        this.snackbar.openSuccess("Session started");
+        toast.success("Session started");
         this.sessionService.run(this.target!.code);
     }
 
@@ -46,7 +45,7 @@ export class SessionPanelComponent implements OnInit, DashboardSection {
 
     public copiedCodeToClipboard(): void {
         if (!this.target || this.disabled) return;
-        this.snackbar.openSuccess("Code copied to clipboard");
+        toast.success("Code copied to clipboard");
     }
 
     public get sessionCode() {

@@ -9,6 +9,7 @@ import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { MasterService } from 'src/app/services/master-service/master.service';
 import { ResourcesService } from 'src/app/services/resources-service/resources.service';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
+import { FileData } from 'src/app/app-models/types/file';
 
 @Component({
     selector: 'app-layout-editor',
@@ -57,8 +58,9 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
     }
 
     public changeBackground() {
-        this.resourcesService.browse(EnumResourceType.IMAGE).then((image: any) => {
-            if (!image) return;
+        this.resourcesService.browse(EnumResourceType.IMAGE, true).then((selection) => {
+            if (!selection?.length) return;
+            const image = selection[0];
             this.target!.fool.layout.desktop.image = image.href;
         });
     }
