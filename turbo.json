@@ -3,13 +3,19 @@
     "$schema": "https://turbo.build/schema.json",
     "tasks": {
         "build": {
+            "dependsOn": [
+                "^build"
+            ],
             "outputs": [
                 "dist/**"
             ]
         },
         "dev": {
             "persistent": true,
-            "cache": false
+            "cache": false,
+            "dependsOn": [
+                "@put3/types#build"
+            ]
         }
     }
 }
