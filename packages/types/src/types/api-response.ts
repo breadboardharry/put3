@@ -1,7 +1,7 @@
 export type APIResponse<Tdata = any> = {
     success: boolean;
     message: string;
-    data?: Tdata;
+    data: Tdata;
     errors?:
         | string
         | {

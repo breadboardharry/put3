@@ -22,7 +22,6 @@ export class ModalService {
             });
 
             dialogRef.closed$.subscribe((result: boolean | undefined) => {
-                console.log('Confirmation result:', result);
                 resolve(result);
             });
         });

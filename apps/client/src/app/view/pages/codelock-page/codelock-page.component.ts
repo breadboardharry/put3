@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
-import { CodeName } from 'src/app/enums/code';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { EnumAppRoute } from 'src/app/enums/routes';
 
@@ -11,8 +10,6 @@ import { EnumAppRoute } from 'src/app/enums/routes';
     styleUrls: ['./codelock-page.component.scss']
 })
 export class CodelockPageComponent implements OnInit {
-
-    public codeName: CodeName = CodeName.MASTER;
 
     constructor(
         private adminService: AdminService,

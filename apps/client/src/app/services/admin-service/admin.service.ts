@@ -1,16 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CodeName } from 'src/app/enums/code';
-import { BackendService } from '../backend/backend.service';
 import { SessionService } from '../session-service/session.service';
+import { APIResponse } from '@put3/types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class AdminService {
-
     constructor(
-        private backend: BackendService,
         private http: HttpClient,
         private sessionService: SessionService
     ) {}
@@ -19,18 +16,18 @@ export class AdminService {
      * Authenticate user with a code
      * @param code Code
      */
-    public login(code: string): Promise<any> {
+    public login(code: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.http.post(
-                    this.backend.apiUrl + '/admin/login',
+            this.http
+                .post<APIResponse>(
+                    '/admin/login',
                     { code },
                     {
                         responseType: 'json',
-                        withCredentials: true
-                    },
+                    }
                 )
-                .subscribe((res: any) => {
-                    resolve(res);
+                .subscribe((res) => {
+                    resolve(res.success);
                 });
         });
     }
@@ -40,42 +37,46 @@ export class AdminService {
      * @returns True if the user is logged
      */
     public isLogged(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.http.get(this.backend.apiUrl + '/admin/islogged', {
+        return new Promise((resolve) => {
+            this.http
+                .get<APIResponse<{ isAdmin: boolean }>>('/admin/islogged', {
                     responseType: 'json',
-                    withCredentials: true
-            })
-            .subscribe({
-                next: (res: any) => { resolve(res.isAdmin) },
-                error: (err) => { resolve(false) }
-            });
+                })
+                .subscribe({
+                    next: (res) => {
+                        resolve(res.data.isAdmin);
+                    },
+                    error: () => {
+                        resolve(false);
+                    },
+                });
         });
     }
 
     /**
      * Get the length of a code
-     * @param codeName Name of the code
      * @returns Code length
      */
-    public getCodeLength(codeName: CodeName): Promise<number> {
-        return new Promise((resolve, reject) => {
-            this.http.get<number>(
-                this.backend.apiUrl + '/admin/codelen/' + codeName,
-                { responseType: 'json' }
-            )
-            .subscribe((length: number) => {
-                resolve(length);
-            });
+    public getCodeLength(): Promise<number> {
+        return new Promise((resolve) => {
+            this.http
+                .get<APIResponse<number>>('/admin/codelen', {
+                    responseType: 'json',
+                })
+                .subscribe((res) => {
+                    resolve(res.data);
+                });
         });
     }
 
     public logout(): void {
         this.sessionService.removeFromCookies();
-        this.http.get(
-            this.backend.apiUrl + '/admin/logout',
-            { responseType: 'json', withCredentials: true }
-        ).subscribe(() => {
-            window.location.replace('/');
-        });
+        this.http
+            .get<APIResponse>('/admin/logout', {
+                responseType: 'json',
+            })
+            .subscribe(() => {
+                window.location.replace('/');
+            });
     }
 }

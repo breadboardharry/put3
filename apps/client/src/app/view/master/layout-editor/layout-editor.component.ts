@@ -3,13 +3,12 @@ import { DesktopService } from 'src/app/services/desktop-service/desktop.service
 import { HitboxService } from 'src/app/services/hitbox-service/hitbox.service';
 import { environment } from 'src/environments/environment';
 import { Hitbox } from 'src/app/classes/hitbox';
-import { BackendService } from 'src/app/services/backend/backend.service';
+import { APIService } from 'src/app/services/api/api.service';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { MasterService } from 'src/app/services/master-service/master.service';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
-import { FileData } from 'src/app/app-models/types/file';
 
 @Component({
     selector: 'app-layout-editor',
@@ -33,11 +32,11 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
     public defaultDesktopImage = environment.defaultDesktopImage;
 
     constructor(
-        public backend: BackendService,
+        public api: APIService,
         private masterService: MasterService,
         private desktopService: DesktopService,
         public hitboxService: HitboxService,
-        private resourcesService: ResourcesService,
+        private resourcesService: MediaService,
     ) {}
 
     ngOnInit(): void {

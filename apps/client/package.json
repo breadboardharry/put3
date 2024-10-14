@@ -21,6 +21,7 @@
     "@angular/router": "^18.2.7",
     "@ng-icons/core": "^25.1.0",
     "@ng-icons/lucide": "^26.3.0",
+    "@put3/types": "workspace:*",
     "@spartan-ng/ui-core": "0.0.1-alpha.356",
     "@spartan-ng/ui-dialog-brain": "0.0.1-alpha.356",
     "@spartan-ng/ui-menu-brain": "0.0.1-alpha.356",

@@ -4,9 +4,10 @@ import { EnumResourceType } from 'src/app/app-models/enums/resources';
 import { FileData } from 'src/app/app-models/types/file';
 import { Session } from 'src/app/classes/session';
 import { DashboardSection } from 'src/app/interfaces/dashboard-section';
+import { RemoteMedia } from 'src/app/providers/media';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 
 @Component({
   selector: 'app-soundboard',
@@ -23,11 +24,11 @@ export class SoundboardComponent implements OnInit, DashboardSection {
 
     volume: number = 50;
 
-    tracks: FileData[] = [];
+    tracks: RemoteMedia[] = [];
 
     constructor(
         private eventService: EventService,
-        public resourceService: ResourcesService,
+        public resourceService: MediaService,
     ) { }
 
     ngOnInit(): void {

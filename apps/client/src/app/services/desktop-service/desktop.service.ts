@@ -1,6 +1,5 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BackendService } from '../backend/backend.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +8,7 @@ export class DesktopService {
 
     public containerRef!: ViewContainerRef;
 
-  constructor(private http: HttpClient, private backend: BackendService) { }
+  constructor(private http: HttpClient) { }
 
   /**
    * Get desktop background image
@@ -17,7 +16,7 @@ export class DesktopService {
    */
   public getBackground(): Promise<string> {
     return new Promise((resolve, reject) => {
-      this.http.get(this.backend.apiUrl + '/desktop/get', {
+      this.http.get('/desktop/get', {
         responseType: 'blob'
       })
         .subscribe((image: Blob) => {

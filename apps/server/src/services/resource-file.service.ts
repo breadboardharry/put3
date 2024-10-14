@@ -214,6 +214,7 @@ export function getGeneralData(filepath: string) {
 
     return {
         name: getLastPathElement(filepath),
+        extension: getFileExtension(filepath),
         href: publicPath,
         path: filepath,
         dirpath: getDirPath(filepath),

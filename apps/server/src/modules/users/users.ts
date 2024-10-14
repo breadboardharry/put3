@@ -30,6 +30,8 @@ export default class UserModule {
     }
 
     public static setRole(uuid: string, role: EnumUserRole, data: { sessionCode?: string, preferences?: UserPreferences, isAdmin: boolean }): APIResponse {
+        console.log("[-] User " + uuid + " selected role " + role);
+
         const userExists = !!UsersService.find(uuid);
         if (userExists) {
             UsersService.remove(uuid);

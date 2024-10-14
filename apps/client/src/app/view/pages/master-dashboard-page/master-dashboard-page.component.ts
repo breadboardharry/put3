@@ -11,7 +11,7 @@ import { EnumAppRoute } from 'src/app/enums/routes';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EventService } from 'src/app/services/event-service/event.service';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { SessionService } from 'src/app/services/session-service/session.service';
 import { TypeService } from 'src/app/services/utils/type/type.service';
 import { ContextMenu } from 'src/app/types/context-menu';
@@ -51,7 +51,7 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
     constructor(
         private adminService: AdminService,
         private clientService: ClientService,
-        public resourceService: ResourcesService,
+        public resourceService: MediaService,
         private eventService: EventService,
         private route: ActivatedRoute,
         private sessionService: SessionService,

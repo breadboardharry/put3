@@ -14,8 +14,8 @@
                     [disabled]="disabled"
                 ></app-hitbox>
             </div>
-            
-            <img class="background" [src]="(target && target.fool.layout.desktop.image) ? (backend.serverUrl + '/' + target.fool.layout.desktop.image) : defaultDesktopImage" draggable="false">
+
+            <img class="background" [src]="(target && target.fool.layout.desktop.image) ? (api.serverUrl + '/' + target.fool.layout.desktop.image) : defaultDesktopImage" draggable="false">
         </div>
     </div>
 </section>

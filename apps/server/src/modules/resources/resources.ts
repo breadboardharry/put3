@@ -1,17 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 import { doFileExists, isValidDir } from '../../services/resource-file.service';
-import { Response } from '../../services/response.service';
 import { Paths } from '../../enums/paths';
 import { getFileExtension, removeSpaces } from '../../services/file.service';
 import * as ResourceService from '../../services/resource.service';
 import { isArrayOf } from '../../services/type.service';
 import { EnumResourceDirectory, EnumResourceType } from '../../app-models/enums/resources';
+import { ERROR, SUCCESS } from '../../services/response.service';
 
 export function getData(dirname?: string) {
     // Check if the directory is valid
     if (dirname && !isValidDir(dirname)) {
-        throw Response.ERROR.INVALID_DIRNAME;
+        throw ERROR.INVALID_DIRNAME;
     }
 
     try {
@@ -33,7 +33,7 @@ export function getData(dirname?: string) {
     } catch (err) {
         // Normal process error
         console.error('[!] Error getting ressources data: ' + err + '\n');
-        throw Response.ERROR.INTERNAL_SERVER;
+        throw ERROR.INTERNAL_SERVER;
     }
 }
 
@@ -47,7 +47,7 @@ export function unlink(filespath) {
             return path.join(Paths.RESOURCES, filepath);
         });
     } catch (err) {
-        throw Response.ERROR.INVALID_PARAMS;
+        throw ERROR.INVALID_PARAMS;
     }
 
     // Delete files
@@ -62,7 +62,7 @@ export function unlink(filespath) {
     } catch (err) {
         // Normal process error
         console.error('[!] Error getting ressources data: ' + err + '\n');
-        throw Response.ERROR.INTERNAL_SERVER;
+        throw ERROR.INTERNAL_SERVER;
     }
 }
 
@@ -73,7 +73,7 @@ export function rename(
 ): boolean {
     // Check parameters type
     if (typeof currentName !== 'string' || typeof newName !== 'string') {
-        throw Response.ERROR.INVALID_PARAMS;
+        throw ERROR.INVALID_PARAMS;
     }
 
     try {
@@ -81,24 +81,24 @@ export function rename(
         newName = removeSpaces(newName);
     } catch (err) {
         console.error('[!] Error renaming file: ' + err + '\n');
-        throw Response.ERROR.INTERNAL_SERVER;
+        throw ERROR.INTERNAL_SERVER;
     }
 
     // Check if filenames are empty
     if (!currentName || !newName) {
-        throw Response.ERROR.INVALID_PARAMS;
+        throw ERROR.INVALID_PARAMS;
     }
     // Check if names are the same
     if (currentName == newName) {
-        throw Response.SUCCESS.DEFAULT;
+        throw SUCCESS.DEFAULT;
     }
     // Check if file extension is the same
     if (getFileExtension(currentName) !== getFileExtension(newName)) {
-        throw Response.ERROR.INVALID_FILE_EXTENSION;
+        throw ERROR.INVALID_FILE_EXTENSION;
     }
     // Check if a file with the same name, at the same location already exists
     if (doFileExists(newName)) {
-        throw Response.ERROR.FILE_ALREADY_EXISTS;
+        throw ERROR.FILE_ALREADY_EXISTS;
     }
 
     try {
@@ -106,7 +106,7 @@ export function rename(
         return success;
     } catch (err) {
         console.error('[!] Error renaming file: ' + err + '\n');
-        throw Response.ERROR.INTERNAL_SERVER;
+        throw ERROR.INTERNAL_SERVER;
     }
 }
 

@@ -1,5 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
-import { CodeName } from 'src/app/enums/code';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { AdminService } from 'src/app/services/admin-service/admin.service';
 
 @Component({
@@ -9,7 +8,6 @@ import { AdminService } from 'src/app/services/admin-service/admin.service';
 })
 export class CodelockComponent implements OnInit {
 
-    @Input() codeName!: CodeName;
     @Output() passed: EventEmitter<void> = new EventEmitter<void>();
 
     code: number[] = [];
@@ -18,7 +16,7 @@ export class CodelockComponent implements OnInit {
     constructor(private adminService: AdminService) {}
 
     ngOnInit(): void {
-        this.adminService.getCodeLength(this.codeName)
+        this.adminService.getCodeLength()
             .then((length: number) => {
                 this.accessCodeLength = length;
             });
@@ -30,10 +28,10 @@ export class CodelockComponent implements OnInit {
         // Check if the code is filled
         if (this.code.length >= this.accessCodeLength) {
             // Try to login
-            const login = await this.adminService.login(this.code.join(''));
+            const success = await this.adminService.login(this.code.join(''));
 
             // If success, emit the passed event
-            if (login.success) {
+            if (success) {
                 this.passed.emit();
                 return;
             }

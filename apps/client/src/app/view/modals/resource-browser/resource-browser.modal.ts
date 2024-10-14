@@ -1,10 +1,4 @@
-import {
-    Component,
-    OnInit,
-    HostBinding,
-    inject,
-    ChangeDetectorRef,
-} from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import {
     BrnDialogRef,
     injectBrnDialogContext,
@@ -19,9 +13,8 @@ import {
 import { toast } from 'ngx-sonner';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
 import { FileData } from 'src/app/app-models/types/file';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
-import { FileService } from 'src/app/services/utils/file-service/file.service';
 import { FileCardComponent } from '../../common/cards/file-card/file-card.component';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { NgClass } from '@angular/common';
@@ -35,6 +28,7 @@ import {
     HlmTabsTriggerDirective,
 } from '@spartan-ng/ui-tabs-helm';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { LocalMedia, RemoteMedia } from 'src/app/providers/media';
 
 type InputData = {
     type?: EnumResourceType;
@@ -42,7 +36,7 @@ type InputData = {
     multiple?: boolean;
 };
 
-type OutputData = FileData[] | undefined;
+type OutputData = RemoteMedia[] | undefined;
 
 enum EnumTabs {
     RESOURCES = 'resources',
@@ -91,21 +85,20 @@ export class ResourceBrowserModal implements OnInit {
     protected readonly multiple: boolean = this.dialogContext.multiple || false;
 
     public selectedMenu: EnumTabs = EnumTabs.RESOURCES;
-    public importedFile: (FileData & { originalFile: File }) | undefined;
-    public medias: FileData[] = [];
+    public importedFile: LocalMedia | undefined;
+    public medias: RemoteMedia[] = [];
     public uploading: boolean = false;
 
     public readonly EnumTabs = EnumTabs;
 
     constructor(
         public selectionService: SelectionService,
-        private resourceService: ResourcesService,
-        private fileService: FileService,
+        private resourceService: MediaService,
         private cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
-        this.medias = this.resourceService.getResources(this.type);
+        this.medias = this.resourceService.getMedias(this.type);
         this.selectionService.init(this.medias, false);
     }
 
@@ -118,11 +111,11 @@ export class ResourceBrowserModal implements OnInit {
         this.selectedMenu = tab as EnumTabs;
     }
 
-    public select(file: FileData, event: any, rightClick: boolean = false) {
+    public select(file: RemoteMedia, event: any, rightClick: boolean = false) {
         this.selectionService.handleSelect(event, file, rightClick);
     }
 
-    public validate(file?: FileData, event?: any) {
+    public validate(file?: RemoteMedia, event?: any) {
         if (file && event)
             this.selectionService.handleSelect(event, file, false);
         this.close();
@@ -139,9 +132,8 @@ export class ResourceBrowserModal implements OnInit {
             return;
         }
         if (!this.importedFile) return;
-        const file = this.importedFile;
-        const result = await this.upload(file.originalFile);
-        this.dialogRef.close(result);
+        const remoteMedia = await this.importedFile.upload();
+        this.dialogRef.close([remoteMedia]);
     }
 
     public get canValidate(): boolean {
@@ -150,38 +142,14 @@ export class ResourceBrowserModal implements OnInit {
             : !!this.importedFile;
     }
 
-    public fileChanged(event: any) {
+    public async fileChanged(event: any) {
         const file = event.target.files[0];
-        const extension = this.fileService.getExtension(file.name);
-        if (
-            !extension ||
-            !this.resourceService
-                .getAllowedExtensions(this.type)
-                .includes(`.${extension}`)
-        ) {
-            toast.error(`File type not allowed.`);
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            this.importedFile = {
-                href: reader.result as string,
-                type: this.type!,
-                dirpath: '',
-                extension: extension,
-                name: this.fileService.removeExtension(file.name),
-                path: '',
-                size: file.size,
-                isBase64: true,
-                originalFile: file,
-            };
-            this.cdr.detectChanges();
-        };
-        reader.onerror = () => {
-            toast.error('Error please try again.');
+        try {
+            this.importedFile = await LocalMedia.createFromFile(file);
+        } catch (error) {
+            toast.error('Error importing file');
             this.importedFile = undefined;
-        };
-        reader.readAsDataURL(file);
+        }
     }
 
     /**
@@ -199,7 +167,7 @@ export class ResourceBrowserModal implements OnInit {
     private upload(file: File): Promise<FileData[]> {
         return new Promise((resolve) => {
             this.resourceService
-                .addFiles([file])
+                .upload([file])
                 .subscribe((event: HttpEvent<any>) => {
                     switch (event.type) {
                         case HttpEventType.Response:

@@ -14,6 +14,7 @@ import { LayoutData } from 'src/app/app-models/types/layout';
 import { RoleResponseData } from 'src/app/app-models/types/role';
 import { UserPreferences } from 'src/app/app-models/types/preferences';
 import { Event } from 'src/app/app-models/classes/event';
+import { RemoteMedia } from 'src/app/providers/media';
 
 @Injectable({
     providedIn: 'root',
@@ -25,7 +26,7 @@ export class EventService {
     public onAction: Subject<Action> = new Subject<Action>();
     public onLayout: Subject<LayoutData> = new Subject<LayoutData>();
     public onRename: Subject<string> = new Subject<string>();
-    public onResourcesUpdate: Subject<ResourceSet> = new Subject<ResourceSet>();
+    public onResourcesUpdate: Subject<ResourceSet<RemoteMedia>> = new Subject<ResourceSet<RemoteMedia>>();
     public onMessage: Subject<EventMessageData> = new Subject<EventMessageData>();
 
     constructor(

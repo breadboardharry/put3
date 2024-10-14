@@ -12,7 +12,7 @@ import { HitboxCoreComponent } from './view/hitbox/core/hitbox-core.component';
 import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.component';
 import {
     provideHttpClient,
-    withInterceptorsFromDi,
+    withInterceptors,
 } from '@angular/common/http';
 import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
 import { ChildElementsDirective } from './directives/child-elements.directive';
@@ -58,11 +58,15 @@ import { HlmTabsModule } from '@spartan-ng/ui-tabs-helm';
 import { HlmSkeletonModule } from '@spartan-ng/ui-skeleton-helm';
 import { BrnContextMenuModule } from '@spartan-ng/ui-menu-brain';
 import { BrnTooltipContentDirective } from '@spartan-ng/ui-tooltip-brain';
-import { BrnDialogContentDirective, BrnDialogTriggerDirective } from '@spartan-ng/ui-dialog-brain';
+import {
+    BrnDialogContentDirective,
+    BrnDialogTriggerDirective,
+} from '@spartan-ng/ui-dialog-brain';
 import { NgIconsModule } from '@ng-icons/core';
 import { lucideArrowDownToLine } from '@ng-icons/lucide';
 import { MediaBrowserComponent } from './view/common/media-browser/media-browser.component';
 import { MediaInfoboxComponent } from './view/common/media-infobox/media-infobox.component';
+import { apiInterceptor } from './services/api/api.service';
 
 @NgModule({
     declarations: [
@@ -136,7 +140,7 @@ import { MediaInfoboxComponent } from './view/common/media-infobox/media-infobox
             deps: [ClientService],
             multi: true,
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withInterceptors([apiInterceptor])),
     ],
 })
 export class AppModule {}
