@@ -4,8 +4,8 @@ import { DashboardSection } from 'src/app/interfaces/dashboard-section';
 import { EventService } from 'src/app/services/event-service/event.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import { NotificationData } from 'src/app/types/notification';
-import { BackendService } from 'src/app/services/backend/backend.service';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { APIService } from 'src/app/services/api/api.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
 import { EnumActionType } from 'src/app/app-models/enums/action';
@@ -13,10 +13,12 @@ import { EnumActionType } from 'src/app/app-models/enums/action';
 @Component({
     selector: 'app-notification-board',
     templateUrl: './notification-board.component.html',
-    styleUrls: ['./notification-board.component.scss']
+    styleUrls: ['./notification-board.component.scss'],
+    host: {
+        class: 'p-8 pt-0',
+    }
 })
 export class NotificationBoardComponent implements OnInit, DashboardSection {
-
     @Input() sessions: Session[] = [];
     @Input() target?: Session;
     @Input() disabled: boolean = false;
@@ -26,9 +28,9 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
     constructor(
         private notification: NotificationsService,
         private eventService: EventService,
-        private backend: BackendService,
-        private resourcesService: ResourcesService,
-    ) { }
+        private api: APIService,
+        private resourcesService: MediaService
+    ) {}
 
     ngOnInit(): void {
         this.reset();
@@ -41,15 +43,17 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
             icon: '',
             image: '',
             duration: 5000,
-        }
+        };
     }
 
     public browseIcon() {
-        this.resourcesService.browse(EnumResourceType.IMAGE, true).then((image: any) => {
-            if (!image) return;
-            if (image.isBase64) this.notif.icon = image.href;
-            else this.notif.icon = this.backend.serverUrl + '/' + image.href;
-        });
+        this.resourcesService
+            .browse(EnumResourceType.IMAGE, true)
+            .then((image: any) => {
+                if (!image) return;
+                if (image.isBase64) this.notif.icon = image.href;
+                else this.notif.icon = this.api.serverUrl + '/' + image.href;
+            });
     }
 
     public preview() {
@@ -58,10 +62,9 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
 
     public send() {
         this.eventService.sendAction(this.target!.fool, {
-                type: EnumActionType.NOTIFICATION,
-                data: this.notif
-            }
-        );
+            type: EnumActionType.NOTIFICATION,
+            data: this.notif,
+        });
     }
 
     public formatDurationSliderLabel(value: number): string {
@@ -74,19 +77,27 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
     }
 
     private get hasTargetBrowserPermission(): boolean {
-        return !!this.target && !!this.target.fool.browser.permissions.notifications;
-    }
-
-    public get isDisabled(): boolean {
-        return this.disabled || !this.target || !this.hasTargetBrowserPermission || (
-            !ClientService.IS_ADMIN && !this.hasTargetNotificationsTurnedOn
+        return (
+            !!this.target &&
+            !!this.target.fool.browser.permissions.notifications
         );
     }
 
-    public get displayAlert(): boolean {
-        return !!this.target && (!this.hasTargetBrowserPermission ||
+    public get isDisabled(): boolean {
+        return (
+            this.disabled ||
+            !this.target ||
+            !this.hasTargetBrowserPermission ||
             (!ClientService.IS_ADMIN && !this.hasTargetNotificationsTurnedOn)
         );
     }
 
+    public get displayAlert(): boolean {
+        return (
+            !!this.target &&
+            (!this.hasTargetBrowserPermission ||
+                (!ClientService.IS_ADMIN &&
+                    !this.hasTargetNotificationsTurnedOn))
+        );
+    }
 }

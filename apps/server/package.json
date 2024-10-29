@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "set NODE_ENV=development&& tsx --watch src/index.ts",
-        "start": "set NODE_ENV=production&& node dist/index.js",
+        "dev": "tsx --watch src/index.ts",
+        "start": "node dist/index.js",
         "build": "tsc"
     },
     "keywords": [],
@@ -26,6 +26,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
+        "@put3/types": "workspace:*",
         "body-parser": "^1.20.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
@@ -37,6 +38,7 @@
         "multer": "^1.4.5-lts.1",
         "rxjs": "^7.8.1",
         "socket.io": "^4.7.2",
-        "uuid": "^9.0.0"
+        "uuid": "^9.0.0",
+        "zod": "^3.23.8"
     }
 }

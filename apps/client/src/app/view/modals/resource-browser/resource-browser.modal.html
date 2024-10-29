@@ -15,10 +15,11 @@
     }
 
     <section [hlmTabsContent]="EnumTabs.RESOURCES" class="h-full min-h-0">
-        <div class="h-full flex flex-wrap justify-between gap-2 overflow-y-auto">
+        <app-media-browser [mediaType]="type ? [type] : []" [enableSelection]="true"></app-media-browser>
+        <!-- <div class="h-full flex flex-wrap justify-between gap-2 overflow-y-auto">
             @if (!medias.length) {
             <div class="no-content-label">No resources</div>
-            } @for (file of medias; track file.href) {
+            } @for (file of medias; track file.src) {
             <app-file-card
                 (click)="select(file, $event)"
                 (dblclick)="validate(file, $event)"
@@ -26,7 +27,7 @@
                 [selected]="selectionService.getSelection().includes(file)"
             ></app-file-card>
             }
-        </div>
+        </div> -->
     </section>
     <section [hlmTabsContent]="EnumTabs.IMPORT" class="h-full min-h-0">
         @if (importedFile == undefined) {
@@ -46,7 +47,7 @@
         </div>
         } @else {
         <div class="h-full flex flex-col gap-6 items-center justify-center">
-            <img class="w-1/2 h-1/2 object-contain" [src]="importedFile.href" />
+            <img class="w-1/2 h-1/2 object-contain" [src]="importedFile.src" />
             <button hlmBtn size="sm" (click)="resetImport()">
                 <hlm-icon size="sm" class="mr-2" name="lucideRotateCcw" />
                 Choose another file

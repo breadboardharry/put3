@@ -34,23 +34,13 @@ export class HTTPServer {
 
         this.server = https.createServer(this.servOptions, app);
 
-        // Add a "conext" object to the request that will be used to store data between middlewares
+        // Add a "context" object to the request that will be used to store data between middlewares
         this.app.use((req, _, next) => {
             req.context = new ReqContext();
             next();
         });
 
         this.app.use('/api/', Routes);
-
-        // Welcome message
-        this.app.use('/', (_r, res) => {
-            res.status(200).send(
-                `Welcome to PUT3 server!
-
-                MODE: ${process.env.NODE_ENV}
-                CORS Origin: ${process.env.CLIENT_ORIGIN}`
-            );
-        });
 
         this.listen();
         return this.server;

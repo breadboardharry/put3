@@ -1,4 +1,4 @@
-@for (media of mediaService.getResources(); track media.href) {
+@for (media of mediaService.getMedias(); track media) {
 <app-file-card
     [ngClass]="loading ? 'opacity-50' : ''"
     (click)="onCardClick(media, $event)"
@@ -7,6 +7,6 @@
     [selected]="selection.getItems().includes(media)"
     [disabled]="loading"
 ></app-file-card>
-} @for (uploadingMedia of uploadingMedias; track uploadingMedia.href) {
+} @for (uploadingMedia of uploadingMedias; track uploadingMedia) {
 <app-file-card-skeleton></app-file-card-skeleton>
 }

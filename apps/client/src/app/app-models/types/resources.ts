@@ -1,7 +1,8 @@
-import { FileData } from "./file";
+import { LocalMedia, RemoteMedia } from 'src/app/providers/media';
+import { FileData } from './file';
 
-export type ResourceSet = {
-    images: FileData[];
-    videos: FileData[];
-    audios: FileData[];
+export type ResourceSet<T extends RemoteMedia | LocalMedia | FileData> = {
+    images: T[];
+    videos: T[];
+    audios: T[];
 };

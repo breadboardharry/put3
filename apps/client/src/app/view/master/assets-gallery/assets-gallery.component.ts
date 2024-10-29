@@ -11,7 +11,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { toast } from 'ngx-sonner';
 import { FileData } from 'src/app/app-models/types/file';
 import { ContextMenuAction } from 'src/app/enums/context-menu-action';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { SelectionService } from 'src/app/services/selection-service/selection.service';
 import { ContextMenu } from 'src/app/types/context-menu';
 
@@ -67,7 +67,7 @@ export class AssetsGalleryComponent implements OnInit {
 
     constructor(
         public selectionService: SelectionService,
-        public resourceService: ResourcesService,
+        public resourceService: MediaService,
         public formBuilder: UntypedFormBuilder
     ) {
         this.form = this.formBuilder.group({
@@ -76,7 +76,7 @@ export class AssetsGalleryComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.selectionService.init(this.resourceService.getResources(), true);
+        this.selectionService.init(this.resourceService.getMedias(), true);
     }
 
     select(file: FileData, event: any, rightClick: boolean = false) {
@@ -107,7 +107,7 @@ export class AssetsGalleryComponent implements OnInit {
         // Upload to server
         this.uploading = true;
         this.resourceService
-            .addFiles(this.form.value.file)
+            .upload(this.form.value.file)
             .subscribe((event: HttpEvent<any>) => {
                 switch (event.type) {
                     case HttpEventType.Sent:

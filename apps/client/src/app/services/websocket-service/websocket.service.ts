@@ -1,21 +1,18 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Socket, io } from 'socket.io-client';
-import { BackendService } from '../backend/backend.service';
+import { APIService } from '../api/api.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class WebSocketService {
-
     private _socket: Socket;
 
-    constructor(
-        private backend: BackendService
-    ) {
-        this._socket = io(this.backend.serverUrl, {
+    constructor(private api: APIService) {
+        this._socket = io(this.api.serverUrl, {
             path: environment.socketPath,
-            withCredentials: true
+            withCredentials: true,
         });
     }
 
@@ -30,5 +27,4 @@ export class WebSocketService {
     public disconnect() {
         this._socket.disconnect();
     }
-
 }

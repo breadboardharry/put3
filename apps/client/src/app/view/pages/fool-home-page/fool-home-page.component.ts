@@ -1,8 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { PreferencesService } from 'src/app/services/preferences-service/preferences.service';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
-import { BackendService } from 'src/app/services/backend/backend.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
+import { APIService } from 'src/app/services/api/api.service';
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { FoolService } from 'src/app/services/fool-service/fool.service';
 import { EnumUserRole } from 'src/app/app-models/enums/user';
@@ -20,8 +20,8 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
 
     constructor(
         private clientService: ClientService,
-        private backend: BackendService,
-        private resourceService: ResourcesService,
+        private api: APIService,
+        private resourceService: MediaService,
         private preferences: PreferencesService,
         public fool: FoolService
     ) {}
@@ -69,7 +69,7 @@ export class FoolHomePageComponent implements OnInit, OnDestroy {
     }
 
     public get backgroundImage(): string {
-        return this.backend.serverUrl + '/' + (this.fool.layout.desktop.image ? this.fool.layout.desktop.image : this.defaultDesktopImage);
+        return this.api.serverUrl + '/' + (this.fool.layout.desktop.image ? this.fool.layout.desktop.image : this.defaultDesktopImage);
     }
 
     public copiedCodeToClipboard(): void {

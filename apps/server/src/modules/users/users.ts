@@ -1,6 +1,6 @@
 import UsersService from "../../services/users/users.service";
 import { getData } from "../resources/resources";
-import { APIResponse } from "../../types/response";
+import { APIResponse } from "@put3/types";
 import { SessionService } from "../../services/users/sessions.service";
 import SessionModule from "../session/sessions";
 import SocketService from "../../services/socket/socket.service";
@@ -15,21 +15,23 @@ export default class UserModule {
 
     public static connect(uuid: string): APIResponse {
         console.log("[-] New user connected: " + uuid);
-        return { success: true };
+        return { success: true, message: "User connected", data: undefined };
     }
 
     public static disconnect(uuid: string): APIResponse {
         const user = UsersService.find(uuid);
-        if (!user) return { success: false, message: "User doesn't exist" };
+        if (!user) return { success: false, message: "User doesn't exist", data: undefined };
 
         console.log("[-] User disconnected: " + user.uuid);
         SessionModule.disconnect(user);
         UsersService.remove(user.uuid);
 
-        return { success: true, message: "User deleted" };
+        return { success: true, message: "User deleted", data: undefined };
     }
 
     public static setRole(uuid: string, role: EnumUserRole, data: { sessionCode?: string, preferences?: UserPreferences, isAdmin: boolean }): APIResponse {
+        console.log("[-] User " + uuid + " selected role " + role);
+
         const userExists = !!UsersService.find(uuid);
         if (userExists) {
             UsersService.remove(uuid);
@@ -39,7 +41,7 @@ export default class UserModule {
         if (role == EnumUserRole.MASTER && !data.isAdmin) {
             if (!SessionService.find(data.sessionCode!)) {
                 console.error("[-] Session " + data.sessionCode + " doesn't exist");
-                return { success: false, message: "Session doesn't exist" };
+                return { success: false, message: "Session doesn't exist", data: undefined };
             }
         }
 
@@ -66,7 +68,7 @@ export default class UserModule {
         }
         else throw new Error("[-] Unknown role: " + role);
 
-        return { success: true, message: "Role changed" };
+        return { success: true, message: "Role changed", data: undefined };
     }
 
     public static sendAction(sourceUuid: string, targetUuid: string, action: Action): APIResponse {
@@ -78,13 +80,13 @@ export default class UserModule {
         // Check if the sender has the right to send an action to the target
         if (!SessionModule.canMasterSendToFool(sourceUser.uuid, sourceUser.isAdmin, targetUuid)) {
             console.error("[-] User " + sourceUser.uuid + " doesn't have the right to send an action to " + targetUuid);
-            return { success: false, message: "You don't have the right to send an action to this user" };
+            return { success: false, message: "You don't have the right to send an action to this user", data: undefined };
         }
 
         console.log("[-] Action from " + sourceUser.uuid + " to " + targetUuid);
         SocketService.emit(EnumEvent.ACTION, action, { targets: [targetUuid]});
 
-        return { success: true, message: "Action sent" };
+        return { success: true, message: "Action sent", data: undefined };
     }
 
     public static changeInfos(userUuid: string, infos: FoolInfos): APIResponse {
@@ -92,12 +94,12 @@ export default class UserModule {
         if (!user) throw new Error("[-] Undefined user");
 
         if (user.role != EnumUserRole.FOOL) {
-            return { success: false, message: "You can't change infos for this user" };
+            return { success: false, message: "You can't change infos for this user", data: undefined };
         }
         user.infos = {...user.infos, ...infos};
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(user.uuid)!);
 
-        return { success: true, message: "Infos changed" };
+        return { success: true, message: "Infos changed", data: undefined };
     }
 
     public static changeLayout(sourceUuid: string, targetUuid: string, layout: any): APIResponse {
@@ -109,18 +111,18 @@ export default class UserModule {
         // Check if the sender has the right to send an action to the target
         if (!SessionModule.canMasterSendToFool(sourceUser.uuid, sourceUser.isAdmin, targetUuid)) {
             console.error("[-] User " + sourceUser.uuid + " doesn't have the right to change the layout of " + targetUuid);
-            return { success: false, message: "You don't have the right to change the layout of this user" };
+            return { success: false, message: "You don't have the right to change the layout of this user", data: undefined };
         }
 
         if (targetUser.role != EnumUserRole.FOOL) {
-            return { success: false, message: "You can't change infos for this user" };
+            return { success: false, message: "You can't change infos for this user", data: undefined };
         }
         console.log("[-] Layout changed for " + targetUuid);
         targetUser.desktop = layout.desktop;
         SocketService.emit(EnumEvent.LAYOUT, layout, { targets: [targetUuid]});
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
-        return { success: true, message: "Layout changed" };
+        return { success: true, message: "Layout changed", data: undefined };
     }
 
     public static rename(sourceUuid: string, targetUuid: string, newName: string): APIResponse {
@@ -130,13 +132,13 @@ export default class UserModule {
         if (!targetUser) throw new Error("[-] Undefined target user");
 
         if (targetUser.role != EnumUserRole.FOOL) {
-            return { success: false };
+            return { success: false, message: "You can't rename this user", data: undefined };
         }
         targetUser.name = newName;
         SocketService.emit(EnumEvent.RENAME, newName, { targets: [targetUuid]});
         SessionModule.emitUpdate.session(SessionService.getFoolAssociatedSession(targetUuid)!);
 
-        return { success: true, message: "User renamed" };
+        return { success: true, message: "User renamed", data: undefined };
     }
 
     public static sendMessage(uuid: string, message: string, type: EnumInfoStyle): void {
