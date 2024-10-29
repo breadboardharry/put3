@@ -3,7 +3,6 @@ import {
     ChangeDetectionStrategy,
     Component,
     EventEmitter,
-    HostBinding,
     OnInit,
     Output,
     inject,
@@ -12,8 +11,8 @@ import {
 import { FormsModule } from '@angular/forms';
 import { HlmSkeletonComponent } from '@spartan-ng/ui-skeleton-helm';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
-import { FileData } from 'src/app/app-models/types/file';
-import { BackendService } from 'src/app/services/backend/backend.service';
+import { Media } from 'src/app/providers/media';
+import { APIService } from 'src/app/services/api/api.service';
 
 @Component({
     selector: 'app-file-card',
@@ -25,7 +24,7 @@ import { BackendService } from 'src/app/services/backend/backend.service';
     host: { class: 'w-full h-full select-none transition-opacity' },
 })
 export class FileCardComponent implements OnInit {
-    public file = input.required<FileData>();
+    public file = input.required<Media>();
     public selected = input<boolean>(false);
     public editing = input<boolean>(false);
     public disabled = input<boolean>(false);
@@ -35,7 +34,7 @@ export class FileCardComponent implements OnInit {
 
     public readonly EnumResourceType = EnumResourceType;
 
-    public readonly backend = inject<BackendService>(BackendService);
+    public readonly api = inject<APIService>(APIService);
 
     ngOnInit(): void {
         this.name = this.file().name;

@@ -11,7 +11,7 @@
     <app-dashboard-navbar></app-dashboard-navbar>
 
     <div class="content">
-        <div class="fool-list-container" *ngIf="displayFoolList">
+        <div class="fool-list-container p-8 pb-0" *ngIf="displayFoolList">
             <app-fool-card
                 *ngFor="let session of sessions"
                 [selected]="target && session.code == target.code"

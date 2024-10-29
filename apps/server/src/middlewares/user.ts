@@ -12,6 +12,7 @@ export default function UserMiddleware(req: Request, _r: Response, next: any) {
     }
 
     AdminModule.isLogged(token).then((logged: boolean) => {
+        console.log('Logged:', logged);
         req['auth'] = {
             isAdmin: logged
         };

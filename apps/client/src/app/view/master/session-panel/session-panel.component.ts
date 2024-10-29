@@ -10,7 +10,10 @@ import { SessionService } from 'src/app/services/session-service/session.service
 @Component({
     selector: 'app-session-panel',
     templateUrl: './session-panel.component.html',
-    styleUrls: ['./session-panel.component.scss']
+    styleUrls: ['./session-panel.component.scss'],
+    host: {
+        class: 'p-8 pt-0',
+    }
 })
 export class SessionPanelComponent implements OnInit, DashboardSection {
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { BackendService } from '../backend/backend.service';
+import { APIService } from '../api/api.service';
 import { EventService } from '../event-service/event.service';
 import { ResourceBrowserModal } from 'src/app/view/modals/resource-browser/resource-browser.modal';
 import { ResourceSet } from 'src/app/app-models/types/resources';
@@ -12,46 +12,55 @@ import {
 } from 'src/app/app-models/enums/resources';
 import { FileData } from 'src/app/app-models/types/file';
 import { HlmDialogService } from '@spartan-ng/ui-dialog-helm';
-import { FileService } from '../utils/file-service/file.service';
+import { LocalMedia, RemoteMedia } from 'src/app/providers/media';
+import { APIResponse } from '@put3/types';
+import path from 'src/app/utilities/path';
 
 @Injectable({
     providedIn: 'root',
 })
-export class ResourcesService {
-    private routeUrl = this.backend.apiUrl + '/resources';
-    private resources: Partial<ResourceSet> = {};
+export class MediaService {
+    private routeUrl = '/resources';
+    private medias: Partial<ResourceSet<RemoteMedia>> = {};
 
     public static ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif'];
     public static ALLOWED_VIDEO_EXTENSIONS = ['mp4', 'webm'];
     public static ALLOWED_AUDIO_EXTENSIONS = ['mp3', 'wav'];
     public static ALLOWED_EXTENSIONS = [
-        ...ResourcesService.ALLOWED_IMAGE_EXTENSIONS,
-        ...ResourcesService.ALLOWED_VIDEO_EXTENSIONS,
-        ...ResourcesService.ALLOWED_AUDIO_EXTENSIONS,
+        ...MediaService.ALLOWED_IMAGE_EXTENSIONS,
+        ...MediaService.ALLOWED_VIDEO_EXTENSIONS,
+        ...MediaService.ALLOWED_AUDIO_EXTENSIONS,
     ];
 
     constructor(
         private http: HttpClient,
-        private backend: BackendService,
+        private api: APIService,
         private eventService: EventService,
-        private hlmDialogService: HlmDialogService,
-        private fileService: FileService
+        private hlmDialogService: HlmDialogService
     ) {
         this.update();
         this.eventService.onResourcesUpdate.subscribe((resources) => {
-            this.resources = resources;
+            this.medias = resources;
         });
     }
 
-    public async update(): Promise<ResourceSet> {
+    public async update(): Promise<typeof this.medias> {
         // const logged = await this.authService.isLogged();
         // if (!logged) return;
 
-        const resources = await this.getData();
-        this.resources = resources;
-        return resources;
+        const medias = await this.getAll();
+        console.log(medias);
+        this.medias = medias;
+        return medias;
     }
 
+    /**
+     * Get the directory of a resource type
+     * @param type Resource type
+     * @returns Resource directory
+     * @throws Error if the type is invalid
+     * @example typeToDir(EnumResourceType.IMAGE) => EnumResourceDirectory.IMAGES
+     */
     public typeToDir(type: EnumResourceType): EnumResourceDirectory {
         switch (type) {
             case EnumResourceType.IMAGE:
@@ -60,9 +69,18 @@ export class ResourcesService {
                 return EnumResourceDirectory.VIDEOS;
             case EnumResourceType.AUDIO:
                 return EnumResourceDirectory.AUDIOS;
+            default:
+                throw new Error('Invalid type');
         }
     }
 
+    /**
+     * Get the type of a resource directory
+     * @param dir Resource directory
+     * @returns Resource type
+     * @throws Error if the directory is invalid
+     * @example dirToType(EnumResourceDirectory.IMAGES) => EnumResourceType.IMAGE
+     */
     public dirToType(dir: EnumResourceDirectory): EnumResourceType {
         switch (dir) {
             case EnumResourceDirectory.IMAGES:
@@ -71,17 +89,47 @@ export class ResourcesService {
                 return EnumResourceType.VIDEO;
             case EnumResourceDirectory.AUDIOS:
                 return EnumResourceType.AUDIO;
+            default:
+                throw new Error('Invalid directory');
         }
     }
 
-    public extensionToType(extension: string): EnumResourceType {
-        if (ResourcesService.ALLOWED_IMAGE_EXTENSIONS.includes(extension))
+    /**
+     * Get the type of a resource file from its extension
+     * @param extension File extension
+     * @returns Resource type
+     * @throws Error if the extension is invalid
+     * @example extensionToType('png') => EnumResourceType.IMAGE
+     */
+    public static extensionToType(extension: string): EnumResourceType {
+        if (MediaService.ALLOWED_IMAGE_EXTENSIONS.includes(extension))
             return EnumResourceType.IMAGE;
-        if (ResourcesService.ALLOWED_VIDEO_EXTENSIONS.includes(extension))
+        if (MediaService.ALLOWED_VIDEO_EXTENSIONS.includes(extension))
             return EnumResourceType.VIDEO;
-        if (ResourcesService.ALLOWED_AUDIO_EXTENSIONS.includes(extension))
+        if (MediaService.ALLOWED_AUDIO_EXTENSIONS.includes(extension))
             return EnumResourceType.AUDIO;
-        throw new Error('Invalid extension');
+        throw new Error(`Invalid extension: ${extension}`);
+    }
+
+    /**
+     * Get the allowed extensions for a resource type
+     * If no type is specified, it will return all allowed extensions
+     * @param type Resource type (optional)
+     * @returns Allowed extensions
+     * @example getAllowedExtensions(EnumResourceType.IMAGE) => ['png', 'jpg', 'jpeg', 'gif']
+     * @example getAllowedExtensions() => ['png', 'jpg', 'jpeg', 'gif', 'mp4', 'webm', 'mp3', 'wav']
+     */
+    public getAllowedExtensions(type?: EnumResourceType): string[] {
+        switch (type) {
+            case EnumResourceType.IMAGE:
+                return MediaService.ALLOWED_IMAGE_EXTENSIONS;
+            case EnumResourceType.VIDEO:
+                return MediaService.ALLOWED_VIDEO_EXTENSIONS;
+            case EnumResourceType.AUDIO:
+                return MediaService.ALLOWED_AUDIO_EXTENSIONS;
+            default:
+                return MediaService.ALLOWED_EXTENSIONS;
+        }
     }
 
     public flattenObject(obj: any, path: string = '') {
@@ -101,73 +149,111 @@ export class ResourcesService {
         return result;
     }
 
-    public getAllowedExtensions(type?: EnumResourceType): string[] {
-        if (!type) return ResourcesService.ALLOWED_EXTENSIONS;
-        switch (type) {
-            case EnumResourceType.IMAGE:
-                return ResourcesService.ALLOWED_IMAGE_EXTENSIONS;
-            case EnumResourceType.VIDEO:
-                return ResourcesService.ALLOWED_VIDEO_EXTENSIONS;
-            case EnumResourceType.AUDIO:
-                return ResourcesService.ALLOWED_AUDIO_EXTENSIONS;
-        }
-    }
-
     /**
-     * Get all resources data
-     * @returns {Promise<ResourceSet>} Resources
+     * Get all medias
+     * @returns Resources
      */
-    public getData(): Promise<ResourceSet> {
-        return new Promise<ResourceSet>((resolve, reject) => {
+    public getAll(): Promise<ResourceSet<RemoteMedia>> {
+        return new Promise((resolve) => {
             this.http
-                .get<ResourceSet>(this.routeUrl, {
+                .get<APIResponse<ResourceSet<FileData>>>(this.routeUrl, {
                     responseType: 'json',
-                    withCredentials: true,
                 })
-                .subscribe((data: ResourceSet) => {
-                    resolve(data);
+                .subscribe((res) => {
+                    const set = {
+                        images: res.data.images?.map(
+                            (media) =>
+                                new RemoteMedia({
+                                    name: media.name,
+                                    extension: path.extname(media.name),
+                                    src: media.href,
+                                    size: media.size,
+                                })
+                        ),
+                        videos: res.data.videos?.map(
+                            (media) =>
+                                new RemoteMedia({
+                                    name: media.name,
+                                    extension: path.extname(media.name),
+                                    src: media.href,
+                                    size: media.size,
+                                })
+                        ),
+                        audios: res.data.audios?.map(
+                            (media) =>
+                                new RemoteMedia({
+                                    name: media.name,
+                                    extension: path.extname(media.name),
+                                    src: media.href,
+                                    size: media.size,
+                                })
+                        ),
+                    };
+                    resolve(set);
                 });
         });
     }
 
     /**
      * Get resources data by type
-     * @param {EnumResourceType} type Resource type
-     * @returns {Promise<FileData[]>} Resources
+     * @param type Resource type
+     * @returns Medias
      */
-    public getDataByType(type: EnumResourceType): Promise<FileData[]> {
+    public getDataByType(type: EnumResourceType): Promise<RemoteMedia[]> {
         const endpoint = this.routeUrl + '/' + this.typeToDir(type);
 
-        return new Promise<FileData[]>((resolve, reject) => {
+        return new Promise<RemoteMedia[]>((resolve) => {
             this.http
-                .get<FileData[]>(endpoint, {
+                .get<APIResponse<FileData[]>>(endpoint, {
                     responseType: 'json',
-                    withCredentials: true,
                 })
-                .subscribe((data: FileData[]) => {
-                    resolve(data);
+                .subscribe((res) => {
+                    resolve(
+                        res.data.map(
+                            (media) =>
+                                new RemoteMedia({
+                                    name: media.name,
+                                    extension: media.extension,
+                                    src: media.href,
+                                    size: media.size,
+                                })
+                        )
+                    );
                 });
         });
     }
 
-    public getResources(type?: EnumResourceType): FileData[] {
-        // Return resources of a specific type
+    /**
+     * Get all medias or medias of a specific type
+     * @param type Media type (optional)
+     * @returns Medias array
+     */
+    public getMedias(type?: EnumResourceType): RemoteMedia[] {
+        // Return medias of a specific type
         if (type) {
             const dir = this.typeToDir(type);
-            return this.resources[dir] || [];
+            return this.medias[dir] || [];
         }
 
-        // Return all resources if no type is specified
+        // Return all medias if no type is specified
         return this.flatten();
     }
 
-    public flatten(set: Partial<ResourceSet> = this.resources) {
-        let result: any[] = [];
+    /**
+     * Flatten a resource set
+     * @param set Resource set
+     * @returns Flattened array
+     * @example flatten({ images: [img1, img2], videos: [vid1, vid2] }) => [img1, img2, vid1, vid2]
+     */
+    public flatten<T extends RemoteMedia | LocalMedia>(
+        set: Partial<ResourceSet<T>> = this.medias as any
+    ): T[] {
+        let result: T[] = [];
 
-        for (let files of Object.values(set)) {
+        for (const files of Object.values(set)) {
+            if (!files) continue;
             result = result.concat(files);
         }
-
         return result;
     }
 
@@ -176,16 +262,19 @@ export class ResourcesService {
      * @param medias Medias to delete
      * @returns Server result
      */
-    public delete(medias: FileData[]): Promise<any> {
+    public delete(medias: RemoteMedia[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            const filespath = medias.map((media) => media.path);
+            const data = medias.map((media) => {
+                type: media.type;
+                name: media.name;
+            });
+            console.log(data);
             this.http
-                .delete(this.routeUrl, {
+                .delete<APIResponse>(this.routeUrl, {
                     responseType: 'json',
-                    body: filespath,
-                    withCredentials: true,
+                    body: data,
                 })
-                .subscribe((data: any) => resolve(data));
+                .subscribe((res) => resolve(res.data));
         });
     }
 
@@ -193,7 +282,7 @@ export class ResourcesService {
         return new Promise<boolean>((resolve, reject) => {
             let path = typeof file === 'string' ? file : file.href;
             this.http
-                .get(this.backend.serverUrl + '/' + path, {
+                .get(this.api.serverUrl + '/' + path, {
                     responseType: 'blob',
                 })
                 .subscribe({
@@ -214,10 +303,10 @@ export class ResourcesService {
         currentName: string,
         newName: string,
         dirpath: string
-    ): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
+    ): Promise<boolean> {
+        return new Promise((resolve, reject) => {
             this.http
-                .post(
+                .post<APIResponse>(
                     this.routeUrl + '/rename',
                     {
                         currentName,
@@ -226,17 +315,16 @@ export class ResourcesService {
                     },
                     {
                         responseType: 'json',
-                        withCredentials: true,
                     }
                 )
                 .subscribe({
-                    next: (data: any) => resolve(data),
-                    error: (error: any) => reject(error),
+                    next: (res) => resolve(res.success),
+                    error: (error) => reject(error),
                 });
         });
     }
 
-    public addFiles(file: File[]) {
+    public upload(file: File[]) {
         let arr: any[] = [];
         let formData = new FormData();
 
@@ -253,7 +341,6 @@ export class ResourcesService {
             .post(this.routeUrl + '/upload', formData, {
                 reportProgress: true,
                 observe: 'events',
-                withCredentials: true,
             })
             .pipe(catchError(this.errorMgmt));
     }
@@ -273,50 +360,15 @@ export class ResourcesService {
     public browse(
         type?: EnumResourceType,
         canImport: boolean = false
-    ): Promise<FileData[] | undefined> {
+    ): Promise<RemoteMedia[] | undefined> {
         return new Promise((resolve) => {
             const dialogRef = this.hlmDialogService.open(ResourceBrowserModal, {
                 context: { type, canImport },
             });
 
-            dialogRef.closed$.subscribe((selection: FileData[] | undefined) => {
+            dialogRef.closed$.subscribe((selection: RemoteMedia[] | undefined) => {
                 resolve(selection);
             });
-        });
-    }
-
-    /**
-     * Create a media object from a file
-     * @param file File to create media object from
-     * @returns Media object
-     */
-    public createMediaObject(file: File): Promise<FileData> {
-        return new Promise((resolve, reject) => {
-            const extension = this.fileService.getExtension(file.name);
-            if (
-                !extension ||
-                !ResourcesService.ALLOWED_EXTENSIONS.includes(extension)
-            ) {
-                return reject('File type not allowed: ' + extension);
-            }
-
-            const reader = new FileReader();
-            reader.onload = () => {
-                resolve({
-                    href: reader.result as string,
-                    type: this.extensionToType(extension),
-                    dirpath: '',
-                    extension: extension,
-                    name: this.fileService.removeExtension(file.name),
-                    path: '',
-                    size: file.size,
-                    isBase64: true,
-                });
-            };
-            reader.onerror = () => {
-                return reject('Error please try again.');
-            };
-            reader.readAsDataURL(file);
         });
     }
 }

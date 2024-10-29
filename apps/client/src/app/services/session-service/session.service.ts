@@ -1,18 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BackendService } from '../backend/backend.service';
 import { Session, SessionData } from 'src/app/classes/session';
 import { CookieService } from 'ngx-cookie-service';
 import { EventService } from '../event-service/event.service';
 import { EnumSessionActionType } from 'src/app/app-models/enums/action';
+import { APIResponse } from '@put3/types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class SessionService {
-
     constructor(
-        private backend: BackendService,
         private http: HttpClient,
         private cookie: CookieService,
         private eventService: EventService
@@ -31,24 +29,30 @@ export class SessionService {
     }
 
     public run(sessionCode: string): void {
-        console.log("[-] Running session", sessionCode);
+        console.log('[-] Running session', sessionCode);
         this.eventService.sendSessionEvent(sessionCode, {
-            type: EnumSessionActionType.RUN
+            type: EnumSessionActionType.RUN,
         });
     }
 
     public getAll(): Promise<Session[]> {
         return new Promise((resolve, reject) => {
-            this.http.get(this.backend.apiUrl + '/session/', {
-                responseType: 'json',
-                withCredentials: true
-            })
-            .subscribe({
-                next: (res: any) => {
-                    resolve(res.sessions.map((data: SessionData) => new Session(data)))
-                },
-                error: (err) => { reject(err) }
-            });
+            this.http
+                .get<APIResponse<SessionData[]>>('/session/', {
+                    responseType: 'json',
+                })
+                .subscribe({
+                    next: (res) => {
+                        resolve(
+                            res.data.map(
+                                (data: SessionData) => new Session(data)
+                            )
+                        );
+                    },
+                    error: (err) => {
+                        reject(err);
+                    },
+                });
         });
     }
 
@@ -57,15 +61,18 @@ export class SessionService {
      */
     public exists(code: string): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.http.get(this.backend.apiUrl + '/session/exists?code=' + code, {
-                responseType: 'json',
-                withCredentials: true
-            })
-            .subscribe({
-                next: (res: any) => { resolve(res.success) },
-                error: (err) => { resolve(false) }
-            });
+            this.http
+                .get<APIResponse<boolean>>('/session/exists?code=' + code, {
+                    responseType: 'json',
+                })
+                .subscribe({
+                    next: (res) => {
+                        resolve(res.data);
+                    },
+                    error: () => {
+                        resolve(false);
+                    },
+                });
         });
     }
-
 }

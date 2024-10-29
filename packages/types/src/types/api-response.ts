@@ -1,7 +1,7 @@
-export type APIResponse<Tdata = any> = {
+export type APIResponse<Tdata extends any = undefined> = {
     success: boolean;
     message: string;
-    data?: Tdata;
+    data: Tdata;
     errors?:
         | string
         | {

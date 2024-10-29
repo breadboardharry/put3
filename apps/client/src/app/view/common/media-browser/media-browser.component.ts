@@ -1,17 +1,16 @@
-import { Component, HostListener, OnInit, inject, input } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, inject, input } from '@angular/core';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
-import { FileData } from 'src/app/app-models/types/file';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { FileCardComponent } from '../cards/file-card/file-card.component';
 import SelectionHandler from 'src/app/providers/selection';
 import { FileDropzoneDirective } from 'src/app/directives/file-dropzone';
-import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { toast } from 'ngx-sonner';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { NgClass } from '@angular/common';
 import { FileCardSkeletonComponent } from '../cards/file-card-skeleton/file-card-skeleton.component';
 import { AudioService } from 'src/app/services/audio-service/audio.service';
-import { BackendService } from 'src/app/services/backend/backend.service';
+import { APIService } from 'src/app/services/api/api.service';
+import { LocalMedia, Media, RemoteMedia } from 'src/app/providers/media';
 
 @Component({
     selector: 'app-media-browser',
@@ -41,15 +40,14 @@ export class MediaBrowserComponent implements OnInit {
     public readonly enableImport = input<boolean>(false);
 
     // Local variables
-    public readonly selection = new SelectionHandler<FileData>();
+    public readonly selection = new SelectionHandler<Media>();
     protected loading = false;
-    protected uploadingMedias: (FileData & { originalFile: File })[] = [];
+    protected uploadingMedias: LocalMedia[] = [];
 
     // Services
-    protected readonly mediaService =
-        inject<ResourcesService>(ResourcesService);
+    protected readonly mediaService = inject<MediaService>(MediaService);
     protected readonly audioService = inject<AudioService>(AudioService);
-    protected readonly backendService = inject<BackendService>(BackendService);
+    protected readonly api = inject<APIService>(APIService);
 
     ngOnInit(): void {}
 
@@ -58,7 +56,7 @@ export class MediaBrowserComponent implements OnInit {
      * @param media The media that was clicked
      * @param event The click event
      */
-    public onCardClick(media: FileData, event: MouseEvent): void {
+    public onCardClick(media: RemoteMedia, event: MouseEvent): void {
         if (!this.enableSelection()) return;
 
         // Handle toggle selection
@@ -74,10 +72,10 @@ export class MediaBrowserComponent implements OnInit {
             if (lastToggledItem) {
                 // Calculate the range of items to select and select them
                 const lastIndex = this.mediaService
-                    .getResources()
+                    .getMedias()
                     .indexOf(lastToggledItem);
                 const currentIndex = this.mediaService
-                    .getResources()
+                    .getMedias()
                     .indexOf(media);
                 const minIndex = Math.min(lastIndex, currentIndex);
                 const maxIndex = Math.max(lastIndex, currentIndex);
@@ -86,7 +84,7 @@ export class MediaBrowserComponent implements OnInit {
                 this.selection.lastToggledItem = lastToggledItem;
                 // Select the range of items
                 for (let i = minIndex; i <= maxIndex; i++) {
-                    this.selection.toggle(this.mediaService.getResources()[i], {
+                    this.selection.toggle(this.mediaService.getMedias()[i], {
                         // Skip registering the last toggled item to avoid changing reference
                         skipLastToggledRegistration: true,
                     });
@@ -104,11 +102,11 @@ export class MediaBrowserComponent implements OnInit {
      * @param media The media that was clicked
      * @param event The click event
      */
-    public onCardDoubleClick(media: FileData, event: MouseEvent): void {
+    public onCardDoubleClick(media: RemoteMedia, event: MouseEvent): void {
         // Preview
         if (media.type === EnumResourceType.AUDIO) {
             this.audioService.stopAll();
-            this.audioService.play(this.backendService.serverUrl + '/' + media.href);
+            this.audioService.play(this.api.serverUrl + '/' + media.src);
         }
     }
 
@@ -148,13 +146,8 @@ export class MediaBrowserComponent implements OnInit {
         let errors = 0;
         for (const file of files) {
             try {
-                const mediaObject = await this.mediaService.createMediaObject(
-                    file
-                );
-                this.uploadingMedias.push({
-                    ...mediaObject,
-                    originalFile: file,
-                });
+                const mediaObject = await LocalMedia.createFromFile(file);
+                this.uploadingMedias.push(mediaObject);
             } catch (error) {
                 console.error('Error importing file', file, error);
                 errors++;
@@ -167,18 +160,7 @@ export class MediaBrowserComponent implements OnInit {
             return;
         }
 
-        await new Promise((resolve) => {
-            this.mediaService
-                .addFiles(
-                    this.uploadingMedias.map((media) => media.originalFile)
-                )
-                .subscribe((event: HttpEvent<any>) => {
-                    switch (event.type) {
-                        case HttpEventType.Response:
-                            resolve(event.body.data);
-                    }
-                });
-        });
+        await LocalMedia.uploadMultiple(this.uploadingMedias);
 
         toast.success(
             `${this.uploadingMedias.length} file(s) uploaded successfully!`

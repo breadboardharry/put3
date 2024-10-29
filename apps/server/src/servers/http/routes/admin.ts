@@ -1,53 +1,60 @@
 import express, { Router } from 'express';
 import AdminModule from '../../../modules/admin/admin';
+import {
+    SUCCESS,
+    internalError,
+    reply,
+} from '../../../services/response.service';
 const router: Router = express.Router();
 
 router.post('/login', (req, res) => {
     const { code } = req.body;
     const login = AdminModule.login(code);
-    if (!login.success) return res.json({ success: false });
+    if (!login.success)
+        return reply(res, {
+            ...SUCCESS.DEFAULT,
+            success: false,
+            message: 'Invalid code!',
+        });
 
-    return res.cookie('token', login.token, {
+    res.cookie('token', login.token, {
         maxAge: login.expiresIn,
-        httpOnly: true
-    }).json({
-        success: true,
-        message: "Logged in successfully!"
+        httpOnly: true,
     });
+    reply(res, { ...SUCCESS.DEFAULT, message: 'Logged in successfully!' });
 });
 
 /**
  * Check if the user is logged in
  * @description This route is protected by the AuthMiddleware
  * @returns A JSON object with a success property
-*/
+ */
 router.get('/islogged', (req, res) => {
-    const auth = req['auth'];
-    res.json({ isAdmin: !!auth && auth.isAdmin });
+    try {
+        const auth = req['auth'];
+        const isAdmin: boolean = !!auth && auth.isAdmin;
+        reply(res, { ...SUCCESS.DEFAULT, data: { isAdmin } });
+    } catch (err: any) {
+        internalError(res, err);
+    }
 });
 
 /**
  * Get the length of a code
- * @param codeName Route parameter - specifies the code to verify
  * @returns The length of the code
  */
-router.get('/codelen/:codeName', (req, res) => {
-    const codeName = req.params.codeName;
-
-    switch (codeName) {
-        case 'master':
-            res.status(200).json(process.env.MASTER_CODE!.length);
-            break;
-
-        default:
-            res.status(400).json({ error: 'Invalid code name' });
-            break;
+router.get('/codelen', (_, res) => {
+    try {
+        const codelen = process.env.MASTER_CODE!.length;
+        reply(res, { ...SUCCESS.DEFAULT, data: codelen });
+    } catch (err: any) {
+        internalError(res, err);
     }
 });
 
-router.get('/logout', (_r, res) => {
+router.get('/logout', (_, res) => {
     res.clearCookie('token');
-    res.json({ success: true });
+    reply(res, SUCCESS.DEFAULT);
 });
 
 export default router;

@@ -1,17 +1,27 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import {
+    ActivatedRouteSnapshot,
+    RouterStateSnapshot,
+    UrlTree,
+} from '@angular/router';
 import { Observable } from 'rxjs';
-import { BackendService } from 'src/app/services/backend/backend.service';
+import { APIService } from 'src/app/services/api/api.service';
 
 @Injectable({
     providedIn: 'root',
 })
-export class AliveGuard  {
+export class AliveGuard {
+    constructor(private api: APIService) {}
 
-    constructor(private backendService: BackendService) { }
-
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        return this.backendService.alive().then((alive: boolean) => {
+    canActivate(
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot
+    ):
+        | Observable<boolean | UrlTree>
+        | Promise<boolean | UrlTree>
+        | boolean
+        | UrlTree {
+        return this.api.alive().then((alive: boolean) => {
             return alive;
         });
     }

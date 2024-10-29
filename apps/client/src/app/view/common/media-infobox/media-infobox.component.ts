@@ -5,9 +5,10 @@ import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
 import { toast } from 'ngx-sonner';
 import { FileData } from 'src/app/app-models/types/file';
+import { Media } from 'src/app/providers/media';
 import SelectionHandler from 'src/app/providers/selection';
 import { ModalService } from 'src/app/services/modal/modal.service';
-import { ResourcesService } from 'src/app/services/resources-service/resources.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
 
 @Component({
     selector: 'app-media-infobox',
@@ -20,7 +21,7 @@ import { ResourcesService } from 'src/app/services/resources-service/resources.s
 })
 export class MediaInfoboxComponent {
     // Inputs
-    public readonly selection = input.required<SelectionHandler<FileData>>();
+    public readonly selection = input.required<SelectionHandler<Media>>();
 
     // Outputs
     public readonly onClose = output<void>();
@@ -29,7 +30,7 @@ export class MediaInfoboxComponent {
 
     // Services
     private readonly modalService = inject(ModalService);
-    private readonly mediaService = inject(ResourcesService);
+    private readonly mediaService = inject(MediaService);
 
     public triggerClose() {
         this.selection().clear();

@@ -1,5 +1,5 @@
+import { Media } from "src/app/providers/media";
 import { EnumActionType, EnumSessionActionType } from "../enums/action";
-import { FileData } from "./file";
 
 export type SessionAction = {
     type: EnumSessionActionType;
@@ -11,7 +11,7 @@ export type Action = {
 };
 
 export type ActionData = {
-    track?: FileData;
+    track?: Media;
     volume?: number;
     stop?: boolean;
     title?: string;

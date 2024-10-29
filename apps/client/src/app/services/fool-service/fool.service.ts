@@ -7,7 +7,7 @@ import { LayoutService } from '../layout-service/layout.service';
 import { AudioService } from '../audio-service/audio.service';
 import { PreferencesService } from '../preferences-service/preferences.service';
 import { Layout } from 'src/app/types/layout';
-import { BackendService } from '../backend/backend.service';
+import { APIService } from '../api/api.service';
 import { MicrophoneService } from '../microphone/microphone.service';
 import { CameraService } from '../camera/camera.service';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -40,7 +40,7 @@ export class FoolService {
 
     constructor(
         private eventService: EventService,
-        private backend: BackendService,
+        private api: APIService,
         private browser: BrowserService,
         private windowService: WindowService,
         private layoutService: LayoutService,
@@ -91,7 +91,7 @@ export class FoolService {
                 if ('stop' in data && data.stop) this.audio.stopAll();
                 else if ('track' in data)
                     this.audio.play(
-                        this.backend.serverUrl + '/' + data.track!.href,
+                        this.api.serverUrl + '/' + data.track!.src,
                         volume
                     );
                 break;
