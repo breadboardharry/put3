@@ -7,7 +7,7 @@ export class Env {
 
     public static init(): void {
         this.useEnvLocal();
-        process.env.PORT = process.env.PORT || '3000';
+        process.env.SERVER_PORT = process.env.SERVER_PORT || '3000';
     }
 
     private static useEnvLocal(): void {

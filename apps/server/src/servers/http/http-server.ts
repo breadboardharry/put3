@@ -32,7 +32,9 @@ export class HTTPServer {
         app.use(UserMiddleware);
         app.use(express.static('public'));
 
-        this.server = https.createServer(this.servOptions, app);
+        this.server = (
+            process.env.NODE_ENV == 'development' ? https : http
+        ).createServer(this.servOptions, app);
 
         // Add a "context" object to the request that will be used to store data between middlewares
         this.app.use((req, _, next) => {
@@ -47,9 +49,9 @@ export class HTTPServer {
     }
 
     private static listen(): void {
-        this.server.listen(process.env.PORT, () => {
+        this.server.listen(process.env.SERVER_PORT, () => {
             console.log(
-                `[*] Server started on port ${process.env.PORT}
+                `[*] Server started on port ${process.env.SERVER_PORT}
                 ENV: ${process.env.NODE_ENV}
                 ORIGIN: ${process.env.CLIENT_ORIGIN}`
             );

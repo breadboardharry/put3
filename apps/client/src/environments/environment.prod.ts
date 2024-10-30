@@ -1,4 +1,4 @@
-const backendUrl = `https://${window.location.hostname}`;
+const backendUrl = `http://${window.location.hostname}`;
 
 export const environment = {
     production: true,
