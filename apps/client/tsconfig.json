@@ -24,31 +24,31 @@
     ],
     "paths": {
       "@spartan-ng/ui-button-helm": [
-        ".\\ui/ui-button-helm/src/index.ts"
+        "./src/app/view/ui/ui-button-helm/src/index.ts"
       ],
       "@spartan-ng/ui-menu-helm": [
-        ".\\ui/ui-menu-helm/src/index.ts"
+        "./src/app/view/ui/ui-menu-helm/src/index.ts"
       ],
       "@spartan-ng/ui-icon-helm": [
-        ".\\ui/ui-icon-helm/src/index.ts"
+        "./src/app/view/ui/ui-icon-helm/src/index.ts"
       ],
       "@spartan-ng/ui-sonner-helm": [
-        ".\\ui/ui-sonner-helm/src/index.ts"
+        "./src/app/view/ui/ui-sonner-helm/src/index.ts"
       ],
       "@spartan-ng/ui-spinner-helm": [
-        ".\\ui/ui-spinner-helm/src/index.ts"
+        "./src/app/view/ui/ui-spinner-helm/src/index.ts"
       ],
       "@spartan-ng/ui-dialog-helm": [
-        ".\\ui/ui-dialog-helm/src/index.ts"
+        "./src/app/view/ui/ui-dialog-helm/src/index.ts"
       ],
       "@spartan-ng/ui-tooltip-helm": [
-        ".\\ui/ui-tooltip-helm/src/index.ts"
+        "./src/app/view/ui/ui-tooltip-helm/src/index.ts"
       ],
       "@spartan-ng/ui-tabs-helm": [
-        ".\\ui/ui-tabs-helm/src/index.ts"
+        "./src/app/view/ui/ui-tabs-helm/src/index.ts"
       ],
       "@spartan-ng/ui-skeleton-helm": [
-        ".\\ui/ui-skeleton-helm/src/index.ts"
+        "./src/app/view/ui/ui-skeleton-helm/src/index.ts"
       ]
     }
   },

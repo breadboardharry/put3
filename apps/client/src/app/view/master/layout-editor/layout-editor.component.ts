@@ -64,7 +64,6 @@ export class LayoutEditorComponent implements OnInit, DashboardSection {
             .then((selection) => {
                 if (!selection?.length) return;
                 const image = selection[0];
-                console.log(image);
                 this.target!.fool.layout.desktop.image = image.src;
             });
     }
