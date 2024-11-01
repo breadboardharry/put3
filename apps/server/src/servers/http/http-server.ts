@@ -11,8 +11,6 @@ import cookieParser from 'cookie-parser';
 import UserMiddleware from '../../middlewares/user';
 import { ReqContext } from '../../providers/req-context';
 
-console.log(process.env.NODE_ENV);
-
 export class HTTPServer {
     private static servOptions =
         process.env.NODE_ENV == 'development'

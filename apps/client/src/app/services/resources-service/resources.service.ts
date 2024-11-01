@@ -49,7 +49,6 @@ export class MediaService {
         // if (!logged) return;
 
         const medias = await this.getAll();
-        console.log(medias);
         this.medias = medias;
         return medias;
     }
@@ -268,7 +267,6 @@ export class MediaService {
                 type: media.type;
                 name: media.name;
             });
-            console.log(data);
             this.http
                 .delete<APIResponse>(this.routeUrl, {
                     responseType: 'json',

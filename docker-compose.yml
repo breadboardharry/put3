@@ -15,8 +15,14 @@ services:
       - put3
     env_file:
       - .env
+    volumes:
+      - medias:/prod/server/public/resources
     command: ["pnpm", "start"]
 
 networks:
   put3:
     driver: bridge
+
+volumes:
+    medias:
+        driver: local
