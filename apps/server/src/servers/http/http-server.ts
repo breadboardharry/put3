@@ -11,6 +11,8 @@ import cookieParser from 'cookie-parser';
 import UserMiddleware from '../../middlewares/user';
 import { ReqContext } from '../../providers/req-context';
 
+console.log(process.env.NODE_ENV);
+
 export class HTTPServer {
     private static servOptions =
         process.env.NODE_ENV == 'development'
@@ -53,7 +55,7 @@ export class HTTPServer {
             console.log(
                 `[*] Server started on port ${process.env.SERVER_PORT}
                 ENV: ${process.env.NODE_ENV}
-                ORIGIN: ${process.env.CLIENT_ORIGIN}`
+                ORIGIN: ${process.env.ACCESS_ORIGIN}`
             );
         });
     }

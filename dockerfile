@@ -33,11 +33,16 @@ FROM nginx:alpine AS client
 # Remove default files
 RUN rm -rf /usr/share/nginx/html/*
 # Use custom nginx configuration
-COPY --from=client-build /usr/src/app/apps/client/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=client-build /usr/src/app/apps/client/nginx.template.conf /etc/nginx/conf.d/config.template
 
 # Copy app files
 COPY --from=client-build /usr/src/app/apps/client/dist/put3/browser/ /usr/share/nginx/html
 EXPOSE 80
+
+# Set environment variables and restart nginx
+CMD envsubst '${API_PATH} ${SOCKET_PATH}' < /usr/share/nginx/html/assets/config/env.template.json > /usr/share/nginx/html/assets/config/env.json && \
+    envsubst '${ACCESS_ORIGIN} ${SERVER_PORT}' < /etc/nginx/conf.d/config.template > /etc/nginx/conf.d/default.conf && \
+    nginx -g 'daemon off;'
 
 # ---------------------------------------------------------------------------- #
 #                                    SERVER                                    #
@@ -53,4 +58,7 @@ RUN pnpm deploy --filter=server --prod /prod/server
 FROM base AS server
 COPY --from=server-build /prod/server /prod/server
 WORKDIR /prod/server
+# Delete source files (typescript)
+RUN rm -rf src
+ENV NODE_ENV=production
 EXPOSE 3000
