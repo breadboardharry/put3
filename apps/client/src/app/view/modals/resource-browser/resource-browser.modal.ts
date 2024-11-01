@@ -38,7 +38,7 @@ import { LocalMedia, RemoteMedia } from 'src/app/providers/media';
 import { MediaBrowserComponent } from '../../common/media-browser/media-browser.component';
 
 type InputData = {
-    type?: EnumResourceType;
+    type?: EnumResourceType | EnumResourceType[];
     canImport: boolean;
     multiple?: boolean;
 };
@@ -81,16 +81,17 @@ export class ResourceBrowserModal implements OnInit {
     /**
      * Type of resource to display
      */
-    protected readonly type: EnumResourceType | undefined =
-        this.dialogContext.type;
+    protected readonly type: InputData['type'] = this.dialogContext.type;
     /**
      * If the user can import a file
      */
-    protected readonly canImport: boolean = this.dialogContext.canImport;
+    protected readonly canImport: InputData['canImport'] =
+        this.dialogContext.canImport;
     /**
      * If the user can select multiple files
      */
-    protected readonly multiple: boolean = this.dialogContext.multiple || false;
+    protected readonly multiple: InputData['multiple'] =
+        this.dialogContext.multiple || false;
 
     @ViewChild(MediaBrowserComponent, { static: true })
     protected mediaBrowser!: MediaBrowserComponent;
@@ -103,8 +104,7 @@ export class ResourceBrowserModal implements OnInit {
     public readonly EnumTabs = EnumTabs;
 
     constructor(
-        private resourceService: MediaService,
-        private cdr: ChangeDetectorRef
+        private resourceService: MediaService
     ) {}
 
     ngOnInit(): void {

@@ -1,4 +1,4 @@
-@for (media of mediaService.getMedias(); track media) {
+@for (media of mediaService.getMedias(mediaType()); track media) {
 <app-file-card
     [ngClass]="loading ? 'opacity-50' : ''"
     (click)="onCardClick(media, $event)"

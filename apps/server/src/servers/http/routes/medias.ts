@@ -34,7 +34,6 @@ router.delete('/', IsAdminMiddleware, (req, res) => {
     const filesdata = req.body;
 
     try {
-        console.log('unlink', filesdata);
         const data = Resources.unlink(filesdata);
         reply(res, { ...SUCCESS.DEFAULT, data });
 

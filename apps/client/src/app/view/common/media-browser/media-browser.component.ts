@@ -1,4 +1,11 @@
-import { Component, HostListener, OnInit, ViewChild, inject, input } from '@angular/core';
+import {
+    Component,
+    HostListener,
+    OnInit,
+    ViewChild,
+    inject,
+    input,
+} from '@angular/core';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
 import { MediaService } from 'src/app/services/resources-service/resources.service';
 import { FileCardComponent } from '../cards/file-card/file-card.component';
@@ -35,7 +42,9 @@ import { LocalMedia, Media, RemoteMedia } from 'src/app/providers/media';
 })
 export class MediaBrowserComponent implements OnInit {
     // Inputs
-    public readonly mediaType = input<EnumResourceType[]>([]);
+    public readonly mediaType = input<
+        EnumResourceType | EnumResourceType[] | undefined
+    >([]);
     public readonly enableSelection = input<boolean>(false);
     public readonly enableImport = input<boolean>(false);
 

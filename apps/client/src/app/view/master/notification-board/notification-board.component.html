@@ -1,22 +1,37 @@
 <div class="alert" *ngIf="displayAlert">
-    The browser of the fool doesn't have the permission to receive notifications.
+    The browser of the fool doesn't have the permission to receive
+    notifications.
 </div>
 
-<div class="template" [ngClass]="{
-    'disabled': isDisabled
-}">
-    <div class="icon-container" [ngClass]="{
-            'disabled': isDisabled
-        }" [ngStyle]="{
-            'background': notif.icon ? 'transparent' : '#efefef'
+<div
+    class="template"
+    [ngClass]="{
+        disabled: isDisabled
+    }"
+>
+    <div
+        class="icon-container"
+        [ngClass]="{
+            disabled: isDisabled
+        }"
+        [ngStyle]="{
+            background: notif.icon ? 'transparent' : '#efefef'
         }"
     >
-        <button class="browse-icon" (click)="browseIcon()" [disabled]="isDisabled">
-            <img src="assets/icons/medias-400.svg"/>
-            <span>{{notif.icon ? 'Change' : 'Select'}}</span>
+        <button
+            class="browse-icon"
+            (click)="browseIcon()"
+            [disabled]="isDisabled"
+        >
+            <img src="assets/icons/medias-400.svg" />
+            <span>{{ notif.icon ? "Change" : "Select" }}</span>
         </button>
-        <img class="placeholder" *ngIf="!notif.icon" src="assets/icons/image-300.svg"/>
-        <img class="icon" *ngIf="notif.icon" [src]="notif.icon"/>
+        <img
+            class="placeholder"
+            *ngIf="!notif.icon"
+            src="assets/icons/image-300.svg"
+        />
+        <img class="icon" *ngIf="notif.icon" [src]="notif.icon" />
     </div>
 
     <div class="texts">
@@ -42,23 +57,35 @@
     </div>
 </div>
 
-<div class="control" [ngClass]="{
-    'disabled': isDisabled
-}">
+<div
+    class="control"
+    [ngClass]="{
+        disabled: isDisabled
+    }"
+>
     <section class="settings">
         <h3>Settings</h3>
         <div class="duration">
-            <img src="assets/icons/timer-400.svg">
-            <mat-slider min="1000" max="11000" step="1000" color="primary" thumbLabel
+            <img src="assets/icons/timer-400.svg" />
+            <mat-slider
+                min="1000"
+                max="11000"
+                step="1000"
+                color="primary"
+                thumbLabel
+                name="duration"
                 [displayWith]="formatDurationSliderLabel"
-                [(ngModel)]="notif.duration"
                 [disabled]="isDisabled"
-            ></mat-slider>
+                ngDefaultControl
+            >
+                <input matSliderThumb [(ngModel)]="notif.duration" />
+            </mat-slider>
         </div>
     </section>
 
     <section class="buttons">
-        <app-button-small (click)="reset()"
+        <app-button-small
+            (click)="reset()"
             [disabled]="isDisabled"
             [icon]="'assets/icons/restart-400.svg'"
             [invertIcon]="true"
@@ -68,12 +95,11 @@
             Reset
         </app-button-small>
 
-        <app-button-small (click)="preview()"
-            [disabled]="isDisabled"
-        >
+        <app-button-small (click)="preview()" [disabled]="isDisabled">
             Preview
         </app-button-small>
-        <app-button-small (click)="send()"
+        <app-button-small
+            (click)="send()"
             [disabled]="isDisabled"
             [icon]="'assets/icons/send-400.svg'"
             [invertIcon]="true"

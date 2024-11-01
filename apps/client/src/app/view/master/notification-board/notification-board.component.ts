@@ -9,6 +9,7 @@ import { MediaService } from 'src/app/services/resources-service/resources.servi
 import { ClientService } from 'src/app/services/client-service/client.service';
 import { EnumResourceType } from 'src/app/app-models/enums/resources';
 import { EnumActionType } from 'src/app/app-models/enums/action';
+import { RemoteMedia } from 'src/app/providers/media';
 
 @Component({
     selector: 'app-notification-board',
@@ -16,7 +17,7 @@ import { EnumActionType } from 'src/app/app-models/enums/action';
     styleUrls: ['./notification-board.component.scss'],
     host: {
         class: 'p-8 pt-0',
-    }
+    },
 })
 export class NotificationBoardComponent implements OnInit, DashboardSection {
     @Input() sessions: Session[] = [];
@@ -49,10 +50,9 @@ export class NotificationBoardComponent implements OnInit, DashboardSection {
     public browseIcon() {
         this.resourcesService
             .browse(EnumResourceType.IMAGE, true)
-            .then((image: any) => {
+            .then((image: RemoteMedia[] | undefined) => {
                 if (!image) return;
-                if (image.isBase64) this.notif.icon = image.href;
-                else this.notif.icon = this.api.serverUrl + '/' + image.href;
+                this.notif.icon = this.api.serverUrl + '/' + image[0].src;
             });
     }
 

@@ -40,7 +40,6 @@ export class MediaService {
     ) {
         this.update();
         this.eventService.onResourcesUpdate.subscribe((resources) => {
-            console.log('Resources updated', resources);
             this.medias = resources;
         });
     }
@@ -50,7 +49,6 @@ export class MediaService {
         // if (!logged) return;
 
         const medias = await this.getAll();
-        console.log('Medias updated', medias);
         this.medias = medias;
         return medias;
     }
@@ -120,17 +118,32 @@ export class MediaService {
      * @example getAllowedExtensions(EnumResourceType.IMAGE) => ['png', 'jpg', 'jpeg', 'gif']
      * @example getAllowedExtensions() => ['png', 'jpg', 'jpeg', 'gif', 'mp4', 'webm', 'mp3', 'wav']
      */
-    public getAllowedExtensions(type?: EnumResourceType): string[] {
-        switch (type) {
-            case EnumResourceType.IMAGE:
-                return MediaService.ALLOWED_IMAGE_EXTENSIONS;
-            case EnumResourceType.VIDEO:
-                return MediaService.ALLOWED_VIDEO_EXTENSIONS;
-            case EnumResourceType.AUDIO:
-                return MediaService.ALLOWED_AUDIO_EXTENSIONS;
-            default:
-                return MediaService.ALLOWED_EXTENSIONS;
+    public getAllowedExtensions(
+        type?: EnumResourceType | EnumResourceType[]
+    ): string[] {
+        // Convert type to array if it's not
+        type = type ? (Array.isArray(type) ? type : [type]) : [];
+
+        // Return all allowed extensions if no type is specified
+        if (!type.length) return MediaService.ALLOWED_EXTENSIONS;
+
+        const extensions: string[] = [];
+        for (const t of type) {
+            switch (t) {
+                case EnumResourceType.IMAGE:
+                    extensions.push(...MediaService.ALLOWED_IMAGE_EXTENSIONS);
+                    break;
+                case EnumResourceType.VIDEO:
+                    extensions.push(...MediaService.ALLOWED_VIDEO_EXTENSIONS);
+                    break;
+                case EnumResourceType.AUDIO:
+                    extensions.push(...MediaService.ALLOWED_AUDIO_EXTENSIONS);
+                    break;
+                default:
+                    throw new Error('Invalid type');
+            }
         }
+        return extensions;
     }
 
     public flattenObject(obj: any, path: string = '') {
@@ -229,15 +242,22 @@ export class MediaService {
      * @param type Media type (optional)
      * @returns Medias array
      */
-    public getMedias(type?: EnumResourceType): RemoteMedia[] {
-        // Return medias of a specific type
-        if (type) {
-            const dir = this.typeToDir(type);
-            return this.medias[dir] || [];
-        }
+    public getMedias(
+        type?: EnumResourceType | EnumResourceType[]
+    ): RemoteMedia[] {
+        // Convert type to array if it's not
+        type = type ? (Array.isArray(type) ? type : [type]) : [];
+
+        console.trace('Type', type);
 
         // Return all medias if no type is specified
-        return this.flatten();
+        if (!type.length) return this.flatten();
+
+        const set: Partial<ResourceSet<RemoteMedia>> = {};
+        for (const t of type) {
+            set[this.typeToDir(t)] = this.medias[this.typeToDir(t)];
+        }
+        return this.flatten(set);
     }
 
     /**
@@ -360,7 +380,7 @@ export class MediaService {
     }
 
     public browse(
-        type?: EnumResourceType,
+        type?: EnumResourceType | EnumResourceType[],
         canImport: boolean = false
     ): Promise<RemoteMedia[] | undefined> {
         return new Promise((resolve) => {

@@ -15,7 +15,7 @@
     }
 
     <section [hlmTabsContent]="EnumTabs.RESOURCES" class="h-full min-h-0">
-        <app-media-browser [mediaType]="type ? [type] : []" [enableSelection]="true"></app-media-browser>
+        <app-media-browser [mediaType]="type" [enableSelection]="true"></app-media-browser>
         <!-- <div class="h-full flex flex-wrap justify-between gap-2 overflow-y-auto">
             @if (!medias.length) {
             <div class="no-content-label">No resources</div>
