@@ -14,7 +14,9 @@ import { LayoutData } from 'src/app/app-models/types/layout';
 import { RoleResponseData } from 'src/app/app-models/types/role';
 import { UserPreferences } from 'src/app/app-models/types/preferences';
 import { Event } from 'src/app/app-models/classes/event';
-import { Media, RemoteMedia } from 'src/app/providers/media';
+import { RemoteMedia } from 'src/app/providers/media';
+import { FileData } from 'src/app/app-models/types/file';
+import path from 'src/app/utilities/path';
 
 @Injectable({
     providedIn: 'root',
@@ -68,7 +70,37 @@ export class EventService {
 
         this.websocket.socket.on(EnumEvent.RESOURCES, (event: EventMessage) => {
             console.log('[-] Resources received', event.data);
-            this.onResourcesUpdate.next(event.data);
+            const mediaSet = event.data as ResourceSet<FileData>;
+            const set = {
+                images: mediaSet.images?.map(
+                    (media) =>
+                        new RemoteMedia({
+                            name: media.name,
+                            extension: path.extname(media.name),
+                            src: media.href,
+                            size: media.size,
+                        })
+                ),
+                videos: mediaSet.videos?.map(
+                    (media) =>
+                        new RemoteMedia({
+                            name: media.name,
+                            extension: path.extname(media.name),
+                            src: media.href,
+                            size: media.size,
+                        })
+                ),
+                audios: mediaSet.audios?.map(
+                    (media) =>
+                        new RemoteMedia({
+                            name: media.name,
+                            extension: path.extname(media.name),
+                            src: media.href,
+                            size: media.size,
+                        })
+                ),
+            };
+            this.onResourcesUpdate.next(set);
         });
 
         this.websocket.socket.on(EnumEvent.SESSION, (event: EventMessage) => {

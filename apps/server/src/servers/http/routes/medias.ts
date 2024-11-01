@@ -31,10 +31,11 @@ router.get('/:dir', (req, res) => {
 });
 
 router.delete('/', IsAdminMiddleware, (req, res) => {
-    const filespath = req.body;
+    const filesdata = req.body;
 
     try {
-        const data = Resources.unlink(filespath);
+        console.log('unlink', filesdata);
+        const data = Resources.unlink(filesdata);
         reply(res, { ...SUCCESS.DEFAULT, data });
 
         // Alert clients that the resources have been updated

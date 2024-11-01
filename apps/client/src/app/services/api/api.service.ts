@@ -59,15 +59,15 @@ export function apiInterceptor(
         url: apiService.apiUrl + req.url,
         withCredentials: true,
     });
-    console.log('Sending request to', apiReq.url);
+    // console.log('Sending request to', apiReq.url);
     return next(apiReq).pipe(
         tap((event) => {
             if (event.type === HttpEventType.Response) {
-                console.log(
-                    req.url,
-                    'returned a response with status',
-                    event.status
-                );
+                // console.log(
+                //     req.url,
+                //     'returned a response with status',
+                //     event.status
+                // );
             }
         })
     );

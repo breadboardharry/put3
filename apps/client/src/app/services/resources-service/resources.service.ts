@@ -40,6 +40,7 @@ export class MediaService {
     ) {
         this.update();
         this.eventService.onResourcesUpdate.subscribe((resources) => {
+            console.log('Resources updated', resources);
             this.medias = resources;
         });
     }
@@ -49,6 +50,7 @@ export class MediaService {
         // if (!logged) return;
 
         const medias = await this.getAll();
+        console.log('Medias updated', medias);
         this.medias = medias;
         return medias;
     }
@@ -264,8 +266,10 @@ export class MediaService {
     public delete(medias: RemoteMedia[]): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const data = medias.map((media) => {
-                type: media.type;
-                name: media.name;
+                return {
+                    type: media.type,
+                    name: media.name,
+                };
             });
             this.http
                 .delete<APIResponse>(this.routeUrl, {
@@ -364,9 +368,11 @@ export class MediaService {
                 context: { type, canImport },
             });
 
-            dialogRef.closed$.subscribe((selection: RemoteMedia[] | undefined) => {
-                resolve(selection);
-            });
+            dialogRef.closed$.subscribe(
+                (selection: RemoteMedia[] | undefined) => {
+                    resolve(selection);
+                }
+            );
         });
     }
 }

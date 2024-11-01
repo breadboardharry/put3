@@ -1,11 +1,17 @@
 import fs from 'fs';
 import path from 'path';
-import { doFileExists, isValidDir } from '../../services/resource-file.service';
+import {
+    doFileExists,
+    isValidDir,
+    typeToDir,
+} from '../../services/resource-file.service';
 import { Paths } from '../../enums/paths';
 import { getFileExtension, removeSpaces } from '../../services/file.service';
 import * as ResourceService from '../../services/resource.service';
-import { isArrayOf } from '../../services/type.service';
-import { EnumResourceDirectory, EnumResourceType } from '../../app-models/enums/resources';
+import {
+    EnumResourceDirectory,
+    EnumResourceType,
+} from '../../app-models/enums/resources';
 import { ERROR, SUCCESS } from '../../services/response.service';
 
 export function getData(dirname?: string) {
@@ -25,7 +31,9 @@ export function getData(dirname?: string) {
             if (!fs.existsSync(dirpath)) throw new Error('Directory not found');
 
             // For each file in the directory, get the file info
-            const data = ResourceService.getFilesData(dirname as EnumResourceDirectory);
+            const data = ResourceService.getFilesData(
+                dirname as EnumResourceDirectory
+            );
             dirnames.length > 1 ? (files[dirname] = data) : (files = data);
         }
 
@@ -37,14 +45,18 @@ export function getData(dirname?: string) {
     }
 }
 
-export function unlink(filespath) {
+export function unlink(filesdata: { type: EnumResourceType; name: string }[]) {
+    let filepaths: string[] = [];
     // Check input
     try {
-        if (!isArrayOf('string', filespath)) throw 1;
+        if (!Array.isArray(filesdata)) throw 1;
 
-        filespath = filespath.map((filepath) => {
-            // Convert to absolute path
-            return path.join(Paths.RESOURCES, filepath);
+        filepaths = filesdata.map((filedata) => {
+            return path.join(
+                Paths.RESOURCES,
+                typeToDir(filedata.type),
+                filedata.name
+            );
         });
     } catch (err) {
         throw ERROR.INVALID_PARAMS;
@@ -52,8 +64,7 @@ export function unlink(filespath) {
 
     // Delete files
     try {
-        const count = ResourceService.deleteFiles(filespath);
-
+        const count = ResourceService.deleteFiles(filepaths);
         return {
             success: count.affected > 0,
             message: count.affected + ' file(s) deleted',
@@ -102,7 +113,11 @@ export function rename(
     }
 
     try {
-        const success = ResourceService.renameFile(currentName, newName, dirpath);
+        const success = ResourceService.renameFile(
+            currentName,
+            newName,
+            dirpath
+        );
         return success;
     } catch (err) {
         console.error('[!] Error renaming file: ' + err + '\n');

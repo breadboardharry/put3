@@ -83,7 +83,6 @@ export class MasterDashboardPageComponent implements OnInit, OnDestroy {
 
         // If a role is already defined
         console.log("[-] ClientService.ROLE", ClientService.ROLE);
-        console.log("[-] ClientService", ClientService);
         if (ClientService.ROLE === EnumUserRole.FOOL) return window.location.reload();
         if (ClientService.ROLE === EnumUserRole.MASTER) return this.init();
 
