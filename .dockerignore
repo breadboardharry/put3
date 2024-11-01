@@ -9,3 +9,16 @@ dist
 .spec.ts
 turbo.json
 **/.env
+
+apps/server/public/resources/audios/*
+apps/server/public/resources/images/*
+apps/server/public/resources/videos/*
+
+!apps/server/public/resources/audios/.default/
+!apps/server/public/resources/audios/.default/**
+
+!apps/server/public/resources/images/.desktop/
+!apps/server/public/resources/images/.desktop/**
+
+!apps/server/public/resources/videos/.default/
+!apps/server/public/resources/videos/.default/**

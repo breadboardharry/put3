@@ -17,6 +17,7 @@ services:
       - .env
     volumes:
       - medias:/prod/server/public/resources
+    restart: always
     command: ["pnpm", "start"]
 
 networks:

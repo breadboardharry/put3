@@ -1,6 +1,6 @@
 {
     "name": "put3",
-    "version": "2.0.0",
+    "version": "1.0.0",
     "description": "",
     "authors": [
         "Harry On Breadboard"
@@ -17,10 +17,5 @@
     "devDependencies": {
         "turbo": "^2.1.2"
     },
-    "packageManager": "pnpm@9.12.1",
-    "pnpm": {
-        "overrides": {
-            "nx": "19.4.1"
-        }
-    }
+    "packageManager": "pnpm@9.12.1"
 }

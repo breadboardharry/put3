@@ -248,8 +248,6 @@ export class MediaService {
         // Convert type to array if it's not
         type = type ? (Array.isArray(type) ? type : [type]) : [];
 
-        console.trace('Type', type);
-
         // Return all medias if no type is specified
         if (!type.length) return this.flatten();
 
