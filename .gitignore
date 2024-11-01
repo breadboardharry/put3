@@ -1,25 +1,23 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Angular
-client/.angular/
+# Dependencies and build artifacts
+.turbo
+.angular
+node_modules
+dist
+build
+tmp
+out-tsc
+bazel-out
 
-# Compiled output
-client/dist
-client/tmp
-client/out-tsc
-client/bazel-out
-server/dist
-shared/libs/**/lib
+# Environment
+.env*
+!.env.example
 
-# Express Server
-server/public/images/desktop.*
-.env.local
-
-server/public/resources/audio/*
-server/public/resources/images/*
-server/public/resources/videos/*
-!server/public/resources/**/.default/
-!server/public/resources/images/.desktop/
+# Application files
+apps/server/public/resources/**/*
+!apps/server/public/resources/**/.default/*
+!apps/server/public/resources/images/.desktop/*
 
 # Dependencies
 node_modules/
@@ -44,7 +42,6 @@ node_modules/
 .history/*
 
 # Miscellaneous
-/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage

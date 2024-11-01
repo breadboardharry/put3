@@ -1,0 +1,155 @@
+<section
+    class="session-infos"
+    [ngClass]="{
+        disabled: !target || disabled
+    }"
+>
+    <h1
+        class="session-code"
+        [cdkCopyToClipboard]="sessionCode || ''"
+        (click)="copiedCodeToClipboard()"
+    >
+        {{ sessionCode || "#####" }}
+    </h1>
+
+    <hr class="separator" />
+
+    <div class="session-infos-section">
+        <hlm-tooltip>
+            <div class="status" hlmTooltipTrigger>
+                <div class="icon {{ sessionStatus }}"></div>
+                <span>{{ sessionStatus || "..." }}</span>
+            </div>
+
+            <span *brnTooltipContent class="flex items-center">
+                {{
+                    sessionStatus == EnumSessionStatus.PENDING
+                        ? "Waiting for session to be started"
+                        : "szdsa"
+                }}
+            </span>
+        </hlm-tooltip>
+
+        <hlm-tooltip>
+            <div class="masters-infos" hlmTooltipTrigger>
+                <span>{{ nbMaster || "0" }}</span>
+                <img src="assets/icons/user-group.png" />
+            </div>
+
+            <span *brnTooltipContent class="flex items-center">
+                Number of connected masters
+            </span>
+        </hlm-tooltip>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="session-button-section">
+        <hlm-tooltip>
+            <button
+                class="run-button"
+                (click)="run()"
+                [disabled]="isSessionRunning || disabled || !target"
+                hlmTooltipTrigger
+            >
+                RUN
+            </button>
+
+            <span *brnTooltipContent class="flex items-center">{{
+                isSessionRunning ? "Session is already running" : "ezcq"
+            }}</span>
+        </hlm-tooltip>
+
+        <hlm-tooltip>
+            <button
+                class="shutdown-button"
+                (click)="shutdown()"
+                [disabled]="disabled || !target"
+                hlmTooltipTrigger
+            >
+                SHUTDOWN
+            </button>
+
+            <span *brnTooltipContent class="flex items-center">
+                Clear the session and redirect the fool on google.com</span
+            >
+        </hlm-tooltip>
+    </div>
+</section>
+
+<section
+    class="fool-infos"
+    [ngClass]="{
+        disabled: !target || disabled
+    }"
+>
+    <div class="fool-name">
+        <img src="assets/icons/user.png" />
+        <h1>{{ foolName || "..." }}</h1>
+    </div>
+
+    <div class="browser-infos">
+        <h2 class="browser-name">
+            Browser: <span>{{ foolBrowser?.name || "-" }}</span>
+        </h2>
+
+        <ul class="permissions-list">
+            <li>
+                <img
+                    [ngClass]="{
+                        disabled:
+                            ClientService.IS_ADMIN &&
+                            !foolBrowser?.permissions?.notifications
+                    }"
+                    [src]="
+                        foolSettings?.notifications
+                            ? 'assets/icons/bell-400.svg'
+                            : 'assets/icons/bell-off-400.svg'
+                    "
+                />
+            </li>
+            <li>
+                <img
+                    [ngClass]="{
+                        disabled:
+                            ClientService.IS_ADMIN &&
+                            !foolBrowser?.permissions?.audio
+                    }"
+                    [src]="
+                        foolSettings?.audio
+                            ? 'assets/icons/volume-400.svg'
+                            : 'assets/icons/volume-off-400.svg'
+                    "
+                />
+            </li>
+            <li>
+                <img
+                    [ngClass]="{
+                        disabled:
+                            ClientService.IS_ADMIN &&
+                            !foolBrowser?.permissions?.camera
+                    }"
+                    [src]="
+                        foolSettings?.camera
+                            ? 'assets/icons/webcam-400.svg'
+                            : 'assets/icons/webcam-off-400.svg'
+                    "
+                />
+            </li>
+            <li>
+                <img
+                    [ngClass]="{
+                        disabled:
+                            ClientService.IS_ADMIN &&
+                            !foolBrowser?.permissions?.microphone
+                    }"
+                    [src]="
+                        foolSettings?.microphone
+                            ? 'assets/icons/microphone-400.svg'
+                            : 'assets/icons/microphone-off-400.svg'
+                    "
+                />
+            </li>
+        </ul>
+    </div>
+</section>

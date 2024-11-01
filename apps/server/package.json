@@ -1,0 +1,45 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "set NODE_ENV=development&& tsx --watch src/index.ts",
+        "start": "node dist/index.js",
+        "build": "tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/body-parser": "^1.19.5",
+        "@types/cookie-parser": "^1.4.4",
+        "@types/cors": "^2.8.14",
+        "@types/express": "^4.17.18",
+        "@types/jsonwebtoken": "^9.0.3",
+        "@types/multer": "^1.4.8",
+        "@types/node": "14.14.0",
+        "@types/uuid": "^9.0.3",
+        "nodemon": "^3.0.1",
+        "ts-node": "^10.9.1",
+        "tsx": "^4.7.2",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "@put3/types": "workspace:*",
+        "body-parser": "^1.20.3",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "iconv-lite": "^0.6.3",
+        "image-size": "^1.0.2",
+        "jsonwebtoken": "^9.0.2",
+        "multer": "^1.4.5-lts.1",
+        "rxjs": "^7.8.1",
+        "socket.io": "^4.7.2",
+        "uuid": "^9.0.0",
+        "zod": "^3.23.8"
+    },
+    "packageManager": "pnpm@9.12.1"
+}

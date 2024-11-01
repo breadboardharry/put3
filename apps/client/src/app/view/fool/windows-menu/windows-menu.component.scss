@@ -1,0 +1,29 @@
+.menu {
+  @extend %box-shadow;
+
+  position: absolute;
+  left: 0;
+  bottom: 4.45vh;
+
+  height: 75vh;
+
+  &:hover {
+    cursor: wait;
+  }
+}
+
+img {
+  height: 100%;
+}
+
+hlm-spinner {
+  position: absolute;
+  left: 48%;
+  bottom: 48%;
+}
+
+%box-shadow {
+	box-shadow: 8px -8px 20px rgba(0, 0, 0, 0.3)  ;
+	-webkit-box-shadow: 8px -8px 20px rgba(0, 0, 0, 0.3)  ;
+	-moz-box-shadow: 8px -8px 20px rgba(0, 0, 0, 0.3)  ;
+}

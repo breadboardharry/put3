@@ -1,0 +1,9 @@
+<hlm-dialog-header>
+    <h3 hlmDialogTitle>{{ title }}</h3>
+    <p hlmDialogDescription>{{ message }}</p>
+</hlm-dialog-header>
+
+<hlm-dialog-footer>
+    <button hlmBtn size="sm" (click)="decline()">{{ cancelLabel }}</button>
+    <button hlmBtn size="sm" (click)="accept()">{{ acceptLabel }}</button>
+</hlm-dialog-footer>

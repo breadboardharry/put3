@@ -1,17 +1,29 @@
 version: '3'
 services:
   frontend:
-    image: put3/frontend:2.0
+    image: harryonbreadboard/put3-client:latest
+    env_file:
+      - .env
     ports:
       - "80:80"
     networks:
       - put3
 
   backend:
-    image: put3/backend:2.0
+    image: harryonbreadboard/put3-server:latest
     networks:
       - put3
+    env_file:
+      - .env
+    volumes:
+      - medias:/prod/server/public/resources
+    restart: always
+    command: ["pnpm", "start"]
 
 networks:
   put3:
     driver: bridge
+
+volumes:
+    medias:
+        driver: local

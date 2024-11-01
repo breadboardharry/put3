@@ -1,0 +1,21 @@
+{
+    "name": "put3",
+    "version": "1.0.0",
+    "description": "",
+    "authors": [
+        "Harry On Breadboard"
+    ],
+    "keywords": [],
+    "license": "ISC",
+    "scripts": {
+        "dev": "set TURBO_TELEMETRY_DISABLED=1&& turbo dev",
+        "build": "set TURBO_TELEMETRY_DISABLED=1&& turbo build",
+        "image:build:all": "pnpm run image:build:client && pnpm run image:build:server",
+        "image:build:client": "docker build . --target client --tag harryonbreadboard/put3-client:latest",
+        "image:build:server": "docker build . --target server --tag harryonbreadboard/put3-server:latest"
+    },
+    "devDependencies": {
+        "turbo": "^2.1.2"
+    },
+    "packageManager": "pnpm@9.12.1"
+}

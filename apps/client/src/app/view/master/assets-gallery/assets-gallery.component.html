@@ -1,0 +1,13 @@
+<app-media-browser
+    #mediaBrowser
+    class="p-8 pb-24"
+    [enableImport]="true"
+    [enableSelection]="true"
+></app-media-browser>
+<app-media-infobox
+    class="sticky bottom-0 px-8"
+    [selection]="mediaBrowser.selection"
+    (onDelete)="mediaBrowser.freeze()"
+    (onDeleted)="mediaBrowser.run()"
+    [@openClose]="mediaBrowser.selection.getItems().length ? 'open' : 'close'"
+></app-media-infobox>

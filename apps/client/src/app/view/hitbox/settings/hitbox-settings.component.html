@@ -1,0 +1,130 @@
+<div
+    class="settings-panel"
+    (mouseenter)="mouseEnter()"
+    [ngClass]="{ hover: hover }"
+>
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                          TRIGGERS AND ACTIONS                           -->
+    <!-- ----------------------------------------------------------------------- -->
+    <button
+        class="action-menu-button"
+        [brnMenuTriggerFor]="behaviorMenu"
+        (mouseenter)="mouseEnter()"
+        [disabled]="!actions.length"
+    >
+        <img class="menu-icon" src="assets/icons/rocket.png" />
+    </button>
+
+    <ng-template #behaviorMenu>
+        <hlm-menu>
+            <div *ngFor="let trigger of triggers">
+                <button
+                    *ngIf="!isDisabled(trigger)"
+                    hlmMenuItem
+                    [brnMenuTriggerFor]="actionsMenu"
+                    [ngClass]="{ bold: hitbox.events[trigger.value] }"
+                    (mouseenter)="mouseEnter()"
+                >
+                    {{ trigger.name }}
+                </button>
+
+                <ng-template #actionsMenu>
+                    <hlm-menu>
+                        <div *ngFor="let action of actions">
+                            <div
+                                *ngIf="
+                                    action.value == 'audio-player';
+                                    then soundsMenuButton;
+                                    else defaultButton
+                                "
+                            ></div>
+
+                            <ng-template #soundsMenuButton>
+                                <button
+                                    *ngIf="isActionEnabled(action, trigger)"
+                                    [brnMenuTriggerFor]="soundsMenu"
+                                    hlmMenuItem
+                                    (mouseenter)="mouseEnter()"
+                                    [ngClass]="{
+                                        bold:
+                                            hitbox.events[trigger.value] &&
+                                            hitbox.events[trigger.value]
+                                                .value == action.value
+                                    }"
+                                >
+                                    {{ action.name }}
+                                </button>
+
+                                <!-- ----------------------------- SOUNDS LIST ----------------------------- -->
+                                <ng-template #soundsMenu>
+                                    <hlm-menu>
+                                        <button
+                                            *ngFor="let track of tracks"
+                                            hlmMenuItem
+                                            (click)="
+                                                assignAction(
+                                                    $event,
+                                                    action,
+                                                    trigger,
+                                                    {
+                                                        track: track
+                                                    }
+                                                )
+                                            "
+                                            [ngClass]="{
+                                                bold:
+                                                    hitbox.events[
+                                                        trigger.value
+                                                    ] &&
+                                                    hitbox.events[trigger.value]
+                                                        .data.track == track
+                                            }"
+                                        >
+                                            {{ track.name }}
+                                        </button>
+                                    </hlm-menu>
+                                </ng-template>
+                            </ng-template>
+
+                            <ng-template #defaultButton>
+                                <button
+                                    *ngIf="isActionEnabled(action, trigger)"
+                                    hlmMenuItem
+                                    (click)="
+                                        assignAction($event, action, trigger)
+                                    "
+                                    (mouseenter)="mouseEnter()"
+                                    [ngClass]="{
+                                        bold:
+                                            hitbox.events[trigger.value] &&
+                                            hitbox.events[trigger.value]
+                                                .value == action.value
+                                    }"
+                                >
+                                    {{ action.name }}
+                                </button>
+                            </ng-template>
+                        </div>
+                    </hlm-menu>
+                </ng-template>
+            </div>
+        </hlm-menu>
+    </ng-template>
+
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                             OTHER SETTINGS                              -->
+    <!-- ----------------------------------------------------------------------- -->
+    <button
+        class="action-menu-button"
+        [brnMenuTriggerFor]="othersMenu"
+        disabled
+    >
+        <img class="menu-icon" src="assets/icons/more.png" />
+    </button>
+
+    <ng-template #othersMenu>
+        <hlm-menu>
+            <!-- Empty for the moment -->
+        </hlm-menu>
+    </ng-template>
+</div>

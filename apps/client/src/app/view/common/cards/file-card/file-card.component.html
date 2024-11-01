@@ -1,0 +1,34 @@
+<div
+    class="card w-full p-3 flex flex-col justify-center items-center gap-4 overflow-hidden bg-transparent transition-colors"
+    [ngClass]="{ selected: selected(), disabled: disabled() }"
+>
+    @switch (file().type) { @case (EnumResourceType.IMAGE) {
+    <img
+        class="h-24 aspect-square object-contain"
+        [src]="api.serverUrl + '/' + file().src"
+        draggable="false"
+    />
+    } @case (EnumResourceType.VIDEO) {
+    <img
+        class="h-24 aspect-square object-contain"
+        src="assets/icons/video-file.png"
+        draggable="false"
+    />
+    } @case (EnumResourceType.AUDIO) {
+    <img
+        class="h-24 aspect-square object-contain"
+        src="assets/icons/audio-file.png"
+        draggable="false"
+    />
+    } }
+
+    <textarea
+        class="filename w-full line-clamp-2 text-sm break-words resize-none text-center whitespace-pre-wrap bg-transparent pointer-events-none"
+        [ngClass]="{ editing: editing() }"
+        [(ngModel)]="name"
+        [readOnly]="!editing()"
+        (focusout)="editDone()"
+        (keydown.enter)="editDone()"
+    >
+    </textarea>
+</div>

@@ -1,0 +1,89 @@
+<div class="left-buttons">
+    <button
+        class="toolbar-button fullscreen-button"
+        (click)="windowService.toggleFullscreen()"
+    >
+        <img
+            [src]="
+                'assets/icons/fullscreen' +
+                (windowService.isFullscreen() ? '-exit' : '') +
+                '-400.svg'
+            "
+        />
+    </button>
+
+    <button
+        class="toolbar-button audio {{ audio.canPlay ? '' : 'alert' }}"
+        (click)="toggleAudio()"
+    >
+        <img
+            [src]="
+                foolService.audioEnabled
+                    ? 'assets/icons/volume-400.svg'
+                    : 'assets/icons/volume-off-400.svg'
+            "
+        />
+    </button>
+
+    <button
+        class="toolbar-button notifications"
+        (click)="toggleNotifications()"
+    >
+        <img
+            [src]="
+                foolService.notificationsEnabled
+                    ? 'assets/icons/bell-400.svg'
+                    : 'assets/icons/bell-off-400.svg'
+            "
+        />
+    </button>
+
+    <button class="toolbar-button camera" (click)="toggleCamera()">
+        <img
+            [src]="
+                foolService.cameraEnabled
+                    ? 'assets/icons/webcam-400.svg'
+                    : 'assets/icons/webcam-off-400.svg'
+            "
+        />
+    </button>
+
+    <button class="toolbar-button microphone" (click)="toggleMicrophone()">
+        <img
+            [src]="
+                foolService.microphoneEnabled
+                    ? 'assets/icons/microphone-400.svg'
+                    : 'assets/icons/microphone-off-400.svg'
+            "
+        />
+    </button>
+</div>
+
+<div class="right-buttons">
+    <button class="toolbar-button" [brnMenuTriggerFor]="scripts">
+        <img src="assets/icons/code-brackets-400.svg" />
+    </button>
+
+    <button class="toolbar-button run" (click)="run()">
+        <div class="icon"></div>
+    </button>
+</div>
+
+<ng-template #scripts>
+    <hlm-menu>
+        <button
+            hlmMenuItem
+            (click)="assetsService.downloadScript(EnumScript.WALLPAPER)"
+        >
+            <hlm-icon name="lucideArrowDownToLine" hlmMenuIcon />
+            <span>Wallpaper</span>
+        </button>
+        <button
+            hlmMenuItem
+            (click)="assetsService.downloadScript(EnumScript.VOLUME)"
+        >
+            <hlm-icon name="lucideArrowDownToLine" hlmMenuIcon />
+            <span>Volume</span>
+        </button>
+    </hlm-menu>
+</ng-template>

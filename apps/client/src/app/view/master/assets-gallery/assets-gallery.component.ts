@@ -1,0 +1,229 @@
+import {
+    animate,
+    state,
+    style,
+    transition,
+    trigger,
+} from '@angular/animations';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { toast } from 'ngx-sonner';
+import { FileData } from 'src/app/app-models/types/file';
+import { ContextMenuAction } from 'src/app/enums/context-menu-action';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
+import { SelectionService } from 'src/app/services/selection-service/selection.service';
+import { ContextMenu } from 'src/app/types/context-menu';
+
+@Component({
+    selector: 'app-assets-gallery',
+    templateUrl: './assets-gallery.component.html',
+    animations: [
+        trigger('openClose', [
+            state(
+                'open',
+                style({
+                    transform: 'translateY(0)',
+                })
+            ),
+            state(
+                'close',
+                style({
+                    transform: 'translateY(100%)',
+                })
+            ),
+            transition('open <=> close', [animate('0.2s ease-in-out')]),
+        ]),
+    ],
+})
+export class AssetsGalleryComponent implements OnInit {
+    @Input()
+    isAdmin: boolean = false;
+
+    // Context menu
+    public contextMenu: ContextMenu = {
+        show: false,
+        x: 0,
+        y: 0,
+        style: {
+            position: 'fixed',
+            top: '0px',
+            left: '0px',
+        },
+        items: [],
+    };
+
+    // Assets
+    public editing: FileData | null = null;
+
+    // File upload
+    fileArr: any[] = [];
+    imgArr: any[] = [];
+    fileObj: any[] = [];
+    form: UntypedFormGroup;
+    msg: string = '';
+    progress: number = 0;
+    uploading: boolean = false;
+
+    constructor(
+        public selectionService: SelectionService,
+        public resourceService: MediaService,
+        public formBuilder: UntypedFormBuilder
+    ) {
+        this.form = this.formBuilder.group({
+            file: [null],
+        });
+    }
+
+    ngOnInit(): void {
+        this.selectionService.init(this.resourceService.getMedias(), true);
+    }
+
+    select(file: FileData, event: any, rightClick: boolean = false) {
+        this.selectionService.handleSelect(event, file, rightClick);
+
+        // On right click, display context menu
+        if (rightClick && this.isAdmin) {
+            this.displayContextMenu(event);
+        }
+    }
+
+    public upload(event: any) {
+        const fileListAsArray = Array.from(event);
+        fileListAsArray.forEach((item, i) => {
+            const file: any = event as HTMLInputElement;
+            const url: any = URL.createObjectURL(file[i]);
+            this.imgArr.push(url);
+            this.fileArr.push({ item, url: url });
+        });
+        this.fileArr.forEach((item) => {
+            this.fileObj.push(item.item);
+        });
+        // Set files form control
+        this.form.patchValue({
+            file: this.fileObj,
+        });
+        this.form.get('file')!.updateValueAndValidity();
+        // Upload to server
+        this.uploading = true;
+        this.resourceService
+            .upload(this.form.value.file)
+            .subscribe((event: HttpEvent<any>) => {
+                switch (event.type) {
+                    case HttpEventType.Sent:
+                        console.log('[-] Request has been made!');
+                        break;
+
+                    case HttpEventType.ResponseHeader:
+                        console.log('[-] Response header has been received!');
+                        break;
+
+                    case HttpEventType.UploadProgress:
+                        this.progress = Math.round(
+                            (event.loaded / event.total!) * 100
+                        );
+                        console.log(`[-] Uploaded! ${this.progress}%`);
+                        break;
+
+                    case HttpEventType.Response:
+                        this.uploading = false;
+                        console.log(
+                            '[-] File uploaded successfully!',
+                            event.body
+                        );
+                        setTimeout(() => {
+                            this.progress = 0;
+                            this.fileArr = [];
+                            this.fileObj = [];
+                            this.msg = 'File uploaded successfully!';
+                        }, 3000);
+                }
+            });
+    }
+
+    private displayContextMenu(event: any) {
+        this.contextMenu.show = true;
+        const len = this.selectionService.getSelection().length;
+
+        this.contextMenu.items = [
+            {
+                title: 'Delete' + (len > 1 ? ` (${len})` : ''),
+                action: ContextMenuAction.DELETE,
+                disabled: len == 0,
+            },
+            {
+                title: 'Rename',
+                action: ContextMenuAction.RENAME,
+                disabled: len != 1,
+            },
+        ];
+
+        this.contextMenu.x = event.clientX;
+        this.contextMenu.y = event.clientY;
+        this.contextMenu.style.left = event.clientX + 1 + 'px';
+        this.contextMenu.style.top = event.clientY + 'px';
+    }
+
+    public handleContextMenu(event: any) {
+        this.contextMenu.show = false;
+        if (!this.isAdmin) return;
+
+        switch (event.item.action) {
+            case ContextMenuAction.DELETE:
+                this.resourceService.delete(this.selectionService
+                    .getSelection());
+                break;
+
+            case ContextMenuAction.RENAME:
+                this.editing = this.selectionService.getSelection()[0];
+                break;
+        }
+    }
+
+    public rename(newName: string, file: FileData) {
+        this.editing = null;
+
+        // Stop here if the name hasn't changed
+        if (newName == file.name) return;
+
+        this.resourceService.rename(file.name, newName, file.dirpath).then(
+            (res) => {
+                toast.success(file.name + ' renamed to ' + newName);
+            },
+            (err) => {
+                if (!err.error.message) return;
+
+                switch (err.error.message.toLowerCase()) {
+                    case 'file already exists':
+                        toast.error(newName + ' already exists');
+                        break;
+
+                    case 'invalid file extension':
+                        toast.error(err.error.message);
+                        break;
+
+                    case 'invalid parameters':
+                        toast.error('Invalid filename');
+                        break;
+                }
+
+                this.editing = file;
+            }
+        );
+    }
+
+    @HostListener('document:click')
+    documentClick(): void {
+        this.contextMenu.show = false;
+    }
+
+    @HostListener('contextmenu', ['$event'])
+    onRightClick(event: any) {
+        // Click outside a card
+        if (!event.target.className.includes('card')) {
+            this.contextMenu.show = false;
+        }
+
+        event.preventDefault();
+    }
+}

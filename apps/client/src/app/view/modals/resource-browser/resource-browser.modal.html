@@ -1,0 +1,65 @@
+<hlm-dialog-header>
+    <h3 hlmDialogTitle>Import media</h3>
+</hlm-dialog-header>
+
+<hlm-tabs
+    [tab]="selectedMenu"
+    (tabActivated)="tabChanged($event)"
+    class="w-full flex-1 flex flex-col min-h-0"
+>
+    @if (canImport) {
+    <hlm-tabs-list class="w-full grid grid-cols-2">
+        <button [hlmTabsTrigger]="EnumTabs.RESOURCES">Ressouces</button>
+        <button [hlmTabsTrigger]="EnumTabs.IMPORT">Importer</button>
+    </hlm-tabs-list>
+    }
+
+    <section [hlmTabsContent]="EnumTabs.RESOURCES" class="h-full min-h-0">
+        <app-media-browser [mediaType]="type" [enableSelection]="true"></app-media-browser>
+        <!-- <div class="h-full flex flex-wrap justify-between gap-2 overflow-y-auto">
+            @if (!medias.length) {
+            <div class="no-content-label">No resources</div>
+            } @for (file of medias; track file.src) {
+            <app-file-card
+                (click)="select(file, $event)"
+                (dblclick)="validate(file, $event)"
+                [file]="file"
+                [selected]="selectionService.getSelection().includes(file)"
+            ></app-file-card>
+            }
+        </div> -->
+    </section>
+    <section [hlmTabsContent]="EnumTabs.IMPORT" class="h-full min-h-0">
+        @if (importedFile == undefined) {
+        <div
+            class="relative h-full flex flex-col gap-1 items-center justify-center rounded-lg bg-slate-900/25"
+        >
+            <hlm-icon size="xl" class="mb-2" name="lucideArrowDownToLine" />
+            <span>Drag files here</span>
+            <input
+                class="absolute top-0 left-0 w-full h-full opacity-0 z-50"
+                type="file"
+                name="files"
+                #fileInput
+                (change)="fileChanged($event)"
+                [accept]="formatExtensions()"
+            />
+        </div>
+        } @else {
+        <div class="h-full flex flex-col gap-6 items-center justify-center">
+            <img class="w-1/2 h-1/2 object-contain" [src]="importedFile.src" />
+            <button hlmBtn size="sm" (click)="resetImport()">
+                <hlm-icon size="sm" class="mr-2" name="lucideRotateCcw" />
+                Choose another file
+            </button>
+        </div>
+        }
+    </section>
+</hlm-tabs>
+
+<hlm-dialog-footer>
+    <button hlmBtn size="sm" (click)="cancel()">Cancel</button>
+    <button hlmBtn size="sm" (click)="validate()" [disabled]="!canValidate">
+        Select
+    </button>
+</hlm-dialog-footer>

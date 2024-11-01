@@ -1,0 +1,41 @@
+<section class="content" *ngIf="target" [ngClass]="{
+    'disabled': disabled
+}">
+    <div class="editor-container" *ngIf="target" [ngStyle]="{
+        'aspect-ratio': target.fool.window.ratio
+    }">
+        <div #editor class="editor" [ngStyle]="{
+                'aspect-ratio': target.fool.window.ratio
+            }"
+        >
+            <div class="draggable-zone">
+                <app-hitbox *ngFor="let hitbox of target.fool.layout.hitboxes"
+                    [hitbox]="hitbox"
+                    [disabled]="disabled"
+                ></app-hitbox>
+            </div>
+
+            <img class="background" [src]="(target && target.fool.layout.desktop.image) ? (api.serverUrl + '/' + target.fool.layout.desktop.image) : defaultDesktopImage" draggable="false">
+        </div>
+    </div>
+</section>
+
+<section class="no-target" *ngIf="!target">
+    Select a fool
+</section>
+
+<section class="toolbar" [ngClass]="{
+    'disabled': disabled
+}">
+    <app-button-raised (click)="addHitbox()" [disabled]="!target || disabled">
+        Add hitbox
+    </app-button-raised>
+
+    <app-button-raised (click)="changeBackground()" [disabled]="!target || disabled">
+        Background
+    </app-button-raised>
+
+    <app-button-raised (click)="sendConfig()" [disabled]="!target || disabled">
+        Send
+    </app-button-raised>
+</section>

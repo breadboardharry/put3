@@ -1,0 +1,61 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2022",
+    "useDefineForClassFields": false,
+    "module": "es2020",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "paths": {
+      "@spartan-ng/ui-button-helm": [
+        "./src/app/view/ui/ui-button-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-menu-helm": [
+        "./src/app/view/ui/ui-menu-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-icon-helm": [
+        "./src/app/view/ui/ui-icon-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-sonner-helm": [
+        "./src/app/view/ui/ui-sonner-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-spinner-helm": [
+        "./src/app/view/ui/ui-spinner-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-dialog-helm": [
+        "./src/app/view/ui/ui-dialog-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-tooltip-helm": [
+        "./src/app/view/ui/ui-tooltip-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-tabs-helm": [
+        "./src/app/view/ui/ui-tabs-helm/src/index.ts"
+      ],
+      "@spartan-ng/ui-skeleton-helm": [
+        "./src/app/view/ui/ui-skeleton-helm/src/index.ts"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

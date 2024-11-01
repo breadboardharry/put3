@@ -1,0 +1,99 @@
+@import 'src/styles.scss';
+
+$keyGap: 2rem;
+$keySize: 92px;
+$keyFill: $dark-gradient-2;
+$hoverKeyFill: $dark-gradient-3;
+$activeKeyFill: $dark-gradient;
+
+.container {
+    @extend %prevent-select;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4.5rem;
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: $keyGap;
+}
+
+.keyboard-row {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: $keyGap;
+}
+
+.key {
+    width: $keySize;
+    height: $keySize;
+
+    @media (max-width: $tablet) {
+        width: 72px;
+        height: 72px;
+    }
+
+    border-radius: 50%;
+
+    background: $keyFill;
+    border: 3px solid rgb(49, 49, 89);
+
+    &:hover {
+        background: $hoverKeyFill;
+        transform: scale(1.04);
+    }
+
+    &:active {
+        background: $activeKeyFill;
+        transform: scale(.94);
+    }
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    transition: all 0.2s, transform .09s ease-in-out;
+
+    span {
+        @extend %font-base;
+        font-size: 30px;
+
+        @media (max-width: $tablet) {
+            font-size: 24px;
+        }
+        font-weight: bold;
+    }
+}
+
+.code-container {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: .5rem;
+}
+
+.digit {
+    width: 36px;
+
+    @extend %font-base;
+    color: darken(rgb(255, 255, 255), 70%);
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+
+    overflow: hidden;
+
+    &.set {
+        color: white;
+    }
+}
