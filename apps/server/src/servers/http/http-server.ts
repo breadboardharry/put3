@@ -13,7 +13,7 @@ import { ReqContext } from '../../providers/req-context';
 
 export class HTTPServer {
     private static servOptions =
-        process.env.NODE_ENV == 'development'
+        process.env.NODE_ENV === 'development'
             ? {
                   key: fs.readFileSync(process.env.SSL_KEY!),
                   cert: fs.readFileSync(process.env.SSL_CERT!),
@@ -33,7 +33,7 @@ export class HTTPServer {
         app.use(express.static('public'));
 
         this.server = (
-            process.env.NODE_ENV == 'development' ? https : http
+            process.env.NODE_ENV === 'development' ? https : http
         ).createServer(this.servOptions, app);
 
         // Add a "context" object to the request that will be used to store data between middlewares
