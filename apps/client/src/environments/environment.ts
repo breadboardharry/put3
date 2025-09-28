@@ -9,7 +9,8 @@ export const environment = {
     serverUrl: backendUrl,
     apiPath: '/api',
     socketPath: '/socket',
-    defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg'
+    defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg',
+    version: '1.0.0',
 };
 
 /*

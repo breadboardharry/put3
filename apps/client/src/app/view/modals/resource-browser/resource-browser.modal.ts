@@ -169,19 +169,4 @@ export class ResourceBrowserModal implements OnInit {
     public resetImport() {
         this.importedFile = undefined;
     }
-
-    private upload(file: File): Promise<FileData[]> {
-        return new Promise((resolve) => {
-            this.resourceService
-                .upload([file])
-                .subscribe((event: HttpEvent<any>) => {
-                    switch (event.type) {
-                        case HttpEventType.Response:
-                            console.log('[-] File uploaded successfully!');
-                            console.log(event.body.data);
-                            resolve(event.body.data);
-                    }
-                });
-        });
-    }
 }

@@ -53,7 +53,8 @@ export class HTTPServer {
             console.log(
                 `[*] Server started on port ${process.env.SERVER_PORT}
                 ENV: ${process.env.NODE_ENV}
-                ORIGIN: ${process.env.ACCESS_ORIGIN}`
+                ORIGIN: ${process.env.ACCESS_ORIGIN}
+                VERSION: ${process.env.VERSION}`
             );
         });
     }

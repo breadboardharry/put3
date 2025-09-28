@@ -14,7 +14,7 @@ export class LayoutService {
         private preferences: PreferencesService
     ) {}
 
-    public newFoolLayout(layout: LayoutData) {
+    public newFoolLayout(layout: LayoutData): Layout {
         const instaciatedLayout: Layout = {...layout as any};
         // Instanciate hitboxes
         instaciatedLayout.hitboxes = this.hitboxService.instaciate(layout.hitboxes, true);

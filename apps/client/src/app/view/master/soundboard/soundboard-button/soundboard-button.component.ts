@@ -25,8 +25,6 @@ export class SoundboardButtonComponent implements OnInit {
     ngOnInit(): void {}
 
     play(track: Media) {
-        console.log('play', track);
-        console.log(this.volume / 100);
         this.eventService.sendAction(this.target.fool, {
             type: EnumActionType.AUDIO,
             data: {

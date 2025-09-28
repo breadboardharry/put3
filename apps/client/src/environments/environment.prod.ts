@@ -3,5 +3,6 @@ export const environment = {
     serverUrl: `${window.location.origin}`,
     apiPath: '/api',
     socketPath: '/socket',
-    defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg'
+    defaultDesktopImage: 'resources/images/.desktop/default-desktop.jpg',
+    version: '1.0.0',
 };

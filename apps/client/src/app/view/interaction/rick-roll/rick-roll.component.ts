@@ -1,32 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { InteractionTemplateComponent } from '../template/interaction-template.component';
 
 @Component({
-  selector: 'app-rick-roll',
-  templateUrl: './rick-roll.component.html',
-  styleUrls: ['./rick-roll.component.scss']
+    selector: 'app-rick-roll',
+    templateUrl: './rick-roll.component.html',
 })
 export class RickRollComponent extends InteractionTemplateComponent {
+    protected title = 'Rick Roll';
+    protected url = 'https://www.youtube.com/embed/eBGIQ7ZuuiU?autoplay=1';
 
-  constructor() {
-    super();
-  }
+    constructor() {
+        super();
+    }
 
-  init() {
-  }
+    init() {}
 
-  onHover(hover: boolean): void {
-  }
+    onHover(hover: boolean): void {}
 
-  onClick(): void {
-  }
+    onClick(): void {}
 
-  onSingleClick(): void {
-  }
+    onSingleClick(): void {}
 
-  onDoubleClick(): void {
-  }
+    onDoubleClick(): void {}
 
-  onOutsideClick(): void {
-  }
+    onOutsideClick(): void {}
 }

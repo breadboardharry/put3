@@ -10,10 +10,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HitboxComponent } from './view/hitbox/hitbox.component';
 import { HitboxCoreComponent } from './view/hitbox/core/hitbox-core.component';
 import { HitboxSettingsComponent } from './view/hitbox/settings/hitbox-settings.component';
-import {
-    provideHttpClient,
-    withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { DesktopIconComponent } from './view/interaction/desktop-icon/desktop-icon.component';
 import { ChildElementsDirective } from './directives/child-elements.directive';
 import { RickRollComponent } from './view/interaction/rick-roll/rick-roll.component';
@@ -67,6 +64,7 @@ import { lucideArrowDownToLine } from '@ng-icons/lucide';
 import { MediaBrowserComponent } from './view/common/media-browser/media-browser.component';
 import { MediaInfoboxComponent } from './view/common/media-infobox/media-infobox.component';
 import { apiInterceptor } from './services/api/api.service';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
     declarations: [
@@ -146,5 +144,9 @@ import { apiInterceptor } from './services/api/api.service';
 export class AppModule {}
 
 function initApp(clientService: ClientService): () => Promise<any> {
+    console.log(`
+WELCOME TO PUT3
+VERSION: ${environment.version}
+    `);
     return () => clientService.init();
 }
