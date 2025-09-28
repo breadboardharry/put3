@@ -27,6 +27,7 @@ RUN pnpm run -r --filter "./packages/**" build
 FROM build-base AS client-build
 WORKDIR /usr/src/app
 RUN pnpm run --filter "client" build
+
 # Host the client app
 FROM nginx:alpine AS client
 
