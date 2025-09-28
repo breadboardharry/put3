@@ -1,11 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MediaService } from 'src/app/services/resources-service/resources.service';
-import { EventService } from 'src/app/services/event-service/event.service';
-import { Session } from 'src/app/classes/session';
-import { FileData } from 'src/app/app-models/types/file';
 import { EnumActionType } from 'src/app/app-models/enums/action';
-import path from 'src/app/utilities/path';
+import { Session } from 'src/app/classes/session';
 import { Media, RemoteMedia } from 'src/app/providers/media';
+import { EventService } from 'src/app/services/event-service/event.service';
+import { MediaService } from 'src/app/services/resources-service/resources.service';
+import path from 'src/app/utilities/path';
 
 @Component({
     selector: 'app-soundboard-button',
@@ -48,6 +47,6 @@ export class SoundboardButtonComponent implements OnInit {
     }
 
     public formatName(name: string): string {
-        return path.basename(name, path.extname(name));
+        return path.basename(name, '.' + path.extname(name));
     }
 }
