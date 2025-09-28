@@ -104,7 +104,8 @@ export class ResourceBrowserModal implements OnInit {
     public readonly EnumTabs = EnumTabs;
 
     constructor(
-        private resourceService: MediaService
+        private resourceService: MediaService,
+        private readonly cdr: ChangeDetectorRef
     ) {}
 
     ngOnInit(): void {
@@ -150,6 +151,7 @@ export class ResourceBrowserModal implements OnInit {
         const file = event.target.files[0];
         try {
             this.importedFile = await LocalMedia.createFromFile(file);
+            this.cdr.detectChanges();
         } catch (error) {
             toast.error('Error importing file');
             this.importedFile = undefined;
